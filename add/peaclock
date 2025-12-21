@@ -1,0 +1,27 @@
+#!/bin/bash
+
+
+# Initialise
+PROJECT_DIR=$HOME/.local/src/octobanana
+PROJECT=$PROJECT_DIR/peaclock
+mkdir -p $PROJECT_DIR
+cd $PROJECT_DIR
+
+# Dependencies
+sudo apt update
+sudo apt-get install ninja-build gettext cmake curl build-essential lua5.3 liblua5.3-dev
+
+# Clone
+git clone --depth 1 https://github.com/octobanana/peaclock.git $PROJECT
+cd $PROJECT
+
+# Build
+./RUNME.sh build
+
+# Install
+./RUNME.sh install
+
+# Clean up
+# rm -rf $PROJECT_DIR
+# echo "Removed peaclock source files"
+# echo "Installed peaclock"

@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# sudo apt install texlive-full
+sudo apt install dunst
+sudo apt install cava
+sudo apt install cmatrix
+sudo apt install cbonsai
+sudo apt install fastfetch
+sudo apt install foot
+sudo apt install mpd
+sudo apt install mpc
+sudo apt install mpv
+sudo apt install nsxiv
+sudo apt install picom
+sudo apt install feh
+sudo apt install xournalpp
+sudo apt install tmux
+sudo apt install sent
+sudo apt install policykit-1-gnome
+sudo apt install network-manager network-manager-applet
+sudo apt install curl
+sudo apt install farbfeld
+sudo apt install git
+sudo apt install libfcft-dev
+sudo apt install borgbackup
+sudo apt install mediainfo
+sudo apt install vim
+sudo apt install acpi
+sudo apt install brightnessctl
+sudo apt install libnotify-bin
+sudo apt install pulseaudio-utils
+sudo apt install pulsemixer
+sudo apt install aspell aspell-en
+
+sudo apt install maim
+sudo apt install xkb-utils
+sudo apt install xclip
+sudo apt install xdotool
+
+sudo apt install grim
+sudo apt install xdg-desktop-portal-wlr
+sudo apt install libwlroots-0.18-dev
+sudo apt install swaybg
+sudo apt install swaylock
+sudo apt install wdisplays
+sudo apt install wlr-randr
+sudo apt install slurp
+sudo apt install wl-clipboard
