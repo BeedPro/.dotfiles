@@ -95,3 +95,4 @@ luac.out
 *.hex
 
 
+.config/peaclock/history

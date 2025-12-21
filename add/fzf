@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Download & install the latest fzf binary from GitHub releases.
+# - Verifies SHA256 against the official checksums file
+# - Installs to /usr/local/bin if writable (or via sudo); otherwise ~/.local/bin
+# - Works on Linux and macOS; supports x86_64/amd64 and arm64 (plus armv7 on Linux)
+
+# --- Requirements: curl, tar, shasum/sha256sum ---
+
+need() { command -v "$1" >/dev/null 2>&1 || { echo "Missing dependency: $1" >&2; exit 1; }; }
+need curl
+need tar
+
+# macOS uses shasum; most Linux uses sha256sum
+if command -v sha256sum >/dev/null 2>&1; then
+  SHACMD="sha256sum"
+elif command -v shasum >/dev/null 2>&1; then
+  SHACMD="shasum -a 256"
+else
+  echo "Missing dependency: sha256sum (or shasum)" >&2
+  exit 1
+fi
+
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+
+case "$OS" in
+  Linux)   os="linux" ;;
+  Darwin)  os="darwin" ;;
+  *) echo "Unsupported OS: $OS" >&2; exit 1 ;;
+esac
+
+case "$ARCH" in
+  x86_64|amd64)   arch="amd64" ;;
+  aarch64|arm64)  arch="arm64" ;;
+  armv7l)         arch="armv7" ;;  # Linux only
+  *) echo "Unsupported architecture: $ARCH" >&2; exit 1 ;;
+esac
+
+API="https://api.github.com/repos/junegunn/fzf/releases/latest"
+
+# Helper: Try jq if present (more robust), otherwise fall back to grep/sed.
+json_get() {
+  # $1: jq filter for the assets[] object(s)
+  if command -v jq >/dev/null 2>&1; then
+    jq -r "$1"
+  else
+    # Very lightweight parser for just the fields we need
+    # We download once into a temp file and grep from there.
+    case "$1" in
+      '.tag_name') grep -m1 '"tag_name":' "$TMP/release.json" | sed -E 's/.*"tag_name": *"([^"]+)".*/\1/' ;;
+      *) echo "jq not available; using fallback for URLs..." >/dev/null ;;
+    esac
+  fi
+}
+
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+echo "→ Querying latest fzf release info…"
+curl -fsSL "$API" -o "$TMP/release.json"
+
+if command -v jq >/dev/null 2>&1; then
+  TAG=$(jq -r '.tag_name' "$TMP/release.json")
+  ASSET_URL=$(jq -r --arg os "$os" --arg arch "$arch" '
+    .assets[] | select(.name | test("^fzf-.*-" + $os + "_" + $arch + "\\.tar\\.gz$")) | .browser_download_url
+  ' "$TMP/release.json" | head -n1)
+  SUMS_URL=$(jq -r '.assets[] | select(.name | endswith("checksums.txt")) | .browser_download_url' "$TMP/release.json" | head -n1)
+else
+  TAG=$(json_get '.tag_name')
+  # Fallback: grab the matching asset line
+  ASSET_URL=$(grep -Eo '"browser_download_url": *"[^"]+"' "$TMP/release.json" \
+    | sed -E 's/.*"([^"]+)".*/\1/' \
+    | grep -E "/download/.*/fzf-.*-${os}_${arch}\.tar\.gz$" \
+    | head -n1)
+  SUMS_URL=$(grep -Eo '"browser_download_url": *"[^"]+"' "$TMP/release.json" \
+    | sed -E 's/.*"([^"]+)".*/\1/' \
+    | grep -E 'checksums\.txt$' \
+    | head -n1)
+fi
+
+if [[ -z "${ASSET_URL:-}" || -z "${SUMS_URL:-}" ]]; then
+  echo "Could not find a suitable asset for ${os}_${arch} or checksums file." >&2
+  exit 1
+fi
+
+echo "→ Latest tag: $TAG"
+echo "→ Downloading fzf binary tarball…"
+TARBALL="$TMP/fzf.tar.gz"
+CHECKSUMS="$TMP/checksums.txt"
+curl -fsSL "$ASSET_URL" -o "$TARBALL"
+curl -fsSL "$SUMS_URL" -o "$CHECKSUMS"
+
+echo "→ Verifying checksum…"
+FILENAME="$(basename "$ASSET_URL")"
+EXPECTED_LINE="$(grep "  $FILENAME\$" "$CHECKSUMS" || true)"
+if [[ -z "$EXPECTED_LINE" ]]; then
+  echo "Could not find checksum for $FILENAME in checksums file." >&2
+  exit 1
+fi
+
+# Calculate actual hash
+ACTUAL_HASH=$($SHACMD "$TARBALL" | awk '{print $1}')
+EXPECTED_HASH="$(echo "$EXPECTED_LINE" | awk '{print $1}')"
+
+if [[ "$ACTUAL_HASH" != "$EXPECTED_HASH" ]]; then
+  echo "Checksum mismatch! Expected $EXPECTED_HASH, got $ACTUAL_HASH." >&2
+  exit 1
+fi
+echo "✓ Checksum OK."
+
+echo "→ Extracting fzf…"
+tar -xzf "$TARBALL" -C "$TMP"
+
+BIN_SRC="$TMP/fzf"
+if [[ ! -f "$BIN_SRC" ]]; then
+  echo "Extracted binary not found. Aborting." >&2
+  exit 1
+fi
+chmod +x "$BIN_SRC"
+
+# Decide install directory
+install_to() {
+  local dst_dir="$1"
+  mkdir -p "$dst_dir"
+  cp "$BIN_SRC" "$dst_dir/fzf"
+  echo "✓ Installed to $dst_dir/fzf"
+}
+
+if [[ -w /usr/local/bin ]]; then
+  install_to "/usr/local/bin"
+elif command -v sudo >/dev/null 2>&1; then
+  echo "→ Using sudo to install to /usr/local/bin…"
+  sudo mkdir -p /usr/local/bin
+  sudo cp "$BIN_SRC" /usr/local/bin/fzf
+  sudo chmod 0755 /usr/local/bin/fzf
+  echo "✓ Installed to /usr/local/bin/fzf"
+else
+  DEST="$HOME/.local/bin"
+  install_to "$DEST"
+  if ! echo "$PATH" | grep -q "$DEST"; then
+    echo "ℹ $DEST is not on your PATH."
+    echo "  Add this to your shell config (e.g. ~/.bashrc or ~/.zshrc):"
+    echo "    export PATH=\"\$HOME/.local/bin:\$PATH\""
+  fi
+fi
+
+echo
+echo "All done. Version installed: $TAG"
+echo "Try: fzf --version"
+

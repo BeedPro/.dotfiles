@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# flatpak install org.unmojang.FjordLauncher
+flatpak install flathub com.borgbase.Vorta
+flatpak install flathub org.keepassxc.KeePassXC
+flatpak install flathub com.github.tchx84.Flatseal
+flatpak install flathub org.prismlauncher.PrismLauncher
+flatpak install flathub org.libreoffice.LibreOffice
+flatpak install flathub io.mrarm.mcpelauncher
+flatpak install flathub com.obsproject.Studio
+flatpak install flathub com.github.Matoking.protontricks
+flatpak install flathub eu.betterbird.Betterbird
+
+read -p "Do you want to install RazerGenie? (y/N): " choice
+choice=${choice:-n}  # Default to 'n' if empty
+
+if [[ "$choice" =~ ^[Yy]$ ]]; then
+    flatpak install flathub xyz.z3ntu.razergenie
+else
+    echo "Installation skipped for RazerGenie"
+fi

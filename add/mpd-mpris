@@ -1,0 +1,6 @@
+#!/bin/bash
+
+go install github.com/natsukagami/mpd-mpris/cmd/mpd-mpris@latest
+mkdir -p $HOME/.config/systemd/user
+cp $HOME/.dotfiles/services/mpd-mpris.service $HOME/.config/systemd/user/
+systemctl --user --now enable mpd-mpris

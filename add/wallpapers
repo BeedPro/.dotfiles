@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd $HOME/Pictures
+git clone https://github.com/dharmx/walls

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+
+# Initialise
+PROJECT_DIR=$HOME/.local/src/pipeseroni
+PROJECT=$PROJECT_DIR/pipesh
+mkdir -p $PROJECT_DIR
+cd $PROJECT_DIR
+
+# Clone
+git clone --depth 1 https://github.com/pipeseroni/pipes.sh $PROJECT
+cd $PROJECT
+
+# Build
+sudo make PREFIX=/usr/local/bin install
+
+# Clean up
+rm -rf $PROJECT_DIR
+echo "Removed pipesh source files"
+echo "Installed pipesh"

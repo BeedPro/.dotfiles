@@ -1,0 +1,38 @@
+#!/bin/bash
+
+mkdir -p /tmp/beeper
+
+cd /tmp/beeper
+wget -O Beeper.AppImage https://api.beeper.com/desktop/download/linux/x64/stable/com.automattic.beeper.desktop
+chmod a+x Beeper.AppImage
+
+/tmp/beeper/Beeper.AppImage --appimage-extract
+
+sudo cp /tmp/beeper/Beeper.AppImage /opt/Beeper.AppImage
+sudo cp /tmp/beeper/squashfs-root/usr/share/icons/hicolor/512x512/apps/beepertexts.png /usr/share/icons/hicolor/512x512/apps/beepertexts.png
+
+sudo ln -sf /opt/Beeper.AppImage /usr/local/bin/beeper
+
+# Create the desktop entry
+cat > /usr/local/share/applications/beepertexts.desktop <<EOF
+[Desktop Entry]
+Name=Beeper
+Exec=beeper --no-sandbox %U
+Terminal=false
+Type=Application
+Icon=beepertexts
+StartupWMClass=Beeper
+X-AppImage-Version=4.1.64
+Comment=The ultimate messaging app
+MimeType=x-scheme-handler/beeper;
+Categories=Network;
+EOF
+
+# Ensure correct permissions
+chmod 644 /usr/local/share/applications/beepertexts.desktop
+
+# Update desktop database (optional but recommended)
+update-desktop-database /usr/local/share/applications
+
+rm -rf /tmp/beeper
+echo "Removed squashfs-root for beeper"

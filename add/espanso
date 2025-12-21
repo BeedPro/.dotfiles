@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Install the x11 version of espanso
+wget -O /opt/Espanso-X11.AppImage 'https://github.com/espanso/espanso/releases/download/v2.2.1/Espanso-X11.AppImage'
+chmod u+x /opt/Espanso-X11.AppImage
+sudo ln -sf /opt/Espanso-X11.AppImage /usr/local/bin/espanso-x11
+echo "Installed espanso (x11)"
+
+# Install the wayland version of espanso
+
+sudo apt update && sudo apt install build-essential git wl-clipboard libxkbcommon-dev libdbus-1-dev libssl-dev "libwxgtk3.*-dev"
+
+mkdir -p $HOME/.local/src/espanso
+cd $HOME/.local/src/espanso
+git clone https://github.com/espanso/espanso
+
+cd espanso
+
+# Compile espanso in release mode
+# NOTE: this will take a while (~5/15 minutes)
+cargo build --release --no-default-features --features wayland,modulo,vendored-tls
+
+sudo mv target/release/espanso /usr/local/bin/espanso
+echo "Installed espanso (wayland)"
+
+rm -rf $HOME/.local/src/espanso
+echo "Cleaned up epsanso source code"
+
+sudo cp $HOME/.dotfiles/.local/scripts/start-espanso /usr/local/bin/start-espanso
+echo "Copied start-espanso to /usr/local/bin"

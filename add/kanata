@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cargo install --locked kanata
+
+sudo cp $HOME/.cargo/bin/kanata /usr/bin
+sudo mkdir -p /etc/kanata
+sudo cp $HOME/.config/kanata/config.kbd /etc/kanata
+sudo cp $HOME/.dotfiles/services/kanata.service /etc/systemd/system
+echo "Installed kanata"
+
+echo "Remember to enable kanata in systemctl"
+# sudo systemctl enable kanata
+# sudo systemctl enable kanata
