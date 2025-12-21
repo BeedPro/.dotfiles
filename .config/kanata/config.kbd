@@ -1,0 +1,120 @@
+(defcfg
+  process-unmapped-keys yes
+  linux-unicode-u-code v
+)
+
+(deflocalkeys-linux
+  # 43
+  \ 86
+  micmute 248
+)
+
+(defsrc
+  esc       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  prtsc scrlck pause  nlck kp/ kp* kp-
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc ins   home   pgup   kp7  kp8 kp9 kp+
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    ret  del   end    pgdn   kp4  kp5 kp6
+  caps a    s    d    f    g    h    j    k    l    ;    '    #                             kp1  kp2 kp3
+  lsft \    z    x    c    v    b    n    m    ,    .    /         rsft       up            kp0  kp.     kprt
+  lctl lmet lalt           spc                                ralt rctl left  down   right
+)
+
+(defvar
+  tap-timeout   200
+  hold-timeout  200
+  tt $tap-timeout
+  ht $hold-timeout
+)
+
+(defalias
+  lyr (layer-while-held layers)
+  [   (multi f24 (tap-hold $tt $ht [ (layer-while-held layers)))
+  spc (multi f24 (tap-hold $tt $ht spc (layer-while-held numbers)))
+  tab (multi f24 (tap-hold $tt $ht tab (layer-while-held symbols)))
+
+  a (multi f24 (tap-hold $tt $ht a lmet))
+  s (multi f24 (tap-hold $tt $ht s lalt))
+  d (multi f24 (tap-hold $tt $ht d lsft))
+  f (multi f24 (tap-hold $tt $ht f lctl))
+  j (multi f24 (tap-hold $tt $ht j rctl))
+  k (multi f24 (tap-hold $tt $ht k rsft))
+  l (multi f24 (tap-hold $tt $ht l lalt))
+  bsc (multi f24 (tap-hold $tt $ht bspc rmet))
+)
+
+(deflayer base
+  XX        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   _    _    _    _    _    _    _    _    _    _    @lyr XX   XX   XX    XX     XX     XX   XX  XX
+  @tab @a   @s   @d   @f   _    _    @j   @k   @l   @bsc esc  XX                            XX   XX  XX
+  XX   XX   _    _    _    _    _    _    _    _    _    ret            XX    XX            XX   XX      XX
+  XX   XX   XX             @spc                               XX   XX   XX    XX     XX
+)
+
+(defalias
+  ftb (multi f24 (tap-hold $tt $ht tab (layer-while-held functions)))
+)
+
+(deflayer numbers
+  XX        XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   XX   XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   1    2    3     4    5    6    7    8    9    0    @lyr   XX   XX   XX    XX     XX     XX   XX  XX
+  @ftb XX   del  prtsc S-3  _    left down up   rght ralt _    XX                            XX   XX  XX
+  XX   XX   del  _     _    _    home pgdn pgup end  _    _              XX    XX            XX   XX      XX
+  XX   XX   XX              XX                                 XX   XX   XX    XX     XX
+)
+
+(defalias
+  fsp (multi f24 (tap-hold $tt $ht spc (layer-while-held functions)))
+  ospp (multi lctl lalt =)
+  osps (multi lctl lshift lalt =)
+)
+
+(deflayer symbols
+  XX        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   S-1  S-'  #    S-4  S-5  S-6  S-7  S-8  grv  S-#  @lyr   XX   XX   XX    XX     XX     XX   XX  XX
+  XX   S-2  [    S-[  S-9  S-,  /    -    =    S-;  ;    XX   XX                            XX   XX  XX
+  XX   '    ]    S-]  S-0  S-.  \    S--  S-=  S-\  S-/  XX   XX              XX            XX   XX      XX
+  XX   XX   XX             @fsp                               XX   XX   XX    XX     XX
+)
+
+(defalias
+  rec (multi lctl lsft lalt =)
+  pau (multi lctl lalt =)
+  cli (multi lctl lalt -)
+)
+
+(deflayer functions
+  XX        XX   XX   XX   XX   XX    XX      XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   XX   XX   XX   XX   XX   XX    XX      XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   f1   f2   f3   f4   XX   XX    @rec    @cli  @pau  prev @lyr   XX   XX   XX    XX     XX     XX   XX  XX
+  XX   f5   f6   f7   f8   XX   brdwn voldwn  volu  bru   pp   XX   XX                            XX   XX  XX
+  XX   f9   f10  f11  f12  XX   @ospp micmute mute  @osps next XX             XX    XX            XX   XX      XX
+  XX   XX   XX             XX                                      XX   XX   XX    XX     XX
+)
+
+(deflayer qwerty
+  esc       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  prtsc scrlck pause  nlck kp/ kp* kp-
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc ins   home   pgup   kp7  kp8 kp9 kp+
+  tab  q    w    e    r    t    y    u    i    o    p    @[   ]    ret  del   end    pgdn   kp4  kp5 kp6
+  caps a    s    d    f    g    h    j    k    l    ;    '    #                             kp1  kp2 kp3
+  lsft \    z    x    c    v    b    n    m    ,    .    /         rsft       up            kp0  kp.     kprt
+  lctl lmet lalt           spc                                ralt rctl left  down   right
+)
+
+(defalias
+  qwt (layer-switch qwerty)
+  clg (multi lmet f12 (switch
+    ((base-layer base)) (layer-switch qwerty) break
+    ((base-layer qwerty)) (layer-switch base) break
+  ))
+)
+
+(deflayer layers
+  XX        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   lrld @qwt @clg XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                            XX   XX  XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX             XX    XX            XX   XX      XX
+  XX   XX   XX             XX                                 XX   XX   XX    XX     XX
+)
