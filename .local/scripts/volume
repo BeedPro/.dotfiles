@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Try to get info, else fallback
+info=$(pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null)
+mute=$(pactl get-sink-mute @DEFAULT_SINK@ 2>/dev/null)
+
+# If pactl fails (e.g. no audio server yet), show placeholder
+if [[ -z "$info" || -z "$mute" ]]; then
+    echo "vol --%"
+    exit 0
+fi
+
+vol=$(echo "$info" | grep -oP '\d+%' | head -1)
+
+if echo "$mute" | grep -q yes; then
+    echo "vol --%"
+else
+    echo "vol $vol"
+fi
