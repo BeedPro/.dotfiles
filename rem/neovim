@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo rm -rfv /usr/local/bin/nvim
+sudo rm -rfv /usr/local/share/nvim/
+sudo rm -rfv /usr/local/lib/nvim

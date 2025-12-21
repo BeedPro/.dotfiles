@@ -1,0 +1,90 @@
+#!/bin/bash
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# Uninstall Flatpak + GNOME Software plugin, with optional removal of all Flatpak apps.
+# Usage:
+#   ./uninstall-flatpak.sh            # interactive (asks about removing apps & reboot)
+#   ./uninstall-flatpak.sh --remove-apps   # non-interactive removal of all apps, still asks about reboot
+#   ./uninstall-flatpak.sh --yes-reboot    # auto-reboot at the end
+#   ./uninstall-flatpak.sh --remove-apps --yes-reboot
+
+REMOVE_APPS="prompt"   # values: prompt|yes|no
+AUTO_REBOOT="no"       # values: yes|no
+
+for arg in "$@"; do
+  case "$arg" in
+    --remove-apps) REMOVE_APPS="yes" ;;
+    --no-remove-apps) REMOVE_APPS="no" ;;
+    --yes-reboot) AUTO_REBOOT="yes" ;;
+    --help|-h)
+      echo "Usage: $0 [--remove-apps] [--no-remove-apps] [--yes-reboot]"
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $arg"
+      exit 1
+      ;;
+  esac
+done
+
+command_exists() { command -v "$1" >/dev/null 2>&1; }
+
+echo "==> Preparing to remove Flatpak and related components"
+
+# If Flatpak is installed, optionally remove all apps and data
+if command_exists flatpak; then
+  if [[ "$REMOVE_APPS" == "prompt" ]]; then
+    read -rp "Remove ALL Flatpak applications and their data? (y/N): " ans
+    ans=${ans:-N}
+    if [[ "$ans" =~ ^[Yy]$ ]]; then
+      REMOVE_APPS="yes"
+    else
+      REMOVE_APPS="no"
+    fi
+  fi
+
+  if [[ "$REMOVE_APPS" == "yes" ]]; then
+    echo "==> Removing all Flatpak applications (system & user) and their data..."
+    # Remove all user-installed apps
+    flatpak --user uninstall --all --delete-data -y 2>/dev/null || true
+    # Remove all system-installed apps
+    sudo flatpak --system uninstall --all --delete-data -y 2>/dev/null || true
+    # Remove any unused runtimes
+    flatpak uninstall --unused -y 2>/dev/null || true
+    sudo flatpak uninstall --unused -y 2>/dev/null || true
+  else
+    echo "==> Skipping removal of installed Flatpak applications."
+  fi
+
+  echo "==> Removing known remotes (if present)..."
+  flatpak remote-delete flathub 2>/dev/null || true
+  sudo flatpak remote-delete flathub 2>/dev/null || true
+else
+  echo "==> Flatpak command not found; continuing with package removal."
+fi
+
+echo "==> Removing Flatpak packages and GNOME plugin..."
+sudo apt remove --purge -y gnome-software-plugin-flatpak flatpak || true
+
+echo "==> Cleaning up residual packages..."
+sudo apt autoremove -y || true
+sudo apt clean || true
+
+# Final reboot prompt (or auto if requested)
+if [[ "$AUTO_REBOOT" == "yes" ]]; then
+  echo "Rebooting system..."
+  sudo reboot
+else
+  read -rp "Do you want to restart now? (y/N): " restart_choice
+  restart_choice=${restart_choice:-N}
+  if [[ "$restart_choice" =~ ^[Yy]$ ]]; then
+    echo "Restarting system..."
+    sudo reboot
+  else
+    echo "Restart skipped."
+  fi
+fi
+
+echo "==> Uninstall complete."

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Removing binaries
+sudo rm -rfv /usr/local/bin/emacs
+sudo rm -rfv /usr/local/bin/ctags
+sudo rm -rfv /usr/local/bin/etags
+sudo rm -rfv /usr/local/bin/ebrowse
+sudo rm -rfv /usr/local/bin/emacsclient
+
+# Removing share files
+sudo rm -rfv /usr/local/share/emacs
+
+# Remove libexec files
+sudo rm -rfv /usr/local/libexec/emacs
+
+# Remove info documentation
+sudo rm -rfv /usr/local/share/info/emacs*.info*
+
+# Removing man page
+sudo rm -rfv /usr/local/share/man/man1/emacs.1*
+
+# Remove desktop entries
+sudo rm -rfv /usr/local/share/applications/emacs*.desktop
+
+# Remove icons
+sudo rm -rfv /usr/local/share/icons/**/apps/emacs*
+
+# Recompile glib
+if command -v glib-compile-schemas &>/dev/null; then
+  echo "Recompiling GSettings schemas..."
+  sudo glib-compile-schemas "${DESTDIR}${PREFIX}/share/glib-2.0/schemas"
+fi

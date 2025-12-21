@@ -1,0 +1,11 @@
+#!/bin/bash
+
+rm $HOME/.cargo/bin/kanata
+
+sudo rm /usr/bin/kanata
+sudo rm -rf /etc/kanata
+sudo rm /etc/systemd/system/kanata.service
+
+echo "Uninstalled kanata"
+# sudo systemctl enable kanata
+# sudo systemctl enable kanata

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sudo rm /usr/local/bin/pipes.sh
+
+# Clean up
+echo "Removed pipes.sh"

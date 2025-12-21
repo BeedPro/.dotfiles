@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo rm -v /usr/local/bin/zoxide
+sudo rm -v  /usr/local/man/man1/zoxide*
