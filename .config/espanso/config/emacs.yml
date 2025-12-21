@@ -1,0 +1,5 @@
+filter_class: "Emacs"
+backend: Clipboard
+
+# With this line, Espanso works!
+x11_use_xclip_backend: true

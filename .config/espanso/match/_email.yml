@@ -1,0 +1,10 @@
+matches:
+  - trigger: ";email.new"
+    form: |
+      Dear [[name]],
+
+      $|$
+
+      Kind regards,
+
+      Annoor Mustafi
