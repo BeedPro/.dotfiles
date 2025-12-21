@@ -1,0 +1,40 @@
+matches:
+  - trigger: ";date"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%Y-%m-%d"
+
+  - trigger: ";en.hijri"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "python3 /home/beed/.local/scripts/system/hijri.py"
+
+  - trigger: ";ar.hijri"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "python3 /home/beed/.local/scripts/system/hijri.py --arabic"
+
+  - trigger: ";en.lhijri"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "python3 /home/beed/.local/scripts/system/hijri.py --long"
+
+  - trigger: ";ar.lhijri"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "python3 /home/beed/.local/scripts/system/hijri.py --arabic --long"
