@@ -1,0 +1,196 @@
+#!/bin/env python3
+import zipfile
+import os
+import shutil
+
+AUTHOR: str = "Yusuke Murata"
+SERIES: str = "One-Punch Man"
+VOLNUM: int = 2
+START: float = 9
+END: float = 15.5
+EXPORT_DIR = ".extracted"
+OUTPUT_VOLUME_DIR = f"Output/{SERIES} Volume {VOLNUM}"
+
+
+def unzip_file(filepath: str, filetype: str = "zip", output_dir: str | None = None):
+    if not filepath.lower().endswith(f".{filetype}"):
+        raise ValueError(f"The file must have a .{filetype} extension")
+
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"No such file: '{filepath}'")
+
+    if output_dir is None:
+        output_dir = os.path.splitext(filepath)[0]
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    with zipfile.ZipFile(filepath, "r") as zip_ref:
+        zip_ref.extractall(output_dir)
+        print(f"Extracted '{filepath}' to '{output_dir}'")
+
+
+def is_file_of_type(filename, filetype):
+    return filename.lower().endswith(f".{filetype.lower()}")
+
+
+def find_files_non_recursive(directory: str, filetype: str):
+    matched_files: list[str] = []
+    for file in os.listdir(directory):
+        full_path = os.path.join(directory, file)
+        if os.path.isfile(full_path) and is_file_of_type(file, filetype):
+            matched_files.append(full_path)
+    return matched_files
+
+
+def find_files_recursive(directory: str, filetype: str) -> list[str]:
+    matched_files: list[str] = []
+    for root, _, files in os.walk(directory):
+        for file in files:
+            if is_file_of_type(file, filetype):
+                matched_files.append(os.path.join(root, file))
+    return matched_files
+
+
+def find_files_by_type(directory: str, filetype: str, recursive=False) -> list[str]:
+    if recursive:
+        return find_files_recursive(directory, filetype)
+    else:
+        return find_files_non_recursive(directory, filetype)
+
+
+def get_chapter_number(filename: str) -> float:
+    return float(os.path.splitext(filename)[0].split()[1])
+
+
+def get_volume_paths(fpaths: list[str], start: float, end: float) -> list[str]:
+    return sorted(
+        [
+            fpath
+            for fpath in fpaths
+            if get_chapter_number(fpath) >= start and get_chapter_number(fpath) <= end
+        ],
+        key=lambda fpath: get_chapter_number(fpath),
+    )
+
+
+def get_valid_chapter(prompt: str) -> float:
+    while True:
+        try:
+            chapter = float(input(prompt))
+            if chapter < 0:
+                print(
+                    "Chapter number cannot be negative. Please enter a valid chapter number."
+                )
+                continue
+            return chapter
+        except ValueError:
+            print("Invalid input. Please enter a number (e.g. 5 or 5.5).")
+
+
+def merge_extracted_chapters(export_dir: str, output_dir: str):
+    image_extensions = [".png", ".jpg", ".jpeg", ".webp"]
+    page_counter = 1
+
+    for chapter_folder in sorted(os.listdir(export_dir)):
+        chapter_path = os.path.join(export_dir, chapter_folder)
+        if not os.path.isdir(chapter_path):
+            continue
+
+        images = sorted(
+            [
+                f
+                for f in os.listdir(chapter_path)
+                if os.path.splitext(f)[1].lower() in image_extensions
+            ]
+        )
+
+        for img in images:
+            src = os.path.join(chapter_path, img)
+            ext = os.path.splitext(img)[1]
+            dst = os.path.join(output_dir, f"{page_counter:03d}{ext}")
+            shutil.copy2(src, dst)
+            page_counter += 1
+
+
+def create_zip_from_directory(input_dir: str, output_zip_path: str):
+    if not output_zip_path.lower().endswith((".zip", ".cbz")):
+        raise ValueError("Output file must end with .zip or .cbz")
+
+    with zipfile.ZipFile(output_zip_path, "w", zipfile.ZIP_DEFLATED) as archive:
+        for root, _, files in os.walk(input_dir):
+            for file in sorted(files):
+                full_path = os.path.join(root, file)
+                rel_path = os.path.relpath(full_path, input_dir)
+                archive.write(full_path, arcname=rel_path)
+    print(f"Created archive: '{output_zip_path}'")
+
+
+def create_comicinfo_xml(path: str, title: str, series: str, number: int, writer: str):
+    content = f"""<?xml version="1.0" encoding="utf-8"?>
+<ComicInfo>
+  <Title>{title}</Title>
+  <Series>{series}</Series>
+  <Number>{number}</Number>
+  <Writer>{writer}</Writer>
+</ComicInfo>
+"""
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+
+def main() -> None:
+    fpaths: list[str] = find_files_by_type(".", "cbz")
+    volpaths: list[str] = get_volume_paths(fpaths, START, END)
+
+    # Clean up and create necessary directories
+    if os.path.exists(EXPORT_DIR):
+        shutil.rmtree(EXPORT_DIR)
+    os.makedirs(EXPORT_DIR, exist_ok=True)
+
+    if os.path.exists(OUTPUT_VOLUME_DIR):
+        shutil.rmtree(OUTPUT_VOLUME_DIR)
+    os.makedirs(OUTPUT_VOLUME_DIR, exist_ok=True)
+
+    print(f"Processing Volume {VOLNUM} of {SERIES} by {AUTHOR}...")
+
+    page_counter = 1
+    image_extensions = [".png", ".jpg", ".jpeg", ".webp"]
+
+    for cpath in volpaths:
+        cname: str = os.path.splitext(os.path.basename(cpath))[0]
+        output_dir: str = os.path.join(EXPORT_DIR, cname)
+        unzip_file(cpath, "cbz", output_dir)
+
+        if not os.path.isdir(output_dir):
+            continue
+
+        images = sorted(
+            [
+                file
+                for file in os.listdir(output_dir)
+                if os.path.splitext(file)[1].lower() in image_extensions
+            ]
+        )
+
+        for img in images:
+            src = os.path.join(output_dir, img)
+            ext = os.path.splitext(img)[1]
+            dst = os.path.join(OUTPUT_VOLUME_DIR, f"{page_counter:03d}{ext}")
+            shutil.copy2(src, dst)
+            page_counter += 1
+
+    create_comicinfo_xml(
+        os.path.join(OUTPUT_VOLUME_DIR, "ComicInfo.xml"),
+        title=f"{SERIES} Volume {VOLNUM}",
+        series=SERIES,
+        number=VOLNUM,
+        writer=AUTHOR,
+    )
+    create_zip_from_directory(OUTPUT_VOLUME_DIR, f"{OUTPUT_VOLUME_DIR}.cbz")
+    shutil.rmtree(OUTPUT_VOLUME_DIR)
+    shutil.rmtree(EXPORT_DIR)
+    print(f"Finished creating volume: '{OUTPUT_VOLUME_DIR}'")
+
+
+if __name__ == "__main__":
+    main()
