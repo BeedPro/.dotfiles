@@ -1,0 +1,3 @@
+Diagnostics:
+  Suppress: ["undeclared_var_use", "unknown_typename", "fatal_too_many_errors", "expected_expression"]
+
