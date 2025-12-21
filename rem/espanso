@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Remove the x11 version of espanso
+sudo rm /opt/Espanso-X11.AppImage
+sudo rm /usr/local/bin/espanso-x11
+echo "Removed espanso-x11"
+
+sudo rm /usr/local/bin/espanso
+echo "Removed espanso-wayland"
+
+sudo rm /usr/local/bin/start-espanso
+echo "Removed start-espanso"

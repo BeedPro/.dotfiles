@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo rm -rfv /usr/bin/atuin
+sudo rm -rfv /usr/share/atuin

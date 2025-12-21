@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Uninstalls fzf installed via the companion install script.
+# Will:
+#   - Detect and remove from /usr/local/bin or ~/.local/bin
+#   - Optionally remove shell integration configs if present
+
+remove_file() {
+  local file="$1"
+  if [[ -f "$file" ]]; then
+    echo "→ Removing $file"
+    rm -f "$file"
+  else
+    echo "ℹ Not found: $file"
+  fi
+}
+
+echo "→ Uninstalling fzf..."
+
+REMOVED=false
+
+# Check /usr/local/bin (with sudo if needed)
+if [[ -f "/usr/local/bin/fzf" ]]; then
+  if [[ -w "/usr/local/bin/fzf" ]]; then
+    remove_file "/usr/local/bin/fzf"
+  elif command -v sudo >/dev/null 2>&1; then
+    echo "→ Using sudo to remove /usr/local/bin/fzf"
+    sudo rm -f "/usr/local/bin/fzf"
+  else
+    echo "⚠ Cannot remove /usr/local/bin/fzf (needs sudo)"
+  fi
+  REMOVED=true
+fi
+
+# Check ~/.local/bin
+if [[ -f "$HOME/.local/bin/fzf" ]]; then
+  remove_file "$HOME/.local/bin/fzf"
+  REMOVED=true
+fi
+
+# Optional: Remove integration files from ~/.fzf if they exist
+if [[ -d "$HOME/.fzf" ]]; then
+  read -rp "Remove ~/.fzf (shell integration files)? [y/N] " ans
+  if [[ "$ans" =~ ^[Yy]$ ]]; then
+    echo "→ Removing ~/.fzf"
+    rm -rf "$HOME/.fzf"
+  fi
+fi
+
+if [[ "$REMOVED" = true ]]; then
+  echo "✓ fzf uninstalled."
+else
+  echo "ℹ fzf binary not found in standard install locations."
+fi
+

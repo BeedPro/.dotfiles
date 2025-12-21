@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# rustup self uninstall
+
+rm -rf $HOME/.cargo

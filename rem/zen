@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo rm -rf /opt/zen
+sudo rm -rf /usr/local/bin/zen
+echo "Removed zen"

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Uninstall syncthing
+sudo apt-get remove --purge -y syncthing
+
+# Remove syncthing repository sources
+if [ -f /etc/apt/sources.list.d/syncthing.list ]; then
+    sudo rm /etc/apt/sources.list.d/syncthing.list
+fi
+
+# Remove syncthing PGP keyring
+if [ -f /etc/apt/keyrings/syncthing-archive-keyring.gpg ]; then
+    sudo rm /etc/apt/keyrings/syncthing-archive-keyring.gpg
+fi
+
+# Clean up unnecessary packages and update
+sudo apt-get autoremove -y
+sudo apt-get update
+
+echo "Syncthing has been uninstalled and its repository removed."

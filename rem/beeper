@@ -1,0 +1,11 @@
+#!/bin/bash
+
+sudo rm /usr/local/bin/beeper
+sudo rm /opt/Beeper.AppImage
+sudo rm /usr/local/share/applications/beepertexts.desktop
+sudo rm /usr/share/icons/hicolor/512x512/apps/beepertexts.png
+
+echo "Removed beeper binary"
+echo "Removed beeper appimage"
+echo "Removed beeper icon"
+echo "Removed beeper desktop file"

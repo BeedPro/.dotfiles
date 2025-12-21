@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Uninstall Mullvad VPN package
+sudo apt remove --purge -y mullvad-vpn
+
+# Remove Mullvad repository list
+sudo rm -f /etc/apt/sources.list.d/mullvad.list
+sudo rm -f /etc/apt/sources.list.d/mullvad.list.bak
+sudo rm -f /etc/apt/sources.list.d/mullvad.sources
+
+# Remove Mullvad signing key
+sudo rm -f /usr/share/keyrings/mullvad-keyring.asc
+
+# Clean up unused packages and apt cache
+sudo apt autoremove -y
+sudo apt clean
+
+# Update apt sources
+sudo apt update
+
+sudo rm /usr/local/bin/mullvad-vpn
+sudo rm /usr/local/bin/mullvad-gui
+
+echo "Mullvad VPN has been uninstalled and repository entries removed."

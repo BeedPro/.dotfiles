@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm $HOME/go/bin/sesh
+sudo rm /usr/local/bin/sesh
