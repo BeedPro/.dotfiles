@@ -1,0 +1,54 @@
+[[mgr.prepend_keymap]]
+# https://github.com/mwh/dragon
+on = "<C-i>"
+# run = '''shell 'dragon --and-exit --on-top "$@"' --confirm'''
+run = '''
+	shell 'dragon -x -i -T "$1"' --confirm
+'''
+desc = "Drag file(s) with dragon"
+
+[[mgr.prepend_keymap]]
+on = "<C-n>"
+run = "shell 'kitty --working-directory $(pwd)'"
+desc = "Open kitty in the current directory"
+
+[[mgr.prepend_keymap]]
+on = "!"
+run = 'shell "$SHELL" --block --confirm'
+desc = "Open shell in the current directory"
+
+
+[[mgr.prepend_keymap]]
+on   = "<Enter>"
+run  = "plugin smart-enter"
+desc = "Enter the child directory, or open the file"
+
+[[mgr.prepend_keymap]]
+on   = "l"
+run  = "plugin smart-enter"
+desc = "Enter the child directory, or open the file"
+
+[[mgr.prepend_keymap]]
+on   = "<Right>"
+run  = "plugin smart-enter"
+desc = "Enter the child directory, or open the file"
+
+[[mgr.prepend_keymap]]
+on = [ "m" ]
+run = "plugin bookmarks --args=save"
+desc = "Save current position as a bookmark"
+
+[[mgr.prepend_keymap]]
+on = [ "`" ]
+run = "plugin bookmarks --args=jump"
+desc = "Jump to a bookmark"
+
+[[mgr.prepend_keymap]]
+on = [ "b", "d" ]
+run = "plugin bookmarks --args=delete"
+desc = "Delete a bookmark"
+
+[[mgr.prepend_keymap]]
+on = [ "b", "D" ]
+run = "plugin bookmarks --args=delete_all"
+desc = "Delete all bookmarks"
