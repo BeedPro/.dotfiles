@@ -1,0 +1,7 @@
+#!/bin/bash
+pkill -RTMIN+3 someblocks     # kblayout
+pkill -RTMIN+0 someblocks     # disk
+pkill -RTMIN+0 someblocks     # battery
+pkill -RTMIN+15 someblocks    # brightness
+pkill -RTMIN+10 someblocks    # volume
+pkill -RTMIN+0 someblocks     # datetime
