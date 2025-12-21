@@ -1,0 +1,101 @@
+#!/bin/sh
+
+if [ "$XDG_SESSION_TYPE" = "wayland" ] && command -v bemenu >/dev/null 2>&1; then
+  MENU="bemenu"
+else
+  MENU="dmenu"
+fi
+
+while read -r file; do
+  fullpath="$(pwd)/$file"
+  case "$1" in
+    "w")
+      echo "$WALL" > $HOME/.config/wallpaper/wall-path
+      echo "$WALL" >> $HOME/.config/wallpaper/history-path
+      cp "$file" ~/.config/wallpaper/current.jpg &&
+      cp "$file" /tmp/wallpaper.jpg &&
+      if [ "$XDG_SESSION_TYPE" = "wayland" ] && command -v bemenu >/dev/null 2>&1; then
+        swaybg -i $HOME/.config/wallpaper/current.jpg -m fill &
+      else
+        feh --no-fehbg --bg-scale ~/.config/wallpaper/current.jpg &
+      fi
+      notify-send -i ~/.config/wallpaper/current.jpg "Wallpaper changed."
+      ;;
+
+    "C-d")
+		  [ "$(printf "No\\nYes" | $MENU -i -p "Really delete $file?")" = "Yes" ] && rm "$file" && notify-send "$file deleted."
+      ;;
+
+    "C-c")
+      if [ -n "$WAYLAND_DISPLAY" ] && command -v wl-copy >/dev/null; then
+        wl-copy < "$file" && notify-send -i "$file" "Image copied to clipboard (Wayland)"
+      elif command -v xclip >/dev/null; then
+        xclip -selection clipboard -t image/png -i "$file" && notify-send -i "$file" "Image copied to clipboard (X11)"
+      else
+        notify-send "Clipboard tool not found (xclip or wl-copy)."
+      fi
+      ;;
+
+    "C-r")
+      magick "$file" -rotate 90 "$file"
+      ;;
+
+    "y")
+      if [ -n "$WAYLAND_DISPLAY" ] && command -v wl-copy >/dev/null; then
+        printf "%s\n" "$fullpath" | wl-copy && notify-send "File path copied to clipboard (Wayland)"
+      elif command -v xclip >/dev/null; then
+        printf "%s\n" "$fullpath" | xclip -selection clipboard &&
+        notify-send "File path copied to clipboard (X11)"
+      else
+        notify-send "Clipboard tool not found (xclip or wl-copy)."
+      fi
+      ;;
+
+    "r")
+      current_name="$(basename "$file")"
+      dir_name="$(dirname "$file")"
+      new_name=$(echo "$current_name" | $MENU -p "Rename to:")
+
+      if [ -n "$new_name" ]; then
+        mv -- "$file" "$dir_name/$new_name" &&
+        notify-send -i "$dir_name/$new_name" "Renamed to $new_name"
+      fi
+      ;;
+
+    "m")
+      if command -v "$HOME/.local/scripts/dbrowse" >/dev/null; then
+        target_dir=$("$HOME/.local/scripts/dbrowse")
+        [ -n "$target_dir" ] && mv "$file" "$target_dir" &&
+        notify-send -i "$file" "Moved to $target_dir"
+      fi
+      ;;
+
+    "c")
+      if command -v "$HOME/.local/scripts/dbrowse" >/dev/null; then
+        target_dir=$("$HOME/.local/scripts/dbrowse")
+        [ -n "$target_dir" ] && cp "$file" "$target_dir" &&
+        notify-send -i "$file" "Copied to $target_dir"
+      fi
+      ;;
+
+    "e")
+      if command -v thunar >/dev/null; then
+        thunar "$file" &
+        notify-send -i "$file" "Opened in Thunar"
+        # pkill -n nsxiv
+        kill $PPID
+        exit 0
+      else
+        notify-send "Thunar is not installed."
+      fi
+      ;;
+
+    "i")
+      notify-send "File information" "$(mediainfo "$file" | sed "s/[ ]\+:/:/g;s/: /: <b>/;s/$/<\/b>/" | grep "<b>")"
+      ;;
+
+    *)
+      notify-send "Unknown action: $1"
+      ;;
+  esac
+done
