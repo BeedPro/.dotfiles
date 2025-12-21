@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Define the keyboard layouts you want to toggle between
+LAYOUT_1="gb"
+LAYOUT_2="ara"
+
+# Get the current layout
+CURRENT_LAYOUT=$(setxkbmap -query | grep layout | awk '{print $2}')
+
+# Toggle between layouts
+if [ "$CURRENT_LAYOUT" == "$LAYOUT_1" ]; then
+    setxkbmap $LAYOUT_2
+else
+    setxkbmap $LAYOUT_1
+fi
+
+pkill -SIGRTMIN+20 dwmblocks
+
