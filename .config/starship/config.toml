@@ -1,0 +1,300 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+$python\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$line_break\
+$username\
+$hostname\
+$character"""
+
+add_newline = false
+
+[username]
+format = "[$user]($style)"
+
+[hostname]
+format = "@[$ssh_symbol$hostname]($style) "
+
+[directory]
+read_only = " ro"
+home_symbol = "home"
+format = "[$path]($style)[$read_only]($read_only_style) "
+
+[character]
+success_symbol = "[>](bold green)"
+error_symbol = "[x](bold red)"
+vimcmd_symbol = "[<](bold green)"
+
+[cmd_duration]
+format = "[$duration]($style) "
+style = "yellow"
+
+[git_commit]
+tag_symbol = " tag "
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
+
+[git_branch]
+symbol = "git"
+format = "$symbol:$branch"
+
+[git_status]
+format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+style = "cyan"
+conflicted = "​"
+untracked = "​"
+modified = "​"
+staged = "​"
+renamed = "​"
+deleted = "​"
+stashed = "\\$\\$"
+ahead = ">>"
+behind = "<<"
+diverged = "<>"
+
+[aws]
+symbol = "aws "
+
+[azure]
+symbol = "az "
+
+[buf]
+symbol = "buf "
+
+[bun]
+symbol = "bun "
+
+[c]
+symbol = "C "
+
+[cpp]
+symbol = "C++ "
+
+[cobol]
+symbol = "cobol "
+
+[conda]
+symbol = "conda "
+
+[container]
+symbol = "container "
+
+[crystal]
+symbol = "cr "
+
+[cmake]
+symbol = "cmake "
+
+[daml]
+symbol = "daml "
+
+[dart]
+symbol = "dart "
+
+[deno]
+symbol = "deno "
+
+[dotnet]
+symbol = ".NET "
+
+[docker_context]
+symbol = "docker "
+
+[elixir]
+symbol = "exs "
+
+[elm]
+symbol = "elm "
+
+[fennel]
+symbol = "fnl "
+
+[fossil_branch]
+symbol = "fossil "
+
+[gcloud]
+symbol = "gcp "
+
+
+[gleam]
+symbol = "gleam "
+
+[golang]
+symbol = "go "
+
+[gradle]
+symbol = "gradle "
+
+[guix_shell]
+symbol = "guix "
+
+[haskell]
+symbol = "haskell "
+
+[helm]
+symbol = "helm "
+
+[hg_branch]
+symbol = "hg "
+
+[java]
+symbol = "java "
+
+[julia]
+symbol = "jl "
+
+[kotlin]
+symbol = "kt "
+
+[lua]
+symbol = "lua "
+
+[nodejs]
+symbol = "nodejs "
+
+[memory_usage]
+symbol = "memory "
+
+[meson]
+symbol = "meson "
+
+[nats]
+symbol = "nats "
+
+[nim]
+symbol = "nim "
+
+[nix_shell]
+symbol = "nix "
+
+[ocaml]
+symbol = "ml "
+
+[opa]
+symbol = "opa "
+
+[os.symbols]
+AIX = "aix "
+Alpaquita = "alq "
+AlmaLinux = "alma "
+Alpine = "alp "
+Amazon = "amz "
+Android = "andr "
+Arch = "rch "
+Artix = "atx "
+Bluefin = "blfn "
+CachyOS = "cach "
+CentOS = "cent "
+Debian = "deb "
+DragonFly = "dfbsd "
+Emscripten = "emsc "
+EndeavourOS = "ndev "
+Fedora = "fed "
+FreeBSD = "fbsd "
+Garuda = "garu "
+Gentoo = "gent "
+HardenedBSD = "hbsd "
+Illumos = "lum "
+Kali = "kali "
+Linux = "lnx "
+Mabox = "mbox "
+Macos = "mac "
+Manjaro = "mjo "
+Mariner = "mrn "
+MidnightBSD = "mid "
+Mint = "mint "
+NetBSD = "nbsd "
+NixOS = "nix "
+Nobara = "nbra "
+OpenBSD = "obsd "
+OpenCloudOS = "ocos "
+openEuler = "oeul "
+openSUSE = "osuse "
+OracleLinux = "orac "
+Pop = "pop "
+Raspbian = "rasp "
+Redhat = "rhl "
+RedHatEnterprise = "rhel "
+RockyLinux = "rky "
+Redox = "redox "
+Solus = "sol "
+SUSE = "suse "
+Ubuntu = "ubnt "
+Ultramarine = "ultm "
+Unknown = "unk "
+Uos = "uos "
+Void = "void "
+Windows = "win "
+
+[package]
+symbol = "pkg "
+
+[perl]
+symbol = "pl "
+
+[php]
+symbol = "php "
+
+[pijul_channel]
+symbol = "pijul "
+
+[pixi]
+symbol = "pixi "
+
+[pulumi]
+symbol = "pulumi "
+
+[purescript]
+symbol = "purs "
+
+[python]
+symbol = "py "
+format = "[${symbol}${pyenv_prefix}(${version}) ([\\($virtualenv\\)](bright-black))]($style)\n"
+
+[quarto]
+symbol = "quarto "
+
+[raku]
+symbol = "raku "
+
+[rlang]
+symbol = "r "
+
+[ruby]
+symbol = "rb "
+
+[rust]
+symbol = "rs "
+
+[scala]
+symbol = "scala "
+
+[spack]
+symbol = "spack "
+
+[solidity]
+symbol = "solidity "
+
+[status]
+symbol = "[x](bold red) "
+
+[sudo]
+symbol = "sudo "
+
+[swift]
+symbol = "swift "
+
+[typst]
+symbol = "typst "
+
+[terraform]
+symbol = "terraform "
+
+[zig]
+symbol = "zig "
