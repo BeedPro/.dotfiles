@@ -1,0 +1,2 @@
+#!/bin/bash
+[ -d /sys/class/backlight ] && [ "$(ls -A /sys/class/backlight)" ] && echo "lux $(brightnessctl | grep -oP '\(\K[0-9]+(?=%)')%" || exit 0
