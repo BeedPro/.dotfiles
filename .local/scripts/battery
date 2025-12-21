@@ -1,0 +1,125 @@
+#!/usr/bin/env perl
+#
+# Copyright 2014 Pierre Mavro <deimos@deimos.fr>
+# Copyright 2014 Vivien Didelot <vivien@didelot.org>
+#
+# Licensed under the terms of the GNU GPL v3, or any later version.
+#
+# This script is meant to use with i3blocks. It parses the output of the "acpi"
+# command (often provided by a package of the same name) to read the status of
+# the battery, and eventually its remaining time (to full charge or discharge).
+#
+# The color will gradually change for a percentage below 85%, and the urgency
+# (exit code 33) is set if there is less that 5% remaining.
+
+use strict;
+use warnings;
+use utf8;
+
+my $acpi;
+my $status;
+my $percent;
+my $ac_adapt;
+my $full_text;
+my $short_text;
+my $bat_number = $ENV{BAT_NUMBER} || 0;
+my $label = $ENV{LABEL} || "";
+
+# read the first line of the "acpi" command output
+open (ACPI, "acpi -b 2>/dev/null| grep 'Battery $bat_number' |") or die;
+$acpi = <ACPI>;
+close(ACPI);
+
+# fail on unexpected output
+if (not defined($acpi)) {
+    # don't print anything to stderr if there is no battery
+    exit(0);
+}
+elsif ($acpi !~ /: ([\w\s]+), (\d+)%/) {
+	die "$acpi\n";
+}
+
+$status = $1;
+$percent = $2;
+$full_text = "bat $label$percent%";
+
+if ($status eq 'Discharging') {
+	$full_text .= ' [<<+]';
+} elsif ($status eq 'Charging') {
+	$full_text .= ' [>>+]';
+} elsif ($status eq 'Unknown') {
+	open (AC_ADAPTER, "acpi -a |") or die;
+	$ac_adapt = <AC_ADAPTER>;
+	close(AC_ADAPTER);
+
+	if ($ac_adapt =~ /: ([\w-]+)/) {
+		$ac_adapt = $1;
+
+		if ($ac_adapt eq 'on-line') {
+			$full_text .= ' [+]';
+		} elsif ($ac_adapt eq 'off-line') {
+			$full_text .= ' [-]';
+		}
+	}
+}
+
+$short_text = $full_text;
+
+if ($acpi =~ /(\d\d:\d\d):/) {
+	$full_text .= " ($1)";
+}
+
+# print text
+# print "$full_text\n";
+print "$short_text\n";
+
+# --- New: critical notifications under 15% while discharging ---
+if ($status eq 'Discharging' && $percent < 15) {
+    # notify at 15%, 10%, 5% buckets only (avoid spam)
+    my $bucket = int($percent / 5);   # 0..2 means <15%
+    my $state_file = "/tmp/.blocks_battery_notify_$bat_number";
+
+    my $last_bucket = -1;
+    if (open my $sf_in, '<', $state_file) {
+        my $line = <$sf_in>;
+        close $sf_in;
+        if (defined $line && $line =~ /^(\d+)$/) { $last_bucket = $1; }
+    }
+
+    if ($bucket < 3 && $bucket != $last_bucket) {
+        # only attempt if notify-send exists
+        my $have_notify = system('sh', '-c', 'command -v notify-send >/dev/null 2>&1') == 0;
+
+        if ($have_notify) {
+            my $msg = "Battery low: $percent% remaining";
+            # -u critical for high urgency
+            system('notify-send', '-u', 'critical', 'Battery Warning', $msg);
+        }
+
+        # persist last bucket notified
+        if (open my $sf_out, '>', $state_file) {
+            print {$sf_out} $bucket;
+            close $sf_out;
+        }
+    }
+}
+
+# consider color and urgent flag only on discharge
+if ($status eq 'Discharging') {
+
+	#if ($percent < 20) {
+	#	print "#f38ba8\n";
+	#} elsif ($percent < 40) {
+	#	print "#fab387\n";
+	#} elsif ($percent < 60) {
+	#	print "#f9e2af\n";
+	#} elsif ($percent < 85) {
+	#	print "#a6e3a1\n";
+	#}
+
+	if ($percent < 5) {
+		exit(33);
+	}
+}
+
+exit(0);
