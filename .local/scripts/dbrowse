@@ -1,0 +1,67 @@
+#!/bin/sh
+
+NEWLINE="
+"
+
+if [ "$XDG_SESSION_TYPE" = "wayland" ] && command -v bemenu >/dev/null 2>&1; then
+    MENU="bemenu"
+else
+    MENU="dmenu"
+fi
+
+fullpath() {
+	name="$(sh -c "echo '$1'")"
+	path="$2"
+	c="$(echo "$name" |cut -b1)"
+
+	if [ "$c" = "/" ]; then
+		full="$name"
+	else
+		full="$path/$name"
+	fi
+	realpath "$full"
+}
+
+main() {
+	target="$1"
+	[ -z "$target" ] && target="$(realpath .)"
+	prompt="$2"
+
+	while true; do
+		p="$prompt"
+		[ -z "$p" ] && p="$target"
+
+		# Add "." to the list of items to allow selecting current directory
+		items="$(printf ".\n%s\n" "$(ls -1a "$target" | grep -v '^\.$')" | $MENU -i -p "$p" -l 25)"
+		ec=$?
+		[ "$ec" -ne 0 ] && exit $ec
+
+		# ignore duplicates
+		items="$(echo "$items" | sort -u)"
+
+		nitems=$(echo "$items" | wc -l)
+		if [ "$nitems" -eq 1 ]; then
+			# Handle selecting "." to mean "current directory"
+			[ "$items" = "." ] && echo "$target" && exit 0
+
+			newt="$(fullpath "$items" "$target")"
+			[ ! -e "$newt" ] && continue
+			if [ -d "$newt" ]; then
+				target="$newt"
+				continue
+			fi
+		fi
+
+		IFS="$NEWLINE"
+		for item in $items; do
+			[ "$item" = "." ] && echo "$target" && continue
+			item="$(fullpath "$item" "$target")"
+			[ ! -e "$item" ] && continue
+			echo "$item"
+		done
+		unset IFS
+		exit 0
+	done
+}
+
+main "$@"
