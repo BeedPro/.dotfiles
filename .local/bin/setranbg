@@ -1,8 +1,0 @@
-#!/bin/bash
-
-WALL=$($HOME/.local/scripts/random-wall)
-echo "$WALL" > $HOME/.config/wallpaper/wall-path
-echo "$WALL" >> $HOME/.config/wallpaper/history-path
-cp $WALL /tmp/wallpaper.jpg
-cp $WALL $HOME/.config/wallpaper/current.jpg
-feh --no-fehbg --bg-scale $WALL
