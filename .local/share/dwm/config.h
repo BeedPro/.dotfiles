@@ -228,7 +228,7 @@ static const char *dmenucmd[] = {
 static const char *tmuxcmd[]  = { "st","-e", "sesh", "connect", "home", NULL };
 static const char *lockcmd[]  = { "slock", NULL };
 static const char *browsercmd[]  = { "zen", NULL };
-static const char *filescmd[]  = { "thunar", NULL };
+static const char *filescmd[]  = { "st", "-e", "yazi", NULL };
 
 static const char *powercmd[] = { "/bin/sh", "-c", "~/.local/scripts/powermenu.sh", NULL };
 static const char *killmenucmd[] = { "/bin/sh", "-c", "~/.local/scripts/killmenu.sh", NULL };
