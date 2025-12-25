@@ -96,3 +96,4 @@ luac.out
 
 
 .config/peaclock/history
+.local/share/dwm/dwm
