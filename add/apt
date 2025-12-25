@@ -2,6 +2,7 @@
 
 # sudo apt install texlive-full
 sudo apt install dunst
+sudo apt install xss-lock
 sudo apt install cava
 sudo apt install cmatrix
 sudo apt install cbonsai
