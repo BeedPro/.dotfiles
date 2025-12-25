@@ -1,11 +1,5 @@
 #!/bin/sh
 
-if [ "$XDG_SESSION_TYPE" = "wayland" ] && command -v bemenu >/dev/null 2>&1; then
-  MENU="bemenu"
-else
-  MENU="dmenu"
-fi
-
 while read -r file; do
   fullpath="$(pwd)/$file"
   case "$1" in
@@ -23,7 +17,7 @@ while read -r file; do
       ;;
 
     "C-d")
-		  [ "$(printf "No\\nYes" | $MENU -i -p "Really delete $file?")" = "Yes" ] && rm "$file" && notify-send "$file deleted."
+		  [ "$(printf "No\\nYes" | dmenu -i -p "Really delete $file?")" = "Yes" ] && rm "$file" && notify-send "$file deleted."
       ;;
 
     "C-c")
@@ -54,7 +48,7 @@ while read -r file; do
     "r")
       current_name="$(basename "$file")"
       dir_name="$(dirname "$file")"
-      new_name=$(echo "$current_name" | $MENU -p "Rename to:")
+      new_name=$(echo "$current_name" | dmenu -p "Rename to:")
 
       if [ -n "$new_name" ]; then
         mv -- "$file" "$dir_name/$new_name" &&
