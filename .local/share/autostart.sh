@@ -12,6 +12,6 @@ beeper &
 
 xss-lock --transfer-sleep-lock -- slock --nofork &
 picom -b
-feh --no-fehbg --bg-scale $HOME/.config/wallpaper/current.jpg
+$HOME/.screenlayout/set-screens.sh
 xset dpms 0 0 0 && xset s noblank  && xset s off
 dwmblocks &
