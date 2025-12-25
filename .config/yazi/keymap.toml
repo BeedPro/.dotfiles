@@ -1,22 +1,16 @@
 [[mgr.prepend_keymap]]
 # https://github.com/mwh/dragon
-on = "<C-i>"
 # run = '''shell 'dragon --and-exit --on-top "$@"' --confirm'''
+on = "<C-i>"
 run = '''
 	shell 'dragon -x -i -T "$1"' --confirm
 '''
 desc = "Drag file(s) with dragon"
 
 [[mgr.prepend_keymap]]
-on = "<C-n>"
-run = "shell 'kitty --working-directory $(pwd)'"
-desc = "Open kitty in the current directory"
-
-[[mgr.prepend_keymap]]
 on = "!"
 run = 'shell "$SHELL" --block --confirm'
 desc = "Open shell in the current directory"
-
 
 [[mgr.prepend_keymap]]
 on   = "<Enter>"
