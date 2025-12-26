@@ -18,7 +18,9 @@ ensure_session () {
 
 # Prompt the user with a fuzzy finder interface to select a session
 selected=$(sesh list --icons | fzf-tmux -p 80%,70% \
-  --no-sort --ansi --border-label ' sesh ' --prompt 'all ' \
+  --ansi \
+  --no-sort \
+  --border-label ' sesh ' --prompt 'all ' \
   --header '  (C-a) all :: (C-t) tmux :: (C-g) config :: (C-x) zoxide :: (M-bs) kill' \
   --bind 'tab:down,btab:up' \
   --bind 'ctrl-a:change-prompt(all )+reload(sesh list --icons)' \
@@ -32,7 +34,9 @@ selected=$(sesh list --icons | fzf-tmux -p 80%,70% \
   --preview-window 'right:55%' \
   --layout 'reverse' \
   --print-query \
-  --preview 'sesh preview {}')
+  --preview 'sesh preview {}' \
+  --color=bg:-1,bg+:-1,gutter:-1
+)
 
 selected=$(echo "$selected" | tail -1)
 
