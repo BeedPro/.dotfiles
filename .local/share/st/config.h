@@ -127,32 +127,61 @@ unsigned int tabspaces = 8;
 char *xdndescchar = " !\"#$&'()*;<>?[\\]^`{|}~";
 
 /* Terminal colors (16 first used in escape sequence) */
+
+// One-light
 static const char *colorname[] = {
 	/* 8 normal colors */
-	"#45475A",
-	"#F38BA8",
-	"#A6E3A1",
-	"#F9E2AF",
-	"#89B4FA",
-	"#F5C2E7",
-	"#94E2D5",
-	"#BAC2DE",
+	"#383A42", /* black */
+	"#E45649", /* red */
+	"#50A14F", /* green */
+	"#C18401", /* yellow */
+	"#4078F2", /* blue */
+	"#A626A4", /* magenta */
+	"#0184BC", /* cyan */
+	"#FAFAFA", /* white */
 
 	/* 8 bright colors */
-	"#585B70",
-	"#F38BA8",
-	"#A6E3A1",
-	"#F9E2AF",
-	"#89B4FA",
-	"#F5C2E7",
-	"#94E2D5",
-	"#A6ADC8",
+	"#4F525D", /* bright black */
+	"#E45649", /* bright red */
+	"#50A14F", /* bright green */
+	"#C18401", /* bright yellow */
+	"#4078F2", /* bright blue */
+	"#A626A4", /* bright magenta */
+	"#0184BC", /* bright cyan */
+	"#FFFFFF", /* bright white */
 
-[256] = "#CDD6F4", /* default foreground colour */
-[257] = "#1E1E2E", /* default background colour */
-[258] = "#F5E0DC", /*575268*/
-
+	[256] = "#383A42", /* default foreground colour */
+	[257] = "#FAFAFA", /* default background colour */
+	[258] = "#526FFF", /* cursor colour */
 };
+
+// Catppuccin-mocha
+// static const char *colorname[] = {
+// 	/* 8 normal colors */
+// 	"#45475A",
+// 	"#F38BA8",
+// 	"#A6E3A1",
+// 	"#F9E2AF",
+// 	"#89B4FA",
+// 	"#F5C2E7",
+// 	"#94E2D5",
+// 	"#BAC2DE",
+//
+// 	/* 8 bright colors */
+// 	"#585B70",
+// 	"#F38BA8",
+// 	"#A6E3A1",
+// 	"#F9E2AF",
+// 	"#89B4FA",
+// 	"#F5C2E7",
+// 	"#94E2D5",
+// 	"#A6ADC8",
+//
+// [256] = "#CDD6F4", /* default foreground colour */
+// [257] = "#1E1E2E", /* default background colour */
+// [258] = "#F5E0DC", /*575268*/
+//
+// };
 
 /*
  * Default colors (colorname index)
