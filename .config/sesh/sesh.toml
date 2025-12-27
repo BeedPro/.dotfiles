@@ -10,7 +10,7 @@ path = "~"
 [[session]]
 name = "agenda"
 path = "~/Compendium/Agenda"
-startup_command = "nvim -c ':Telescope find_files'"
+startup_command = "nvim -c ':Telescope find_files'; tmux kill-session"
 
 [[session]]
 name = "library"
