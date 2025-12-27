@@ -2,6 +2,12 @@ return {
   { import = "nvchad.blink.lazyspec" },
   {
     "Saghen/blink.cmp",
-    opts = require "configs.blink",
+    opts = {
+      completion = {
+        ghost_text = {
+          enabled = false,
+        },
+      },
+    },
   },
 }
