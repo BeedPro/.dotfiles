@@ -98,3 +98,4 @@ luac.out
 .config/peaclock/history
 .local/share/dwm/dwm
 .local/share/st/st
+.local/share/sent/sent
