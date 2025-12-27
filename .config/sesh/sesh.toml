@@ -44,7 +44,7 @@ startup_command = "lazygit"
 [[session]]
 name = "src"
 path = "~/.local/src"
-startup_command = "find . -mindepth 2 -maxdepth 2 -type d | xargs -I {} zoxide add {}"
+startup_command='SEL="$(find . -mindepth 2 -maxdepth 2 -type d -printf "%P\n" | tee >(xargs -r zoxide add) | fzf)" && [ -n "$SEL" ] && tmux rename-session "$SEL" && cd "$SEL"'
 
 [[session]]
 name = "config"
