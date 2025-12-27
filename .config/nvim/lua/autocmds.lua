@@ -4,10 +4,9 @@ local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 local command = vim.api.nvim_create_user_command
 
---- Augroups
 local diagnosticGroup = augroup("DiagnosticFloat", { clear = true })
+local numtogglegroup = augroup("numbertoggle", {}) --- sitiom/nvim-numbertoggle
 
---- Functions
 local function open_diagnostic_float()
   vim.diagnostic.open_float(nil, { focus = false })
 end
@@ -28,37 +27,113 @@ local function open_on_start(data)
   end
 end
 
-local external_ext = {
-  "pdf",
-  "png",
-  "jpg",
-  "jpeg",
-  "gif",
-  "bmp",
-  "svg",
-  "xopp",
-}
+local function is_django_project(filepath)
+  local uv = vim.loop
 
--- Detect OS command
-local open_cmd
-if vim.fn.has "mac" == 1 then
-  open_cmd = "open"
-elseif vim.fn.has "win32" == 1 then
-  open_cmd = "start"
-else
-  open_cmd = "xdg-open"
+  -- Walk up directories to find "manage.py" or "settings.py"
+  local dir = vim.fn.fnamemodify(filepath, ":p:h")
+
+  while dir and dir ~= "/" do
+    local manage_py = dir .. "/manage.py"
+    local settings_py = dir .. "/project/settings.py" -- common layout
+    local settings_glob = vim.fn.glob(dir .. "/**/settings.py")
+
+    if uv.fs_stat(manage_py) or uv.fs_stat(settings_py) or settings_glob ~= "" then
+      return true
+    end
+
+    -- Move up one directory
+    local parent = vim.fn.fnamemodify(dir, ":h")
+    if parent == dir then
+      break
+    end
+    dir = parent
+  end
+
+  return false
 end
 
-local ext_pattern = table.concat(
-  vim.tbl_map(function(ext)
-    return "*." .. ext
-  end, external_ext),
-  ","
-)
+local function html_looks_like_django(filepath)
+  local lines = vim.fn.readfile(filepath, "", 20) -- read first 20 lines
+  for _, line in ipairs(lines) do
+    if line:match "{%%" or line:match "{{" or line:match "{#" then
+      return true
+    end
+  end
+  return false
+end
+
+--- Commands
+command("Format", function()
+  require("conform").format { async = true, lsp_fallback = true }
+end, {})
+
+command("FormatDisable", function(args)
+  if args.bang then
+    vim.b.disable_autoformat = true
+  else
+    vim.g.disable_autoformat = true
+  end
+end, {
+  desc = "Disable autoformat-on-save",
+  bang = true,
+})
+
+command("FormatEnable", function()
+  vim.b.disable_autoformat = false
+  vim.g.disable_autoformat = false
+end, {
+  desc = "Re-enable autoformat-on-save",
+})
+
+autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.html",
+  callback = function(args)
+    local file = args.file
+
+    -- Complex detection logic
+    if
+      -- in a Django project folder
+      is_django_project(file)
+      -- inside typical Django template directories
+      or file:match "/templates/"
+      or file:match "/templates/.+%.html$"
+      or file:match "/app_name/templates/"
+      -- contains Django template syntax
+      or html_looks_like_django(file)
+    then
+      vim.bo.filetype = "htmldjango"
+    else
+      vim.bo.filetype = "html"
+    end
+  end,
+})
 
 autocmd({ "BufReadPost" }, {
-  pattern = ext_pattern,
+  pattern = table.concat(
+    vim.tbl_map(function(ext)
+      return "*." .. ext
+    end, {
+      "pdf",
+      "png",
+      "jpg",
+      "jpeg",
+      "gif",
+      "bmp",
+      "svg",
+      "xopp",
+    }),
+    ","
+  ),
   callback = function()
+    local open_cmd
+    if vim.fn.has "mac" == 1 then
+      open_cmd = "open"
+    elseif vim.fn.has "win32" == 1 then
+      open_cmd = "start"
+    else
+      open_cmd = "xdg-open"
+    end
     local file = vim.fn.expand "%:p"
     vim.fn.jobstart({ open_cmd, file }, { detach = true })
     vim.schedule(function()
@@ -109,7 +184,6 @@ autocmd("FileType", {
   end,
 })
 
---- Autocommands
 autocmd("TextYankPost", {
   callback = function()
     vim.highlight.on_yank { higroup = "IncSearch", timeout = 200 }
@@ -120,9 +194,6 @@ autocmd("CursorHold", {
   group = diagnosticGroup,
   callback = open_diagnostic_float,
 })
-
--- https://github.com/sitiom/nvim-numbertoggle/blob/main/plugin/numbertoggle.lua
-local numtogglegroup = augroup("numbertoggle", {})
 
 autocmd({ "BufEnter", "FocusGained", "InsertLeave", "CmdlineLeave", "WinEnter" }, {
   pattern = "*",
@@ -148,7 +219,3 @@ autocmd({ "BufLeave", "FocusLost", "InsertEnter", "CmdlineEnter", "WinLeave" }, 
     end
   end,
 })
-
-command("Format", function()
-  require("conform").format { async = true, lsp_fallback = true }
-end, {})
