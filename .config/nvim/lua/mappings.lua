@@ -36,16 +36,10 @@ nomap({ "n", "t" }, "<A-i>")
 nomap({ "n", "t" }, "<A-h>")
 nomap({ "n", "t" }, "<A-v>")
 
-map("n", "<leader>of", function()
-  require("telescope.builtin").find_files {
-    cwd = vim.fn.expand "~/Compendium/Agenda",
-    prompt_title = "Compendium / Agenda",
-  }
-end, { desc = "Open Compendium Agenda files" })
-
 map("n", "<leader>a", function()
   harpoon:list():add()
 end)
+
 map("n", "<C-e>", function()
   harpoon.ui:toggle_quick_menu(harpoon:list())
 end)
