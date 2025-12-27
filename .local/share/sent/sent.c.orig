@@ -18,6 +18,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xft/Xft.h>
+#include <fribidi.h>
 
 #include "arg.h"
 #include "util.h"
@@ -117,6 +118,7 @@ static void configure(XEvent *);
 
 /* Globals */
 static const char *fname = NULL;
+static char fribidi_text[BUFSIZ] = "";
 static Slide *slides = NULL;
 static int idx = 0;
 static int slidecount = 0;
@@ -133,6 +135,26 @@ static void (*handler[LASTEvent])(XEvent *) = {
 	[Expose] = expose,
 	[KeyPress] = kpress,
 };
+
+static void
+apply_fribidi(char *str)
+{
+        FriBidiStrIndex len = strlen(str);
+        FriBidiChar logical[BUFSIZ];
+        FriBidiChar visual[BUFSIZ];
+        FriBidiParType base = FRIBIDI_PAR_ON;
+        FriBidiCharSet charset;
+        fribidi_boolean result;
+
+        fribidi_text[0] = 0;
+        if (len>0)
+        {
+                charset = fribidi_parse_charset("UTF-8");
+                len = fribidi_charset_to_unicode(charset, str, len, logical);
+                result = fribidi_log2vis(logical, len, &base, visual, NULL, NULL, NULL);
+                len = fribidi_unicode_to_charset(charset, visual, len, fribidi_text);
+        }
+}
 
 int
 filter(int fd, const char *cmd)
@@ -530,15 +552,17 @@ xdraw(void)
 
 	if (!im) {
 		drw_rect(d, 0, 0, xw.w, xw.h, 1, 1);
-		for (i = 0; i < slides[idx].linecount; i++)
+		for (i = 0; i < slides[idx].linecount; i++) {
+			apply_fribidi(slides[idx].lines[i]);
 			drw_text(d,
 			         (xw.w - width) / 2,
 			         (xw.h - height) / 2 + i * linespacing * d->fonts->h,
 			         width,
 			         d->fonts->h,
 			         0,
-			         slides[idx].lines[i],
+			         fribidi_text,
 			         0);
+		}
 		drw_map(d, xw.win, 0, 0, xw.w, xw.h);
 	} else {
 		if (!(im->state & SCALED))
