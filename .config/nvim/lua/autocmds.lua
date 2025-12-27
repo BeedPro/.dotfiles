@@ -35,7 +35,7 @@ local function is_django_project(filepath)
 
   while dir and dir ~= "/" do
     local manage_py = dir .. "/manage.py"
-    local settings_py = dir .. "/project/settings.py" -- common layout
+    local settings_py = dir .. "/project/settings.py"
     local settings_glob = vim.fn.glob(dir .. "/**/settings.py")
 
     if uv.fs_stat(manage_py) or uv.fs_stat(settings_py) or settings_glob ~= "" then
@@ -63,7 +63,6 @@ local function html_looks_like_django(filepath)
   return false
 end
 
---- Commands
 command("Format", function()
   require("conform").format { async = true, lsp_fallback = true }
 end, {})
@@ -147,7 +146,6 @@ autocmd({ "BufEnter", "BufWritePost" }, {
     local dir = vim.fn.fnamemodify(filepath, ":h")
     local outpath = dir .. "/render.pdf"
 
-    -- Run typst compile
     local cmd = { "typst", "compile", filepath, outpath }
     vim.fn.jobstart(cmd, {
       stdout_buffered = true,
