@@ -91,15 +91,11 @@ autocmd({ "BufRead", "BufNewFile" }, {
   callback = function(args)
     local file = args.file
 
-    -- Complex detection logic
     if
-      -- in a Django project folder
       is_django_project(file)
-      -- inside typical Django template directories
       or file:match "/templates/"
       or file:match "/templates/.+%.html$"
       or file:match "/app_name/templates/"
-      -- contains Django template syntax
       or html_looks_like_django(file)
     then
       vim.bo.filetype = "htmldjango"
