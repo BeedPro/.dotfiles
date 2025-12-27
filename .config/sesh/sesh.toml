@@ -8,6 +8,11 @@ name = "home"
 path = "~"
 
 [[session]]
+name = "agenda"
+path = "~/Compendium/Agenda"
+startup_command = "nvim -c ':Telescope find_files'"
+
+[[session]]
 name = "library"
 path = "~/Compendium/Library"
 startup_command = "yazi"
