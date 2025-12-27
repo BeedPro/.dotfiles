@@ -8,6 +8,7 @@ sudo apt install cmatrix
 sudo apt install cbonsai
 sudo apt install fastfetch
 
+sudo apt install nwg-look
 sudo apt install mpd
 sudo apt install mpc
 sudo apt install mpv
@@ -18,7 +19,6 @@ sudo apt install xournalpp
 sudo apt install zathura
 sudo apt install sioyek
 sudo apt install tmux
-sudo apt install sent
 sudo apt install policykit-1-gnome
 sudo apt install network-manager network-manager-applet
 sudo apt install curl
@@ -26,7 +26,6 @@ sudo apt install farbfeld
 sudo apt install git
 sudo apt install libfcft-dev
 sudo apt install borgbackup
-sudo apt install mediainfo
 sudo apt install vim
 sudo apt install acpi
 sudo apt install brightnessctl
