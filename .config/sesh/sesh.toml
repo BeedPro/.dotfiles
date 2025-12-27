@@ -44,7 +44,7 @@ startup_command = "lazygit"
 [[session]]
 name = "src"
 path = "~/.local/src"
-startup_command = "~/.config/tmux/scripts/sesh-srcs.sh"
+startup_command = "find . -mindepth 2 -maxdepth 2 -type d | xargs -I {} zoxide add {}"
 
 [[session]]
 name = "config"
