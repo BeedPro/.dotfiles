@@ -100,3 +100,4 @@ luac.out
 .local/share/st/st
 .local/share/sent/sent
 .local/share/dwm/dwm
+.local/share/dmenu/dmenu
