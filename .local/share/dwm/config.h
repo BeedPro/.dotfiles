@@ -36,17 +36,17 @@ static const char dmenufont[]            = "GohuFont 14 Nerd Font:size=12";
 static char c000000[]                    = "#000000"; // placeholder value
 
 static char normfgcolor[]                = "#cdd6f4";
-static char normbgcolor[]                = "#1e1e2e";
+static char normbgcolor[]                = "#11111b";
 static char normbordercolor[]            = "#313244";
 static char normfloatcolor[]             = "#a6e3a1";
 
-static char selfgcolor[]                 = "#1e1e2e";
+static char selfgcolor[]                 = "#11111b";
 static char selbgcolor[]                 = "#b4befe";
 static char selbordercolor[]             = "#b4befe";
 static char selfloatcolor[]              = "#b4befe";
 
 static char titlenormfgcolor[]           = "#cdd6f4";
-static char titlenormbgcolor[]           = "#1e1e2e";
+static char titlenormbgcolor[]           = "#11111b";
 static char titlenormbordercolor[]       = "#444444";
 static char titlenormfloatcolor[]        = "#f5c2e7";
 
@@ -56,7 +56,7 @@ static char titleselbordercolor[]        = "#b4befe";
 static char titleselfloatcolor[]         = "#b4befe";
 
 static char tagsnormfgcolor[]            = "#cdd6f4";
-static char tagsnormbgcolor[]            = "#1e1e2e";
+static char tagsnormbgcolor[]            = "#11111b";
 static char tagsnormbordercolor[]        = "#444444";
 static char tagsnormfloatcolor[]         = "#f5c2e7";
 
@@ -67,11 +67,11 @@ static char tagsselfloatcolor[]          = "#b4befe";
 
 static char hidnormfgcolor[]             = "#45475a";
 static char hidselfgcolor[]              = "#585b70";
-static char hidnormbgcolor[]             = "#1e1e2e";
-static char hidselbgcolor[]              = "#1e1e2e";
+static char hidnormbgcolor[]             = "#11111b";
+static char hidselbgcolor[]              = "#11111b";
 
 static char urgfgcolor[]                 = "#cdd6f4";
-static char urgbgcolor[]                 = "#1e1e2e";
+static char urgbgcolor[]                 = "#11111b";
 static char urgbordercolor[]             = "#f38ba8";
 static char urgfloatcolor[]              = "#f5c2e7";
 
