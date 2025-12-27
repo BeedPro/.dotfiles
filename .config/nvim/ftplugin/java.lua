@@ -16,8 +16,6 @@ local bundles = {
   vim.fn.glob(mason_package .. "/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar"),
 }
 
--- vim.list_extend(bundles, vim.split(vim.fn.glob(mason_home .. "/java-test/extension/server/*.jar"), "\n"))
-
 local config = {
   on_attach = nvlsp.on_attach,
   cmd = {
@@ -97,7 +95,3 @@ map("v", "<leader>crv", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<C
 map("n", "<leader>crc", "<Cmd>lua require('jdtls').extract_constant()<CR>", { desc = "Extract Constant" })
 map("v", "<leader>crc", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", { desc = "Extract Constant" })
 map("v", "<leader>crm", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", { desc = "Extract Method" })
-
--- Testing mappings
--- map("n", "<leader>tr", require("jdtls").test_nearest_method, { desc = "Run nearest test" })
--- map("n", "<leader>tc", require("jdtls").test_class, { desc = "Run current class tests" })
