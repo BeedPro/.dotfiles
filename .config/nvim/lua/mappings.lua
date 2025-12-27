@@ -1,18 +1,25 @@
 require "nvchad.mappings"
 
---- Plugins
 local nvim_tmux_nav = require "nvim-tmux-navigation"
 local snacks = require "snacks"
 local dap = require "dap"
 local dapui = require "dapui"
 local neotest = require "neotest"
 local harpoon = require "harpoon"
+local builtin = require "telescope.builtin"
+local map = vim.keymap.set
+local function nomap(mode, lhs)
+  pcall(vim.keymap.del, mode, lhs)
+end
 
 harpoon:setup()
 
--- Disable mappings
-local function nomap(mode, lhs)
-  pcall(vim.keymap.del, mode, lhs)
+local function search_filename_no_ext()
+  local name = vim.fn.expand "%:t:r"
+  if name == "" then
+    return
+  end
+  builtin.live_grep { default_text = "(" .. name .. ")" }
 end
 
 nomap("n", "K")
@@ -28,18 +35,6 @@ nomap("n", "<S-tab>")
 nomap({ "n", "t" }, "<A-i>")
 nomap({ "n", "t" }, "<A-h>")
 nomap({ "n", "t" }, "<A-v>")
-
--- Set mappings
-local map = vim.keymap.set
-local builtin = require "telescope.builtin"
-
-local function search_filename_no_ext()
-  local name = vim.fn.expand "%:t:r"
-  if name == "" then
-    return
-  end
-  builtin.live_grep { default_text = "(" .. name .. ")" }
-end
 
 map("n", "<leader>of", function()
   require("telescope.builtin").find_files {
