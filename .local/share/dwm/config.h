@@ -241,8 +241,6 @@ static const char *audiomutecmd[] = { "/bin/sh", "-c", "pactl set-sink-mute @DEF
 static const char *audiotogglecmd[] = { "/bin/sh", "-c", "playerctl play-pause", NULL };
 static const char *audionextcmd[] = { "/bin/sh", "-c", "playerctl next", NULL };
 
-static const char *quitcmd[] = { "/bin/sh", "-c", "~/.local/scripts/exitconfirm.sh", NULL };
-
 static const char *screenselcmd[] = { "/bin/sh", "-c", "~/.local/scripts/screenshot.sh selection", NULL };
 static const char *screenwincmd[] = { "/bin/sh", "-c", "~/.local/scripts/screenshot.sh window", NULL };
 static const char *screensrncmd[] = { "/bin/sh", "-c", "~/.local/scripts/screenshot.sh screen", NULL };
@@ -260,7 +258,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_e,          spawn,                  {.v = filescmd } },
 	{ MODKEY,                       XK_x,          spawn,                  {.v = lockcmd } },
 	{ MODKEY,                       XK_p,          spawn,                  {.v = powercmd} },
-	{ MODKEY|ShiftMask,             XK_q,          spawn,                  {.v = killmenucmd} },
+	{ MODKEY|ShiftMask,             XK_c,          spawn,                  {.v = killmenucmd} },
 	{ 0,         XF86XK_AudioRaiseVolume,          spawn,                  {.v = volupcmd} },
 	{ 0,         XF86XK_AudioLowerVolume,          spawn,                  {.v = voldowncmd} },
 	{ 0,          XF86XK_MonBrightnessUp,          spawn,                  {.v = brightupcmd} },
@@ -286,8 +284,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_h,          zoom,                   {0} },
 	{ MODKEY|Mod1Mask,              XK_g,          togglegaps,             {0} },
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
-	{ MODKEY,                       XK_q,          killclient,             {0} },
-	{ MODKEY|Mod1Mask,              XK_q,          spawn,                  {.v = quitcmd} },
+	{ MODKEY,                       XK_c,          killclient,             {0} },
 	{ MODKEY|Mod1Mask,              XK_r,          quit,                   {1} },
 	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
