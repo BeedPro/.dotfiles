@@ -15,30 +15,34 @@ case "$1" in
 		;;
 esac
 
-# Try to get info, else fallback
 info=$(pactl get-sink-volume "$SINK" 2>/dev/null)
 mute=$(pactl get-sink-mute "$SINK" 2>/dev/null)
 
 TITLE="Volume"
 BODY="vol --%"
 
-# If pactl failed
 if [ -n "$info" ] && [ -n "$mute" ]; then
 	vol=$(echo "$info" | grep -oP '\d+%' | head -1 | tr -d '%')
 
-	BAR_WIDTH=45
-	FILLED=$((vol * BAR_WIDTH / 100))
+	# clamp visual bar at 100%
+	bar_vol=$vol
+	[ "$bar_vol" -gt 100 ] && bar_vol=100
+	[ "$bar_vol" -lt 0 ] && bar_vol=0
+
+	BAR_WIDTH=35
+	FILLED=$((bar_vol * BAR_WIDTH / 100))
 	EMPTY=$((BAR_WIDTH - FILLED))
 
+	FILLED_BAR=$(printf '%*s' "$FILLED" '' | tr ' ' '|')
+	EMPTY_BAR=$(printf '%*s' "$EMPTY" '' | tr ' ' '-')
+
 	if echo "$mute" | grep -q yes; then
-		# muted: greyed bar
-    TITLE="$TITLE MUTED"
-		BAR="$(printf '%0.s#' $(seq 1 $FILLED))$(printf '%0.s-' $(seq 1 $EMPTY))"
-		BODY="[${BAR}]"
+		TITLE="Volume MUTED"
+	  FILLED_BAR=$(printf '%*s' "$FILLED" '' | tr ' ' '#')
+		BODY="[${FILLED_BAR}${EMPTY_BAR}]"
 	else
-    TITLE="$TITLE ${vol}%"
-		BAR="$(printf '%0.s|' $(seq 1 $FILLED))$(printf '%0.s-' $(seq 1 $EMPTY))"
-		BODY="[${BAR}]"
+		TITLE="Volume ${vol}%"
+		BODY="[${FILLED_BAR}${EMPTY_BAR}]"
 	fi
 fi
 

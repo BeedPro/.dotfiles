@@ -237,8 +237,8 @@ static const char *volupcmd[]   = { "/bin/sh", "-c", "~/.local/scripts/volume up
 static const char *volmutecmd[] = { "/bin/sh", "-c", "~/.local/scripts/volume mute", NULL };
 static const char *voldowncmd[] = { "/bin/sh", "-c", "~/.local/scripts/volume down", NULL };
 
-static const char *brightupcmd[] = { "/bin/sh", "-c", "brightnessctl s +5% && pkill -SIGRTMIN+15 dwmblocks", NULL };
-static const char *brightdowncmd[] = { "/bin/sh", "-c", "brightnessctl s 5%- && pkill -SIGRTMIN+15 dwmblocks", NULL };
+static const char *brightupcmd[] = { "/bin/sh", "-c", "~/.local/scripts/brightness up", NULL };
+static const char *brightdowncmd[] = { "/bin/sh", "-c", "~/.local/scripts/brightness down", NULL };
 static const char *audiotogglecmd[] = { "/bin/sh", "-c", "playerctl play-pause", NULL };
 static const char *audionextcmd[] = { "/bin/sh", "-c", "playerctl next", NULL };
 
