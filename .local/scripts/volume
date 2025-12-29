@@ -1,19 +1,34 @@
 #!/usr/bin/env bash
+SINK="@DEFAULT_SINK@"
+
+case "$1" in
+	up)
+		pactl set-sink-mute "$SINK" 0
+		pactl set-sink-volume "$SINK" +5%
+		;;
+	down)
+		pactl set-sink-mute "$SINK" 0
+		pactl set-sink-volume "$SINK" -5%
+		;;
+	mute)
+		pactl set-sink-mute "$SINK" toggle
+		;;
+esac
 
 # Try to get info, else fallback
-info=$(pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null)
-mute=$(pactl get-sink-mute @DEFAULT_SINK@ 2>/dev/null)
+info=$(pactl get-sink-volume "$SINK" 2>/dev/null)
+mute=$(pactl get-sink-mute "$SINK" 2>/dev/null)
 
-# If pactl fails (e.g. no audio server yet), show placeholder
-if [[ -z "$info" || -z "$mute" ]]; then
-    echo "vol --%"
-    exit 0
+# If pactl fails (e.g. no audio server yet)
+if [ -z "$info" ] || [ -z "$mute" ]; then
+	notify-send -r 9999 -t 100 "vol --%"
+	exit 0
 fi
 
 vol=$(echo "$info" | grep -oP '\d+%' | head -1)
 
 if echo "$mute" | grep -q yes; then
-    echo "vol --%"
+	notify-send -r 9999 -t 1000 "vol --%"
 else
-    echo "vol $vol"
+	notify-send -r 9999 -t 1000 "vol $vol"
 fi

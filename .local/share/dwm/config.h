@@ -233,8 +233,9 @@ static const char *filescmd[]  = { "st", "-e", "yazi", NULL };
 static const char *powercmd[] = { "/bin/sh", "-c", "~/.local/scripts/powermenu.sh", NULL };
 static const char *killmenucmd[] = { "/bin/sh", "-c", "~/.local/scripts/killmenu.sh", NULL };
 
-static const char *volupcmd[] = { "/bin/sh", "-c", "pactl set-sink-volume @DEFAULT_SINK@ +5% && pkill -SIGRTMIN+10 dwmblocks", NULL };
-static const char *voldowncmd[] = { "/bin/sh", "-c", "pactl set-sink-volume @DEFAULT_SINK@ -5% && pkill -SIGRTMIN+10 dwmblocks", NULL };
+static const char *volupcmd[]   = { "/bin/sh", "-c", "~/.local/scripts/volume up", NULL };
+static const char *voldowncmd[] = { "/bin/sh", "-c", "~/.local/scripts/volume down", NULL };
+
 static const char *brightupcmd[] = { "/bin/sh", "-c", "brightnessctl s +5% && pkill -SIGRTMIN+15 dwmblocks", NULL };
 static const char *brightdowncmd[] = { "/bin/sh", "-c", "brightnessctl s 5%- && pkill -SIGRTMIN+15 dwmblocks", NULL };
 static const char *audiomutecmd[] = { "/bin/sh", "-c", "pactl set-sink-mute @DEFAULT_SINK@ toggle && pkill -SIGRTMIN+10 dwmblocks", NULL };
