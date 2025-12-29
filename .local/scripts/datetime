@@ -1,2 +1,4 @@
 #!/bin/bash
-date '+%Y.%m.%d %H:%M'
+OUTPUT=$(date '+%Y.%m.%d %H:%M')
+
+echo $OUTPUT '|'
