@@ -19,16 +19,27 @@ esac
 info=$(pactl get-sink-volume "$SINK" 2>/dev/null)
 mute=$(pactl get-sink-mute "$SINK" 2>/dev/null)
 
-# If pactl fails (e.g. no audio server yet)
-if [ -z "$info" ] || [ -z "$mute" ]; then
-	notify-send -r 9999 -t 100 "vol --%"
-	exit 0
+TITLE="Volume"
+BODY="vol --%"
+
+# If pactl failed
+if [ -n "$info" ] && [ -n "$mute" ]; then
+	vol=$(echo "$info" | grep -oP '\d+%' | head -1 | tr -d '%')
+
+	BAR_WIDTH=45
+	FILLED=$((vol * BAR_WIDTH / 100))
+	EMPTY=$((BAR_WIDTH - FILLED))
+
+	if echo "$mute" | grep -q yes; then
+		# muted: greyed bar
+    TITLE="$TITLE MUTED"
+		BAR="$(printf '%0.s#' $(seq 1 $FILLED))$(printf '%0.s-' $(seq 1 $EMPTY))"
+		BODY="[${BAR}]"
+	else
+    TITLE="$TITLE ${vol}%"
+		BAR="$(printf '%0.s|' $(seq 1 $FILLED))$(printf '%0.s-' $(seq 1 $EMPTY))"
+		BODY="[${BAR}]"
+	fi
 fi
 
-vol=$(echo "$info" | grep -oP '\d+%' | head -1)
-
-if echo "$mute" | grep -q yes; then
-	notify-send -r 9999 -t 1000 "vol --%"
-else
-	notify-send -r 9999 -t 1000 "vol $vol"
-fi
+notify-send -r 9999 -t 1000 "$TITLE" "\n$BODY"

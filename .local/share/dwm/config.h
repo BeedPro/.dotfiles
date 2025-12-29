@@ -234,11 +234,11 @@ static const char *powercmd[] = { "/bin/sh", "-c", "~/.local/scripts/powermenu.s
 static const char *killmenucmd[] = { "/bin/sh", "-c", "~/.local/scripts/killmenu.sh", NULL };
 
 static const char *volupcmd[]   = { "/bin/sh", "-c", "~/.local/scripts/volume up", NULL };
+static const char *volmutecmd[] = { "/bin/sh", "-c", "~/.local/scripts/volume mute", NULL };
 static const char *voldowncmd[] = { "/bin/sh", "-c", "~/.local/scripts/volume down", NULL };
 
 static const char *brightupcmd[] = { "/bin/sh", "-c", "brightnessctl s +5% && pkill -SIGRTMIN+15 dwmblocks", NULL };
 static const char *brightdowncmd[] = { "/bin/sh", "-c", "brightnessctl s 5%- && pkill -SIGRTMIN+15 dwmblocks", NULL };
-static const char *audiomutecmd[] = { "/bin/sh", "-c", "pactl set-sink-mute @DEFAULT_SINK@ toggle && pkill -SIGRTMIN+10 dwmblocks", NULL };
 static const char *audiotogglecmd[] = { "/bin/sh", "-c", "playerctl play-pause", NULL };
 static const char *audionextcmd[] = { "/bin/sh", "-c", "playerctl next", NULL };
 
@@ -261,12 +261,12 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_x,          spawn,                  {.v = powercmd} },
 	{ MODKEY|ShiftMask,             XK_c,          spawn,                  {.v = killmenucmd} },
 	{ 0,         XF86XK_AudioRaiseVolume,          spawn,                  {.v = volupcmd} },
+	{ 0,                XF86XK_AudioMute,          spawn,                  {.v = volmutecmd} },
 	{ 0,         XF86XK_AudioLowerVolume,          spawn,                  {.v = voldowncmd} },
 	{ 0,          XF86XK_MonBrightnessUp,          spawn,                  {.v = brightupcmd} },
 	{ 0,        XF86XK_MonBrightnessDown,          spawn,                  {.v = brightdowncmd} },
 	{ 0,                XF86XK_AudioPlay,          spawn,                  {.v = audiotogglecmd} },
 	{ 0,                XF86XK_AudioNext,          spawn,                  {.v = audionextcmd} },
-	{ 0,                XF86XK_AudioMute,          spawn,                  {.v = audiomutecmd} },
 	{ 0,                            XK_Print,      spawn,                  {.v = screenselcmd} },
 	{ MODKEY,                       XK_Print,      spawn,                  {.v = screenwincmd} },
 	{ MODKEY|ShiftMask,             XK_Print,      spawn,                  {.v = screensrncmd} },
