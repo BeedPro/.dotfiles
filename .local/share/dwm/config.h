@@ -228,6 +228,7 @@ static const char *dmenucmd[] = {
 static const char *tmuxcmd[]  = { "st","-e", "sesh", "connect", "home", NULL };
 static const char *lockcmd[]  = { "slock", NULL };
 static const char *browsercmd[]  = { "zen", NULL };
+static const char *privatebrowsercmd[]  = { "zen", "--private-window", NULL };
 static const char *filescmd[]  = { "st", "-e", "yazi", NULL };
 
 static const char *powercmd[] = { "/bin/sh", "-c", "~/.local/scripts/powermenu.sh", NULL };
@@ -256,6 +257,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_space,      spawn,                  {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,     spawn,                  {.v = tmuxcmd } },
 	{ MODKEY,                       XK_w,          spawn,                  {.v = browsercmd } },
+	{ MODKEY|ShiftMask,             XK_w,          spawn,                  {.v = privatebrowsercmd } },
 	{ MODKEY,                       XK_e,          spawn,                  {.v = filescmd } },
 	{ MODKEY,                       XK_x,          spawn,                  {.v = lockcmd } },
 	{ MODKEY|ShiftMask,             XK_x,          spawn,                  {.v = powercmd} },
