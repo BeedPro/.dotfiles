@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+WALL_DIR="$HOME/Pictures/walls"
+
+# Find all image files inside subfolders
+mapfile -t IMAGES < <(
+  find "$WALL_DIR" -type f \( \
+    -iname "*.jpg" -o \
+    -iname "*.jpeg" -o \
+    -iname "*.png" -o \
+    -iname "*.webp" \
+  \)
+)
+
+# Exit if no images were found
+if [ "${#IMAGES[@]}" -eq 0 ]; then
+  echo "No wallpapers found in $WALL_DIR"
+  exit 1
+fi
+
+# Pick a random image
+RANDOM_WALL="${IMAGES[RANDOM % ${#IMAGES[@]}]}"
+
+# Set wallpaper
+feh --no-fehbg --bg-fill "$RANDOM_WALL"
