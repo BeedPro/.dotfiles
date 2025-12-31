@@ -32,6 +32,7 @@ nomap("n", "<leader>pt")
 nomap("n", "<C-n>")
 nomap("n", "<tab>")
 nomap("n", "<S-tab>")
+nomap({ "n", "x" }, "<leader>fm")
 nomap({ "n", "t" }, "<A-i>")
 nomap({ "n", "t" }, "<A-h>")
 nomap({ "n", "t" }, "<A-v>")
@@ -77,7 +78,7 @@ map("n", "<leader>.", function()
 end, { desc = "Toggle Oil file explorer" })
 
 -- Format
-map("n", "<leader>cf", function()
+map({ "n", "x" }, "<leader>fm", function()
   require("conform").format { async = true, lsp_fallback = true }
 end, { desc = "Format current buffer" })
 
