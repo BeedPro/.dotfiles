@@ -20,7 +20,7 @@ export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
 HISTTIMEFORMAT='%F %T '
 
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
-alias agim="/usr/local/bin/nvim -c ':Org agenda d'"
+alias beedvim="NVIM_APPNAME=beedvim /usr/local/bin/nvim"
 alias vim="/usr/local/bin/nvim"
 alias vi="/usr/bin/vim"
 alias ls='eza'
