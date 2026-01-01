@@ -7,9 +7,8 @@ require("lualine").setup({
   },
   sections = {
     lualine_a = { "mode" },
-    lualine_b = { "branch", "diff" },
+    lualine_b = { "filename" },
     lualine_c = {
-      { "filename", path = 1 },
       {
         function()
           local clients = vim.lsp.get_clients({ bufnr = 0 })
@@ -18,14 +17,11 @@ require("lualine").setup({
           end
           return "  " .. clients[1].name
         end,
-      }
+      },
+      { "diagnostics" }
     },
-    lualine_x = {
-      "diagnostics",
-      "encoding",
-      "filetype",
-    },
-    lualine_y = { "progress" },
-    lualine_z = { "location" },
+    lualine_x = {},
+    lualine_y = { "branch" },
+    lualine_z = { "location" }
   },
 })
