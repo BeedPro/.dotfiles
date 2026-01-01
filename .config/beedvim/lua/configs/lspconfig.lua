@@ -1,33 +1,41 @@
-local autocmd = vim.api.nvim_create_autocmd
+local config = {}
 local map = vim.keymap.set
 
-on_attach = function(_, bufnr)
+-- export on_attach & capabilities
+config.on_attach = function(_, bufnr)
   local function opts(desc)
     return { buffer = bufnr, desc = "LSP " .. desc }
   end
 
   map("n", "gD", vim.lsp.buf.declaration, opts "Go to declaration")
   map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
-  map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
-
   map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
-  map("n", "<leader>wr", vim.lsp.baa.remove_workspace_folder, opts "Remove workspace folder")
+  map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "Remove workspace folder")
+
   map("n", "<leader>wl", function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, opts "List workspace folders")
 
+  map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
   map("n", "<leader>ra", require "nvchad.lsp.renamer", opts "NvRenamer")
 end
 
-on_init = function(client)
-  if client:supports_method "textDocument/semanticTokens" then
-    client.server_capabilities.semanticTokensProvider = nil
+-- disable semanticTokens
+config.on_init = function(client, _)
+  if vim.fn.has "nvim-0.11" ~= 1 then
+    if client.supports_method "textDocument/semanticTokens" then
+      client.server_capabilities.semanticTokensProvider = nil
+    end
+  else
+    if client:supports_method "textDocument/semanticTokens" then
+      client.server_capabilities.semanticTokensProvider = nil
+    end
   end
 end
 
-capabilities = vim.lsp.protocol.make_client_capabilities()
+config.capabilities = vim.lsp.protocol.make_client_capabilities()
 
-capabilities.textDocument.completion.completionItem = {
+config.capabilities.textDocument.completion.completionItem = {
   documentationFormat = { "markdown", "plaintext" },
   snippetSupport = true,
   preselectSupport = true,
@@ -45,26 +53,19 @@ capabilities.textDocument.completion.completionItem = {
   },
 }
 
-dofile(vim.g.base46_cache .. "lsp")
-require("nvchad.lsp").diagnostic_config()
+config.setup = function()
+  dofile(vim.g.base46_cache .. "lsp")
+  require("nvchad.lsp").diagnostic_config()
+  local autocmd = vim.api.nvim_create_autocmd
 
-autocmd("LspAttach", {
-  callback = function(args)
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if not client then
-      return
-    end
-    on_attach(client, args.buf)
-  end,
-})
+  autocmd("LspAttach", {
+    callback = function(args)
+      config.on_attach(_, args.buf)
+    end,
+  })
 
-vim.lsp.config("*", {
-  capabilities = capabilities,
-  on_init = on_init,
-})
-
-vim.lsp.config("lua_ls", {
-  settings = {
+  vim.lsp.config("*", { capabilities = config.capabilities, on_init = config.on_init })
+  vim.lsp.config("lua_ls", { settings = {
     Lua = {
       runtime = { version = "LuaJIT" },
       workspace = {
@@ -75,16 +76,10 @@ vim.lsp.config("lua_ls", {
           "${3rd}/luv/library",
         },
       },
-      diagnostics = {
-        globals = { "vim" },
-      },
     },
-  },
-})
+  }
+ })
+  vim.lsp.enable "lua_ls"
+end
 
--- Enable servers
-vim.lsp.enable {
-  "lua_ls",
-  "html",
-  "cssls",
-}
+return config
