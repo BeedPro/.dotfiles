@@ -6,14 +6,9 @@ M.on_attach = function(_, bufnr)
     return { buffer = bufnr, desc = "LSP " .. desc }
   end
 
-  map(
-    "n",
-    "K",
-    function()
-      vim.lsp.buf.hover { border = "single", max_height = 25, max_width = 120 }
-    end,
-    opts "Hover documentation"
-  )
+  map("n", "K", function()
+    vim.lsp.buf.hover { border = "single", max_height = 25, max_width = 120 }
+  end, opts "Hover documentation")
   map("n", "gD", vim.lsp.buf.declaration, opts "Go to declaration")
   map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
   map("n", "<leader>ra", vim.lsp.buf.rename, opts "[R]e[n]ame")
@@ -29,7 +24,7 @@ M.on_attach = function(_, bufnr)
 end
 
 M.on_init = function(client)
-  if client.supports_method("textDocument/semanticTokens") then
+  if client.supports_method "textDocument/semanticTokens" then
     client.server_capabilities.semanticTokensProvider = nil
   end
 end
@@ -69,7 +64,7 @@ M.setup = function()
 
   -- Lua language server
   vim.lsp.config("lua_ls", {
-      settings = {
+    settings = {
       Lua = {
         runtime = { version = "LuaJIT" },
         diagnostics = {
@@ -83,7 +78,7 @@ M.setup = function()
     },
   })
 
-  local servers = {"lua_ls"}
+  local servers = { "lua_ls" }
 
   vim.lsp.enable(servers)
 end
