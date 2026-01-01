@@ -39,4 +39,12 @@ return {
       require "configs.nvim-lint"
     end,
   },
+
+  {
+    "mason-org/mason.nvim",
+    cmd = { "Mason", "MasonInstall", "MasonUpdate" },
+    opts = function()
+      return require "configs.mason"
+    end,
+  },
 }
