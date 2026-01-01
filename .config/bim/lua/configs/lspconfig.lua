@@ -6,6 +6,14 @@ M.on_attach = function(_, bufnr)
     return { buffer = bufnr, desc = "LSP " .. desc }
   end
 
+  map(
+    "n",
+    "K",
+    function()
+      vim.lsp.buf.hover { border = "single", max_height = 25, max_width = 120 }
+    end,
+    opts "Hover documentation"
+  )
   map("n", "gD", vim.lsp.buf.declaration, opts "Go to declaration")
   map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
   map("n", "<leader>ra", vim.lsp.buf.rename, opts "[R]e[n]ame")
