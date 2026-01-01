@@ -4,28 +4,7 @@ local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 local command = vim.api.nvim_create_user_command
 
-local diagnosticGroup = augroup("DiagnosticFloat", { clear = true })
 local numtogglegroup = augroup("numbertoggle", {}) --- sitiom/nvim-numbertoggle
-
-local function open_diagnostic_float()
-  vim.diagnostic.open_float(nil, { focus = false })
-end
-
-local function open_on_start(data)
-  local is_dir = vim.fn.isdirectory(data.file) == 1
-  local no_name = data.file == "" and vim.bo[data.buf].buftype == ""
-
-  if not is_dir and not no_name then
-    return
-  end
-
-  if is_dir then
-    vim.schedule(function()
-      vim.cmd.cd(data.file)
-      vim.cmd("Oil " .. vim.fn.fnameescape(data.file))
-    end)
-  end
-end
 
 local function is_django_project(filepath)
   local uv = vim.loop
@@ -62,10 +41,6 @@ local function html_looks_like_django(filepath)
   end
   return false
 end
-
-command("Format", function()
-  require("conform").format { async = true, lsp_fallback = true }
-end, {})
 
 command("FormatDisable", function(args)
   if args.bang then
@@ -165,16 +140,20 @@ autocmd({ "BufEnter", "BufWritePost" }, {
 })
 
 autocmd("VimEnter", {
-  callback = open_on_start,
-})
+  callback = function(data)
+    local is_dir = vim.fn.isdirectory(data.file) == 1
+    local no_name = data.file == "" and vim.bo[data.buf].buftype == ""
 
-autocmd("FileType", {
-  pattern = "org",
-  callback = function()
-    vim.keymap.set("i", "<S-CR>", '<cmd>lua require("orgmode").action("org_mappings.meta_return")<CR>', {
-      silent = true,
-      buffer = true,
-    })
+    if not is_dir and not no_name then
+      return
+    end
+
+    if is_dir then
+      vim.schedule(function()
+        vim.cmd.cd(data.file)
+        vim.cmd("Oil " .. vim.fn.fnameescape(data.file))
+      end)
+    end
   end,
 })
 
@@ -182,11 +161,6 @@ autocmd("TextYankPost", {
   callback = function()
     vim.highlight.on_yank { higroup = "IncSearch", timeout = 200 }
   end,
-})
-
-autocmd("CursorHold", {
-  group = diagnosticGroup,
-  callback = open_diagnostic_float,
 })
 
 autocmd({ "BufEnter", "FocusGained", "InsertLeave", "CmdlineLeave", "WinEnter" }, {
