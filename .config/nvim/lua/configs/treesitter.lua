@@ -14,6 +14,10 @@ opts.ensure_installed = {
   "typescript",
   "c_sharp",
   "commonlisp",
+  "typst",
+  "c",
+  "cpp",
+  "svelte",
 }
 
 return opts
