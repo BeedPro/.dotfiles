@@ -1,0 +1,5 @@
+{
+  "lazy.nvim": { "branch": "main", "commit": "85c7ff3711b730b4030d03144f6db6375044ae82" },
+  "mini.icons": { "branch": "main", "commit": "efc85e42262cd0c9e1fdbf806c25cb0be6de115c" },
+  "oil.nvim": { "branch": "master", "commit": "81b8a91735ad5cd24a6b3137f14a89f19176364f" }
+}
