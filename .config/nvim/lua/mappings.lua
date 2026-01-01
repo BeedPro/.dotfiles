@@ -62,7 +62,6 @@ map("n", "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
 map("n", "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
 map("n", "<leader>rr", ":.lua <cr>", { desc = "Lua Run the current line" })
 map("v", "<leader>rr", ":lua <cr>", { desc = "Lua Run the selected lines" })
-map("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree focus window" })
 
 -- map("n", "Y", "y$", { desc = "Yank to end of line" })
 map({ "n", "v" }, "<leader>y", '"+y')
