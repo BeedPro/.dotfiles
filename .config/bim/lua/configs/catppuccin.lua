@@ -13,6 +13,11 @@
       telescope = true,
       nvimtree = true,
     },
+    custom_highlights = function(colors)
+      return {
+        WinSeparator = { fg = colors.surface1 },
+      }
+    end,
   })
 
   vim.cmd.colorscheme("catppuccin")
