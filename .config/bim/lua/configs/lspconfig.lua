@@ -50,20 +50,23 @@ M.capabilities.textDocument.completion.completionItem = {
 }
 
 M.setup = function()
-  vim.api.nvim_create_autocmd("LspAttach", {
+  local autocmd = vim.api.nvim_create_autocmd
+  local lspconfig = vim.lsp.config
+
+  autocmd("LspAttach", {
     callback = function(args)
       M.on_attach(_, args.buf)
     end,
   })
 
-  vim.lsp.config("*", {
+  lspconfig("*", {
     on_attach = M.on_attach,
     on_init = M.on_init,
     capabilities = M.capabilities,
   })
 
   -- Lua language server
-  vim.lsp.config("lua_ls", {
+  lspconfig("lua_ls", {
     settings = {
       Lua = {
         runtime = { version = "LuaJIT" },
@@ -78,7 +81,21 @@ M.setup = function()
     },
   })
 
-  local servers = { "lua_ls" }
+  lspconfig("pyright", {
+    settings = {
+      pyright = { autoImportCompletion = true },
+      python = {
+        analysis = {
+          autoSearchPaths = true,
+          diagnosticMode = "openFilesOnly",
+          useLibraryCodeForTypes = true,
+          typeCheckingMode = "on",
+        },
+      },
+    },
+  })
+
+  local servers = { "lua_ls", "html", "cssls", "pyright" }
 
   vim.lsp.enable(servers)
 end
