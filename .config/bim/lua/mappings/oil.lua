@@ -7,4 +7,3 @@ map("n", "<leader>.", function()
     require("oil").open()
   end
 end, { desc = "Toggle Oil file explorer" })
-
