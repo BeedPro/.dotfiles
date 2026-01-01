@@ -1,5 +1,6 @@
 require "nvchad.mappings"
 
+local neogen = require "neogen"
 local nvim_tmux_nav = require "nvim-tmux-navigation"
 local snacks = require "snacks"
 local dap = require "dap"
@@ -189,5 +190,14 @@ end, { desc = "Neotest Run current file tests" })
 map("n", "<leader>td", function()
   neotest.run.run { strategy = "dap" }
 end, { desc = "Neotest Debug the nearest test" })
-map("n", "<leader>ts", neotest.run.stop, { desc = "Neotest Stop nearest test" })
-map("n", "<leader>ta", neotest.run.attach, { desc = "Neotest Attach to the nearest test" })
+map("n", "<leader>ts", function()
+  neotest.run.stop()
+end, { desc = "Neotest Stop nearest test" })
+
+map("n", "<leader>ta", function()
+  neotest.run.attach()
+end, { desc = "Neotest Attach to the nearest test" })
+
+map("n", "<leader>cn", function()
+  neogen.generate()
+end, { desc = "Generate comments using Neogen" })
