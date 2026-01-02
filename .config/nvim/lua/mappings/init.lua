@@ -9,6 +9,7 @@ require "mappings.trouble"
 require "mappings.dap"
 require "mappings.neotest"
 require "mappings.neogen"
+require "mappings.luasnip"
 
 local map = vim.keymap.set
 

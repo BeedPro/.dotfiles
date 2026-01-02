@@ -3,6 +3,18 @@ return {
   {
     "Saghen/blink.cmp",
     opts = {
+      keymap = {
+        preset = "none",
+
+        ["<Tab>"] = {},
+        ["<S-Tab>"] = {},
+        ["<C-n>"] = { "select_next", "fallback" },
+        ["<C-p>"] = { "select_prev", "fallback" },
+
+        ["<CR>"] = { "accept", "fallback" },
+        ["<C-e>"] = { "cancel", "fallback" },
+      },
+
       completion = {
         ghost_text = {
           enabled = false,
