@@ -56,15 +56,9 @@ map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic locli
 map("n", "<leader>ca", function()
   vim.lsp.buf.code_action()
 end, { desc = "LSP Code Action" })
-map(
-  "n",
-  "g?",
-  "<cmd> lua vim.diagnostic.open_float(nil, { border = 'rounded',	source = 'always'})<CR>",
-  { desc = "LSP Open diagnostics" }
-)
 
-map("n", "<leader>K", function()
-  vim.diagnostic.open_float(nil, { focus = true, border = "rounded" })
+map("n", "g?", function()
+  vim.diagnostic.open_float(nil, { border = "rounded", source = "always" })
 end)
 
 map("n", "K", function()
