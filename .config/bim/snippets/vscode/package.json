@@ -1,0 +1,19 @@
+{
+  "name": "beed-vscode-snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": [
+          "all"
+        ],
+        "path": "./all.json"
+      },
+      {
+        "language": [
+          "htmldjango"
+        ],
+        "path": "./htmldjango.json"
+      }
+    ]
+  }
+}

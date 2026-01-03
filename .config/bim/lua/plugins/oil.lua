@@ -11,7 +11,5 @@ return {
       }
     end,
     cmd = "Oil",
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
   },
 }
-
