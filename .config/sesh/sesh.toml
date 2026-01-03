@@ -4,101 +4,101 @@ blacklist = ["scratch"]
 preview_command = "eza --all --oneline --git-ignore --color=always {}"
 
 [[session]]
-name = "home"
+name = "s:home"
 path = "~"
 
 [[session]]
-name = "agenda"
+name = "s:agenda"
 path = "~/Compendium/Agenda"
 startup_command = "nvim -c ':Telescope find_files'; tmux kill-session"
 
 [[session]]
-name = "library"
+name = "s:library"
 path = "~/Compendium/Library"
 startup_command = "yazi"
 
 [[session]]
-name = "slipbox"
+name = "s:slipbox"
 path = "~/Compendium/Slipbox"
 startup_command = "nvim -c ':Telescope find_files'"
 
 [[session]]
-name = "notebook"
+name = "s:notebook"
 path = "~/Compendium/Notebook"
 startup_command = "yazi"
 
 [[session]]
-name = "workspace"
+name = "s:workspace"
 path = "~/Compendium/Workspace"
 startup_command = "nvim -c ':Telescope find_files'"
 
 [[session]]
-name = "screenshots"
+name = "s:screenshots"
 path = "~/Pictures/Screenshots"
 startup_command = "yazi"
 
 [[session]]
-name = "downloads"
+name = "s:downloads"
 path = "~/Downloads"
 
 [[session]]
-name = "dotfiles"
+name = "s:dotfiles"
 path = "~/.dotfiles"
 startup_command = "lazygit"
 
 [[session]]
-name = "src"
+name = "s:src"
 path = "~/.local/src"
 startup_command='SEL="$(find . -mindepth 2 -maxdepth 2 -type d -printf "%P\n" | tee >(xargs -r zoxide add) | fzf)" && [ -n "$SEL" ] && tmux rename-session "$SEL" && cd "$SEL"'
 
 [[session]]
-name = "config"
+name = "s:config"
 path = "~/.dotfiles/.config"
 
 [[session]]
-name = "local/share"
+name = "s:local/share"
 path = "~/.dotfiles/.local/share"
 
 [[session]]
-name = "local/share/dwm"
+name = "s:local/share/dwm"
 path = "~/.dotfiles/.local/share/dwm"
 startup_command = "nvim config.h"
 
 [[session]]
-name = "local/share/dwmblocks"
+name = "s:local/share/dwmblocks"
 path = "~/.dotfiles/.local/share/dwmblocks"
 startup_command = "nvim blocks.h"
 
 [[session]]
-name = "local/share/dmenu"
+name = "s:local/share/dmenu"
 path = "~/.dotfiles/.local/share/dmenu"
 startup_command = "nvim config.h"
 
 [[session]]
-name = "local/share/st"
+name = "s:local/share/st"
 path = "~/.dotfiles/.local/share/st"
 startup_command = "nvim config.h"
 
 [[session]]
-name = "local/share/slock"
+name = "s:local/share/slock"
 path = "~/.dotfiles/.local/share/slock"
 startup_command = "nvim config.h"
 
 [[session]]
-name = "config/tmux"
+name = "s:config/tmux"
 path = "~/.dotfiles/.config/tmux"
 startup_command = "nvim tmux.conf"
 
 [[session]]
-name = "config/sesh"
+name = "s:config/sesh"
 path = "~/.dotfiles/.config/sesh"
 startup_command = "nvim sesh.toml"
 
 [[session]]
-name = "config/nvim"
+name = "s:config/nvim"
 path = "~/.dotfiles/.config/nvim"
 startup_command = "nvim -c ':Telescope find_files'"
 
 [[session]]
-name = "scratchpad"
+name = "s:scratchpad"
 path = "~"
