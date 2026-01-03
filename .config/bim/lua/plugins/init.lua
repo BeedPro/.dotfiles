@@ -39,7 +39,12 @@ return {
       {
         "mason-org/mason.nvim",
         cmd = { "Mason", "MasonInstall", "MasonUpdate" },
-        opts = {},
+        opts = {
+          registries = {
+            "github:mason-org/mason-registry",
+            "github:Crashdummyy/mason-registry",
+          },
+        },
       },
 
       {
