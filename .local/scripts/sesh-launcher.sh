@@ -17,7 +17,7 @@ ensure_session () {
 }
 
 # Prompt the user with a fuzzy finder interface to select a session
-selected=$(sesh list | fzf-tmux -p 80%,70% \
+selected=$(sesh list -d | fzf-tmux -p 80%,70% \
   --ansi \
   --no-sort \
   --border-label ' sesh ' --prompt 'all ' \
