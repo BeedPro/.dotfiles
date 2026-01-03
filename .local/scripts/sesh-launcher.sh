@@ -17,15 +17,15 @@ ensure_session () {
 }
 
 # Prompt the user with a fuzzy finder interface to select a session
-selected=$(sesh list | fzf-tmux -p 80%,70% \
+selected=$(sesh list --icons | fzf-tmux -p 80%,70% \
   --ansi \
   --no-sort \
   --border-label ' sesh ' --prompt 'all ' \
   --header '  (C-a) all :: (C-t) tmux :: (M-bs) kill' \
   --bind 'tab:down,btab:up' \
-  --bind 'ctrl-a:change-prompt(all )+reload(sesh list)' \
-  --bind 'ctrl-t:change-prompt(ses )+reload(sesh list -t)' \
-  --bind 'alt-backspace:execute(tmux kill-session -t {2..})+change-prompt(all )+reload(sesh list)' \
+  --bind 'ctrl-a:change-prompt(all )+reload(sesh list --icons)' \
+  --bind 'ctrl-t:change-prompt(ses )+reload(sesh list -t --icons)' \
+  --bind 'alt-backspace:execute(tmux kill-session -t {2..})+change-prompt(all )+reload(sesh list --icons)' \
   --border=sharp \
   --preview-border=left \
   --no-scrollbar \
