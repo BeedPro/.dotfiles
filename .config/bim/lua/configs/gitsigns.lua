@@ -1,4 +1,22 @@
 return {
+
+  signs = {
+    add = { text = "+" },
+    change = { text = "~" },
+    delete = { text = "-" },
+    topdelete = { text = "^" },
+    changedelete = { text = "!" },
+    untracked = { text = "?" },
+  },
+
+  signs_staged = {
+    add = { text = "+" },
+    change = { text = "~" },
+    delete = { text = "-" },
+    topdelete = { text = "^" },
+    changedelete = { text = "!" },
+    untracked = { text = "?" },
+  },
   on_attach = function(bufnr)
     local gitsigns = require "gitsigns"
 
@@ -9,21 +27,21 @@ return {
       })
     end
 
-    map("n", "]c", function()
+    map("n", "<leader>hn", function()
       if vim.wo.diff then
         vim.cmd.normal { "]c", bang = true }
       else
         gitsigns.nav_hunk "next"
       end
-    end, "[G]it [N]ext hunk")
+    end, "Git Next hunk")
 
-    map("n", "[c", function()
+    map("n", "<leader>hp", function()
       if vim.wo.diff then
         vim.cmd.normal { "[c", bang = true }
       else
         gitsigns.nav_hunk "prev"
       end
-    end, "[G]it [P]revious hunk")
+    end, "Git Previous hunk")
 
     map("n", "<leader>hs", gitsigns.stage_hunk, "[H]unk [S]tage")
     map("n", "<leader>hr", gitsigns.reset_hunk, "[H]unk [R]eset")
@@ -39,7 +57,7 @@ return {
     map("n", "<leader>hS", gitsigns.stage_buffer, "[H]unk [S]tage buffer")
     map("n", "<leader>hR", gitsigns.reset_buffer, "[H]unk [R]eset buffer")
 
-    map("n", "<leader>hp", gitsigns.preview_hunk, "[H]unk [P]review")
+    map("n", "<leader>hP", gitsigns.preview_hunk, "[H]unk [P]review")
     map("n", "<leader>hi", gitsigns.preview_hunk_inline, "[H]unk preview [I]nline")
 
     map("n", "<leader>hb", function()
