@@ -18,7 +18,8 @@ M.on_attach = function(_, bufnr)
   end, opts "[W]orkspace [L]ist")
 
   map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Goto type definition")
-  map("n", "<leader>ra", require "mappings.renamer", opts "NvRenamer")
+  map("n", "<leader>ra", require "mappings.renamer", opts "[R]ename [A]ll")
+  map("n", "<leader>ca", vim.lsp.buf.code_action, opts "[C]ode [A]ction")
 end
 
 -- disable semanticTokens

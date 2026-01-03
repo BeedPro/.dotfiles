@@ -45,9 +45,6 @@ map("n", "N", "Nzzzv", { desc = "Previous search result (centered)" })
 map("n", "<leader>cd", "<cmd> cd %:p:h <CR>", { desc = "General Change to current directory" })
 
 map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
-map("n", "<leader>ca", function()
-  vim.lsp.buf.code_action()
-end, { desc = "LSP Code Action" })
 
 map("n", "g?", function()
   vim.diagnostic.open_float(nil, { border = "rounded", source = "always" })
