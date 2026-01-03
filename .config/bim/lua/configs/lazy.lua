@@ -1,15 +1,6 @@
 return {
   defaults = { lazy = true },
-  install = { colorscheme = { "catppuccin" } },
-
-  ui = {
-    icons = {
-      ft = "",
-      lazy = "󰂠 ",
-      loaded = "",
-      not_loaded = "",
-    },
-  },
+  install = { colorscheme = { "default" } },
 
   performance = {
     rtp = {
@@ -45,3 +36,4 @@ return {
     },
   },
 }
+

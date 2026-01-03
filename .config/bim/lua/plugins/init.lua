@@ -1,7 +1,66 @@
 return {
   {
-    "alexghergh/nvim-tmux-navigation",
-    lazy = false,
+    "saghen/blink.cmp",
+    version = "1.*",
+    event = { "InsertEnter", "CmdLineEnter" },
+
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+      {
+        "L3MON4D3/LuaSnip",
+        dependencies = "rafamadriz/friendly-snippets",
+        opts = { history = true, updateevents = "TextChanged,TextChangedI" },
+        config = function(_, opts)
+          require("luasnip").config.set_config(opts)
+          require "configs.luasnip"
+        end,
+      },
+
+      {
+        "windwp/nvim-autopairs",
+        opts = {
+          fast_wrap = {},
+          disable_filetype = { "TelescopePrompt", "vim" },
+        },
+      },
+    },
+
+    opts_extend = { "sources.default" },
+
+    opts = function()
+      return require "configs.blink"
+    end,
+  },
+
+  {
+    "neovim/nvim-lspconfig",
+    event = "User FilePost",
+    dependencies = {
+      {
+        "mason-org/mason.nvim",
+        cmd = { "Mason", "MasonInstall", "MasonUpdate" },
+        opts = {},
+      },
+
+      {
+        "j-hui/fidget.nvim",
+        event = "LspAttach",
+        opts = {},
+      },
+
+      {
+        "folke/lazydev.nvim",
+        ft = "lua",
+        opts = {
+          library = {
+            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+          },
+        },
+      },
+    },
+    config = function()
+      require("configs.lsp").setup()
+    end,
   },
 
   {
@@ -11,7 +70,7 @@ return {
     cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
     build = ":TSUpdate",
     opts = function()
-      require "configs.treesitter"
+      return require "configs.treesitter"
     end,
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
@@ -19,11 +78,8 @@ return {
   },
 
   {
-    "neovim/nvim-lspconfig",
-    event = "User FilePost",
-    config = function()
-      require("configs.lspconfig").setup()
-    end,
+    "alexghergh/nvim-tmux-navigation",
+    lazy = false,
   },
 
   {
@@ -36,15 +92,7 @@ return {
     "mfussenegger/nvim-lint",
     event = { "BufReadPost", "BufWritePost", "InsertLeave", "BufEnter" },
     config = function()
-      require "configs.nvim-lint"
-    end,
-  },
-
-  {
-    "mason-org/mason.nvim",
-    cmd = { "Mason", "MasonInstall", "MasonUpdate" },
-    opts = function()
-      return require "configs.mason"
+      require "configs.linter"
     end,
   },
 }

@@ -1,5 +1,6 @@
 vim.g.mapleader = " "
 
+-- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
 if not vim.uv.fs_stat(lazypath) then
@@ -8,9 +9,9 @@ if not vim.uv.fs_stat(lazypath) then
 end
 
 vim.opt.rtp:prepend(lazypath)
-
 local lazy_config = require "configs.lazy"
 
+-- load plugins
 require("lazy").setup({
   { import = "plugins" },
 }, lazy_config)
@@ -21,3 +22,7 @@ require "autocmds"
 vim.schedule(function()
   require "mappings"
 end)
+
+-- Snippets global path
+vim.g.lua_snippets_path = vim.fn.stdpath "config" .. "/snippets/luasnips"
+vim.g.vscode_snippets_path = "./snippets/vscode"

@@ -1,4 +1,5 @@
 local map = vim.keymap.set
+local o = vim.o
 
 map("n", "<leader>.", function()
   if vim.bo.filetype == "oil" then
@@ -7,3 +8,4 @@ map("n", "<leader>.", function()
     require("oil").open()
   end
 end, { desc = "Toggle Oil file explorer" })
+

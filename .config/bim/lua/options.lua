@@ -26,7 +26,6 @@ o.relativenumber = true
 o.numberwidth = 2
 o.ruler = false
 
--- disable nvim intro
 opt.shortmess:append "sI"
 
 o.signcolumn = "yes"
@@ -34,6 +33,11 @@ o.splitbelow = true
 o.splitright = true
 o.timeoutlen = 400
 o.undofile = true
+
+o.foldmethod = "expr"
+o.foldexpr = "nvim_treesitter#foldexpr()"
+o.foldlevel = 99
+o.foldtext = "v:folddashes.substitute(getline(v:foldstart),'/\\*\\|\\*/\\|{{{\\d\\=','','g')"
 
 o.updatetime = 250
 
