@@ -79,7 +79,7 @@ return function()
     vim.fn.prompt_setprompt(buf, "")
     vim.api.nvim_input "A"
 
-    vim.keymap.set({ "i", "n" }, "<Esc>", function()
+    vim.keymap.set({ "n" }, "<Esc>", function()
       api.nvim_buf_delete(buf, { force = true })
     end, { buffer = buf })
 

@@ -10,7 +10,6 @@ map("n", "<C-Down>", ":resize -2<CR>", { desc = "Decrease window height" })
 map("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "Decrease window width" })
 map("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "Increase window width" })
 
-map("i", "jk", "<ESC>", { desc = "General Return to Normal mode" })
 map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>", { desc = "General Saves file in all modes" })
 map("n", "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
 map("n", "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
