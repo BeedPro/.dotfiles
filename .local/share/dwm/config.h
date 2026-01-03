@@ -88,7 +88,7 @@ static char *colors[][ColCount] = {
 	[SchemeUrg]          = { urgfgcolor,       urgbgcolor,       urgbordercolor,       urgfloatcolor },
 };
 
-const char *scratchpadcmd[] = {"st", "-c", "scratchpad", "-g", "160x42","-e", "sesh", "connect", "s/scratchpad", NULL };
+const char *scratchpadcmd[] = {"st", "-c", "scratchpad", "-g", "160x42","-e", "sesh", "connect", "scratchpad", NULL };
 static Sp scratchpads[] = {
    /* name        cmd  */
    {"scratchpad", scratchpadcmd},
@@ -225,7 +225,7 @@ static const char *dmenucmd[] = {
 	"-sf", selfgcolor,
 	NULL
 };
-static const char *tmuxcmd[]  = { "st","-e", "sesh", "connect", "s/home", NULL };
+static const char *tmuxcmd[]  = { "st","-e", "sesh", "connect", "home", NULL };
 static const char *lockcmd[]  = { "slock", NULL };
 static const char *browsercmd[]  = { "zen", NULL };
 static const char *privatebrowsercmd[]  = { "zen", "--private-window", NULL };
