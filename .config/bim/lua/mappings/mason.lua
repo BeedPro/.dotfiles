@@ -1,3 +1,4 @@
+local command = vim.api.nvim_create_user_command
 local pkgs = {
   -- LSP
   "clangd",
@@ -42,7 +43,7 @@ local function install()
   end)
 end
 
-vim.api.nvim_create_user_command("MasonInstallAll", function()
+command("MasonInstallAll", function()
   install()
   vim.cmd "Mason"
 end, {
