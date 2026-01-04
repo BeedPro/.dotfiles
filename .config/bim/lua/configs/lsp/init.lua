@@ -6,10 +6,6 @@ local autocmd = vim.api.nvim_create_autocmd
 
 local M = {}
 
-M.on_attach = attach
-M.on_init = client
-M.capabilities = caps
-
 function M.setup()
   autocmd("LspAttach", {
     callback = function(args)
