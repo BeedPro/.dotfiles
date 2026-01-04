@@ -3,7 +3,12 @@ local dap = require "dap"
 local dapui = require "dapui"
 
 map("n", "<leader>d?", function()
-  dapui.eval(nil, { enter = true })
+  dapui.eval(nil, {
+    enter = true,
+    context = "hover",
+    width = 200,
+    height = 10,
+  })
 end, { desc = "Dap Continue" })
 map("n", "<F5>", dap.continue, { desc = "Dap Continue" })
 map("n", "<F10>", dap.step_over, { desc = "Dap Step Over" })
