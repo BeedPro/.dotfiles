@@ -8,6 +8,7 @@ require "mappings.dap"
 require "mappings.snacks"
 require "mappings.neotest"
 require "mappings.nvzone"
+require "mappings.conform"
 
 local map = vim.keymap.set
 
