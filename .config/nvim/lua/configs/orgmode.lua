@@ -4,7 +4,7 @@ require("orgmode").setup {
   org_agenda_files = agenda_dir .. "/*",
   org_default_notes_file = agenda_dir .. "/inbox.org",
 
-  win_split_mode = { "float", "0.85" },
+  win_split_mode = "tabnew",
 
   org_startup_folded = "showeverything",
 
