@@ -8,7 +8,7 @@ name = "home"
 path = "~"
 
 [[session]]
-name = "agenda"
+name = "agim"
 path = "~/Compendium/Agenda"
 startup_command = "nvim -c ':Telescope find_files'; tmux kill-session"
 
