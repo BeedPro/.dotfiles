@@ -27,7 +27,6 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 export PATH=$PATH:$HOME/.local/bin
 export PATH=$PATH:$HOME/.local/share/flatpak/exports/bin
 export PATH=$PATH:$HOME/.go/bin
-export PATH=$PATH:$HOME/.config/emacs/bin
 export PATH=$PATH:/var/lib/flatpak/exports/bin
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:/usr/games
@@ -41,3 +40,5 @@ export PATH="$PATH:/home/beed/.cache/scalacli/local-repo/bin/scala-cli"
 # >>> coursier install directory >>>
 export PATH="$PATH:/home/beed/.local/share/coursier/bin"
 # <<< coursier install directory <<<
+
+typeset -U PATH
