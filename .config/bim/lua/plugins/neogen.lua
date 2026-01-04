@@ -5,7 +5,7 @@ return {
     "L3MON4D3/LuaSnip",
   },
   cmd = "Neogen",
-  opt = {
+  opts = {
     snippet_engine = "luasnip",
   },
 }
