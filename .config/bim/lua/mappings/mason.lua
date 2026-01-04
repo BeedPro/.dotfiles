@@ -1,34 +1,5 @@
 local command = vim.api.nvim_create_user_command
-local pkgs = {
-  -- LSP
-  "clangd",
-  "pyright",
-  "jdtls",
-  "lua-language-server",
-  "roslyn",
-  "tinymist",
-
-  -- DAP
-  "codelldb",
-  "debugpy",
-  "java-debug-adapter",
-  "java-test",
-  "netcoredbg",
-
-  -- Linters
-  "mypy",
-  "ruff",
-  "djlint",
-
-  -- Formatters
-  "prettypst",
-  "black",
-  "clang-format",
-  "csharpier",
-  "prettier",
-  "prettierd",
-  "stylua",
-}
+local pkgs = require "configs.mason"
 
 local function install()
   local registry = require "mason-registry"
