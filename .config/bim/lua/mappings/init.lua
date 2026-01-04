@@ -4,6 +4,7 @@ require "mappings.harpoon"
 require "mappings.tmuxnav"
 require "mappings.mason"
 require "mappings.neogen"
+require "mappings.dap"
 
 local map = vim.keymap.set
 
