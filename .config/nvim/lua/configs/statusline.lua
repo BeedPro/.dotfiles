@@ -6,7 +6,7 @@ return {
     component_separators = "",
     section_separators = "",
 
-    globalstatus = false,
+    globalstatus = true,
     always_divide_middle = false,
 
     refresh = {
