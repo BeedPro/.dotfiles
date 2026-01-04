@@ -3,4 +3,4 @@ local neogen = require "neogen"
 
 map("n", "<leader>cn", function()
   neogen.generate()
-end, { desc = "Generate comments using Neogen" })
+end, { desc = "[C]omments [N]eogen" })
