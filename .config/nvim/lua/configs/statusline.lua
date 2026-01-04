@@ -18,10 +18,7 @@ return {
     lualine_a = { "mode" },
 
     lualine_b = {
-      {
-        "branch",
-        icon = "",
-      },
+      {},
     },
 
     lualine_c = {
@@ -44,9 +41,9 @@ return {
       },
     },
 
-    lualine_x = {},
-
-    lualine_y = {
+    lualine_x = { "location" },
+    lualine_y = {},
+    lualine_z = {
       {
         function()
           local clients = vim.lsp.get_clients { bufnr = 0 }
@@ -63,8 +60,6 @@ return {
         end,
       },
     },
-
-    lualine_z = { "location" },
   },
 
   inactive_sections = {
@@ -76,9 +71,9 @@ return {
         path = 1,
       },
     },
-    lualine_x = {},
+    lualine_x = { "location" },
     lualine_y = {},
-    lualine_z = { "location" },
+    lualine_z = {},
   },
 
   tabline = {},

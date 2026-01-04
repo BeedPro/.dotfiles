@@ -4,6 +4,7 @@ require "autocmds.ready"
 require "autocmds.numbertoggle"
 require "autocmds.conform"
 require "autocmds.signature"
+require("autocmds.colorify").run()
 
 autocmd("TextYankPost", {
   callback = function()
