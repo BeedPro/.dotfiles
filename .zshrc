@@ -1,15 +1,7 @@
-# Add deno completions to search path
 if [[ ":$FPATH:" != *":/home/beed/.zsh/completions:"* ]]; then export FPATH="/home/beed/.zsh/completions:$FPATH"; fi
-#
-# ~/.zshrc
-#
 
-# Only proceed if running interactively
 [[ $- != *i* ]] && return
 
-CONFIG_PATH="$HOME/.config/shell"
-
-# Options
 set -o vi
 
 PROMPT_COMMAND='history -a'
@@ -48,19 +40,15 @@ eval "$(starship init zsh)"
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 
-# Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
-# Download Zinit, if it's not there yet
 if [ ! -d "$ZINIT_HOME" ]; then
    mkdir -p "$(dirname $ZINIT_HOME)"
    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 
-# Source/Load zinit
 source "${ZINIT_HOME}/zinit.zsh"
 
-# Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
@@ -78,13 +66,10 @@ autoload -Uz compinit && compinit
 
 zinit cdreplay -q
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-# >>> scala-cli completions >>>
 fpath=("/home/beed/.local/share/scalacli/completions/zsh" $fpath)
 compinit
-# <<< scala-cli completions <<<
 
 typeset -U PATH
