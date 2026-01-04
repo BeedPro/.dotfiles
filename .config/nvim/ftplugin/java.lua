@@ -3,7 +3,7 @@ local mason_package = home .. "/.local/share/nvim/mason/packages"
 local workspace_path = home .. "/.local/share/nvim/jdtls-workspace/"
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local workspace_dir = workspace_path .. project_name
-local nvlsp = require "nvchad.configs.lspconfig"
+local attach = require "configs.lsp.attach"
 local map = vim.keymap.set
 
 local status, jdtls = pcall(require, "jdtls")
@@ -17,7 +17,7 @@ local bundles = {
 }
 
 local config = {
-  on_attach = nvlsp.on_attach,
+  on_attach = attach,
   cmd = {
     "java",
     "-Declipse.application=org.eclipse.jdt.ls.core.id1",
