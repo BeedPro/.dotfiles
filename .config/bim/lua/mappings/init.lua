@@ -5,6 +5,8 @@ require "mappings.tmuxnav"
 require "mappings.mason"
 require "mappings.neogen"
 require "mappings.dap"
+require "mappings.snacks"
+require "mappings.neotest"
 
 local map = vim.keymap.set
 
