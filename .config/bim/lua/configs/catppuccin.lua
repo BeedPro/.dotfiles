@@ -1,4 +1,4 @@
-return {
+require("catppuccin").setup {
   flavour = "auto",
   background = {
     light = "latte",
@@ -19,3 +19,5 @@ return {
     }
   end,
 }
+
+vim.cmd.colorscheme "catppuccin"
