@@ -3,53 +3,38 @@ require "mappings.telescope"
 require "mappings.harpoon"
 require "mappings.tmuxnav"
 require "mappings.mason"
+require "mappings.neogen"
 
 local map = vim.keymap.set
 
-map("n", "<C-Up>", ":resize +2<CR>", { desc = "Increase window height" })
-map("n", "<C-Down>", ":resize -2<CR>", { desc = "Decrease window height" })
-map("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "Decrease window width" })
-map("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "Increase window width" })
+map("n", "<C-Up>", ":resize +2<CR>", { desc = "[W]indow [H]eight +" })
+map("n", "<C-Down>", ":resize -2<CR>", { desc = "[W]indow [H]eight -" })
+map("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "[W]indow [W]idth -" })
+map("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "[W]indow [W]idth +" })
 
-map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>", { desc = "General Saves file in all modes" })
-map("n", "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
-map("n", "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
-map("n", "<leader>rr", ":.lua <cr>", { desc = "Lua Run the current line" })
-map("v", "<leader>rr", ":lua <cr>", { desc = "Lua Run the selected lines" })
+map({ "n", "i", "v" }, "<C-s>", "<cmd>w<cr>", { desc = "[S]ave [F]ile" })
 
-map({ "n", "v" }, "<leader>y", '"+y')
-map({ "n", "v" }, "P", '"+p')
+map({ "n", "v" }, "<leader>y", '"+y', { desc = "[Y]ank to clipboard" })
+map({ "n", "v" }, "P", '"+p', { desc = "[P]aste from clipboard" })
 
-map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
-map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "general copy whole file" })
+map("n", "<Esc>", "<cmd>noh<CR>", { desc = "[C]lear [H]ighlights" })
+map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "[C]opy [A]ll" })
 
-map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
-map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
+map("n", "<leader>/", "gcc", { desc = "[C]omment [T]oggle", remap = true })
+map("v", "<leader>/", "gc", { desc = "[C]omment [T]oggle", remap = true })
 
-map("v", "<", "<gv", { desc = "Indent left and reselect" })
-map("v", ">", ">gv", { desc = "Indent right and reselect" })
-map("n", "J", "mzJ`z", { desc = "Join lines and keep cursor position" })
+map("n", "<leader>bk", "<cmd>bd<CR>", { desc = "[B]uffer [K]ill" })
+map("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "[B]uffer [N]ext" })
+map("n", "<leader>bp", "<cmd>bprev<CR>", { desc = "[B]uffer [P]revious" })
+map("n", "<leader>bl", "<cmd>buffer#<CR>", { desc = "[B]uffer [L]ast" })
 
-map("n", "<leader>bk", "<cmd>bd<CR>", { desc = "Buffer Close buffer" })
-map("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Buffer Next tabbed buffer" })
-map("n", "<leader>bp", "<cmd>bprev<CR>", { desc = "Buffer Previous tabbed buffer" })
-map("n", "<leader>bl", "<cmd>buffer#<CR>", { desc = "Buffer Previous tabbed buffer" })
-map("n", "<tab>", "<cmd>bnext<CR>", { desc = "Buffer Next tabbed buffer" })
-map("n", "<S-tab>", "<cmd>bprev<CR>", { desc = "Buffer Previous tabbed buffer" })
+map("n", "<tab>", "<cmd>bnext<CR>", { desc = "[B]uffer [N]ext" })
+map("n", "<S-tab>", "<cmd>bprev<CR>", { desc = "[B]uffer [P]revious" })
 
-map("n", "<C-d>", "<C-d>zz", { desc = "General Better page down" })
-map("n", "<C-u>", "<C-u>zz", { desc = "General Better page up" })
-map("n", "n", "nzzzv", { desc = "Next search result (centered)" })
-map("n", "N", "Nzzzv", { desc = "Previous search result (centered)" })
+map("n", "<leader>cd", "<cmd>cd %:p:h<CR>", { desc = "[C]hange [D]irectory" })
 
-map("n", "<leader>cd", "<cmd> cd %:p:h <CR>", { desc = "General Change to current directory" })
-
-map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
+map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "[D]iagnostic [S]how (loclist)" })
 
 map("n", "g?", function()
   vim.diagnostic.open_float(nil, { border = "rounded", source = "always" })
-end)
-
-map("n", "K", function()
-  vim.lsp.buf.hover { border = "single", max_height = 25, max_width = 120 }
-end, { desc = "Hover documentation" })
+end, { desc = "[D]iagnostic [H]over" })
