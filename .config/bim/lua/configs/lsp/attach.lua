@@ -12,6 +12,9 @@ M.on_attach = function(_, bufnr)
   map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "[W]orkspace [A]dd")
   map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "[W]orkspace [R]emove")
   map("n", "grn", vim.lsp.buf.rename, opts "[R]e[n]ame")
+  map("n", "K", function()
+    vim.lsp.buf.hover { border = "single", max_height = 25, max_width = 120 }
+  end, opts "[H]over [D]ocs")
 
   map("n", "<leader>wl", function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
