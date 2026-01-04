@@ -86,3 +86,5 @@ export SDKMAN_DIR="$HOME/.sdkman"
 fpath=("/home/beed/.local/share/scalacli/completions/zsh" $fpath)
 compinit
 # <<< scala-cli completions <<<
+
+typeset -U PATH
