@@ -33,7 +33,7 @@ return {
       else
         gitsigns.nav_hunk "next"
       end
-    end, "Git Next hunk")
+    end, "[H]unk [N]ext Git")
 
     map("n", "<leader>hp", function()
       if vim.wo.diff then
@@ -41,7 +41,7 @@ return {
       else
         gitsigns.nav_hunk "prev"
       end
-    end, "Git Previous hunk")
+    end, "[H]unk [P]revious Git")
 
     map("n", "<leader>hs", gitsigns.stage_hunk, "[H]unk [S]tage")
     map("n", "<leader>hr", gitsigns.reset_hunk, "[H]unk [R]eset")
