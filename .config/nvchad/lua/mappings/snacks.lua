@@ -2,17 +2,19 @@ local map = vim.keymap.set
 local snacks = require "snacks"
 
 map("n", "<leader>gl", function()
+  ---@diagnostic disable-next-line: undefined-field
   snacks.lazygit.log()
-end, { desc = "Lazy[G]it [L]og" })
+end, { desc = "Snacks Lazygit Log (cwd)" })
 
 map("n", "<leader>gf", function()
+  ---@diagnostic disable-next-line: undefined-field
   snacks.lazygit.log_file()
-end, { desc = "Lazy[g]it Log [F]ile" })
+end, { desc = "Snacks Lazygit Current File History" })
 
 map("n", "<leader>n", function()
   snacks.notifier.show_history()
-end, { desc = "[N]otification History" })
+end, { desc = "Snacks Notification History" })
 
 map("n", "<leader>un", function()
   snacks.notifier.hide()
-end, { desc = "[U][N]otifications" })
+end, { desc = "Snacks Dismiss All Notifications" })

@@ -1,0 +1,16 @@
+local map = vim.keymap.set
+local dap = require "dap"
+local dapui = require "dapui"
+
+map("n", "<leader>?", function()
+  dapui.eval(nil, { enter = true })
+end, { desc = "Dap Continue" })
+
+map("n", "<F5>", dap.continue, { desc = "Dap Continue" })
+map("n", "<F10>", dap.step_over, { desc = "Dap Step Over" })
+map("n", "<F11>", dap.step_into, { desc = "Dap Step Into" })
+map("n", "<F12>", dap.step_out, { desc = "Dap Step Out" })
+map("n", "<Leader>db", dap.toggle_breakpoint, { desc = "Dap Toggle Breakpoint" })
+map("n", "<Leader>dB", dap.set_breakpoint, { desc = "Dap Set Breakpoint" })
+map("n", "<Leader>dr", dap.repl.open, { desc = "Dap Repl Open" })
+map("n", "<Leader>dl", dap.run_last, { desc = "Dap Run Last" })

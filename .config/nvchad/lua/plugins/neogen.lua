@@ -5,7 +5,9 @@ return {
     "L3MON4D3/LuaSnip",
   },
   cmd = "Neogen",
-  opts = {
-    snippet_engine = "luasnip",
-  },
+  config = function()
+    require("neogen").setup {
+      snippet_engine = "luasnip",
+    }
+  end,
 }
