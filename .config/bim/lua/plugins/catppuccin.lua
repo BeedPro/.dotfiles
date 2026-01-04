@@ -3,7 +3,7 @@ return {
   name = "catppuccin",
   lazy = false,
   priority = 1000,
-  opt = function()
+  config = function()
     require "configs.catppuccin"
   end,
 }
