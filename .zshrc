@@ -29,6 +29,7 @@ alias zadd="find . -maxdepth 1 -type d ! -name '.' -exec zoxide add {} \;"
 alias apt="sudo apt"
 alias pkgm="dotman distro"
 alias yay="dotman yay"
+alias largefiles="sudo find / -xdev -type f -size +500M -exec ls -lh {} \;"
 
 export MANPAGER='nvim +Man!'
 export BAT_THEME="Catppuccin Mocha"
