@@ -1,5 +1,5 @@
 local command = vim.api.nvim_create_user_command
-local pkgs = require "configs.mason"
+local pkgs = require "configs.mason.required"
 
 local function install()
   local registry = require "mason-registry"
