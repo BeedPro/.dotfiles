@@ -16,3 +16,4 @@ espanso-x11 start --unmanaged
 $HOME/.screenlayout/set-screens.sh
 xset dpms 0 0 0 && xset s noblank  && xset s off
 dwmblocks &
+cp $HOME/.config/wallpaper/current.jpg /tmp/wallpaper.jpg

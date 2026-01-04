@@ -18,8 +18,7 @@ static const char * text_color = "#cdd6f4";
 /* text size (must be a valid size) */
 static const char * font_name = "6x13";
 
-// static const char * background_image = "/tmp/wallpaper.jpg";
-static const char * background_image = "";
+static const char * background_image = "/tmp/wallpaper.jpg";
 
 /* insert grid pattern with scale 1:1, the size can be changed with logosize */
 static const int logosize = 50;
