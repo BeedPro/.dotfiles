@@ -1,5 +1,5 @@
-require("catppuccin").setup({
-  flavour = "auto", 
+return {
+  flavour = "auto",
   background = {
     light = "latte",
     dark = "mocha",
@@ -18,6 +18,4 @@ require("catppuccin").setup({
       WinSeparator = { fg = colors.surface1 },
     }
   end,
-})
-
-  vim.cmd.colorscheme("catppuccin")
+}
