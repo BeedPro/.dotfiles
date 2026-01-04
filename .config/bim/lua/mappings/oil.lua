@@ -7,5 +7,4 @@ map("n", "<leader>.", function()
   else
     require("oil").open()
   end
-end, { desc = "Toggle Oil file explorer" })
-
+end, { desc = "[.] Toggle Oil" })
