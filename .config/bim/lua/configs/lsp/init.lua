@@ -1,14 +1,13 @@
 local attach = require "configs.lsp.attach"
-local client = require "configs.lsp.init_client"
+local client = require "configs.lsp.client"
 local caps = require "configs.lsp.capabilities"
-local init = require "configs.lsp.init_client"
 
 local autocmd = vim.api.nvim_create_autocmd
 
 local M = {}
 
 M.on_attach = attach
-M.on_init = init
+M.on_init = client
 M.capabilities = caps
 
 function M.setup()
