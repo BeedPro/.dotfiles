@@ -4,7 +4,7 @@ local map = vim.keymap.set
 -- export on_attach & capabilities
 M.on_attach = function(_, bufnr)
   local function opts(desc)
-    return { buffer = bufnr, desc = "LSP " .. desc }
+    return { buffer = bufnr, desc = desc }
   end
 
   map("n", "gD", vim.lsp.buf.declaration, opts "[G]oto [D]eclaration")
@@ -17,7 +17,6 @@ M.on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, opts "[W]orkspace [L]ist")
 
-  map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Goto type definition")
   map("n", "<leader>ra", require "mappings.renamer", opts "[R]ename [A]ll")
   map("n", "<leader>ca", vim.lsp.buf.code_action, opts "[C]ode [A]ction")
 end

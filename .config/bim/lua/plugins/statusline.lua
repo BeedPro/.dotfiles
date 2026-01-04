@@ -38,6 +38,14 @@ return {
             unnamed = "",
           },
         },
+        {
+          "diff",
+          symbols = {
+            added = "+",
+            modified = "~",
+            removed = "-",
+          },
+        },
       },
 
       lualine_x = {},
