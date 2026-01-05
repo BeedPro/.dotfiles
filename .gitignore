@@ -101,4 +101,3 @@ luac.out
 .local/share/sent/sent
 .local/share/dmenu/dmenu
 .local/share/dwmblocks/dwmblocks
-.config/nvim/lazy-lock.json
