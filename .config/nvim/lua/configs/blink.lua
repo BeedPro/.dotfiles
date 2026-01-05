@@ -7,7 +7,7 @@ local opts = {
 
   keymap = {
     preset = "default",
-    ["<CR>"] = { "accept", "fallback" },
+    ["<C-y>"] = { "accept", "fallback" },
     ["<C-n>"] = { "select_next", "fallback" },
     ["<C-p>"] = { "select_prev", "fallback" },
     ["<C-j>"] = { "snippet_forward", "fallback" },
