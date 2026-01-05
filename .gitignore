@@ -101,5 +101,4 @@ luac.out
 .local/share/sent/sent
 .local/share/dmenu/dmenu
 .local/share/dwmblocks/dwmblocks
-.config/bim/lazy-lock.json
-.config/bim/lazy-lock.json
+.config/nvim/lazy-lock.json
