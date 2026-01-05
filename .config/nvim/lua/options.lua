@@ -16,7 +16,6 @@ o.smartindent = true
 o.tabstop = 2
 o.softtabstop = 2
 
-opt.fillchars = { eob = " " }
 o.ignorecase = true
 o.smartcase = true
 o.mouse = "a"
@@ -25,8 +24,6 @@ o.number = true
 o.relativenumber = true
 o.numberwidth = 2
 o.ruler = false
-
-opt.shortmess:append "sI"
 
 o.signcolumn = "yes"
 o.splitbelow = true
@@ -40,6 +37,11 @@ o.foldlevel = 99
 o.foldtext = "v:folddashes.substitute(getline(v:foldstart),'/\\*\\|\\*/\\|{{{\\d\\=','','g')"
 
 o.updatetime = 250
+
+opt.fillchars = { eob = " " }
+opt.guicursor = ""
+opt.shortmess:append "sI"
+opt.wrap = false
 
 opt.whichwrap:append "<>[]hl"
 
