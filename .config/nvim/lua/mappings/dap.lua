@@ -9,7 +9,7 @@ map("n", "<leader>d?", function()
     width = 200,
     height = 10,
   })
-end, { desc = "Dap Continue" })
+end, { desc = "[D]ap Question[?]" })
 map("n", "<F5>", dap.continue, { desc = "Dap Continue" })
 map("n", "<F10>", dap.step_over, { desc = "Dap Step Over" })
 map("n", "<F11>", dap.step_into, { desc = "Dap Step Into" })

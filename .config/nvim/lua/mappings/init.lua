@@ -28,17 +28,10 @@ map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "[C]opy [A]ll" })
 map("n", "<leader>/", "gcc", { desc = "[C]omment [T]oggle", remap = true })
 map("v", "<leader>/", "gc", { desc = "[C]omment [T]oggle", remap = true })
 
-map("n", "<leader>bk", "<cmd>bd<CR>", { desc = "[B]uffer [K]ill" })
-map("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "[B]uffer [N]ext" })
-map("n", "<leader>bp", "<cmd>bprev<CR>", { desc = "[B]uffer [P]revious" })
-map("n", "<leader>bl", "<cmd>buffer#<CR>", { desc = "[B]uffer [L]ast" })
-
-map("n", "<tab>", "<cmd>bnext<CR>", { desc = "[B]uffer [N]ext" })
-map("n", "<S-tab>", "<cmd>bprev<CR>", { desc = "[B]uffer [P]revious" })
-
 map("n", "<leader>cd", "<cmd>cd %:p:h<CR>", { desc = "[C]hange [D]irectory" })
 
 map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "[D]iagnostic [S]how (loclist)" })
+map("n", "<leader>da", vim.diagnostic.setqflist, { desc = "[D]iagnostic [A]all (globallist)" })
 
 map("n", "g?", function()
   vim.diagnostic.open_float(nil, { border = "rounded", source = "always" })
