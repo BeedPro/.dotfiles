@@ -1,7 +1,7 @@
 local agenda_dir = vim.fn.expand "~/Compendium/Agenda"
 
 require("orgmode").setup {
-  org_agenda_files = agenda_dir .. "/*",
+  org_agenda_files = agenda_dir .. "/**/*",
   org_default_notes_file = agenda_dir .. "/inbox.org",
 
   win_split_mode = "tabnew",
