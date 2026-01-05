@@ -27,21 +27,21 @@ return {
       })
     end
 
-    map("n", "<leader>hn", function()
+    map("n", "]c", function()
       if vim.wo.diff then
         vim.cmd.normal { "]c", bang = true }
       else
         gitsigns.nav_hunk "next"
       end
-    end, "[H]unk [N]ext Git")
+    end, "[Next [C]hange Git")
 
-    map("n", "<leader>hp", function()
+    map("n", "[c", function()
       if vim.wo.diff then
         vim.cmd.normal { "[c", bang = true }
       else
         gitsigns.nav_hunk "prev"
       end
-    end, "[H]unk [P]revious Git")
+    end, "[Previous [C]hange Git")
 
     map("n", "<leader>hs", gitsigns.stage_hunk, "[H]unk [S]tage")
     map("n", "<leader>hr", gitsigns.reset_hunk, "[H]unk [R]eset")
