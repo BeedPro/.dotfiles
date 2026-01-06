@@ -6,13 +6,21 @@ return {
     opts = {
       bigfile = { enabled = true },
       dashboard = { enabled = false },
-      indent = { enabled = false },
+      indent = {
+        enabled = false,
+        animate = {
+          enabled = false,
+        },
+        scope = {
+          enabled = false,
+        },
+      },
       input = { enabled = true },
       notifier = { enabled = true },
       quickfile = { enabled = true },
-      scroll = { enabled = false },
       statuscolumn = { enabled = true },
       words = { enabled = true },
+      scroll = { enabled = false },
       styles = {
         notification = {
           border = "single",
