@@ -8,6 +8,12 @@ set $right l
 set $term foot
 set $menu bemenu-run  -c -W 0.5 -H 10 -l 10 -B 1 --bdr "#cdd6f4" --fb "#1e1e2e" --ff "#cdd6f4" --nb "#1e1e2e" --nf "#cdd6f4" --tb "#1e1e2e" --hb "#1e1e2e" --tf "#f38ba8" --hf "#f9e2af" --af "#cdd6f4" --ab "#1e1e2e"
 
+exec_always swaybg -c 1e1e2e
+
+input type:keyboard {
+    xkb_layout gb
+}
+
 output DP-1 {
     mode 1080x1920@143.72Hz
     transform 270
