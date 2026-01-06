@@ -1,12 +1,9 @@
-static int enableattachbelow = 0;
+static int attachbelow = 0;
+static int attachbottom = 0;
 
 void
 attachx(Client *c)
 {
-  if (enableattachbelow == 0) {
-    attach(c);
-    return;
-  }
 	Client *at;
 
 	if (c->idx > 0) { /* then the client has a designated position in the client list */
@@ -23,11 +20,20 @@ attachx(Client *c)
 		}
 	}
 
-	if (!(c->mon->sel == NULL || c->mon->sel == c || c->mon->sel->isfloating)) {
-		c->next = c->mon->sel->next;
-		c->mon->sel->next = c;
-		return;
-	}
+  if (attachbelow == 1){
+    if (!(c->mon->sel == NULL || c->mon->sel == c || c->mon->sel->isfloating)) {
+      c->next = c->mon->sel->next;
+      c->mon->sel->next = c;
+      return;
+    }
+  } else if (attachbottom == 1) {
+    for (at = c->mon->clients; at && at->next; at = at->next);
+    if (at) {
+      at->next = c;
+      c->next = NULL;
+      return;
+    }
+  }
 	attach(c); // master (default)
 }
 
