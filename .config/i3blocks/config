@@ -1,0 +1,23 @@
+# Global settings
+full_text=|
+align=center
+separator=false
+separator_block_width=7
+
+# Disk usage
+[disk]
+label=/
+command=~/.local/scripts/disk
+interval=30
+
+# Battery
+[battery]
+label=
+command=~/.local/scripts/battery
+interval=60
+
+# Date & time
+[datetime]
+label=
+command=~/.local/scripts/datetime
+interval=5
