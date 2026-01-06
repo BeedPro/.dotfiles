@@ -1,5 +1,5 @@
 static int attachbelow = 0;
-static int attachbottom = 0;
+static int attachbottom = 1;
 
 void
 attachx(Client *c)
