@@ -230,6 +230,8 @@ static const char *lockcmd[]  = { "slock", NULL };
 static const char *browsercmd[]  = { "zen", NULL };
 static const char *privatebrowsercmd[]  = { "zen", "--private-window", NULL };
 static const char *filescmd[]  = { "st", "-e", "yazi", NULL };
+static const char *agendacmd[]  = { "st", "-e", "nvim", "-c", ":Org agenda", NULL };
+static const char *notescmd[]  = { "st", "-e", "nvim", "-c", ":Org capture", NULL };
 
 static const char *powercmd[] = { "/bin/sh", "-c", "~/.local/scripts/powermenu.sh", NULL };
 static const char *killmenucmd[] = { "/bin/sh", "-c", "~/.local/scripts/killmenu.sh", NULL };
@@ -258,6 +260,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Return,     spawn,                  {.v = tmuxcmd } },
 	{ MODKEY,                       XK_w,          spawn,                  {.v = browsercmd } },
 	{ MODKEY|ShiftMask,             XK_w,          spawn,                  {.v = privatebrowsercmd } },
+	{ MODKEY,                       XK_o,          spawn,                  {.v = agendacmd } },
+	{ MODKEY|ShiftMask,             XK_o,          spawn,                  {.v = notescmd } },
 	{ MODKEY,                       XK_e,          spawn,                  {.v = filescmd } },
 	{ MODKEY,                       XK_x,          spawn,                  {.v = lockcmd } },
 	{ MODKEY|ShiftMask,             XK_x,          spawn,                  {.v = powercmd} },
