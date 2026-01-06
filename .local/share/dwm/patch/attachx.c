@@ -1,4 +1,4 @@
-static int enableattachbelow = 1;
+static int enableattachbelow = 0;
 
 void
 attachx(Client *c)
