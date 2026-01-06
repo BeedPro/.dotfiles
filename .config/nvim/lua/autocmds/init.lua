@@ -4,9 +4,11 @@ require "autocmds.ready"
 require "autocmds.numbertoggle"
 require "autocmds.conform"
 require "autocmds.signature"
-require("autocmds.colorify").run()
 require "autocmds.typst"
 require "autocmds.django"
+require "autocmds.oil"
+
+require("autocmds.colorify").run()
 
 autocmd("TextYankPost", {
   callback = function()
