@@ -12,7 +12,7 @@ static const unsigned int gappiv         = 0;   /* vert inner gap between window
 static const unsigned int gappoh         = 0;   /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov         = 0;   /* vert outer gap between windows and screen edge */
 static const int smartgaps_fact          = 1;   /* gap factor when there is only one client; 0 = no gaps, 3 = 3x outer gaps */
-static const int smartborders            = 1;   /* border factor when there is only one client; 0 = no border, 1 = border */
+static const int smartborders            = 0;   /* border factor when there is only one client; 0 = no border, 1 = border */
 static const char autostartblocksh[]     = "../autostart_blocking.sh";
 static const char autostartsh[]          = "../autostart.sh";
 static const char dwmdir[]               = "dwm";
