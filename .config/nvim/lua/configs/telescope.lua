@@ -1,4 +1,4 @@
-local actions = require("telescope.actions")
+local actions = require "telescope.actions"
 
 return {
   defaults = {
@@ -8,7 +8,7 @@ return {
 
     border = true,
     borderchars = {
-      prompt =  { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+      prompt = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
       results = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
       preview = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
     },
