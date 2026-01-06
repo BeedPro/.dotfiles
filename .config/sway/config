@@ -140,7 +140,8 @@ client.placeholder      $overlay0  $base      $text     $overlay0  $overlay0
 bar {
     position bottom
 
-    status_command while date +'%Y-%m-%d %X'; do sleep 1; done
+    status_command i3blocks
+    font pango:GohuFont 14 Nerd Font 10
     colors {
       background         $base
       statusline         $text
