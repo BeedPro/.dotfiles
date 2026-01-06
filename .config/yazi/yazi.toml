@@ -12,5 +12,14 @@ edit = [
 ]
 
 open = [
-  { run = 'devour xdg-open "$@"', block = false }
+	{ run = 'devour xdg-open "$@"', block = false, for = "unix" }
+]
+
+play = [
+	{ run = 'devour mpv "$@"', block = false, for = "unix" }
+]
+
+[open]
+prepend_rules = [
+	{ mime = "video/*", use = "play" },
 ]
