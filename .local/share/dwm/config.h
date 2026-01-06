@@ -282,9 +282,7 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_k,          setcfact,               {.f = +0.25} },
 	{ MODKEY|ControlMask,           XK_j,          setcfact,               {.f = -0.25} },
 	{ MODKEY|ControlMask,           XK_0,          setcfact,               {0} },
-	{ MODKEY|ShiftMask,             XK_j,          movestack,              {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_h,          zoom,                   {0} },
+	{ MODKEY|ShiftMask,             XK_Return,     zoom,                   {0} },
 	{ MODKEY,                       XK_g,          togglegaps,             {0} },
 	{ MODKEY,                       XK_Tab,        view,                   {0} },
 	{ MODKEY,                       XK_c,          killclient,             {0} },
@@ -292,7 +290,6 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
-	// { MODKEY,                       XK_s,          setlayout,              {.v = &layouts[3]} },
 	{ MODKEY|ShiftMask,             XK_f,          togglefloating,         {0} },
 	{ MODKEY,                       XK_n,          togglescratch,          {.ui = 0 } },
 	{ 0,                            XK_F11,        fullscreen,             {0} },
@@ -304,8 +301,6 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period,     focusmon,               {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,      tagmon,                 {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period,     tagmon,                 {.i = +1 } },
-	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
 	TAGKEYS(                        XK_1,                                  0)
 	TAGKEYS(                        XK_2,                                  1)
 	TAGKEYS(                        XK_3,                                  2)
@@ -315,6 +310,11 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                                  6)
 	TAGKEYS(                        XK_8,                                  7)
 	TAGKEYS(                        XK_9,                                  8)
+	// { MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
+	// { MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
+	// { MODKEY|ShiftMask,             XK_j,          movestack,              {.i = +1 } },
+	// { MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
+	// { MODKEY,                       XK_s,          setlayout,              {.v = &layouts[3]} },
 };
 
 /* button definitions */
