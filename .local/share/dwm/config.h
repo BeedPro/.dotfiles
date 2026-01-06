@@ -296,7 +296,6 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
 	{ MODKEY,                       XK_s,          setlayout,              {.v = &layouts[3]} },
 	{ MODKEY|ShiftMask,             XK_f,          togglefloating,         {0} },
-	{ MODKEY,                       XK_n,          togglescratch,          {.ui = 0 } },
 	{ 0,                            XK_F11,        fullscreen,             {0} },
 	{ MODKEY,                       XK_F11,        togglefakefullscreen,   {0} },
 	{ MODKEY,                       XK_F12,        spawn,                  {.v = xswapkbcmd} },
@@ -319,6 +318,7 @@ static const Key keys[] = {
 	// { MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
 	// { MODKEY|ShiftMask,             XK_j,          movestack,              {.i = +1 } },
 	// { MODKEY|ShiftMask,             XK_k,          movestack,              {.i = -1 } },
+	// { MODKEY,                       XK_n,          togglescratch,          {.ui = 0 } },
 };
 
 /* button definitions */
