@@ -40,7 +40,6 @@ alias zadd="find . -maxdepth 1 -type d ! -name '.' -exec zoxide add {} \;"
 alias largefiles="sudo find / -xdev -type f -size +500M -exec ls -lh {} \;"
 
 eval "$(starship init zsh)"
-eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -52,11 +51,19 @@ fi
 
 source "${ZINIT_HOME}/zinit.zsh"
 
-zinit light zsh-users/zsh-syntax-highlighting
+zinit ice wait lucid
 zinit light zsh-users/zsh-completions
+
+zinit ice wait lucid
 zinit light zsh-users/zsh-autosuggestions
+
+zinit ice wait lucid
+zinit light zsh-users/zsh-syntax-highlighting
+
+zinit ice wait lucid
 zinit light Aloxaf/fzf-tab
 
+zinit ice wait lucid
 zinit load atuinsh/atuin
 
 zstyle ':fzf-tab:*' fzf-flags \
@@ -68,5 +75,7 @@ if [ "$(hostname)" = "nimbus" ] && [ "$XDG_SESSION_TYPE" = "x11" ]; then
     xsetroot -cursor_name left_ptr
 fi
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit
+compinit -C
+
 zinit cdreplay -q
