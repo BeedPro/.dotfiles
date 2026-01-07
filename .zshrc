@@ -1,6 +1,9 @@
-if [[ ":$FPATH:" != *":/home/beed/.zsh/completions:"* ]]; then export FPATH="/home/beed/.zsh/completions:$FPATH"; fi
-
 [[ $- != *i* ]] && return
+
+if [[ ":$FPATH:" != *":/home/beed/.zsh/completions:"* ]]; then export FPATH="/home/beed/.zsh/completions:$FPATH"; fi
+fpath=("/home/beed/.local/share/scalacli/completions/zsh" $fpath)
+
+typeset -U PATH
 
 set -o vi
 
@@ -66,15 +69,8 @@ if [ "$(hostname)" = "nimbus" ] && [ "$XDG_SESSION_TYPE" = "x11" ]; then
     xsetroot -cursor_name left_ptr
 fi
 
-# Load completions
-autoload -Uz compinit && compinit
-
-zinit cdreplay -q
-
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-fpath=("/home/beed/.local/share/scalacli/completions/zsh" $fpath)
-compinit
-
-typeset -U PATH
+autoload -Uz compinit && compinit
+zinit cdreplay -q
