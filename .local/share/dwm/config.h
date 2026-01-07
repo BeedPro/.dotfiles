@@ -225,7 +225,7 @@ static const char *dmenucmd[] = {
 	"-sf", selfgcolor,
 	NULL
 };
-static const char *tmuxcmd[]  = {"st", "-c", "scratchpad", "-g", "160x42","-e", "sesh", "connect", "home", NULL };
+static const char *tmuxcmd[]  = {"st", "-e", "sesh", "connect", "home", NULL };
 static const char *termcmd[]  = {"st", NULL};
 static const char *lockcmd[]  = { "slock", NULL };
 static const char *browsercmd[]  = { "zen", NULL };
