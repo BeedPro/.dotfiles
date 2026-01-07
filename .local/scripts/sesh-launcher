@@ -10,9 +10,9 @@ from pathlib import Path
 SRC_DIR = Path.home() / ".local" / "src"
 SRC_DIR.mkdir(parents=True, exist_ok=True)
 
-TMUX_PREFIX = "* "
-SESH_PREFIX = "@ "
-DIR_PREFIX = "+ "
+TMUX_PREFIX = "󰖯 "
+SESH_PREFIX = " "
+DIR_PREFIX = " "
 
 
 def is_valid_base(path: Path) -> bool:
