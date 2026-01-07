@@ -165,15 +165,12 @@ def get_all_items(paths: list[str]) -> tuple[list[str], dict[str, str]]:
 
     display_items: list[str] = []
 
-    # tmux sessions
     for name in sorted(tmux_set):
         display_items.append(f"{TMUX_PREFIX}{name}")
 
-    # sesh sessions (excluding tmux dupes)
     for name in sorted(sesh_set - tmux_set):
         display_items.append(f"{SESH_PREFIX}{name}")
 
-    # directory-backed sessions
     for name in sorted(mapping_keys - sesh_set - tmux_set):
         display_items.append(f"{DIR_PREFIX}{name}")
 
