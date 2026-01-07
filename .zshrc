@@ -13,6 +13,14 @@ HISTCONTROL="erasedups:ignoreboth"
 export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
 HISTTIMEFORMAT='%F %T '
 
+export MANPAGER='nvim +Man!'
+export BAT_THEME="Catppuccin Mocha"
+export STARSHIP_CONFIG=$HOME/.config/starship/config.toml
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border --color=bg:-1,bg+:-1,preview-bg:-1"
+export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
 alias vim="/usr/local/bin/nvim"
 alias vi="/usr/bin/vim"
@@ -24,20 +32,12 @@ alias rm='rm -v'
 alias mv='mv -v'
 alias cp='cp -v'
 alias python="python3"
-alias grep='grep --color=auto'
-alias fonts='fc-list | grep -ioE ": [^:]*$1[^:]+:" | sed -E "s/(^: |:)//g" | tr , \\n | sort  | uniq'
-alias cd='>/dev/null cd'
-alias zadd="find . -maxdepth 1 -type d ! -name '.' -exec zoxide add {} \;"
 alias apt="sudo apt"
-alias pkgm="dotman distro"
-alias yay="dotman yay"
-alias largefiles="sudo find / -xdev -type f -size +500M -exec ls -lh {} \;"
+alias grep='grep --color=auto'
 
-export MANPAGER='nvim +Man!'
-export BAT_THEME="Catppuccin Mocha"
-export STARSHIP_CONFIG=$HOME/.config/starship/config.toml
-export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border --color=bg:-1,bg+:-1,preview-bg:-1"
-export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
+alias fonts='fc-list | grep -ioE ": [^:]*$1[^:]+:" | sed -E "s/(^: |:)//g" | tr , \\n | sort  | uniq'
+alias zadd="find . -maxdepth 1 -type d ! -name '.' -exec zoxide add {} \;"
+alias largefiles="sudo find / -xdev -type f -size +500M -exec ls -lh {} \;"
 
 eval "$(starship init zsh)"
 eval "$(fzf --zsh)"
@@ -67,9 +67,6 @@ if [ "$(hostname)" = "nimbus" ] && [ "$XDG_SESSION_TYPE" = "x11" ]; then
     xrdb -merge <<< "Xcursor.size: 24"
     xsetroot -cursor_name left_ptr
 fi
-
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 autoload -Uz compinit && compinit
 zinit cdreplay -q
