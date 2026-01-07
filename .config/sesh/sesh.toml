@@ -49,3 +49,8 @@ startup_command="~/.local/scripts/tmux-picker.sh 1 share/"
 name = "config"
 path = "~/.dotfiles/.config"
 startup_command="~/.local/scripts/tmux-picker.sh 1 config/"
+
+[[session]]
+name = "tmp"
+path = "/tmp"
+startup_command='printf "Folder name: " && read dir && mkdir -p -- "$dir" && cd -- "$dir" && tmux rename-session -- "$PWD"'
