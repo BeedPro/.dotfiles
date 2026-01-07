@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+
+import argparse
+import subprocess
+import sys
+import os
+
+from pathlib import Path
+
+
+def is_valid_base(path: Path) -> bool:
+    return path.is_dir()
+
+
+def relative_depth(root: str, base_depth: int) -> int:
+    return len(Path(root).parts) - base_depth
+
+
+def handle_depth(
+    root: str,
+    dirs: list[str],
+    current_depth: int,
+    target_depth: int,
+    base: Path,
+    result: list[str],
+) -> None:
+    if current_depth > target_depth:
+        dirs.clear()
+        return
+
+    if current_depth == target_depth:
+        relative = Path(root).resolve().relative_to(base)
+        result.append(relative.as_posix())
+        dirs.clear()
+
+
+def find_dirs(input: str, depth: int = 1) -> list[str]:
+    base = Path(input).expanduser().resolve()
+    result: list[str] = []
+
+    if not is_valid_base(base):
+        return result
+
+    base_depth = len(base.parts)
+
+    for root, dirs, _ in os.walk(base):
+        current = relative_depth(root, base_depth)
+        handle_depth(root, dirs, current, depth, base, result)
+
+    return result
+
+
+def create_session(name: str, path: str) -> str:
+    output: str = "[[session]]\n"
+    output += f'name = "{name}"\n'
+    output += f'path = "{path}/{name}"\n'
+    output += 'startup_command="' + "nvim -c ':Telescope find_files'" + '"\n'
+    return output
+
+
+def create_mapping(paths: list[str]) -> dict[str, str]:
+    src: list[str] = find_dirs(paths[0], 2)
+    share: list[str] = find_dirs(paths[1])
+    config: list[str] = find_dirs(paths[2])
+    output: dict[str, str] = {}
+    for p in src:
+        output[p] = paths[0] + "/" + p
+    for p in share:
+        output["share/" + p] = paths[1] + "/" + p
+    for p in config:
+        output["config/" + p] = paths[2] + "/" + p
+    return output
+
+
+def list_sessions(sesh_mapping) -> None:
+    for name in sesh_mapping:
+        print(name)
+
+
+def start_tmux_session(name: str, path: str) -> None:
+    path = str(Path(path).expanduser().resolve())
+
+    inside_tmux = "TMUX" in os.environ
+
+    if inside_tmux:
+        subprocess.run(
+            ["tmux", "new-session", "-d", "-s", name, "-c", path],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        subprocess.run(
+            ["tmux", "switch-client", "-t", name],
+            check=True,
+        )
+        return
+
+    subprocess.run(
+        ["tmux", "new-session", "-A", "-s", name, "-c", path],
+        check=True,
+    )
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Create or attach to a tmux session")
+    parser.add_argument(
+        "name",
+        nargs="?",
+        help="Session name (e.g. Beed/project)",
+    )
+    args = parser.parse_args()
+
+    paths: list[str] = [
+        "~/.local/src",
+        "~/.dotfiles/.local/share",
+        "~/.dotfiles/.config",
+    ]
+    sesh_mapping: dict[str, str] = create_mapping(paths)
+
+    if not args.name:
+        list_sessions(sesh_mapping)
+        return
+
+    if args.name not in sesh_mapping:
+        print(f"Unknown session: {args.name}", file=sys.stderr)
+        sys.exit(1)
+
+    start_tmux_session(args.name, sesh_mapping[args.name])
+
+
+if __name__ == "__main__":
+    main()
