@@ -17,15 +17,15 @@ ensure_session () {
 }
 
 # Prompt the user with a fuzzy finder interface to select a session
-selected=$(sesh list --icons | fzf-tmux -p 80%,70% \
+selected=$(sesh list -c | fzf-tmux -p 80%,70% \
   --ansi \
   --no-sort \
   --border-label ' sesh ' --prompt 'all ' \
-  --header '  (C-a) all :: (C-t) tmux :: (M-bs) kill' \
-  --bind 'tab:down,btab:up' \
-  --bind 'ctrl-a:change-prompt(all )+reload(sesh list --icons)' \
-  --bind 'ctrl-t:change-prompt(ses )+reload(sesh list -t --icons)' \
-  --bind 'alt-backspace:execute(tmux kill-session -t {2..})+change-prompt(all )+reload(sesh list --icons)' \
+  --header '  (C-g) configs :: (C-t) tmux :: (C-x) zoxide :: (M-bs) kill' \
+  --bind 'ctrl-x:change-prompt(zox )+reload(sesh list -z)' \
+  --bind 'ctrl-g:change-prompt(con )+reload(sesh list -c)' \
+  --bind 'ctrl-t:change-prompt(ses )+reload(sesh list -t)' \
+  --bind 'alt-backspace:execute(tmux kill-session -t {2..})+change-prompt(all )+reload(sesh list -t)' \
   --border=sharp \
   --preview-border=left \
   --no-scrollbar \
@@ -35,8 +35,6 @@ selected=$(sesh list --icons | fzf-tmux -p 80%,70% \
   --preview 'sesh preview {}' \
   --color=bg:-1,bg+:-1,gutter:-1
 )
-
-selected=$(echo "$selected" | tail -1)
 
 # If the input looks like a Git URL, clone it
 # Matches:
@@ -73,19 +71,6 @@ fi
 
 selected=$(echo "$selected" | tail -1)
 
-# Check if SRC_DIR is a substring of the selected path
-if [[ "$selected" == *"~/.local/src"* ]]; then
-  relative_path=$(echo $selected | sed 's|^[^ ]* ~/.local/src/||')
-  session_name=$relative_path
-  target="$SRC_DIR/$relative_path"
-
-  # Create a tmux session and switch to it
-   tmux new-session -ds "$session_name" -c "$target" && \
-   tmux switch-client -t "$session_name"
-   exit $?
-fi
-
-# If a session was selected, connect to it
 if [[ -n "$selected" ]]; then
   sesh connect "$selected"
 fi
