@@ -102,7 +102,16 @@ def ensure_session(session_name: str, directory: Path) -> None:
         stderr=subprocess.DEVNULL,
     )
     if result.returncode != 0:
-        run(["tmux", "new-session", "-ds", session_name, "-c", str(directory)])
+        subprocess.run(
+            [
+                "tmux",
+                "new-session",
+                "-ds",
+                session_name,
+                "-c",
+                str(directory.expanduser().resolve()),
+            ]
+        )
     run(["tmux", "switch-client", "-t", session_name])
 
 
