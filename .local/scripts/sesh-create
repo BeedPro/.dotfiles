@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+SRC_DIR = Path.home() / ".local" / "src"
+SRC_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def run(cmd, check=True):
+    return subprocess.run(cmd, check=check)
+
+
+def has_session(name: str) -> bool:
+    result = subprocess.run(
+        ["tmux", "has-session", "-t", name],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    return result.returncode == 0
+
+
+def ensure_session(name: str, directory: Path | None = None) -> None:
+    if not has_session(name):
+        cmd = ["tmux", "new-session", "-ds", name]
+        if directory:
+            cmd += ["-c", str(directory)]
+        run(cmd)
+
+    run(["tmux", "switch-client", "-t", name])
+
+
+def is_git_url(value: str) -> bool:
+    return bool(re.match(r"^(https?://|git@[^:]+:|ssh://git@[^/]+/|gh:)", value))
+
+
+def clean_repo_path(url: str) -> str:
+    cleaned = re.sub(r"^ssh://git@[^/]+/", "", url)
+    cleaned = re.sub(r"^git@[^:]+:", "", cleaned)
+    cleaned = re.sub(r"^https?://[^/]+/", "", cleaned)
+    cleaned = re.sub(r"(\.git)?$", "", cleaned)
+    return cleaned
+
+
+def main() -> None:
+    value = input("Name: ")
+
+    if is_git_url(value):
+        clean = clean_repo_path(value)
+        repo_dir = SRC_DIR / clean
+
+        if not (repo_dir / ".git").is_dir():
+            repo_dir.parent.mkdir(parents=True, exist_ok=True)
+            run(["git", "clone", value, str(repo_dir)])
+
+        ensure_session(clean, repo_dir)
+        return
+
+    session_name = value
+    cwd = Path.cwd()
+
+    ensure_session(session_name, cwd)
+
+    run(
+        [
+            "tmux",
+            "send-keys",
+            "-t",
+            session_name,
+            "cdi",
+            "Enter",
+        ]
+    )
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except subprocess.CalledProcessError as e:
+        sys.exit(e.returncode)

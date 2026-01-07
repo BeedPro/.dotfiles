@@ -39,18 +39,3 @@ startup_command="nvim autostart.sh"
 name = "tmp"
 path = "/tmp"
 startup_command='printf "Folder name: " && read dir && mkdir -p -- "$dir" && cd -- "$dir" && tmux rename-session -- "$PWD"'
-
-[[session]]
-name = "src"
-path = "~/.local/src"
-startup_command="~/.local/scripts/tmux-picker.sh"
-
-[[session]]
-name = "share"
-path = "~/.dotfiles/.local/share"
-startup_command="~/.local/scripts/tmux-picker.sh 1 share/"
-
-[[session]]
-name = "config"
-path = "~/.dotfiles/.config"
-startup_command="~/.local/scripts/tmux-picker.sh 1 config/"
