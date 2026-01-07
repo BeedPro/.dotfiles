@@ -34,7 +34,7 @@ alias largefiles="sudo find / -xdev -type f -size +500M -exec ls -lh {} \;"
 export MANPAGER='nvim +Man!'
 export BAT_THEME="Catppuccin Mocha"
 export STARSHIP_CONFIG=$HOME/.config/starship/config.toml
-export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border --color=bg:-1,bg+:-1,preview-bg:-1"
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 
 eval "$(starship init zsh)"
