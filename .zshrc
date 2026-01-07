@@ -1,7 +1,6 @@
 [[ $- != *i* ]] && return
 
-if [[ ":$FPATH:" != *":/home/beed/.zsh/completions:"* ]]; then export FPATH="/home/beed/.zsh/completions:$FPATH"; fi
-fpath=("/home/beed/.local/share/scalacli/completions/zsh" $fpath)
+if [[ ":$FPATH:" != *":/home/beed/.zsh/completions:"* ]]; then export FPATH="$HOME/.local/share/scalacli/completions/zsh:$HOME/.zsh/completions:$FPATH"; fi
 
 typeset -U PATH
 
