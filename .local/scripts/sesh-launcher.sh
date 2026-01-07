@@ -21,11 +21,9 @@ selected=$(sesh list -c | fzf-tmux -p 80%,70% \
   --ansi \
   --no-sort \
   --border-label ' sesh ' --prompt 'all ' \
-  --header '  (C-g) configs :: (C-t) tmux :: (C-x) zoxide :: (M-bs) kill' \
+  --header '  (C-g) configs :: (C-x) zoxide' \
   --bind 'ctrl-x:change-prompt(zox )+reload(sesh list -z)' \
   --bind 'ctrl-g:change-prompt(con )+reload(sesh list -c)' \
-  --bind 'ctrl-t:change-prompt(ses )+reload(sesh list -t)' \
-  --bind 'alt-backspace:execute(tmux kill-session -t {2..})+change-prompt(all )+reload(sesh list -t)' \
   --border=sharp \
   --preview-border=left \
   --no-scrollbar \

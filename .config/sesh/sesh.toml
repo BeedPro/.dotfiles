@@ -29,7 +29,7 @@ path = "~/.dotfiles"
 [[session]]
 name = "src"
 path = "~/.local/src"
-startup_command='SEL="$(find . -mindepth 2 -maxdepth 2 -type d -printf "%P\n" | tee >(xargs -r zoxide add) | fzf)" && [ -n "$SEL" ] && tmux rename-session "$SEL" && cd "$SEL" && clear'
+startup_command="~/.local/scripts/tmux-picker.sh"
 
 [[session]]
 name = "scripts"
@@ -43,9 +43,9 @@ startup_command="nvim autostart.sh"
 [[session]]
 name = "share"
 path = "~/.dotfiles/.local/share"
-startup_command='SEL="$(find . -mindepth 1 -maxdepth 1 -type d -printf "%P\n" | tee >(xargs -r zoxide add) | fzf)" && [ -n "$SEL" ] && tmux rename-session "share/$SEL" && cd "$SEL" && clear&& nvim -c ":Telescope find_files"'
+startup_command="~/.local/scripts/tmux-picker.sh 1 share/"
 
 [[session]]
 name = "config"
 path = "~/.dotfiles/.config"
-startup_command='SEL="$(find . -mindepth 1 -maxdepth 1 -type d -printf "%P\n" | tee >(xargs -r zoxide add) | fzf)" && [ -n "$SEL" ] && tmux rename-session "config/$SEL" && cd "$SEL" && clear && nvim -c ":Telescope find_files"'
+startup_command="~/.local/scripts/tmux-picker.sh 1 config/"
