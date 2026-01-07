@@ -126,18 +126,37 @@ def fuzzy_score(query: str, candidate: str) -> int | None:
     return score
 
 
+def get_tmux_items() -> list[str]:
+    result = subprocess.run(
+        ["tmux", "list-sessions", "-F", "#S"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        text=True,
+    )
+    if result.returncode != 0:
+        return []
+    return result.stdout.splitlines()
+
+
 def get_sesh_items() -> list[str]:
     return run(["sesh", "list", "-c"], capture_output=True).stdout.splitlines()
 
 
 def get_all_items(paths: list[str]) -> tuple[list[str], dict[str, str]]:
     mapping = create_mapping(paths)
+
     sesh_items = get_sesh_items()
+    tmux_items = get_tmux_items()
 
     sesh_set = set(sesh_items)
+    tmux_set = set(tmux_items)
     mapping_keys = set(mapping.keys())
 
-    ordered_items = sesh_items + sorted(mapping_keys - sesh_set)
+    ordered_items = (
+        sorted(tmux_set)
+        + sorted(sesh_set - tmux_set)
+        + sorted(mapping_keys - sesh_set - tmux_set)
+    )
 
     return ordered_items, mapping
 
