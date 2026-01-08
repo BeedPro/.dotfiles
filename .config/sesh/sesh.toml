@@ -38,4 +38,4 @@ startup_command="nvim autostart.sh"
 [[session]]
 name = "tmp"
 path = "/tmp"
-startup_command='printf "Folder name: " && read dir && mkdir -p -- "$dir" && cd -- "$dir" && tmux rename-session -- "$PWD"'
+startup_command='printf "Folder name: " && read dir && mkdir -p -- "$dir" && cd -- "$dir" && tmux rename-session -- "$PWD" && clear'
