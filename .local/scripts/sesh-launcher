@@ -188,18 +188,34 @@ def compute_results(items: list[str], query: str, height: int) -> list[str]:
     return [m[1] for m in matches][: height - 2]
 
 
-def draw_screen(stdscr, query: str, results: list[str], index: int) -> None:
+def draw_screen(
+    stdscr,
+    query: str,
+    results: list[str],
+    index: int,
+    cursor: int,
+) -> None:
     stdscr.clear()
     _, w = stdscr.getmaxyx()
 
-    stdscr.addstr(0, 0, f"> {query}")
+    prompt = "> "
+    stdscr.addstr(0, 0, prompt)
+
+    # Draw query text
+    stdscr.addstr(0, len(prompt), query)
+
+    # Draw cursor as reverse video
+    cursor_x = len(prompt) + cursor
+    if cursor < len(query):
+        stdscr.chgat(0, cursor_x, 1, curses.A_REVERSE)
+    else:
+        stdscr.addstr(0, cursor_x, " ", curses.A_REVERSE)
 
     for i, item in enumerate(results):
-        prefix = "  " if i == index else "  "
         if i == index:
             stdscr.attron(curses.A_REVERSE)
 
-        stdscr.addstr(i + 1, 0, prefix + item[: w - 3])
+        stdscr.addstr(i + 1, 0, "  " + item[: w - 3])
 
         if i == index:
             stdscr.attroff(curses.A_REVERSE)
@@ -212,47 +228,66 @@ def handle_key(
     query: str,
     index: int,
     results: list[str],
-) -> tuple[str | None, str, int]:
+    cursor: int,
+) -> tuple[str | None, str, int, int]:
+
     if key in (curses.KEY_ENTER, 10, 13):
         if results:
-            return results[index], query, index
-        return query, query, index
+            return results[index], query, index, cursor
+        return query, query, index, cursor
 
-    if key in (27, 3):
-        return "", query, index
+    if key in (27, 3):  # Esc / Ctrl-C
+        return "", query, index, cursor
 
+    # Backspace
     if key in (curses.KEY_BACKSPACE, 127):
-        return None, query[:-1], 0
+        if cursor > 0:
+            query = query[: cursor - 1] + query[cursor:]
+            cursor -= 1
+        return None, query, 0, cursor
 
-    # Next (↓ or Ctrl-n)
+    # Cursor left
+    if key == curses.KEY_LEFT:
+        return None, query, index, max(0, cursor - 1)
+
+    # Cursor right
+    if key == curses.KEY_RIGHT:
+        return None, query, index, min(len(query), cursor + 1)
+
+    # Down / Ctrl-n
     if key in (curses.KEY_DOWN, 14):
-        return None, query, min(index + 1, max(0, len(results) - 1))
+        return None, query, min(index + 1, max(0, len(results) - 1)), cursor
 
-    # Previous (↑ or Ctrl-p)
+    # Up / Ctrl-p
     if key in (curses.KEY_UP, 16):
-        return None, query, max(index - 1, 0)
+        return None, query, max(index - 1, 0), cursor
 
+    # Insert printable characters at cursor
     if 32 <= key <= 126:
-        return None, query + chr(key), 0
+        ch = chr(key)
+        query = query[:cursor] + ch + query[cursor:]
+        cursor += 1
+        return None, query, 0, cursor
 
-    return None, query, index
+    return None, query, index, cursor
 
 
 def curses_ui(stdscr, items: list[str]) -> str:
-    curses.curs_set(1)
+    curses.curs_set(0)  # hide terminal cursor, we draw our own
     curses.start_color()
     curses.use_default_colors()
-    stdscr.bkgd(" ", curses.A_NORMAL)
+
     query = ""
+    cursor = 0
     index = 0
 
     while True:
         h, _ = stdscr.getmaxyx()
         results = compute_results(items, query, h)
-        draw_screen(stdscr, query, results, index)
+        draw_screen(stdscr, query, results, index, cursor)
 
         key = stdscr.getch()
-        result, query, index = handle_key(key, query, index, results)
+        result, query, index, cursor = handle_key(key, query, index, results, cursor)
 
         if result is not None:
             return result
