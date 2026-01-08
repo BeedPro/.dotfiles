@@ -24,5 +24,5 @@ map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "[D]iagnostic [S]how 
 map("n", "<leader>da", vim.diagnostic.setqflist, { desc = "[D]iagnostic [A]all (globallist)" })
 
 map("n", "g?", function()
-  vim.diagnostic.open_float(nil, { border = "rounded", source = "always" })
+  vim.diagnostic.open_float(nil, { border = "single", source = "always" })
 end, { desc = "[D]iagnostic [H]over" })
