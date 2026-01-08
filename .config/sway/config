@@ -131,9 +131,6 @@ set $base #1e1e2e
 set $mantle #181825
 set $crust #11111b
 
-default_border pixel 2
-default_floating_border pixel 2
-
 # Focused window
 client.focused          $mauve     $base      $text     $mauve     $mauve
 
