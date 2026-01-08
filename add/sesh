@@ -2,4 +2,4 @@
 
 go install github.com/joshmedeski/sesh/v2@latest
 
-sudo cp $HOME/go/bin/sesh /usr/local/bin/sesh
+sudo cp $HOME/.go/bin/sesh /usr/local/bin/sesh
