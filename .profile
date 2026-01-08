@@ -19,5 +19,3 @@ export MPD_HOST=/tmp/mpd_socket
 
 [ -f "$HOME/.deno/env" ] && . "$HOME/.deno/env"
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-
-typeset -U PATH
