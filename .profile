@@ -19,5 +19,4 @@ export MPD_HOST=/tmp/mpd_socket
 
 [ -f "$HOME/.deno/env" ] && . "$HOME/.deno/env"
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-
-. "$HOME/.atuin/bin/env"
+[ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
