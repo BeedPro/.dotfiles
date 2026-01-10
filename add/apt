@@ -10,6 +10,7 @@ CORE_UTILS=(
   stow
   eza
   bat
+  git-lfs
 )
 
 SYSTEM=(

@@ -44,22 +44,6 @@ rm -rf /etc/apt/sources.list.d/*.bak
 apt update
 ```
 
-## Base system packages
-
-This is to setup the dotfiles
-
-```
-apt install vim git git-lfs curl
-```
-
-### NVIDIA
-
-```
-apt install linux-headers-generic
-apt install nvidia-detect
-apt install nvidia-open-kernel-dkms nvidia-driver
-```
-
 ## GRUB configuration
 
 If you are dual booting Windows and you installed Debian after installing
@@ -109,28 +93,6 @@ xclip -selection clipboard < ~/.ssh/codeberg.pub
 ssh -T git@codeberg.org
 ```
 
-## Syncthing
-
-```
-sudo mkdir -p /etc/apt/keyrings
-sudo curl -L -o /etc/apt/keyrings/syncthing-archive-keyring.gpg \
-  https://syncthing.net/release-key.gpg
-
-echo "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] \
-https://apt.syncthing.net/ syncthing stable-v2" | \
-sudo tee /etc/apt/sources.list.d/syncthing.list
-
-sudo apt update
-sudo apt install syncthing
-```
-
-## Flatpak and Flathub
-
-```
-apt install flatpak gnome-software-plugin-flatpak
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-```
-
 ## Mount additional drives
 
 ### Identify and prepare
@@ -160,33 +122,4 @@ mount -a
 sudo chown -R $USER:$USER /mnt/nvme
 sudo chmod 755 /mnt/nvme
 ls -ld /mnt/nvme
-```
-
-## Steam
-
-Enable 32-bit packages:
-
-```
-dpkg --add-architecture i386
-apt update
-apt install steam-installer
-```
-
-### AMD Vulkan
-
-```
-apt install mesa-vulkan-drivers libglx-mesa0:i386 \
-           mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386
-```
-
-### NVIDIA Vulkan
-
-```
-apt install nvidia-driver nvidia-driver-libs:i386
-```
-
-## Desktop theming
-
-```
-apt install adwaita-qt adwaita-icon-theme-full gnome-themes-extra
 ```
