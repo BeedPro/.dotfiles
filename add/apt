@@ -1,7 +1,13 @@
 #!/bin/bash
 
+sudo apt install bat
+sudo ln -sf /usr/bin/batcat /usr/local/bin/bat
 sudo apt install dunst
 sudo apt install xss-lock
+sudo apt install zsh
+sudo apt install eza
+sudo apt install stow
+apt install libavcodec-extra
 
 sudo apt install cava
 sudo apt install cmatrix
