@@ -1,5 +1,19 @@
 #!/bin/bash
 
-bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
-atuin import auto
+sudo apt update
+
+echo "Starting Atuin installation..."
+
+sudo apt install -y curl
+
+curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+
+export PATH="$HOME/.atuin/bin:$PATH"
+
+if command -v atuin &> /dev/null; then
+    echo "Atuin version $(atuin --version) installed successfully!"
+    echo "Installation complete. Please restart your shell or run: source ~/.zshrc"
+else
+    echo "Installation failed or atuin is not in the PATH."
+fi
 

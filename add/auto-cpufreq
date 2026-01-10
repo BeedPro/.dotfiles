@@ -1,24 +1,37 @@
 #!/bin/bash
 
+# Configuration
+SRC_DIR="$HOME/.local/src/AdnanHodzic"
+REPO_DIR="$SRC_DIR/auto-cpufreq"
+REPO_URL="https://github.com/AdnanHodzic/auto-cpufreq.git"
 
-# Initialise
-PROJECT_DIR=$HOME/.local/src/AdnanHodzic
-PROJECT=$PROJECT_DIR/auto-cpufreq
-mkdir -p $PROJECT_DIR
-cd $PROJECT_DIR
-
-# Dependencies
+echo "Step 1: Installing dependencies..."
 sudo apt update
-sudo apt-get install ninja-build gettext cmake curl build-essential lua5.3 liblua5.3-dev
+sudo apt install -y \
+    ninja-build \
+    gettext \
+    cmake \
+    curl \
+    build-essential \
+    lua5.3 \
+    liblua5.3-dev \
+    git
 
-# Clone
-git clone --depth 1 https://github.com/AdnanHodzic/auto-cpufreq.git $PROJECT
-cd $PROJECT
+echo "Step 2: Cloning repository..."
+mkdir -p "$SRC_DIR"
+if [ -d "$REPO_DIR" ]; then
+    rm -rf "$REPO_DIR"
+fi
 
-# Build
+git clone --depth 1 "$REPO_URL" "$REPO_DIR"
+cd "$REPO_DIR" || exit 1
+
+echo "Step 3: Building and installing auto-cpufreq..."
 sudo ./auto-cpufreq-installer
 
-# Clean up
-rm -rf $PROJECT_DIR
-echo "Removed auto-cpufreq source files"
-echo "Installed auto-cpufreq"
+echo "Step 4: Cleaning up source files..."
+rm -rf "$REPO_DIR"
+
+echo "------------------------------------------------"
+echo "Installation of auto-cpufreq is complete!"
+echo "Check status with: auto-cpufreq --stats"

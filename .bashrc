@@ -39,7 +39,7 @@ eval "$(zoxide init --cmd cd bash)"
 PATH="$(awk -v RS=: '!a[$0]++ { if (NR>1) printf ":"; printf "%s",$0 }' <<< "$PATH")"
 export PATH
 
-. "$HOME/.atuin/bin/env"
+[ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
 
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 eval "$(atuin init bash)"

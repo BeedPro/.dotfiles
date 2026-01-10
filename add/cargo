@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# cargo install kanata
-
-sudo apt install ffmpeg 7zip jq poppler-utils fd-find ripgrep imagemagick
-cargo install --locked yazi-fm yazi-cli
 cargo install --locked typst-cli
 cargo install --locked rmpc
 cargo install silicon
