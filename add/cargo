@@ -1,6 +1,3 @@
 #!/bin/bash
 
-cargo install --locked typst-cli
-cargo install --locked rmpc
-cargo install silicon
 cargo install bluetui
