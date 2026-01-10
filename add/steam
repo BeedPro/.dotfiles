@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Enable 32-bit architecture
+sudo dpkg --add-architecture i386
+sudo apt update
+
+# Install Steam
+sudo apt install -y steam-installer
+
+echo "Run Vulkan support"
+# AMD Vulkan Support
+# sudo apt install -y mesa-vulkan-drivers libglx-mesa0:i386 \
+                   mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386
+
+# NVIDIA 32-bit/Vulkan Support
+# sudo apt install -y nvidia-driver-libs:i386

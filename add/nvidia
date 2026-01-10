@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Install headers, detection tool, and drivers
+sudo apt install -y linux-headers-generic nvidia-detect
+sudo apt install -y nvidia-open-kernel-dkms nvidia-driver
