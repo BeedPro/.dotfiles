@@ -3,7 +3,7 @@ nm-applet &
 gtk-launch syncthing-start &
 dunst &
 mpd
-/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
+lxpolkit &
 
 flatpak run org.keepassxc.KeePassXC &
 flatpak run eu.betterbird.Betterbird &
