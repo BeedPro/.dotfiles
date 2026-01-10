@@ -18,7 +18,7 @@ sudo apt install feh
 sudo apt install xournalpp
 sudo apt install zathura
 sudo apt install tmux
-sudo apt install policykit-1-gnome
+sudo apt install lxpolkit
 sudo apt install network-manager network-manager-applet
 sudo apt install curl
 sudo apt install farbfeld
@@ -34,6 +34,6 @@ sudo apt install pulsemixer
 sudo apt install aspell aspell-en
 
 sudo apt install maim
-sudo apt install xkb-utils
+sudo apt install x11-xkb-utils
 sudo apt install xclip
 sudo apt install xdotool
