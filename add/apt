@@ -24,12 +24,12 @@ sudo apt install curl
 sudo apt install farbfeld
 sudo apt install git
 sudo apt install libfcft-dev
-sudo apt install borgbackup
+# sudo apt install borgbackup
 sudo apt install vim
 sudo apt install acpi
 sudo apt install brightnessctl
 sudo apt install libnotify-bin
-sudo apt install pulseaudio-utils
+# sudo apt install pulseaudio-utils
 sudo apt install pulsemixer
 sudo apt install aspell aspell-en
 
