@@ -36,8 +36,11 @@ alias largefiles="sudo find / -xdev -type f -size +500M -exec ls -lh {} \;"
 eval "$(starship init bash)"
 eval "$(zoxide init --cmd cd bash)"
 
-source $HOME/.config/fzf/bash-completion.sh
-bind -x '"\t": fzf_bash_completion'
-
 PATH="$(awk -v RS=: '!a[$0]++ { if (NR>1) printf ":"; printf "%s",$0 }' <<< "$PATH")"
 export PATH
+
+. "$HOME/.atuin/bin/env"
+
+[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
+eval "$(atuin init bash)"
+. "$HOME/.cargo/env"
