@@ -1,45 +1,64 @@
 #!/bin/bash
+sudo apt update
 
-sudo apt install bat
-sudo ln -sf /usr/bin/batcat /usr/local/bin/bat
-sudo apt install dunst
-sudo apt install xss-lock
-sudo apt install zsh
-sudo apt install eza
-sudo apt install stow
-apt install libavcodec-extra
+CORE_UTILS=(
+  zsh
+  tmux
+  vim
+  git
+  curl
+  stow
+  eza
+  bat
+)
 
-sudo apt install cava
-sudo apt install cmatrix
-sudo apt install cbonsai
-sudo apt install fastfetch
+SYSTEM=(
+  acpi
+  brightnessctl
+  libnotify-bin
+  network-manager
+  network-manager-applet
+  lxpolkit
+  pulsemixer
+  aspell
+  aspell-en
+)
 
-sudo apt install nwg-look
-sudo apt install mpd
-sudo apt install mpc
-sudo apt install mpv
-sudo apt install nsxiv
-sudo apt install picom
-sudo apt install feh
-sudo apt install xournalpp
-sudo apt install zathura
-sudo apt install tmux
-sudo apt install lxpolkit
-sudo apt install network-manager network-manager-applet
-sudo apt install curl
-sudo apt install farbfeld
-sudo apt install git
-sudo apt install libfcft-dev
-# sudo apt install borgbackup
-sudo apt install vim
-sudo apt install acpi
-sudo apt install brightnessctl
-sudo apt install libnotify-bin
-# sudo apt install pulseaudio-utils
-sudo apt install pulsemixer
-sudo apt install aspell aspell-en
+X11_TOOLS=(
+  picom
+  feh
+  xss-lock
+  dunst
+  nwg-look
+  maim
+  x11-xkb-utils
+  xclip
+  xdotool
+)
 
-sudo apt install maim
-sudo apt install x11-xkb-utils
-sudo apt install xclip
-sudo apt install xdotool
+MEDIA=(
+  mpd
+  mpc
+  mpv
+  nsxiv
+  zathura
+  xournalpp
+  libavcodec-extra
+  farbfeld
+)
+
+VISUALS=(
+  cava
+  cmatrix
+  cbonsai
+  fastfetch
+)
+
+echo "Installing all packages..."
+sudo apt install -y "${CORE_UTILS[@]}" "${SYSTEM[@]}" "${X11_TOOLS[@]}" "${MEDIA[@]}" "${VISUALS[@]}"
+
+if [ -f /usr/bin/batcat ]; then
+  sudo ln -sf /usr/bin/batcat /usr/local/bin/bat
+fi
+
+echo "Installation complete!"
