@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# --- 1. Install Dependencies ---
+echo "Installing Yazi dependencies..."
+sudo apt update
+sudo apt install -y \
+    file \
+    ffmpeg \
+    7zip \
+    jq \
+    poppler-utils \
+    fd-find \
+    ripgrep \
+    fzf \
+    zoxide \
+    imagemagick \
+    libmagickwand-dev \
+    xclip \
+    build-essential \
+    git \
+    curl \
+    pkg-config \
+    libssl-dev
+
+if ! command -v fd &> /dev/null; then
+    sudo ln -sf /usr/bin/fdfind /usr/local/bin/fd
+fi
+
+if ! command -v cargo &> /dev/null; then
+    echo "Installing Rust toolchain..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    source "$HOME/.cargo/env"
+else
+    echo "Rust is already installed. Updating..."
+    rustup update
+fi
+
+# --- 3. Build Yazi from Source ---
+BUILD_DIR="/tmp/yazi-build"
+echo "Cloning and building Yazi..."
+
+# Clean up previous build
+rm -rf "$BUILD_DIR"
+
+git clone https://github.com/sxyazi/yazi.git "$BUILD_DIR"
+cd "$BUILD_DIR" || exit
+
+# Build the release binary
+cargo build --release --locked
+
+# --- 4. Install Binaries ---
+echo "Installing binaries to /usr/local/bin..."
+sudo mv target/release/yazi /usr/local/bin/
+sudo mv target/release/ya /usr/local/bin/
+
+# --- 5. Cleanup ---
+echo "Cleaning up build files..."
+rm -rf "$BUILD_DIR"
+
+echo "------------------------------------------------"
+echo "Yazi installation complete!"
+echo "You can now run 'yazi' in your terminal."
+echo "Make sure to install a Nerd Font for the best experience."
