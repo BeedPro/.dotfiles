@@ -62,4 +62,10 @@ if [ -f /usr/bin/batcat ]; then
   sudo ln -sf /usr/bin/batcat /usr/local/bin/bat
 fi
 
+if [ -f /usr/bin/mpd ]; then
+  mkdir -p $HOME/.local/share/mpd/playlists
+  mkdir -p $HOME/.cache/mpd
+  mkdir -p $HOME/.config/mpd
+fi
+
 echo "Installation complete!"
