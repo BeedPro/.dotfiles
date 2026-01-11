@@ -27,6 +27,7 @@ $ADD_PATH/dragon
 $ADD_PATH/silicon
 $ADD_PATH/typst
 $ADD_PATH/ical2orgpy
+$ADD_PATH/uv
 $ADD_PATH/beeper
 
 read -p "Do you want to install Vorta? [y/N] " reply
