@@ -226,7 +226,6 @@ static const char *dmenucmd[] = {
 	NULL
 };
 static const char *tmuxcmd[]  = {"st", "-e", "sesh", "connect", "home", NULL };
-static const char *termcmd[]  = {"st", NULL};
 static const char *lockcmd[]  = { "slock", NULL };
 static const char *browsercmd[]  = { "zen", NULL };
 static const char *privatebrowsercmd[]  = { "zen", "--private-window", NULL };
@@ -259,11 +258,10 @@ static const Key keys[] = {
 	/* modifier                     key            function                argument */
 	{ MODKEY,                       XK_space,      spawn,                  {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,     spawn,                  {.v = tmuxcmd } },
-	{ MODKEY,                       XK_n,          spawn,                  {.v = termcmd } },
 	{ MODKEY,                       XK_w,          spawn,                  {.v = browsercmd } },
 	{ MODKEY|ShiftMask,             XK_w,          spawn,                  {.v = privatebrowsercmd } },
-	{ MODKEY,                       XK_o,          spawn,                  {.v = agendacmd } },
-	{ MODKEY|ShiftMask,             XK_o,          spawn,                  {.v = notescmd } },
+	{ MODKEY,                       XK_n,          spawn,                  {.v = agendacmd } },
+	{ MODKEY|ShiftMask,             XK_n,          spawn,                  {.v = notescmd } },
 	{ MODKEY,                       XK_e,          spawn,                  {.v = filescmd } },
 	{ MODKEY,                       XK_x,          spawn,                  {.v = lockcmd } },
 	{ MODKEY|ShiftMask,             XK_x,          spawn,                  {.v = powercmd} },
