@@ -1,5 +1,8 @@
 #!/bin/bash
 
+sudo apt update
+sudo apt install libfuse2
+
 # Configuration
 DOWNLOAD_URL="https://api.beeper.com/desktop/download/linux/x64/stable/com.automattic.beeper.desktop"
 TEMP_DIR="/tmp/beeper"
