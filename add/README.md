@@ -123,3 +123,10 @@ sudo chown -R $USER:$USER /mnt/nvme
 sudo chmod 755 /mnt/nvme
 ls -ld /mnt/nvme
 ```
+
+## Setup crontab
+
+The one I use is to update my org calendars using `crontab -e`:
+```
+@hourly $HOME/Compendium/Agenda/.sync/calendars.sh >$HOME/.local/share/org-gcal/sync.log 2>&1
+```

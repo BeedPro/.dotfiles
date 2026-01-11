@@ -11,6 +11,8 @@ CORE_UTILS=(
   eza
   bat
   git-lfs
+  python3-venv
+  pipx
 )
 
 SYSTEM=(
@@ -48,15 +50,8 @@ MEDIA=(
   farbfeld
 )
 
-VISUALS=(
-  cava
-  cmatrix
-  cbonsai
-  fastfetch
-)
-
 echo "Installing all packages..."
-sudo apt install -y "${CORE_UTILS[@]}" "${SYSTEM[@]}" "${X11_TOOLS[@]}" "${MEDIA[@]}" "${VISUALS[@]}"
+sudo apt install -y "${CORE_UTILS[@]}" "${SYSTEM[@]}" "${X11_TOOLS[@]}" "${MEDIA[@]}"
 
 if [ -f /usr/bin/batcat ]; then
   sudo ln -sf /usr/bin/batcat /usr/local/bin/bat
