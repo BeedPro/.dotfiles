@@ -2,5 +2,44 @@
 
 ADD_PATH=$HOME/.dotfiles/add
 
+# Initial programs
 $ADD_PATH/apt
 
+# Add package managers
+$ADD_PATH/flatpak
+$ADD_PATH/rust
+$ADD_PATH/go
+$ADD_PATH/deno
+$ADD_PATH/volta
+
+$ADD_PATH/espanso
+$ADD_PATH/fonts
+$ADD_PATH/suckless
+$ADD_PATH/neovim
+$ADD_PATH/zen
+$ADD_PATH/yazi
+$ADD_PATH/zoxide
+$ADD_PATH/starship
+$ADD_PATH/atuin
+$ADD_PATH/sesh
+$ADD_PATH/lazygit
+$ADD_PATH/dragon
+$ADD_PATH/silicon
+$ADD_PATH/typst
+$ADD_PATH/ical2orgpy
+$ADD_PATH/beeper
+
+read -p "Do you want to install Vorta? [y/N] " reply
+
+if [[ "$reply" =~ ^[Yy]$ ]]; then
+    echo "Installing Vorta..."
+    flatpak install flathub com.borgbase.Vorta
+else
+    echo "Skipping Vorta installation."
+fi
+
+flatpak install flathub org.keepassxc.KeePassXC
+flatpak install flathub eu.betterbird.Betterbird
+
+$ADD_PATH/kanata
+echo "Installation complete. Please restart"
