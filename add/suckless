@@ -1,4 +1,4 @@
 #!/bin/bash
 
 sudo apt build-dep dwm
-sudo apt install libfribidi-dev libimlib2-dev libgd-dev libfcft-dev
+sudo apt install libfribidi-dev libimlib2-dev libgd-dev libfcft-dev libxrandr-dev
