@@ -9,5 +9,5 @@ sudo cp $HOME/.dotfiles/srv/kanata.service /etc/systemd/system
 echo "Installed kanata"
 
 echo "Remember to enable kanata in systemctl"
-# sudo systemctl enable kanata
+echo "sudo systemctl enable kanata"
 # sudo systemctl enable kanata
