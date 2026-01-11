@@ -55,7 +55,7 @@ Edit `/etc/default/grub`:
 GRUB_DISABLE_OS_PROBER=false
 ```
 
-Then regenerate GRUB as usual.
+Then regenerate GRUB with `sudo update-grub`.
 
 ## Zsh as default shell
 
@@ -127,6 +127,7 @@ ls -ld /mnt/nvme
 ## Setup crontab
 
 The one I use is to update my org calendars using `crontab -e`:
+
 ```
 @hourly $HOME/Compendium/Agenda/.sync/calendars.sh >$HOME/.local/share/org-gcal/sync.log 2>&1
 ```
