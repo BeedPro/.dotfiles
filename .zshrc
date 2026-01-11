@@ -69,12 +69,6 @@ zinit load atuinsh/atuin
 zstyle ':fzf-tab:*' fzf-flags \
   --color=bg:-1,bg+:-1,preview-bg:-1
 
-
-if [ "$(hostname)" = "nimbus" ] && [ "$XDG_SESSION_TYPE" = "x11" ]; then
-    xrdb -merge <<< "Xcursor.size: 24"
-    xsetroot -cursor_name left_ptr
-fi
-
 autoload -Uz compinit
 compinit -C
 
