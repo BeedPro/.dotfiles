@@ -63,7 +63,6 @@ zinit light zsh-users/zsh-syntax-highlighting
 zinit ice wait lucid
 zinit light Aloxaf/fzf-tab
 
-zinit ice wait lucid
 zinit load atuinsh/atuin
 
 zstyle ':fzf-tab:*' fzf-flags \
