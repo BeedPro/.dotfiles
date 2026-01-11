@@ -25,10 +25,7 @@ return {
       "nvim-neotest/nvim-nio",
     },
     config = function()
-      local dap_python = require "dap-python"
-      local home = os.getenv "HOME"
-      local path = home .. "/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
-      dap_python.setup(path)
+      require "configs.dap.adapters.python"
     end,
   },
 }
