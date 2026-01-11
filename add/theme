@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# Theming packages
-sudo apt install -y adwaita-qt adwaita-icon-theme-full gnome-themes-extra
