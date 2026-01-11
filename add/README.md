@@ -1,8 +1,17 @@
 # Debian New System Setup
 
-This is a guide on setting up a new debian system, as of writing this is for Debian Trixie and so all examples are in that version.
+This is a guide on setting up a new debian system, as of writing this is for
+Debian Trixie and so all examples are in that version.
 
 ## Configure APT sources
+
+### Update system and install initial applications
+
+```bash
+sudo apt update
+sudo apt upgrade
+sudo apt install git git-lfs xclip vim zsh
+```
 
 ### Main repositories
 
@@ -37,39 +46,21 @@ Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 ### Refresh and clean
 
+```bash
+sudo apt modernize-sources
+sudo rm -rf /etc/apt/sources.list.bak
+sudo rm -rf /etc/apt/sources.list.d/*.bak
+sudo apt update
 ```
-apt modernize-sources
-rm -rf /etc/apt/sources.list.bak
-rm -rf /etc/apt/sources.list.d/*.bak
-apt update
-```
-
-## GRUB configuration
-
-If you are dual booting Windows and you installed Debian after installing
-Windows you may want the boot loader to be on the GRUB screen.
-
-Edit `/etc/default/grub`:
-
-```
-GRUB_DISABLE_OS_PROBER=false
-```
-
-Then regenerate GRUB with `sudo update-grub`.
-
-## Zsh as default shell
-
-```
-chsh -s /usr/bin/zsh
-```
-
-Log out and back in for the change to take effect.
 
 ## Codeberg SSH setup
 
+This is to setup git remotes via the ssh protocol, for this section it should
+work with all git remotes but this one is for `codeberg.org`.
+
 ### Create key
 
-```
+```bash
 cd ~/.ssh
 ssh-keygen -t ed25519 -a 100 -f codeberg
 ssh-add codeberg
@@ -79,7 +70,7 @@ ssh-add codeberg
 
 Add to `~/.ssh/config`:
 
-```
+```bash
 Host codeberg.org
   HostName codeberg.org
   User git
@@ -88,8 +79,13 @@ Host codeberg.org
 
 ### Upload key
 
-```
+```bash
 xclip -selection clipboard < ~/.ssh/codeberg.pub
+```
+
+Add the key to your Codeberg account. and verify it worked via:
+
+```bash
 ssh -T git@codeberg.org
 ```
 
@@ -97,31 +93,26 @@ ssh -T git@codeberg.org
 
 ### Identify and prepare
 
-```
-lsblk -f
+```bash
+sudo lsblk -f
 sudo mkdir -p /mnt/nvme
-blkid /dev/nvme0n1
+sudo chown -R $USER:$USER /mnt/nvme
+sudo chmod 755 /mnt/nvme
+ls -ld /mnt/nvme
+sudo blkid /dev/nvme0n1
 ```
 
 ### Add to `/etc/fstab`
 
-```
+```bash
 UUID=a1b2c3d4-e5f6-7890-abcd-ef1234567890   /mnt/nvme   ext4   defaults   0   2
 ```
 
 Apply changes:
 
 ```
-systemctl daemon-reload
-mount -a
-```
-
-### Set ownership
-
-```
-sudo chown -R $USER:$USER /mnt/nvme
-sudo chmod 755 /mnt/nvme
-ls -ld /mnt/nvme
+sudo systemctl daemon-reload
+sudo mount -a
 ```
 
 ## Setup crontab
@@ -129,5 +120,26 @@ ls -ld /mnt/nvme
 The one I use is to update my org calendars using `crontab -e`:
 
 ```
-@hourly $HOME/Compendium/Agenda/.sync/calendars.sh >$HOME/.local/share/org-gcal/sync.log 2>&1
+@hourly $HOME/Compndium/Agenda/.sync/calendars.sh >$HOME/.local/share/org-gcal/sync.log 2>&1
 ```
+
+## GRUB configuration
+
+If you are dual booting Windows and you installed Debian after installing
+Windows you may want the boot loader to be on the GRUB screen.
+
+Edit `/etc/default/grub`:
+
+```bash
+GRUB_DISABLE_OS_PROBER=false
+```
+
+Then regenerate GRUB with `sudo update-grub`.
+
+## Zsh as default shell
+
+```bash
+chsh -s /usr/bin/zsh
+```
+
+Make sure to reboot when prompted, if you did not reboot yet this is now the time to do so.
