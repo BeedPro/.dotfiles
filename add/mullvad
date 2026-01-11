@@ -1,14 +1,20 @@
 #!/bin/bash
+set -e
 
-# Download the Mullvad signing key
-sudo curl -fsSLo /usr/share/keyrings/mullvad-keyring.asc https://repository.mullvad.net/deb/mullvad-keyring.asc
+URL="https://mullvad.net/en/download/app/deb/latest"
+TMP_DEB="/tmp/mullvad.deb"
 
-# Add the Mullvad repository server to apt
-echo "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=$( dpkg --print-architecture )] https://repository.mullvad.net/deb/stable stable main" | sudo tee /etc/apt/sources.list.d/mullvad.list
+echo "Downloading Mullvad VPN…"
+curl -L "$URL" -o "$TMP_DEB"
 
-# Install the package
-sudo apt update
-sudo apt install mullvad-vpn
+echo "Installing package…"
+sudo apt install -y "$TMP_DEB"
 
+echo "Creating command symlinks…"
 sudo ln -sf "/opt/Mullvad VPN/mullvad-vpn" /usr/local/bin/mullvad-vpn
 sudo ln -sf "/opt/Mullvad VPN/mullvad-gui" /usr/local/bin/mullvad-gui
+
+echo "Cleaning up…"
+rm -f "$TMP_DEB"
+
+echo "Mullvad VPN installed successfully."
