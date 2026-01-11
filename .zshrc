@@ -13,6 +13,7 @@ HISTCONTROL="erasedups:ignoreboth"
 export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
 HISTTIMEFORMAT='%F %T '
 
+export PATH="$HOME/.atuin/bin:$PATH"
 export MANPAGER='nvim +Man!'
 export BAT_THEME="Catppuccin Mocha"
 export STARSHIP_CONFIG=$HOME/.config/starship/config.toml

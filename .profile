@@ -5,6 +5,7 @@ if [ -n "$BASH_VERSION" ]; then
 fi
 
 export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+export PATH="$HOME/.atuin/bin:$PATH"
 export PATH="$HOME/.volta/bin:$PATH"
 export PATH=$PATH:$HOME/.local/bin
 export PATH=$PATH:$HOME/.local/share/flatpak/exports/bin
