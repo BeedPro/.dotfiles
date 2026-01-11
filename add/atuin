@@ -6,7 +6,7 @@ echo "Starting Atuin installation..."
 
 sudo apt install -y curl
 
-curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/atuinsh/atuin/releases/latest/download/atuin-installer.sh | sh
 
 export PATH="$HOME/.atuin/bin:$PATH"
 
