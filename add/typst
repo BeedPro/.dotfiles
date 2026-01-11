@@ -1,3 +1,5 @@
 #!/bin/bash
 
+sudo apt update
+sudo apt install pkg-config libssl-dev
 cargo install --locked typst-cli
