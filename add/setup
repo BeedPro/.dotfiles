@@ -1,2 +1,6 @@
 #!/bin/bash
 
+ADD_PATH=$HOME/.dotfiles/add
+
+$ADD_PATH/apt
+
