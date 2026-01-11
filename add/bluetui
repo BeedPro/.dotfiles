@@ -1,2 +1,2 @@
 #!/bin/bash
-cargo install rmpc --locked
+cargo install bluetui
