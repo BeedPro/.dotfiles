@@ -3,7 +3,6 @@ set $mod Mod4
 font pango:GohuFont 14 Nerd Font 12
 
 exec --no-startup-id dex --autostart --environment i3
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id ~/.local/share/autostart.sh
 
 for_window [window_type="dialog"]  floating enable
@@ -37,7 +36,7 @@ bindsym XF86AudioMute exec --no-startup-id ~/.local/scripts/volume mute
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 bindsym $mod+F12 exec --no-startup-id ~/.local/scripts/xswapkb
 
-bindsym $mod+Return exec --no-startup-id st
+bindsym $mod+Return exec --no-startup-id alacritty -e sesh connect home
 
 bindsym $mod+c kill
 
