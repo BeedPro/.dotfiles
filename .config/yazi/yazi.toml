@@ -1,5 +1,5 @@
 [mgr]
-ratio = [0, 4, 2]
+ratio = [0, 1, 0]
 
 [preview]
 cache_dir = "~/.cache/yazi"
