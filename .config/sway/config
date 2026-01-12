@@ -2,7 +2,6 @@ set $mod Mod4
 
 font pango:GohuFont 14 Nerd Font 12
 
-exec --no-startup-id dex --autostart --environment i3
 # exec --no-startup-id ~/.local/share/autostart.sh
 
 
@@ -51,8 +50,6 @@ default_border pixel 2
 default_floating_border pixel 2
 
 floating_modifier $mod
-
-tiling_drag modifier titlebar
 
 include /etc/sway/config-vars.d/*
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
@@ -140,8 +137,7 @@ bindsym $mod+Shift+9 move container to workspace number $ws9; workspace number $
 
 bindsym $mod+Mod1+r reload
 bindsym $mod+Mod1+Shift+r restart
-bindsym $mod+Mod1+c exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
-
+bindsym $mod+Mod1+c exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 
 set $rosewater #f5e0dc
 set $flamingo #f2cdcd
