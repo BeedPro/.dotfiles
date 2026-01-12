@@ -83,7 +83,8 @@ include /etc/sway/config-vars.d/*
     bindsym $mod+b splith
     bindsym $mod+v splitv
 
-    bindsym $mod+s layout toggle split tabbed stacking
+    bindsym $mod+shift+s layout toggle split
+    bindsym $mod+s layout tabbed
 
     bindsym $mod+Shift+f floating toggle
     bindsym $mod+f focus mode_toggle
