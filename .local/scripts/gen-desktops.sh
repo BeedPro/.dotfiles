@@ -5,7 +5,7 @@ set -e
 APPDIR="$HOME/.local/share/applications"
 mkdir -p "$APPDIR"
 
-TERMINAL=st
+TERMINAL=$1
 
 APPS=(
   "RMPC|$TERMINAL -e /home/beed/.cargo/bin/rmpc"
