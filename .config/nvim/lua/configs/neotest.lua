@@ -1,5 +1,6 @@
 local neotest = require "neotest"
 
+---@diagnostic disable-next-line: missing-fields
 neotest.setup {
   adapters = {
     require "neotest-python" {
