@@ -28,13 +28,29 @@ floating_modifier $mod
 
 tiling_drag modifier titlebar
 
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86MonBrightnessUp   exec --no-startup-id ~/.local/scripts/brightness up
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/.local/scripts/brightness down
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.local/scripts/volume up
 bindsym XF86AudioLowerVolume exec --no-startup-id ~/.local/scripts/volume down
 bindsym XF86AudioMute exec --no-startup-id ~/.local/scripts/volume mute
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 bindsym $mod+F12 exec --no-startup-id ~/.local/scripts/xswapkb
+bindsym Print exec --no-startup-id ~/.local/scripts/screenshot.sh selection
+bindsym $mod+Print exec --no-startup-id ~/.local/scripts/screenshot.sh window
+bindsym $mod+Shift+Print exec --no-startup-id ~/.local/scripts/screenshot.sh screen
+bindsym $mod+Tab workspace back_and_forth
 
 bindsym $mod+Return exec --no-startup-id alacritty -e sesh connect home
+bindsym $mod+w exec --no-startup-id zen
+bindsym $mod+Shift+w exec --no-startup-id zen --private-window
+bindsym $mod+n exec --no-startup-id alacritty -e nvim -c ":Org agenda"
+bindsym $mod+Shift+n exec --no-startup-id alacritty -e nvim -c ":Org capture"
+bindsym $mod+e exec --no-startup-id alacritty -e yazi
+bindsym $mod+x exec --no-startup-id slock
+bindsym $mod+Shift+x exec --no-startup-id ~/.local/scripts/powermenu.sh
+bindsym $mod+Shift+c exec --no-startup-id ~/.local/scripts/killmenu.sh
 
 bindsym $mod+c kill
 
@@ -49,6 +65,11 @@ bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
+
+bindsym $mod+control+h resize shrink width 5 px or 5 ppt
+bindsym $mod+control+j resize grow height 5 px or 5 ppt
+bindsym $mod+control+k resize shrink height 5 px or 5 ppt
+bindsym $mod+control+l resize grow width 5 px or 5 ppt
 
 bindsym $mod+b split h
 bindsym $mod+v split v
