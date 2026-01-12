@@ -150,8 +150,7 @@
           (size: "50%", pane: Split(
             direction: Horizontal,
             panes: [
-              (size: "75%", pane: Pane(Queue)),
-              (size: "25%", borders: "LEFT", pane: Pane(AlbumArt)),
+              (size: "100%", pane: Pane(Queue)),
             ],
           )),
           (size: "50%", borders: "TOP", pane: Pane(Cava)),
@@ -183,9 +182,8 @@
       pane: Split(
         direction: Vertical,
         panes: [
-          (size: "30%", pane: Pane(AlbumArt), borders: "BOTTOM"),
           (size: "50%", pane: Pane(Lyrics), vertical_align: Top),
-          (size: "20%", borders: "TOP", pane: Pane(Cava)),
+          (size: "50%", borders: "TOP", pane: Pane(Cava)),
         ],
       ),
     ),
