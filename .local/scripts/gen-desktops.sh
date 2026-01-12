@@ -8,7 +8,7 @@ mkdir -p "$APPDIR"
 TERMINAL=$1
 
 APPS=(
-  "RMPC|$TERMINAL -e /home/beed/.cargo/bin/rmpc"
+  "RMPC|$TERMINAL -e $HOME/.cargo/bin/rmpc"
   "Neovim|$TERMINAL -e nvim"
   "Yazi|$TERMINAL -e yazi"
   "Pulsemixer|$TERMINAL -e pulsemixer"
