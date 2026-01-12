@@ -1,4 +1,4 @@
 #!/bin/bash
 OUTPUT=$(date '+%Y.%m.%d %H:%M')
 
-echo $OUTPUT '|'
+echo "[@]" $OUTPUT
