@@ -14,5 +14,6 @@ else
     setxkbmap $LAYOUT_1
 fi
 
-pkill -SIGRTMIN+20 dwmblocks
+pkill -SIGRTMIN+10 dwmblocks
+pkill -SIGRTMIN+10 i3blocks
 
