@@ -1,0 +1,20 @@
+general.import = [
+  "~/.config/alacritty/catppuccin-mocha.toml"
+]
+
+[font]
+size = 8.0
+
+normal = { family = "GohuFont 14 Nerd Font", style = "Regular" }
+bold = { family = "GohuFont 14 Nerd Font", style = "Bold" }
+italic = { family = "GohuFont 14 Nerd Font", style = "Italic" }
+bold_italic = { family = "GohuFont 14 Nerd Font", style = "Bold Italic" }
+
+offset = { x = 0, y = 0 }
+glyph_offset = { x = 0, y = 0 }
+
+builtin_box_drawing = true
+
+[window]
+padding = { x = 10, y = 10 }
+dynamic_padding = true
