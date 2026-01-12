@@ -16,6 +16,7 @@ map({ "n", "i", "v" }, "<C-s>", "<cmd>w<cr>", { desc = "[S]ave [F]ile" })
 map("n", "<C-a>", "ggVG", { desc = "[S]elect [A]ll" })
 map("n", "<C-c>", "<cmd>%y+<CR>", { desc = "[C]opy [A]ll" })
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "[C]lear [H]ighlights" })
+map("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
 
 map({ "n", "v" }, "<leader>y", '"+y', { desc = "[Y]ank to clipboard" })
 map({ "n", "v" }, "P", '"+p', { desc = "[P]aste from clipboard" })
