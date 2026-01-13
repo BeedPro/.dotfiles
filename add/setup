@@ -14,7 +14,6 @@ $ADD_PATH/volta
 
 $ADD_PATH/espanso
 $ADD_PATH/fonts
-$ADD_PATH/suckless
 $ADD_PATH/neovim
 $ADD_PATH/zen
 $ADD_PATH/yazi
