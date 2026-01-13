@@ -1,13 +1,5 @@
 #!/bin/bash
-if [ "$XDG_SESSION_TYPE" = "wayland" ] && command -v bemenu >/dev/null 2>&1; then
-    MENU="bemenu -p power"
-    LOCKER="$HOME/.local/scripts/waylock.sh"
-else
-    MENU="dmenu -p power"
-    LOCKER="slock"
-fi
-
-choice=$(echo -e "lock\nlogout\nsuspend\nhibernate\nreboot\npoweroff" | $MENU)
+choice=$(echo -e "lock\nlogout\nsuspend\nhibernate\nreboot\npoweroff" | rofi -dmenu)
 
 if [[ -f /tmp/power-lock ]]; then
   notify-send "Powermenu" "Power locked due to process"
@@ -15,7 +7,7 @@ if [[ -f /tmp/power-lock ]]; then
 fi
 
 if [ "$choice" == "logout" ]; then
-  pkill -KILL -u "$USER"
+  pkill i3
 elif [ "$choice" == "lock" ]; then
   "$LOCKER"
 elif [ -n "$choice" ]; then
