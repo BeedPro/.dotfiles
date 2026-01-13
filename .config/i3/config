@@ -5,16 +5,16 @@ font pango:GohuFont 14 Nerd Font 12
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id ~/.local/share/autostart.sh
 
-workspace 1 output DP-3
-workspace 2 output DP-3
-workspace 3 output DP-3
-workspace 4 output DP-3
-workspace 5 output DP-3
-workspace 6 output DP-3
-workspace 7 output DP-3
-workspace 8 output DP-3
-workspace 9 output DP-3
-workspace 11 output DP-1
+workspace 1 output DP-4
+workspace 2 output DP-4
+workspace 3 output DP-4
+workspace 4 output DP-4
+workspace 5 output DP-4
+workspace 6 output DP-4
+workspace 7 output DP-4
+workspace 8 output DP-4
+workspace 9 output DP-4
+workspace 11 output DP-0
 
 for_window [window_type="dialog"]  floating enable
 for_window [window_type="utility"] floating enable
@@ -35,6 +35,7 @@ for_window [instance="^floating$"] floating enable
 default_border pixel 2
 default_floating_border pixel 2
 
+focus_wrapping workspace
 floating_modifier $mod
 
 tiling_drag modifier titlebar
@@ -52,6 +53,9 @@ bindsym Print exec --no-startup-id ~/.local/scripts/screenshot.sh selection
 bindsym $mod+Print exec --no-startup-id ~/.local/scripts/screenshot.sh window
 bindsym $mod+Shift+Print exec --no-startup-id ~/.local/scripts/screenshot.sh screen
 bindsym $mod+Tab workspace back_and_forth
+
+bindsym $mod+comma focus output left
+bindsym $mod+period focus output right
 
 bindsym $mod+Return exec --no-startup-id alacritty -e sesh connect home
 bindsym $mod+w exec --no-startup-id zen
