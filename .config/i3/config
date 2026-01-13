@@ -20,10 +20,9 @@ for_window [window_type="dialog"]  floating enable
 for_window [window_type="utility"] floating enable
 for_window [window_type="toolbar"] floating enable
 for_window [window_type="splash"]  floating enable
-for_window [class="st"] border pixel 2
 for_window [class="discord"] border pixel 2
 
-assign [class="discord"] number 7
+assign [class="discord"] number 5
 assign [class="Beeper"] number 7
 assign [class="KeePassXC"] number 8
 assign [class="eu.betterbird.Betterbird"] number 9
