@@ -6,15 +6,14 @@ exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id ~/.local/share/autostart.sh
 
 workspace 1 output DP-4
-workspace 2 output DP-4
+workspace 2 output DP-0
 workspace 3 output DP-4
 workspace 4 output DP-4
-workspace 5 output DP-4
+workspace 5 output DP-0
 workspace 6 output DP-4
 workspace 7 output DP-4
 workspace 8 output DP-4
 workspace 9 output DP-4
-workspace 11 output DP-0
 
 for_window [window_type="dialog"]  floating enable
 for_window [window_type="utility"] floating enable
@@ -22,7 +21,7 @@ for_window [window_type="toolbar"] floating enable
 for_window [window_type="splash"]  floating enable
 for_window [class="discord"] border pixel 2
 
-assign [class="discord"] number 5
+assign [class="discord"] number 7
 assign [class="Beeper"] number 7
 assign [class="KeePassXC"] number 8
 assign [class="eu.betterbird.Betterbird"] number 9
