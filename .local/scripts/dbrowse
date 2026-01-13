@@ -3,12 +3,6 @@
 NEWLINE="
 "
 
-if [ "$XDG_SESSION_TYPE" = "wayland" ] && command -v bemenu >/dev/null 2>&1; then
-    MENU="bemenu"
-else
-    MENU="dmenu"
-fi
-
 fullpath() {
 	name="$(sh -c "echo '$1'")"
 	path="$2"
@@ -32,7 +26,7 @@ main() {
 		[ -z "$p" ] && p="$target"
 
 		# Add "." to the list of items to allow selecting current directory
-		items="$(printf ".\n%s\n" "$(ls -1a "$target" | grep -v '^\.$')" | $MENU -i -p "$p" -l 25)"
+		items="$(printf ".\n%s\n" "$(ls -1a "$target" | grep -v '^\.$')" | rofi -dmenu -i -p "$p" -l 25)"
 		ec=$?
 		[ "$ec" -ne 0 ] && exit $ec
 
