@@ -64,6 +64,11 @@ bindsym $mod+F12 exec --no-startup-id ~/.local/scripts/xswapkb
 bindsym Print exec --no-startup-id grim
 bindsym $mod+Tab workspace back_and_forth
 
+bindsym $mod+comma focus output left
+bindsym $mod+period focus output right
+bindsym $mod+Shift+comma  move container to output left; focus output left
+bindsym $mod+Shift+period move container to output right; focus output right
+
 bindsym $mod+Return exec --no-startup-id foot -e sesh connect home
 bindsym $mod+w exec --no-startup-id zen
 bindsym $mod+Shift+w exec --no-startup-id zen --private-window
