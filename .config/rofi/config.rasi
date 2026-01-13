@@ -1,5 +1,9 @@
 @import "catppuccin-mocha"
 
+window {
+    font: "GohuFont 14 Nerd Font 12";
+}
+
 * {
   selected-active-foreground:  @background;
   lightfg:                     @text;
