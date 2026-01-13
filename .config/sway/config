@@ -37,7 +37,7 @@ for_window [window_type="utility"] floating enable
 for_window [window_type="toolbar"] floating enable
 for_window [window_type="splash"]  floating enable
 
-assign [class="discord"] number 7
+assign [class="discord"] number 5
 assign [class="Beeper"] number 7
 assign [class="KeePassXC"] number 8
 assign [class="eu.betterbird.Betterbird"] number 9
