@@ -103,3 +103,4 @@ luac.out
 .local/share/dwmblocks/dwmblocks
 .config/atuin/atuin-receipt.json
 .local/share/slock/slock
+.local/share/dmenu/stest
