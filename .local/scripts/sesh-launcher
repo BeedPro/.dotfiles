@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 
+import os
 import subprocess
 import sys
-import curses
-import os
 from pathlib import Path
-
 
 SRC_DIR = Path.home() / ".local" / "src"
 SRC_DIR.mkdir(parents=True, exist_ok=True)
 
-TMUX_PREFIX = "󰖯 "
-SESH_PREFIX = " "
-DIR_PREFIX = " "
+TMUX_PREFIX = ""
+SESH_PREFIX = ""
+DIR_PREFIX = ""
+
+
+def run(cmd, **kwargs):
+    return subprocess.run(cmd, check=True, text=True, **kwargs)
 
 
 def is_valid_base(path: Path) -> bool:
@@ -23,31 +25,23 @@ def relative_depth(root: str, base_depth: int) -> int:
     return len(Path(root).parts) - base_depth
 
 
-def handle_depth(
-    root: str,
-    dirs: list[str],
-    current_depth: int,
-    target_depth: int,
-    base: Path,
-    result: list[str],
-) -> None:
-    if current_depth > target_depth:
+def handle_depth(root, dirs, current, target, base, result):
+    if current > target:
         dirs.clear()
         return
 
-    if current_depth == target_depth:
-        relative = Path(root).resolve().relative_to(base)
-        result.append(relative.as_posix())
+    if current == target:
+        rel = Path(root).resolve().relative_to(base)
+        result.append(rel.as_posix())
         dirs.clear()
 
 
 def find_dirs(input: str, depth: int = 1) -> list[str]:
     base = Path(input).expanduser().resolve()
-    result: list[str] = []
-
     if not is_valid_base(base):
-        return result
+        return []
 
+    result = []
     base_depth = len(base.parts)
 
     for root, dirs, _ in os.walk(base):
@@ -57,266 +51,124 @@ def find_dirs(input: str, depth: int = 1) -> list[str]:
     return result
 
 
-def add_paths(
-    output: dict[str, str],
-    items: list[str],
-    prefix: str,
-    base_path: str,
-) -> None:
+def add_paths(out, items, prefix, base):
     for p in items:
         key = f"{prefix}{p}" if prefix else p
-        output[key] = f"{base_path}/{p}"
+        out[key] = f"{base}/{p}"
 
 
-def create_mapping(paths: list[str]) -> dict[str, str]:
-    src: list[str] = find_dirs(paths[0], 2)
-    share: list[str] = find_dirs(paths[1])
-    config: list[str] = find_dirs(paths[2])
-    output: dict[str, str] = {}
+def create_mapping(paths):
+    src = find_dirs(paths[0], 2)
+    share = find_dirs(paths[1])
+    config = find_dirs(paths[2])
 
-    add_paths(
-        output,
-        src,
-        "",
-        paths[0],
-    )
-    add_paths(output, share, "share/", paths[1])
-    add_paths(output, config, "config/", paths[2])
-
-    return output
+    out = {}
+    add_paths(out, src, "", paths[0])
+    add_paths(out, share, "share/", paths[1])
+    add_paths(out, config, "config/", paths[2])
+    return out
 
 
-def run(cmd, check=True, capture_output=False, text=True):
-    return subprocess.run(
+def get_tmux_items():
+    try:
+        out = subprocess.check_output(
+            ["tmux", "list-sessions", "-F", "#S"],
+            stderr=subprocess.DEVNULL,
+            text=True,
+        )
+        return out.splitlines()
+    except subprocess.CalledProcessError:
+        return []
+
+
+def get_sesh_items():
+    return subprocess.check_output(["sesh", "list", "-c"], text=True).splitlines()
+
+
+def get_all_items(paths):
+    mapping = create_mapping(paths)
+
+    sesh = set(get_sesh_items())
+    tmux = set(get_tmux_items())
+    keys = set(mapping)
+
+    display = []
+
+    for name in sorted(tmux):
+        display.append(f"{TMUX_PREFIX}{name}")
+
+    for name in sorted(sesh - tmux):
+        display.append(f"{SESH_PREFIX}{name}")
+
+    for name in sorted(keys - sesh - tmux):
+        display.append(f"{DIR_PREFIX}{name}")
+
+    return display, mapping
+
+
+def fzf_select(items):
+    cmd = [
+        "fzf",
+        "--prompt",
+        "> ",
+        "--reverse",
+        "--exit-0",
+    ]
+
+    p = subprocess.Popen(
         cmd,
-        check=check,
-        capture_output=capture_output,
-        text=text,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        text=True,
     )
 
+    stdout, _ = p.communicate("\n".join(items))
+    return stdout.strip()
 
-def ensure_session(session_name: str, directory: Path) -> None:
-    result = subprocess.run(
-        ["tmux", "has-session", "-t", session_name],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-    if result.returncode != 0:
+
+def ensure_session(name: str, directory: Path):
+    if (
         subprocess.run(
+            ["tmux", "has-session", "-t", name],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        ).returncode
+        != 0
+    ):
+        run(
             [
                 "tmux",
                 "new-session",
                 "-ds",
-                session_name,
+                name,
                 "-c",
                 str(directory.expanduser().resolve()),
             ]
         )
-    run(["tmux", "switch-client", "-t", session_name])
+
+    run(["tmux", "switch-client", "-t", name])
 
 
-def fuzzy_score(query: str, candidate: str) -> int | None:
-    """
-    Simple ordered-subsequence matcher.
-    Lower score is better. None = no match.
-    """
-    if not query:
-        return 0
-
-    it = iter(candidate.lower())
-    score = 0
-
-    for ch in query.lower():
-        for c in it:
-            score += 1
-            if c == ch:
-                break
-        else:
-            return None
-
-    return score
-
-
-def get_tmux_items() -> list[str]:
-    result = subprocess.run(
-        ["tmux", "list-sessions", "-F", "#S"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        text=True,
-    )
-    if result.returncode != 0:
-        return []
-    return result.stdout.splitlines()
-
-
-def get_sesh_items() -> list[str]:
-    return run(["sesh", "list", "-c"], capture_output=True).stdout.splitlines()
-
-
-def get_all_items(paths: list[str]) -> tuple[list[str], dict[str, str]]:
-    mapping = create_mapping(paths)
-
-    sesh_items = get_sesh_items()
-    tmux_items = get_tmux_items()
-
-    sesh_set = set(sesh_items)
-    tmux_set = set(tmux_items)
-    mapping_keys = set(mapping.keys())
-
-    display_items: list[str] = []
-
-    for name in sorted(tmux_set):
-        display_items.append(f"{TMUX_PREFIX}{name}")
-
-    for name in sorted(sesh_set - tmux_set):
-        display_items.append(f"{SESH_PREFIX}{name}")
-
-    for name in sorted(mapping_keys - sesh_set - tmux_set):
-        display_items.append(f"{DIR_PREFIX}{name}")
-
-    return display_items, mapping
-
-
-def compute_results(items: list[str], query: str, height: int) -> list[str]:
-    matches = []
-    for item in items:
-        score = fuzzy_score(query, item)
-        if score is not None:
-            matches.append((score, item))
-
-    matches.sort(key=lambda x: x[0])
-    return [m[1] for m in matches][: height - 2]
-
-
-def draw_screen(
-    stdscr,
-    query: str,
-    results: list[str],
-    index: int,
-    cursor: int,
-) -> None:
-    stdscr.clear()
-    _, w = stdscr.getmaxyx()
-
-    prompt = "> "
-    stdscr.addstr(0, 0, prompt)
-
-    # Draw query text
-    stdscr.addstr(0, len(prompt), query)
-
-    # Draw cursor as reverse video
-    cursor_x = len(prompt) + cursor
-    if cursor < len(query):
-        stdscr.chgat(0, cursor_x, 1, curses.A_REVERSE)
-    else:
-        stdscr.addstr(0, cursor_x, " ", curses.A_REVERSE)
-
-    for i, item in enumerate(results):
-        if i == index:
-            stdscr.attron(curses.A_REVERSE)
-
-        stdscr.addstr(i + 1, 0, "  " + item[: w - 3])
-
-        if i == index:
-            stdscr.attroff(curses.A_REVERSE)
-
-    stdscr.refresh()
-
-
-def handle_key(
-    key: int,
-    query: str,
-    index: int,
-    results: list[str],
-    cursor: int,
-) -> tuple[str | None, str, int, int]:
-
-    if key in (curses.KEY_ENTER, 10, 13):
-        if results:
-            return results[index], query, index, cursor
-        return query, query, index, cursor
-
-    if key in (27, 3):  # Esc / Ctrl-C
-        return "", query, index, cursor
-
-    # Backspace
-    if key in (curses.KEY_BACKSPACE, 127):
-        if cursor > 0:
-            query = query[: cursor - 1] + query[cursor:]
-            cursor -= 1
-        return None, query, 0, cursor
-
-    # Cursor left
-    if key == curses.KEY_LEFT:
-        return None, query, index, max(0, cursor - 1)
-
-    # Cursor right
-    if key == curses.KEY_RIGHT:
-        return None, query, index, min(len(query), cursor + 1)
-
-    # Down / Ctrl-n
-    if key in (curses.KEY_DOWN, 14):
-        return None, query, min(index + 1, max(0, len(results) - 1)), cursor
-
-    # Up / Ctrl-p
-    if key in (curses.KEY_UP, 16):
-        return None, query, max(index - 1, 0), cursor
-
-    # Insert printable characters at cursor
-    if 32 <= key <= 126:
-        ch = chr(key)
-        query = query[:cursor] + ch + query[cursor:]
-        cursor += 1
-        return None, query, 0, cursor
-
-    return None, query, index, cursor
-
-
-def curses_ui(stdscr, items: list[str]) -> str:
-    curses.curs_set(0)  # hide terminal cursor, we draw our own
-    curses.start_color()
-    curses.use_default_colors()
-
-    query = ""
-    cursor = 0
-    index = 0
-
-    while True:
-        h, _ = stdscr.getmaxyx()
-        results = compute_results(items, query, h)
-        draw_screen(stdscr, query, results, index, cursor)
-
-        key = stdscr.getch()
-        result, query, index, cursor = handle_key(key, query, index, results, cursor)
-
-        if result is not None:
-            return result
-
-
-def fuzzy_select(items: list[str]) -> str:
-    return curses.wrapper(curses_ui, items)
-
-
-def main() -> None:
-    paths: list[str] = [
+def main():
+    paths = [
         "~/.local/src",
         "~/.dotfiles/.local/share",
         "~/.dotfiles/.config",
     ]
 
     items, mapping = get_all_items(paths)
-    selected = fuzzy_select(items)
+    selected = fzf_select(items)
 
     if not selected:
         return
 
-    selected = selected[2:]
+    # Strip icon + space
+    # selected = selected[2:]
 
     if selected in mapping:
         ensure_session(selected, Path(mapping[selected]))
-        return
-
-    run(["sesh", "connect", selected])
+    else:
+        run(["sesh", "connect", selected])
 
 
 if __name__ == "__main__":
