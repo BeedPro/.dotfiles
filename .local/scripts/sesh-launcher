@@ -109,6 +109,7 @@ def fzf_select(items):
         "> ",
         "--reverse",
         "--exit-0",
+        "--color=bg:-1,bg+:-1,preview-bg:-1",
     ]
 
     p = subprocess.Popen(
