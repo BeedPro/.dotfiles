@@ -64,7 +64,26 @@ bindsym $mod+Shift+w exec --no-startup-id zen --private-window
 bindsym $mod+n exec --no-startup-id alacritty -e nvim -c ":Org agenda"
 bindsym $mod+Shift+n exec --no-startup-id alacritty -e nvim -c ":Org capture"
 bindsym $mod+e exec --no-startup-id alacritty -e yazi
-bindsym $mod+x exec --no-startup-id i3lock --color=1e1e2e --ring-color=89b4fa --inside-color=313244 --line-color=1e1e2e --keyhl-color=a6e3a1 --bshl-color=f38ba8 --separator-color=1e1e2e --verif-color=89b4fa --wrong-color=f38ba8 --layout-color=cdd6f4 --time-color=cdd6f4 --date-color=cdd6f4 --greeter-color=cdd6f4 --indicator --radius=120 --ring-width=10 --clock
+
+bindsym $mod+x exec --no-startup-id i3lock \
+  --color=1e1e2eff \
+  --indicator \
+  --radius 120 \
+  --ring-width 8 \
+  --inside-color=1e1e2eff \
+  --ring-color=45475aff \
+  --line-color=1e1e2eff \
+  --insidever-color=89b4faff \
+  --ringver-color=89b4faff \
+  --insidewrong-color=f38ba8ff \
+  --ringwrong-color=f38ba8ff \
+  --keyhl-color=a6e3a1ff \
+  --bshl-color=fab387ff \
+  --separator-color=313244ff \
+  --verif-color=89b4faff \
+  --wrong-color=f38ba8ff \
+  --modif-color=fab387ff
+
 bindsym $mod+Shift+x exec --no-startup-id ~/.local/scripts/powermenu.sh
 bindsym $mod+Shift+c exec --no-startup-id ~/.local/scripts/killmenu.sh
 
