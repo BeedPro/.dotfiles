@@ -2,6 +2,7 @@ local opt = vim.opt
 local o = vim.o
 local g = vim.g
 
+o.background = "dark"
 o.laststatus = 3
 o.showmode = false
 o.splitkeep = "screen"
