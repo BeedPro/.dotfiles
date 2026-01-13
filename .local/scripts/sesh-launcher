@@ -8,10 +8,6 @@ from pathlib import Path
 SRC_DIR = Path.home() / ".local" / "src"
 SRC_DIR.mkdir(parents=True, exist_ok=True)
 
-TMUX_PREFIX = ""
-SESH_PREFIX = ""
-DIR_PREFIX = ""
-
 
 def run(cmd, **kwargs):
     return subprocess.run(cmd, check=True, text=True, **kwargs)
@@ -62,7 +58,7 @@ def create_mapping(paths):
     share = find_dirs(paths[1])
     config = find_dirs(paths[2])
 
-    out = {}
+    out = {"agenda": "~/Compendium/Agenda"}
     add_paths(out, src, "", paths[0])
     add_paths(out, share, "share/", paths[1])
     add_paths(out, config, "config/", paths[2])
@@ -95,13 +91,13 @@ def get_all_items(paths):
     display = []
 
     for name in sorted(tmux):
-        display.append(f"{TMUX_PREFIX}{name}")
+        display.append(f"{name}")
 
     for name in sorted(sesh - tmux):
-        display.append(f"{SESH_PREFIX}{name}")
+        display.append(f"{name}")
 
     for name in sorted(keys - sesh - tmux):
-        display.append(f"{DIR_PREFIX}{name}")
+        display.append(f"{name}")
 
     return display, mapping
 
