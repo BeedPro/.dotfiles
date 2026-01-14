@@ -64,6 +64,7 @@ def create_mapping(paths):
         "workspace": "~/Compendium/Workspace",
         "dotfiles": "~/.dotfiles",
         "scripts": "~/.local/scripts",
+        "tmp": "/tmp",
     }
     add_paths(out, src, "", paths[0])
     add_paths(out, config, "config/", paths[1])

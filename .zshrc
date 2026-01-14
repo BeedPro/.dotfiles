@@ -29,7 +29,7 @@ HISTTIMEFORMAT='%F %T '
 export MANPAGER='nvim +Man!'
 export BAT_THEME="Catppuccin Mocha"
 export STARSHIP_CONFIG=$HOME/.config/starship/config.toml
-export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border --color=bg:-1,bg+:-1,preview-bg:-1"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --color=bg:-1,bg+:-1,preview-bg:-1"
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH=$HOME/.go
 
