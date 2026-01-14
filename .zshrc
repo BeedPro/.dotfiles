@@ -33,6 +33,7 @@ export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border --color=bg:-1,bg
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH=$HOME/.go
 
+alias topen="~/.local/scripts/sesh-launcher"
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
 alias vim="/usr/local/bin/nvim"
 alias vimff="/usr/local/bin/nvim -c 'Telescope find_files'"
