@@ -26,6 +26,9 @@ for_window [title="^floating$"] floating enable
 for_window [class="^floating$"] floating enable
 for_window [instance="^floating$"] floating enable
 
+default_border pixel 1
+default_floating_border normal
+
 floating_modifier $mod
 tiling_drag modifier titlebar
 
