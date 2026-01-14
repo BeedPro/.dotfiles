@@ -5,13 +5,14 @@ set -e
 APPDIR="$HOME/.local/share/applications"
 mkdir -p "$APPDIR"
 
-TERMINAL=$1
+TERMINAL=alacritty
 
 APPS=(
   "RMPC|$TERMINAL -e $HOME/.cargo/bin/rmpc"
   "Neovim|$TERMINAL -e nvim"
   "Yazi|$TERMINAL -e yazi"
   "Pulsemixer|$TERMINAL -e pulsemixer"
+  "Helium|helium"
 )
 
 for entry in "${APPS[@]}"; do
