@@ -7,6 +7,11 @@ return {
     sorting_strategy = "ascending",
 
     border = true,
+    borderchars = {
+      prompt = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+      results = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+      preview = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+    },
 
     layout_config = {
       horizontal = {
