@@ -15,10 +15,6 @@ workspace 7 output DP-4
 workspace 8 output DP-4
 workspace 9 output DP-4
 
-for_window [window_type="dialog"]  floating enable
-for_window [window_type="utility"] floating enable
-for_window [window_type="toolbar"] floating enable
-for_window [window_type="splash"]  floating enable
 for_window [class="discord"] border pixel 2
 
 assign [class="discord"] number 7
@@ -30,12 +26,7 @@ for_window [title="^floating$"] floating enable
 for_window [class="^floating$"] floating enable
 for_window [instance="^floating$"] floating enable
 
-default_border pixel 2
-default_floating_border pixel 2
-
-focus_wrapping workspace
 floating_modifier $mod
-
 tiling_drag modifier titlebar
 
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
