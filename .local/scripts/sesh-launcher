@@ -157,6 +157,8 @@ def main():
 
     if selected in mapping:
         ensure_session(selected, Path(mapping[selected]))
+    else:
+        ensure_session(selected, Path("~"))
 
 
 if __name__ == "__main__":
