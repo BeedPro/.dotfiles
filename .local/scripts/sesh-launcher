@@ -121,6 +121,8 @@ def fzf_select(items):
 
 
 def ensure_session(name: str, directory: Path):
+    inside_tmux = "TMUX" in os.environ
+
     if (
         subprocess.run(
             ["tmux", "has-session", "-t", name],
@@ -140,7 +142,10 @@ def ensure_session(name: str, directory: Path):
             ]
         )
 
-    run(["tmux", "switch-client", "-t", name])
+    if inside_tmux:
+        run(["tmux", "switch-client", "-t", name])
+    else:
+        run(["tmux", "attach-session", "-t", name])
 
 
 def main():
