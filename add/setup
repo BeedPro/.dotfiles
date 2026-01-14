@@ -8,7 +8,6 @@ $ADD_PATH/apt
 # Add package managers
 $ADD_PATH/flatpak
 $ADD_PATH/rust
-$ADD_PATH/go
 $ADD_PATH/deno
 $ADD_PATH/volta
 
@@ -20,7 +19,6 @@ $ADD_PATH/yazi
 $ADD_PATH/zoxide
 $ADD_PATH/starship
 $ADD_PATH/atuin
-$ADD_PATH/sesh
 $ADD_PATH/lazygit
 $ADD_PATH/dragon
 $ADD_PATH/silicon
