@@ -1,6 +1,7 @@
 local dap = require "dap"
 
 require "configs.dap.adapters"
+require "configs.dap.ui"
 
 dap.configurations.cpp = require "configs.dap.configurations.cpp"
 dap.configurations.c = dap.configurations.cpp
