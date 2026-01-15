@@ -1,7 +1,0 @@
-#!/bin/bash
-
-git clone https://github.com/salman-abedin/devour /tmp/devour
-cd /tmp/devour
-sudo make install
-
-rm -rf /tmp/devour
