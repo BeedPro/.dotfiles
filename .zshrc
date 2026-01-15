@@ -38,7 +38,6 @@ alias peaclock='peaclock --config-dir ~/.config/peaclock'
 alias vim="/usr/local/bin/nvim"
 alias svim="sudo -E /usr/local/bin/nvim"
 alias vimff="/usr/local/bin/nvim -c 'Telescope find_files'"
-alias vi="/usr/bin/vim"
 alias ls='eza'
 alias tree='eza --tree'
 alias cat='bat -p'
