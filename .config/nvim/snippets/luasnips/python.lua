@@ -1,31 +1,83 @@
 local ts_utils = require "nvim-treesitter.ts_utils"
 
+local function node_text(node)
+  return vim.treesitter.get_node_text(node, 0)
+end
+
+local function children_of_type(node, wanted)
+  local out = {}
+  for c in node:iter_children() do
+    if c:type() == wanted then
+      out[#out + 1] = c
+    end
+  end
+  return out
+end
+
+local function first_child_of_type(node, wanted)
+  for c in node:iter_children() do
+    if c:type() == wanted then
+      return c
+    end
+  end
+end
+
+local function first_identifier(node)
+  return first_child_of_type(node, "identifier")
+end
+
+local function is_named(node, name)
+  local id = first_identifier(node)
+  return id and node_text(id) == name
+end
+
+local function get_class_node_at_cursor()
+  local node = ts_utils.get_node_at_cursor()
+  while node and node:type() ~= "class_definition" do
+    node = node:parent()
+  end
+  return node
+end
+
 local function get_init_function(class_node)
-  for child in class_node:iter_children() do
-    if child:type() == "block" then
-      for stmt in child:iter_children() do
-        if stmt:type() == "function_definition" then
-          for name in stmt:iter_children() do
-            if name:type() == "identifier" then
-              if vim.treesitter.get_node_text(name, 0) == "__init__" then
-                return stmt
-              end
-            end
-          end
-        end
+  local blocks = children_of_type(class_node, "block")
+  for _, block in ipairs(blocks) do
+    local fns = children_of_type(block, "function_definition")
+    for _, fn in ipairs(fns) do
+      if is_named(fn, "__init__") then
+        return fn
       end
     end
   end
 end
 
-local function get_class_node_at_cursor()
-  local node = ts_utils.get_node_at_cursor()
-  while node do
-    if node:type() == "class_definition" then
-      return node
-    end
-    node = node:parent()
+local function param_name(param)
+  local t = param:type()
+  if t == "identifier" then
+    return node_text(param)
   end
+
+  if
+    t == "default_parameter"
+    or t == "typed_parameter"
+    or t == "typed_default_parameter"
+    or t == "list_splat_pattern"
+    or t == "dictionary_splat_pattern"
+  then
+    local id = first_identifier(param)
+    return id and node_text(id)
+  end
+end
+
+local function collect_params(params_node)
+  local out = {}
+  for p in params_node:iter_children() do
+    local name = param_name(p)
+    if name then
+      out[#out + 1] = name
+    end
+  end
+  return out
 end
 
 local function get_class_init_params()
@@ -39,27 +91,12 @@ local function get_class_init_params()
     return {}
   end
 
-  local params = {}
-
-  for child in init_fn:iter_children() do
-    if child:type() == "parameters" then
-      for param in child:iter_children() do
-        local t = param:type()
-
-        if t == "identifier" then
-          table.insert(params, vim.treesitter.get_node_text(param, 0))
-        elseif t == "default_parameter" or t == "typed_parameter" or t == "typed_default_parameter" then
-          for c in param:iter_children() do
-            if c:type() == "identifier" then
-              table.insert(params, vim.treesitter.get_node_text(c, 0))
-              break
-            end
-          end
-        end
-      end
-    end
+  local params_node = first_child_of_type(init_fn, "parameters")
+  if not params_node then
+    return {}
   end
 
+  local params = collect_params(params_node)
   if params[1] == "self" then
     table.remove(params, 1)
   end
@@ -68,27 +105,15 @@ local function get_class_init_params()
 end
 
 local function is_class_method(fn_node)
-  if not fn_node then
-    return false
-  end
-
-  local parent = fn_node:parent()
-  while parent do
-    if parent:type() == "class_definition" then
-      return true
-    end
+  local parent = fn_node and fn_node:parent()
+  while parent and parent:type() ~= "class_definition" do
     parent = parent:parent()
   end
-
-  return false
+  return parent ~= nil
 end
 
 local function get_python_params()
   local node = ts_utils.get_node_at_cursor()
-  if not node then
-    return {}
-  end
-
   while node and node:type() ~= "function_definition" do
     node = node:parent()
   end
@@ -96,48 +121,14 @@ local function get_python_params()
     return {}
   end
 
-  local is_method = is_class_method(node)
-
-  local params_node
-  for child in node:iter_children() do
-    if child:type() == "parameters" then
-      params_node = child
-      break
-    end
-  end
-
+  local params_node = first_child_of_type(node, "parameters")
   if not params_node then
     return {}
   end
 
-  local params = {}
-
-  for param in params_node:iter_children() do
-    local t = param:type()
-
-    if t == "identifier" then
-      table.insert(params, vim.treesitter.get_node_text(param, 0))
-    elseif t == "default_parameter" or t == "typed_parameter" or t == "typed_default_parameter" then
-      for child in param:iter_children() do
-        if child:type() == "identifier" then
-          table.insert(params, vim.treesitter.get_node_text(child, 0))
-          break
-        end
-      end
-    elseif t == "list_splat_pattern" or t == "dictionary_splat_pattern" then
-      for child in param:iter_children() do
-        if child:type() == "identifier" then
-          table.insert(params, vim.treesitter.get_node_text(child, 0))
-          break
-        end
-      end
-    end
-  end
-
-  if is_method and #params > 0 then
-    if params[1] == "self" or params[1] == "cls" then
-      table.remove(params, 1)
-    end
+  local params = collect_params(params_node)
+  if is_class_method(node) and (params[1] == "self" or params[1] == "cls") then
+    table.remove(params, 1)
   end
 
   return params
@@ -152,7 +143,6 @@ local t = ls.text_node
 
 local function python_docstring()
   local params = get_class_init_params() or get_python_params()
-
   local nodes = {
     t '"""',
     t { "", "" },
@@ -162,24 +152,21 @@ local function python_docstring()
     t { "", "" },
   }
 
-  local insert_index = 2
-
-  for _, param in ipairs(params) do
-    table.insert(nodes, t(":param " .. param .. ": "))
-    table.insert(nodes, i(insert_index))
-    insert_index = insert_index + 1
-    table.insert(nodes, t { "", "" })
+  local idx = 2
+  for _, p in ipairs(params) do
+    nodes[#nodes + 1] = t(":param " .. p .. ": ")
+    nodes[#nodes + 1] = i(idx)
+    idx = idx + 1
+    nodes[#nodes + 1] = t { "", "" }
   end
 
-  table.insert(nodes, t ":return: ")
-  table.insert(nodes, i(insert_index))
-  table.insert(nodes, t { "", '"""' })
+  nodes[#nodes + 1] = t ":return: "
+  nodes[#nodes + 1] = i(idx)
+  nodes[#nodes + 1] = t { "", '"""' }
 
   return sn(nil, nodes)
 end
 
 ls.add_snippets("python", {
-  s("docs", {
-    d(1, python_docstring),
-  }),
+  s("docs", { d(1, python_docstring) }),
 })
