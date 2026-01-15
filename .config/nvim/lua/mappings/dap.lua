@@ -1,15 +1,5 @@
 local map = vim.keymap.set
 local dap = require "dap"
-local dapui = require "dapui"
-
-map("n", "<leader>d?", function()
-  dapui.eval(nil, {
-    enter = true,
-    context = "hover",
-    width = 200,
-    height = 10,
-  })
-end, { desc = "[D]ap Question[?]" })
 
 map("n", "<leader>dc", dap.continue, { desc = "[D]ap [C]ontinue" })
 map("n", "<leader>dn", dap.step_over, { desc = "[D]ap [N]ext (Step Over)" })
