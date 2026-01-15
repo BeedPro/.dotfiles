@@ -39,7 +39,6 @@ local function get_class_init_params()
     return {}
   end
 
-  -- reuse existing logic
   local params = {}
 
   for child in init_fn:iter_children() do
@@ -90,7 +89,6 @@ local function get_python_params()
     return {}
   end
 
-  -- Walk up to function_definition
   while node and node:type() ~= "function_definition" do
     node = node:parent()
   end
@@ -100,7 +98,6 @@ local function get_python_params()
 
   local is_method = is_class_method(node)
 
-  -- Find the parameters() child
   local params_node
   for child in node:iter_children() do
     if child:type() == "parameters" then
@@ -115,7 +112,6 @@ local function get_python_params()
 
   local params = {}
 
-  -- Walk each parameter inside (parameters ...)
   for param in params_node:iter_children() do
     local t = param:type()
 
@@ -129,7 +125,6 @@ local function get_python_params()
         end
       end
     elseif t == "list_splat_pattern" or t == "dictionary_splat_pattern" then
-      -- *args or **kwargs
       for child in param:iter_children() do
         if child:type() == "identifier" then
           table.insert(params, vim.treesitter.get_node_text(child, 0))
@@ -139,7 +134,6 @@ local function get_python_params()
     end
   end
 
-  -- Drop self / cls for class methods
   if is_method and #params > 0 then
     if params[1] == "self" or params[1] == "cls" then
       table.remove(params, 1)
