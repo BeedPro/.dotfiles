@@ -1,9 +1,9 @@
 return {
   {
-    "rcarriga/nvim-dap-ui",
+    "igorlfs/nvim-dap-view",
+    lazy = false,
     dependencies = {
       "mfussenegger/nvim-dap",
-      "nvim-neotest/nvim-nio",
       "theHamsta/nvim-dap-virtual-text",
     },
     config = function()
@@ -21,8 +21,6 @@ return {
     ft = "python",
     dependencies = {
       "mfussenegger/nvim-dap",
-      "rcarriga/nvim-dap-ui",
-      "nvim-neotest/nvim-nio",
     },
     config = function()
       require "configs.dap.adapters.python"
