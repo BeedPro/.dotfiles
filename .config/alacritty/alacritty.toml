@@ -25,3 +25,6 @@ bindings = [
   { key = "Minus", mods = "Control",       action = "DecreaseFontSize" },
   { key = "Key0",  mods = "Control",       action = "ResetFontSize" }
 ]
+
+[cursor]
+style = { shape = "Block", blinking = "Off" }
