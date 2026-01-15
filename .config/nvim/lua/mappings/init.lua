@@ -1,6 +1,5 @@
 require "mappings.oil"
 require "mappings.telescope"
-require "mappings.harpoon"
 require "mappings.tmuxnav"
 require "mappings.mason"
 require "mappings.neogen"
