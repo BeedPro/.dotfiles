@@ -4,6 +4,7 @@ return {
   "pyright",
   "jdtls",
   "lua-language-server",
+  "haskell-language-server",
   "roslyn",
   "tinymist",
 
@@ -27,4 +28,5 @@ return {
   "prettier",
   "prettierd",
   "stylua",
+  "fourmolu",
 }
