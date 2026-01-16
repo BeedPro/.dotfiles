@@ -1,7 +1,7 @@
 return {
   -- LSP
   "clangd",
-  "pyright",
+  "ty",
   "jdtls",
   "lua-language-server",
   "tinymist",
@@ -16,7 +16,6 @@ return {
   "netcoredbg",
 
   -- Linters
-  "mypy",
   "ruff",
   "djlint",
 
