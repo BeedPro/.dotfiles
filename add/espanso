@@ -2,7 +2,7 @@
 
 # Install the x11 version of espanso
 sudo wget -O /opt/Espanso-X11.AppImage 'https://github.com/espanso/espanso/releases/download/v2.2.1/Espanso-X11.AppImage'
-sudo chmod u+x /opt/Espanso-X11.AppImage
+sudo chmod +x /opt/Espanso-X11.AppImage
 sudo ln -sf /opt/Espanso-X11.AppImage /usr/local/bin/espanso-x11
 echo "Installed espanso (x11)"
 
