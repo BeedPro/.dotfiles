@@ -5,7 +5,6 @@ return {
   "jdtls",
   "lua-language-server",
   "tinymist",
-  "roslyn",
   "haskell-language-server",
 
   -- DAP
