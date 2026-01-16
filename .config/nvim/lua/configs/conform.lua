@@ -20,7 +20,6 @@ local options = {
     json = { "prettierd" },
     vue = { "prettierd" },
     svelte = { "prettierd" },
-    scala = { "scalafmt" },
     ["cshtml"] = { "trim_whitespace" },
     ["_"] = { "trim_whitespace" },
   },
