@@ -3,6 +3,7 @@ local options = {
     lua = { "stylua" },
     typst = { "prettypst" },
     python = { "black" },
+    haskell = { "fourmolu" },
     css = { "prettierd" },
     html = { "prettierd" },
     djangohtml = { "djlint" },
