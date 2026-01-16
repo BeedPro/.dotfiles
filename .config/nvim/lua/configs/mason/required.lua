@@ -4,9 +4,9 @@ return {
   "pyright",
   "jdtls",
   "lua-language-server",
-  "haskell-language-server",
-  "roslyn",
   "tinymist",
+  "roslyn",
+  "haskell-language-server",
 
   -- DAP
   "codelldb",
@@ -22,10 +22,8 @@ return {
 
   -- Formatters
   "prettypst",
-  "black",
   "clang-format",
   "csharpier",
-  "prettier",
   "prettierd",
   "stylua",
   "fourmolu",
