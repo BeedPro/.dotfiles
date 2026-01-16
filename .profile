@@ -10,3 +10,5 @@ export PATH=$PATH:/var/lib/flatpak/exports/bin
 export PATH=$PATH:/usr/games
 export PATH=$PATH:/usr/local/go/bin
 export MPD_HOST=/tmp/mpd_socket
+
+[ -f "/home/beed/.ghcup/env" ] && . "/home/beed/.ghcup/env" # ghcup-env

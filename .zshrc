@@ -11,6 +11,7 @@ export PATH=$HOME/.atuin/bin:$PATH
 
 export SDKMAN_DIR="$HOME/.sdkman"
 
+[ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 [ -f "$HOME/.deno/env" ] && . "$HOME/.deno/env"
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
@@ -86,3 +87,4 @@ autoload -Uz compinit
 compinit -C
 
 zinit cdreplay -q
+
