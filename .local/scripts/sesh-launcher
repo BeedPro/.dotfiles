@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import os
 import subprocess
 import sys
 from pathlib import Path
+from subprocess import CompletedProcess
+from typing import Iterable, List, Dict, Tuple
 
-SRC_DIR = Path.home() / ".local" / "src"
+SRC_DIR: Path = Path.home() / ".local" / "src"
 SRC_DIR.mkdir(parents=True, exist_ok=True)
 
-TMUX_ICON = "@"
-CONFIG_ICON = "+"
+TMUX_ICON: str = "@"
+CONFIG_ICON: str = "+"
 
 
-def run(cmd, **kwargs):
+def run(cmd: list[str], **kwargs) -> CompletedProcess[str]:
     return subprocess.run(cmd, check=True, text=True, **kwargs)
 
 
@@ -24,7 +28,14 @@ def relative_depth(root: str, base_depth: int) -> int:
     return len(Path(root).parts) - base_depth
 
 
-def handle_depth(root, dirs, current, target, base, result):
+def handle_depth(
+    root: str,
+    dirs: List[str],
+    current: int,
+    target: int,
+    base: Path,
+    result: List[str],
+) -> None:
     if current > target:
         dirs.clear()
         return
@@ -35,13 +46,13 @@ def handle_depth(root, dirs, current, target, base, result):
         dirs.clear()
 
 
-def find_dirs(input: str, depth: int = 1) -> list[str]:
-    base = Path(input).expanduser().resolve()
+def find_dirs(input: str, depth: int = 1) -> List[str]:
+    base: Path = Path(input).expanduser().resolve()
     if not is_valid_base(base):
         return []
 
-    result = []
-    base_depth = len(base.parts)
+    result: List[str] = []
+    base_depth: int = len(base.parts)
 
     for root, dirs, _ in os.walk(base):
         current = relative_depth(root, base_depth)
@@ -50,29 +61,36 @@ def find_dirs(input: str, depth: int = 1) -> list[str]:
     return result
 
 
-def add_paths(out, items, prefix, base):
+def add_paths(
+    out: Dict[str, str],
+    items: Iterable[str],
+    prefix: str,
+    base: str,
+) -> None:
     for p in items:
         key = f"{prefix}{p}" if prefix else p
         out[key] = f"{base}/{p}"
 
 
-def create_mapping(paths):
-    src = find_dirs(paths[0], 2)
-    config = find_dirs(paths[1])
+def create_mapping(paths: list[str]) -> Dict[str, str]:
+    src: List[str] = find_dirs(paths[0], 2)
+    config: List[str] = find_dirs(paths[1])
 
-    out = {
+    out: Dict[str, str] = {
         "agim": "~/Compendium/Agenda",
         "slipbox": "~/Compendium/Slipbox",
         "workspace": "~/Compendium/Workspace",
         "dotfiles": "~/.dotfiles",
         "scripts": "~/.local/scripts",
     }
+
     add_paths(out, src, "", paths[0])
     add_paths(out, config, "config/", paths[1])
+
     return out
 
 
-def get_tmux_items():
+def get_tmux_items() -> List[str]:
     try:
         out = subprocess.check_output(
             ["tmux", "list-sessions", "-F", "#S"],
@@ -84,13 +102,13 @@ def get_tmux_items():
         return []
 
 
-def get_all_items(paths):
+def get_all_items(paths: list[str]) -> Tuple[List[str], Dict[str, str]]:
     mapping = create_mapping(paths)
 
-    tmux = set(get_tmux_items())
-    keys = set(mapping)
+    tmux: set[str] = set(get_tmux_items())
+    keys: set[str] = set(mapping)
 
-    display = []
+    display: List[str] = []
 
     for name in sorted(tmux):
         display.append(f"{TMUX_ICON} {name}")
@@ -101,8 +119,8 @@ def get_all_items(paths):
     return display, mapping
 
 
-def fzf_select(items):
-    cmd = [
+def fzf_select(items: List[str]) -> str:
+    cmd: list[str] = [
         "fzf",
         "--prompt",
         "> ",
@@ -123,8 +141,8 @@ def fzf_select(items):
     return stdout.strip()
 
 
-def ensure_session(name: str, directory: Path):
-    inside_tmux = "TMUX" in os.environ
+def ensure_session(name: str, directory: Path) -> None:
+    inside_tmux: bool = "TMUX" in os.environ
 
     if (
         subprocess.run(
@@ -151,14 +169,14 @@ def ensure_session(name: str, directory: Path):
         run(["tmux", "attach-session", "-t", name])
 
 
-def main():
-    paths = [
+def main() -> None:
+    paths: list[str] = [
         "~/.local/src",
         "~/.dotfiles/.config",
     ]
 
     items, mapping = get_all_items(paths)
-    selected = fzf_select(items)[2:]
+    selected: str = fzf_select(items)[2:]
 
     if not selected:
         return
