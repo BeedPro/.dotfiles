@@ -177,7 +177,6 @@ def main() -> None:
 
     items, mapping = get_all_items(paths)
     selected: str = fzf_select(items)[2:]
-    print(selected)
 
     if not selected:
         return
