@@ -61,13 +61,11 @@ def create_mapping(paths):
     config = find_dirs(paths[1])
 
     out = {
-        "home": "~",
         "agim": "~/Compendium/Agenda",
         "slipbox": "~/Compendium/Slipbox",
         "workspace": "~/Compendium/Workspace",
         "dotfiles": "~/.dotfiles",
         "scripts": "~/.local/scripts",
-        "tmp": "/tmp",
     }
     add_paths(out, src, "", paths[0])
     add_paths(out, config, "config/", paths[1])
