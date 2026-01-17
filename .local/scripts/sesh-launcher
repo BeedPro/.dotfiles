@@ -6,7 +6,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-from subprocess import CompletedProcess
+from subprocess import CompletedProcess, Popen
 from typing import Iterable, List, Dict, Tuple
 
 SRC_DIR: Path = Path.home() / ".local" / "src"
@@ -41,7 +41,7 @@ def handle_depth(
         return
 
     if current == target:
-        rel = Path(root).resolve().relative_to(base)
+        rel: Path = Path(root).resolve().relative_to(base)
         result.append(rel.as_posix())
         dirs.clear()
 
@@ -55,7 +55,7 @@ def find_dirs(input: str, depth: int = 1) -> List[str]:
     base_depth: int = len(base.parts)
 
     for root, dirs, _ in os.walk(base):
-        current = relative_depth(root, base_depth)
+        current: int = relative_depth(root, base_depth)
         handle_depth(root, dirs, current, depth, base, result)
 
     return result
@@ -68,7 +68,7 @@ def add_paths(
     base: str,
 ) -> None:
     for p in items:
-        key = f"{prefix}{p}" if prefix else p
+        key: str = f"{prefix}{p}" if prefix else p
         out[key] = f"{base}/{p}"
 
 
@@ -92,7 +92,7 @@ def create_mapping(paths: list[str]) -> Dict[str, str]:
 
 def get_tmux_items() -> List[str]:
     try:
-        out = subprocess.check_output(
+        out: str = subprocess.check_output(
             ["tmux", "list-sessions", "-F", "#S"],
             stderr=subprocess.DEVNULL,
             text=True,
@@ -103,7 +103,7 @@ def get_tmux_items() -> List[str]:
 
 
 def get_all_items(paths: list[str]) -> Tuple[List[str], Dict[str, str]]:
-    mapping = create_mapping(paths)
+    mapping: dict[str, str] = create_mapping(paths)
 
     tmux: set[str] = set(get_tmux_items())
     keys: set[str] = set(mapping)
@@ -130,7 +130,7 @@ def fzf_select(items: List[str]) -> str:
         "--color=bg:-1,bg+:-1,preview-bg:-1",
     ]
 
-    p = subprocess.Popen(
+    p: Popen[str] = subprocess.Popen(
         cmd,
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
