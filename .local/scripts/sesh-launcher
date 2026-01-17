@@ -8,6 +8,9 @@ from pathlib import Path
 SRC_DIR = Path.home() / ".local" / "src"
 SRC_DIR.mkdir(parents=True, exist_ok=True)
 
+TMUX_ICON = "@"
+CONFIG_ICON = "+"
+
 
 def run(cmd, **kwargs):
     return subprocess.run(cmd, check=True, text=True, **kwargs)
@@ -92,10 +95,10 @@ def get_all_items(paths):
     display = []
 
     for name in sorted(tmux):
-        display.append(f"{name}")
+        display.append(f"{TMUX_ICON} {name}")
 
     for name in sorted(keys - tmux):
-        display.append(f"{name}")
+        display.append(f"{CONFIG_ICON} {name}")
 
     return display, mapping
 
@@ -106,6 +109,7 @@ def fzf_select(items):
         "--prompt",
         "> ",
         "--reverse",
+        "--height=100%",
         "--exit-0",
         "--color=bg:-1,bg+:-1,preview-bg:-1",
     ]
@@ -156,7 +160,7 @@ def main():
     ]
 
     items, mapping = get_all_items(paths)
-    selected = fzf_select(items)
+    selected = fzf_select(items)[2:]
 
     if not selected:
         return
