@@ -19,9 +19,7 @@ local function title_from_filename()
 
   filename = filename:gsub("_", " ")
 
-  filename = filename:gsub("(%a)([%w']*)", function(first, rest)
-    return first:upper() .. rest:lower()
-  end)
+  filename = filename:lower():gsub("(%f[%a]%a)", string.upper)
 
   return filename
 end
