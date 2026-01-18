@@ -41,15 +41,14 @@ ls.add_snippets("typst", {
     },
     i(1),
     t {
-      "",
+      ":",
       "",
       "= ",
     },
     f(title_from_filename),
     t { "", "" },
-    i(3),
-    t { "", "", "= Links", "- " },
     i(2),
+    t { "", "", "= Links" },
     t { "", "", '#bibliography("sources.yaml")' },
   }),
 })

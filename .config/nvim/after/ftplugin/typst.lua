@@ -45,6 +45,6 @@ map("n", "<space>frb", function()
   builtin.live_grep { default_text = name }
 end, { desc = "[F]ind [R]oam [B]acklinks" })
 
-map("i", "<C-f>", function()
+map("i", "<C-i>", function()
   insert_filename()
 end, { desc = "Insert filename via Telescope" })
