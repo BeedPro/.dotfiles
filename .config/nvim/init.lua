@@ -16,6 +16,7 @@ require("lazy").setup({
 
 require "options"
 require "autocmds"
+require "commands"
 
 vim.schedule(function()
   require "mappings"
