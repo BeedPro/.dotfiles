@@ -27,7 +27,7 @@ end
 ls.add_snippets("typst", {
   s("main", {
     t {
-      '#import "style.typ": style',
+      '#import "preamble/style.typ": style',
       "#show: style",
       "",
       "",
