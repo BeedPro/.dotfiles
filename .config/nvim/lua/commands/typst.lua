@@ -1,4 +1,5 @@
 local command = vim.api.nvim_create_user_command
+local M = {}
 
 local function slugify(title)
   title = title:lower()
@@ -9,7 +10,7 @@ local function slugify(title)
   return title
 end
 
-local function new_main_note()
+function M.new_main_note()
   vim.ui.input({ prompt = "Zettel title: " }, function(title)
     if not title or title == "" then
       return
@@ -25,5 +26,7 @@ local function new_main_note()
 end
 
 command("SlipNew", function()
-  new_main_note()
-end, {})
+  M.new_main_note()
+end, { desc = "Create a new slipbox note" })
+
+return M

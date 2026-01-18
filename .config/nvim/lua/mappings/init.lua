@@ -7,6 +7,7 @@ require "mappings.snacks"
 require "mappings.neotest"
 require "mappings.nvzone"
 require "mappings.conform"
+require "mappings.typst"
 
 local map = vim.keymap.set
 
