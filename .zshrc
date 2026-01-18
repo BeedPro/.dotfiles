@@ -35,6 +35,7 @@ export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH=$HOME/.go
 
 alias topen="~/.local/scripts/sesh-launcher"
+alias tmux="tmux a || tmux"
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
 alias vim="/usr/local/bin/nvim"
 alias svim="sudo -E /usr/local/bin/nvim"
