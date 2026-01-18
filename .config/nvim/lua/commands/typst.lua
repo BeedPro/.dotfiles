@@ -16,6 +16,10 @@ local function slugify(title)
   return title
 end
 
+local function make_path(path, basename)
+  return path .. "/" .. basename .. ".typ"
+end
+
 local function make_note(title)
   local timestamp = os.date "%Y%m%d%H%M"
   local slug = slugify(title)
@@ -31,8 +35,8 @@ function M.new_main_note()
       return
     end
 
-    local _, path = make_note(title)
-    vim.cmd("edit " .. path)
+    local basename, path = make_note(title)
+    vim.cmd("edit " .. make_path(path, basename))
   end)
 end
 
@@ -48,7 +52,7 @@ function M.insert_note()
     vim.api.nvim_put({ basename }, "c", true, true)
 
     -- open note in horizontal split
-    vim.cmd("split " .. path .. "/" .. basename .. ".typ")
+    vim.cmd("split " .. make_path(path, basename))
   end)
 end
 
