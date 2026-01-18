@@ -37,6 +37,10 @@ function M.new_main_note()
 
     local basename, path = make_note(title)
     vim.cmd("edit " .. make_path(path, basename))
+
+    vim.schedule(function()
+      vim.cmd "startinsert"
+    end)
   end)
 end
 
@@ -53,6 +57,9 @@ function M.insert_note()
 
     -- open note in horizontal split
     vim.cmd("split " .. make_path(path, basename))
+    vim.schedule(function()
+      vim.cmd "startinsert"
+    end)
   end)
 end
 
