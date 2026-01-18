@@ -1,4 +1,5 @@
 local autocmd = vim.api.nvim_create_autocmd
+local slipbox_dir = require("configs.typst").slipbox_dir() .. "/"
 
 autocmd({ "BufEnter", "BufWritePost" }, {
   pattern = "*.typ",
@@ -35,5 +36,18 @@ autocmd({ "BufEnter", "BufWritePost" }, {
         end
       end,
     })
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = slipbox_dir .. "*",
+  callback = function()
+    -- load once per session
+    if vim.g.slipbox_mappings_loaded then
+      return
+    end
+
+    vim.g.slipbox_mappings_loaded = true
+    require "mappings.typst"
   end,
 })

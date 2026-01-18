@@ -7,10 +7,6 @@ local action_state = require "telescope.actions.state"
 
 local M = {}
 
-local function slipbox_dir()
-  return vim.fn.expand "~/Compendium/Slipbox"
-end
-
 local function slugify(title)
   title = title:lower()
   title = title:gsub("%s+", "_")
@@ -24,8 +20,7 @@ local function make_note(title)
   local timestamp = os.date "%Y%m%d%H%M"
   local slug = slugify(title)
   local basename = string.format("%s-%s", timestamp, slug)
-  local filename = basename .. ".typ"
-  local path = slipbox_dir()
+  local path = require("configs.typst").slipbox_dir()
 
   return basename, path
 end
@@ -53,12 +48,12 @@ function M.insert_note()
     vim.api.nvim_put({ basename }, "c", true, true)
 
     -- open note in horizontal split
-    vim.cmd("split " .. path)
+    vim.cmd("split " .. path .. "/" .. basename .. ".typ")
   end)
 end
 
 function M.open_note()
-  local dir = slipbox_dir()
+  local dir = require("configs.typst").slipbox_dir()
 
   -- get .typ files only (non-recursive)
   local files = vim.fn.globpath(dir, "*.typ", false, true)

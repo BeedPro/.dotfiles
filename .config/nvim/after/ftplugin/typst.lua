@@ -1,6 +1,7 @@
 local o = vim.o
 o.spell = true
 o.spelllang = "en_gb"
+o.colorcolumn = "80"
 
 local map = vim.keymap.set
 local builtin = require "telescope.builtin"
