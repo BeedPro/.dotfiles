@@ -14,7 +14,10 @@ local function insert_filename()
   pickers
     .new({}, {
       prompt_title = "Insert file",
-      finder = finders.new_oneshot_job({ "rg", "--files", "--glob", "*.typ" }, { cwd = vim.fn.getcwd() }),
+      finder = finders.new_oneshot_job(
+        { "rg", "--files", "--maxdepth", "1", "--glob", "*.typ" },
+        { cwd = vim.fn.expand "%:p:h" }
+      ),
       sorter = conf.generic_sorter {},
       attach_mappings = function(prompt_bufnr)
         actions.select_default:replace(function()
@@ -39,7 +42,7 @@ map("n", "<space>frb", function()
     return
   end
   builtin.live_grep { default_text = name }
-end, { desc = "Search '(filename)' (no ext)" })
+end, { desc = "[F]ind [R]oam [B]acklinks" })
 
 map("i", "<C-f>", function()
   insert_filename()
