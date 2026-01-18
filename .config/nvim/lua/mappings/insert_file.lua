@@ -1,16 +1,10 @@
-local o = vim.o
-o.spell = true
-o.spelllang = "en_gb"
-
-local map = vim.keymap.set
-local builtin = require "telescope.builtin"
-local actions = require "telescope.actions"
-local action_state = require "telescope.actions.state"
-local pickers = require "telescope.pickers"
-local finders = require "telescope.finders"
-local conf = require("telescope.config").values
-
 local function insert_filename()
+  local actions = require "telescope.actions"
+  local action_state = require "telescope.actions.state"
+  local pickers = require "telescope.pickers"
+  local finders = require "telescope.finders"
+  local conf = require("telescope.config").values
+
   pickers
     .new({}, {
       prompt_title = "Insert file",
@@ -33,13 +27,7 @@ local function insert_filename()
     :find()
 end
 
-map("n", "<space>frb", function()
-  local name = vim.fn.expand "%:t:r"
-  if name == "" then
-    return
-  end
-  builtin.live_grep { default_text = "(" .. name .. ")" }
-end, { desc = "Search '(filename)' (no ext)" })
+local map = vim.keymap.set
 
 map("i", "<C-f>", function()
   insert_filename()
