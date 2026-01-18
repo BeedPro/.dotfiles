@@ -9,7 +9,7 @@ local function slugify(title)
   return title
 end
 
-local function new_zettel()
+local function new_main_note()
   vim.ui.input({ prompt = "Zettel title: " }, function(title)
     if not title or title == "" then
       return
@@ -24,6 +24,6 @@ local function new_zettel()
   end)
 end
 
-command("ZettelNew", function()
-  new_zettel()
+command("SlipNew", function()
+  new_main_note()
 end, {})
