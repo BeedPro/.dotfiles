@@ -76,10 +76,6 @@ return {
 
     map("n", "<leader>hq", gitsigns.setqflist, "[H]unk [Q]uickfix")
 
-    map("n", "<leader>tb", gitsigns.toggle_current_line_blame, "[T]oggle [B]lame")
-
-    map("n", "<leader>tw", gitsigns.toggle_word_diff, "[T]oggle [W]ord diff")
-
     map({ "o", "x" }, "ih", gitsigns.select_hunk, "[I]nside [H]unk")
   end,
 }
