@@ -25,7 +25,6 @@ SYSTEM=(
   network-manager
   network-manager-applet
   lxpolkit
-  pulsemixer
   aspell
   aspell-en
 )
