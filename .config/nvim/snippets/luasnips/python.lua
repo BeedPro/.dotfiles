@@ -198,7 +198,7 @@ local function python_fastapi_response_docstring()
     t '"""',
     t { "", "" },
     i(1, "Create an item with all the information:"),
-    t { "", "" },
+    t { "", "", "" },
   }
 
   local idx = 2
