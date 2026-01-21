@@ -197,7 +197,7 @@ local function python_fastapi_response_docstring()
   local nodes = {
     t '"""',
     t { "", "" },
-    i(1, "Create an item with all the information:"),
+    i(1, "DESCRIPTION"),
     t { "", "", "" },
   }
 
