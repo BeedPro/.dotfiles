@@ -9,9 +9,6 @@ TERMINAL=alacritty
 
 APPS=(
   "RMPC|$TERMINAL -e $HOME/.cargo/bin/rmpc"
-  "Neovim|$TERMINAL -e nvim"
-  "Yazi|$TERMINAL -e yazi"
-  "Pulsemixer|$TERMINAL -e pulsemixer"
   "Helium|helium"
 )
 
