@@ -99,8 +99,9 @@ bindsym $mod+v split v
 
 bindsym $mod+m fullscreen toggle
 
-bindsym $mod+s layout tabbed
-bindsym $mod+shift+s layout toggle split
+bindsym $mod+s layout stacking
+bindsym $mod+t layout tabbed
+bindsym $mod+e layout toggle split
 
 bindsym $mod+Shift+f floating toggle
 
