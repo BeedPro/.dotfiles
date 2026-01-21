@@ -219,5 +219,5 @@ ls.add_snippets("python", {
 })
 
 ls.add_snippets("python", {
-  s("docs", { d(1, python_fastapi_response_docstring) }),
+  s("docsfast", { d(1, python_fastapi_response_docstring) }),
 })
