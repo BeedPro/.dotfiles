@@ -2,6 +2,7 @@
 
 if [[ ":$FPATH:" != *":/home/beed/.zsh/completions:"* ]]; then export FPATH="$HOME/.local/share/scalacli/completions/zsh:$HOME/.zsh/completions:$FPATH"; fi
 
+export EDITOR=nvim
 export PATH=$HOME/.local/share/nvim/mason/bin:$PATH
 export PATH=$HOME/.volta/bin:$PATH
 export PATH=$HOME/.go/bin:$PATH
