@@ -26,9 +26,6 @@ for_window [title="^floating$"] floating enable
 for_window [class="^floating$"] floating enable
 for_window [instance="^floating$"] floating enable
 
-for_window [class="^Alacritty$" title="^Yazi:"] split horizontal
-for_window [class="^Alacritty$" title="^Yazi:"] layout stacking
-
 floating_modifier $mod
 tiling_drag modifier titlebar
 
@@ -51,7 +48,6 @@ bindsym $mod+w exec --no-startup-id zen
 bindsym $mod+Shift+w exec --no-startup-id zen --private-window
 bindsym $mod+n exec --no-startup-id alacritty -e nvim -c ":Org agenda"
 bindsym $mod+Shift+n exec --no-startup-id alacritty -e nvim -c ":Org capture"
-bindsym $mod+e exec --no-startup-id alacritty -e yazi
 
 bindsym $mod+x exec --no-startup-id i3lock \
   --color=1e1e2eff \
