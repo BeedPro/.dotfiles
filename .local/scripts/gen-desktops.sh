@@ -8,7 +8,6 @@ mkdir -p "$APPDIR"
 TERMINAL=alacritty
 
 APPS=(
-  "RMPC|$TERMINAL -e $HOME/.cargo/bin/rmpc"
   "Helium|helium"
 )
 
