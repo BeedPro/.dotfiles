@@ -75,6 +75,87 @@ local function get_python_params()
   return params
 end
 
+local function find_class_definition(name)
+  if not name then
+    return nil
+  end
+
+  local ok, parser = pcall(vim.treesitter.get_parser, 0, "python")
+  if not ok or not parser then
+    return nil
+  end
+
+  local trees = parser:parse()
+  if not trees or not trees[1] then
+    return nil
+  end
+
+  local root = trees[1]:root()
+  if not root then
+    return nil
+  end
+
+  for node in root:iter_children() do
+    if node:type() == "class_definition" then
+      local id = first_identifier(node)
+      if id and node_text(id) == name then
+        return node
+      end
+    end
+  end
+
+  return nil
+end
+
+local function collect_pydantic_fields(class_node)
+  local out = {}
+  if not class_node then
+    return out
+  end
+
+  for node in class_node:iter_children() do
+    if node:type() == "block" then
+      for stmt in node:iter_children() do
+        if stmt:type() == "expression_statement" then
+          local target = stmt:child(0)
+          if target and target:type() == "assignment" then
+            local id = first_identifier(target)
+            if id then
+              table.insert(out, node_text(id))
+            end
+          end
+        end
+      end
+    end
+  end
+
+  return out
+end
+
+local function get_body_model()
+  local node = ts_utils.get_node_at_cursor()
+  while node and node:type() ~= "function_definition" do
+    node = node:parent()
+  end
+  if not node then
+    return
+  end
+
+  local params_node = first_child_of_type(node, "parameters")
+  if not params_node then
+    return
+  end
+
+  for p in params_node:iter_children() do
+    if p:type() == "typed_parameter" then
+      local type_node = p:child(2)
+      if type_node then
+        return node_text(type_node)
+      end
+    end
+  end
+end
+
 local ls = require "luasnip"
 local s = ls.snippet
 local i = ls.insert_node
@@ -82,7 +163,7 @@ local d = ls.dynamic_node
 local sn = ls.snippet_node
 local t = ls.text_node
 
-local function python_docstring()
+local function python_sphinx_docstring()
   local params = get_python_params()
   local nodes = {
     t '"""',
@@ -108,6 +189,35 @@ local function python_docstring()
   return sn(nil, nodes)
 end
 
+local function python_fastapi_response_docstring()
+  local model_name = get_body_model()
+  local class_node = model_name and find_class_definition(model_name)
+  local fields = collect_pydantic_fields(class_node)
+
+  local nodes = {
+    t '"""',
+    t { "", "" },
+    i(1, "Create an item with all the information:"),
+    t { "", "" },
+  }
+
+  local idx = 2
+  for _, field in ipairs(fields) do
+    nodes[#nodes + 1] = t("- **" .. field .. "**: ")
+    nodes[#nodes + 1] = i(idx)
+    idx = idx + 1
+    nodes[#nodes + 1] = t { "", "" }
+  end
+
+  nodes[#nodes + 1] = t '"""'
+
+  return sn(nil, nodes)
+end
+
 ls.add_snippets("python", {
-  s("docs", { d(1, python_docstring) }),
+  s("sphinx", { d(1, python_sphinx_docstring) }),
+})
+
+ls.add_snippets("python", {
+  s("docs", { d(1, python_fastapi_response_docstring) }),
 })
