@@ -8,6 +8,7 @@ mkdir -p "$APPDIR"
 TERMINAL=alacritty
 
 APPS=(
+  "Godot|godot"
   "Helium|helium"
 )
 
