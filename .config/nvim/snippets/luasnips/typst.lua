@@ -52,3 +52,32 @@ ls.add_snippets("typst", {
     t { "", "", '#bibliography("sources.yaml")' },
   }),
 })
+
+ls.add_snippets("typst", {
+  s("baby", {
+    t {
+      '#import "preamble/style.typ": style',
+      "#show: style",
+      "",
+      "",
+    },
+    t "ID = ",
+    f(id_from_filename),
+    t {
+      "",
+      "",
+      ":",
+    },
+    i(1),
+    t {
+      ":baby:",
+      "",
+      "= ",
+    },
+    f(title_from_filename),
+    t { "", "" },
+    i(2),
+    t { "", "", "= Links" },
+    t { "", "", '#bibliography("sources.yaml")' },
+  }),
+})
