@@ -7,3 +7,13 @@ CCS2
 def
 osc
 neumann
+preempt
+cpu
+int
+BFS
+DFS
+UCS
+io
+FCFS
+SJF
+preemptive
