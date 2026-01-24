@@ -5,6 +5,7 @@ require("catppuccin").setup {
     dark = "mocha",
   },
   no_italic = true,
+  no_underline = true,
   transparent_background = false,
   term_colors = true,
   integrations = {
