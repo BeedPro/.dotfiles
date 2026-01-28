@@ -3,5 +3,3 @@
 if ! command -v getnf >/dev/null 2>&1; then
   curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash
 fi
-
-getnf -i Gohu

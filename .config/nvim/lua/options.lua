@@ -3,7 +3,6 @@ local o = vim.o
 local g = vim.g
 
 o.winborder = "single"
-o.background = "dark"
 o.laststatus = 3
 o.showmode = false
 o.splitkeep = "screen"

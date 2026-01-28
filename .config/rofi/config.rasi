@@ -1,7 +1,7 @@
-@import "catppuccin-mocha"
+@import "theme.rasi"
 
 window {
-    font: "GohuFont 14 Nerd Font 12";
+    font: "monospace 12";
 }
 
 * {
