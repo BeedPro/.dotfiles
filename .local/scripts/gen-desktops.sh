@@ -9,7 +9,6 @@ TERMINAL=alacritty
 
 APPS=(
   "Godot|godot"
-  "Helium|helium"
 )
 
 for entry in "${APPS[@]}"; do
