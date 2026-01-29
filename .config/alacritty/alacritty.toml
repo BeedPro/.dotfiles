@@ -6,10 +6,10 @@ general.import = [
 [font]
 size = 12.0
 
-normal = { family = "Liberation Mono", style = "Regular" }
-bold = { family = "Liberation Mono", style = "Bold" }
-italic = { family = "Liberation Mono", style = "Italic" }
-bold_italic = { family = "Liberation Mono", style = "Bold Italic" }
+normal = { family = "monospace", style = "Regular" }
+bold = { family = "monospace", style = "Bold" }
+italic = { family = "monospace", style = "Italic" }
+bold_italic = { family = "monospace", style = "Bold Italic" }
 
 offset = { x = 0, y = 0 }
 glyph_offset = { x = 0, y = 0 }
