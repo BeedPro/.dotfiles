@@ -10,6 +10,9 @@ CORE_UTILS=(
   stow
   eza
   bat
+  fd-find
+  ripgrep
+  du-dust
   git-lfs
   python3-venv
   pipx
@@ -64,6 +67,10 @@ sudo apt install -y "${CORE_UTILS[@]}" "${SYSTEM[@]}" "${X11_TOOLS[@]}" "${MEDIA
 
 if [ -f /usr/bin/batcat ]; then
   sudo ln -sf /usr/bin/batcat /usr/local/bin/bat
+fi
+
+if [ -f /usr/bin/fdfind ]; then
+  sudo ln -sf /usr/bin/fdfind /usr/local/bin/fd
 fi
 
 if [ -f /usr/bin/mpd ]; then

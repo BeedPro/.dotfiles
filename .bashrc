@@ -1,46 +1,74 @@
 [[ $- != *i* ]] && return
 
+export EDITOR=nvim
+
+export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+export PATH="$HOME/.volta/bin:$PATH"
+export PATH="$HOME/.go/bin:$PATH"
+export PATH="$HOME/.cache/scalacli/local-repo/bin/scala-cli:$PATH"
+export PATH="$HOME/.local/share/coursier/bin:$PATH"
+
+export SDKMAN_DIR="$HOME/.sdkman"
+
+[ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env"
+[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+[ -f "$HOME/.deno/env" ] && source "$HOME/.deno/env"
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
 set -o vi
 
-PROMPT_COMMAND='history -a'
-HISTSIZE=500000
-HISTFILESIZE=100000
-HISTCONTROL="erasedups:ignoreboth"
+shopt -s histappend
+export HISTSIZE=500000
+export HISTFILESIZE=500000
+export HISTCONTROL=ignoreboth:erasedups
 export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
-HISTTIMEFORMAT='%F %T '
+export HISTTIMEFORMAT='%F %T '
 
 export MANPAGER='nvim +Man!'
-export BAT_THEME="Catppuccin Mocha"
-export STARSHIP_CONFIG=$HOME/.config/starship/config.toml
-export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --color=bg:-1,bg+:-1,preview-bg:-1"
+
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
+export GOPATH="$HOME/.go"
+
+alias topen="$HOME/.local/scripts/sesh-launcher"
+alias t="tmux a || tmux"
 
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
+
 alias vim="/usr/local/bin/nvim"
-alias vi="/usr/bin/vim"
-alias ls='eza'
-alias tree='eza --tree'
-alias cat='bat -p'
+alias svim="sudo -E /usr/local/bin/nvim"
+
+if command -v eza >/dev/null 2>&1; then
+  alias ls='eza'
+  alias tree='eza --tree'
+else
+  alias ls='ls --color=auto'
+  alias tree='tree -C'
+fi
+
+if command -v bat >/dev/null 2>&1; then
+  alias cat='bat -p'
+fi
+
 alias mkdir='mkdir -v'
 alias rm='rm -v'
 alias mv='mv -v'
 alias cp='cp -v'
-alias python="python3"
+
+alias python='python3'
+alias apt='sudo apt'
 alias grep='grep --color=auto'
-alias apt="sudo apt"
 
-alias fonts='fc-list | grep -ioE ": [^:]*$1[^:]+:" | sed -E "s/(^: |:)//g" | tr , \\n | sort  | uniq'
-alias zadd="find . -maxdepth 1 -type d ! -name '.' -exec zoxide add {} \;"
-alias largefiles="sudo find / -xdev -type f -size +500M -exec ls -lh {} \;"
+alias fonts='fc-list | grep -ioE ": [^:]*$1[^:]+:" | sed -E "s/(^: |:)//g" | tr , "\n" | sort | uniq'
+alias largefiles='sudo find / -xdev -type f -size +500M -exec ls -lh {} \;'
+eval "$(fzf --bash)"
 
-eval "$(starship init bash)"
-eval "$(zoxide init --cmd cd bash)"
+if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi
 
-PATH="$(awk -v RS=: '!a[$0]++ { if (NR>1) printf ":"; printf "%s",$0 }' <<< "$PATH")"
-export PATH
-
-[ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
-
-[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
-eval "$(atuin init bash)"
-. "$HOME/.cargo/env"
+PROMPT='PS1_CMD1=$(__git_ps1 " (%s)")'; PS1='\n\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]${PS1_CMD1}\n> '
+PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT"
+# PROMPT_COMMAND="history -a; history -n; $PROMPT"
