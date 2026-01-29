@@ -2,7 +2,7 @@
 sudo apt update
 
 CORE_UTILS=(
-  zsh
+  bash-completion
   tmux
   vim
   git
