@@ -30,8 +30,14 @@ export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --color=bg:-1,bg+:-1,prev
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH="$HOME/.go"
 
-alias topen="$HOME/.local/scripts/sesh-launcher"
 alias t="tmux a || tmux"
+alias topen="$HOME/.local/scripts/sesh-launcher"
+
+cdi() {
+    local dir
+    dir="$("$HOME/.local/scripts/sesh-launcher" -o </dev/tty)" || return
+    cd "$dir"
+}
 
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
 
@@ -74,9 +80,9 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 # https://unix.stackexchange.com/questions/767621/i-cant-get-bash-history-to-update-instantly-in-all-terminals
 PROMPT='
 PS1_VENV=${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }
-PS1_CMD1=$(__git_ps1 "%s")
+PS1_CMD1=$(__git_ps1 "\n%s ")
 '
 
-PS1='\n\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]\n\[\e[93m\]${PS1_VENV}\[\e[0m\]${PS1_CMD1}\n> '
+PS1='${PS1_CMD1}\n\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]\n\[\e[93m\]${PS1_VENV}\[\e[0m\]> '
 
 PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT"
