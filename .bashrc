@@ -37,6 +37,7 @@ cdi() {
     local dir
     dir="$("$HOME/.local/scripts/sesh-launcher" -o </dev/tty)" || return
     cd "$dir"
+    clear
 }
 
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
