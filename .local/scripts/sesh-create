@@ -58,7 +58,6 @@ def handle_key(
     pos: int,
     esc_armed: bool,
 ) -> tuple[list[str], int, bool, bool]:
-
     if is_esc(ch):
         return buf, pos, False, not esc_armed
 
@@ -172,17 +171,6 @@ def main() -> None:
     cwd = Path.cwd()
 
     ensure_session(session_name, cwd)
-
-    run(
-        [
-            "tmux",
-            "send-keys",
-            "-t",
-            session_name,
-            "cdi",
-            "Enter",
-        ]
-    )
 
 
 if __name__ == "__main__":
