@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
+import argparse
 from pathlib import Path
 from subprocess import CompletedProcess, Popen
 from typing import Iterable, List, Dict, Tuple
@@ -169,7 +170,20 @@ def ensure_session(name: str, directory: Path) -> None:
         run(["tmux", "attach-session", "-t", name])
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-o",
+        "--output",
+        action="store_true",
+        help="Output the selected directory and exit",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
+    args = parse_args()
+
     paths: list[str] = [
         "~/.local/src",
         "~/.dotfiles/.config",
@@ -182,9 +196,15 @@ def main() -> None:
         return
 
     if selected in mapping:
-        ensure_session(selected, Path(mapping[selected]))
+        target = Path(mapping[selected]).expanduser().resolve()
     else:
-        ensure_session(selected, Path("~"))
+        target = Path("~").expanduser().resolve()
+
+    if args.output:
+        print(target)
+        return
+
+    ensure_session(selected, target)
 
 
 if __name__ == "__main__":
