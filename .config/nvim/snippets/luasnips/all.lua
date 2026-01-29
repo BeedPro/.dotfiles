@@ -5,6 +5,6 @@ local t = ls.text_node
 
 ls.add_snippets("all", {
   s("hello_world", {
-    t "Hello, world!\n",
+    t "Hello, world!\\n",
   }),
 })
