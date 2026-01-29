@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
-
-sudo mv $HOME/.local/bin/zoxide /usr/local/bin/zoxide
-sudo mv -v $HOME/.local/share/man/man1/zoxide* /usr/local/man/man1
