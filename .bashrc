@@ -69,6 +69,14 @@ elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 
-PROMPT='PS1_CMD1=$(__git_ps1 " (%s)")'; PS1='\n\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]${PS1_CMD1}\n> '
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+# https://unix.stackexchange.com/questions/767621/i-cant-get-bash-history-to-update-instantly-in-all-terminals
+PROMPT='
+PS1_VENV=${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }
+PS1_CMD1=$(__git_ps1 "%s")
+'
+
+PS1='\n\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]\n\[\e[93m\]${PS1_VENV}\[\e[0m\]${PS1_CMD1}\n> '
+
 PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT"
-# PROMPT_COMMAND="history -a; history -n; $PROMPT"
