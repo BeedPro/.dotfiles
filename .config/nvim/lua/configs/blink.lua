@@ -6,10 +6,20 @@ local opts = {
   sources = { default = { "lsp", "snippets", "buffer", "path" } },
 
   keymap = {
-    preset = "default",
+    preset = "none",
+
+    ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+    ["<C-e>"] = { "hide", "fallback" },
     ["<C-y>"] = { "accept", "fallback" },
+
+    ["<Up>"] = { "select_prev", "fallback" },
+    ["<Down>"] = { "select_next", "fallback" },
     ["<C-n>"] = { "select_next", "fallback" },
     ["<C-p>"] = { "select_prev", "fallback" },
+
+    ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+    ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+
     ["<C-j>"] = { "snippet_forward", "fallback" },
     ["<C-k>"] = { "snippet_backward", "fallback" },
   },
