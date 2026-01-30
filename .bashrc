@@ -25,7 +25,7 @@ export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
 export HISTTIMEFORMAT='%F %T '
 
 export MANPAGER='nvim +Man!'
-export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --color=bg:-1,bg+:-1,preview-bg:-1"
+source $HOME/.config/fzf/light.sh
 
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH="$HOME/.go"
