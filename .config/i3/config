@@ -49,24 +49,7 @@ bindsym $mod+Shift+w exec --no-startup-id firefox --private-window
 bindsym $mod+n exec --no-startup-id alacritty -e nvim -c ":Org agenda"
 bindsym $mod+Shift+n exec --no-startup-id alacritty -e nvim -c ":Org capture"
 
-bindsym $mod+x exec --no-startup-id i3lock \
-  --color=1e1e2eff \
-  --indicator \
-  --radius 120 \
-  --ring-width 8 \
-  --inside-color=1e1e2eff \
-  --ring-color=45475aff \
-  --line-color=1e1e2eff \
-  --insidever-color=89b4faff \
-  --ringver-color=89b4faff \
-  --insidewrong-color=f38ba8ff \
-  --ringwrong-color=f38ba8ff \
-  --keyhl-color=a6e3a1ff \
-  --bshl-color=fab387ff \
-  --separator-color=313244ff \
-  --verif-color=89b4faff \
-  --wrong-color=f38ba8ff \
-  --modif-color=fab387ff
+bindsym $mod+x exec --no-startup-id i3lock -c "#080808"
 
 bindsym $mod+Shift+x exec --no-startup-id ~/.local/scripts/powermenu.sh
 bindsym $mod+Shift+c exec --no-startup-id ~/.local/scripts/killmenu.sh
