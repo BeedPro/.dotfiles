@@ -25,7 +25,7 @@ export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
 export HISTTIMEFORMAT='%F %T '
 
 export MANPAGER='nvim +Man!'
-source $HOME/.config/fzf/light.sh
+source $HOME/.config/fzf/dark.sh
 
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH="$HOME/.go"
@@ -54,7 +54,7 @@ else
 fi
 
 if command -v bat >/dev/null 2>&1; then
-  alias cat='bat -p'
+  alias cat='bat -p --theme gruvbox-dark'
 fi
 
 alias mkdir='mkdir -v'

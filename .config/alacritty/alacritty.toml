@@ -1,5 +1,5 @@
 general.import = [
-  "~/.config/alacritty/light.toml"
+  "~/.config/alacritty/dark.toml"
 ]
 
 
