@@ -12,7 +12,6 @@ return {
   "debugpy",
   "java-debug-adapter",
   "java-test",
-  "netcoredbg",
 
   -- Linters
   "ruff",
@@ -21,7 +20,6 @@ return {
   -- Formatters
   "prettypst",
   "clang-format",
-  "csharpier",
   "prettierd",
   "stylua",
   "fourmolu",
