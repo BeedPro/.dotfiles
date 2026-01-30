@@ -1,4 +1,4 @@
 #!/bin/bash
 
-sudo apt i3blocks install dex libanyevent-i3-perl libasync-interrupt-perl libconfuse-common libev-perl libjson-xs-perl i3-wm  libanyevent-perl libcommon-sense-perl libconfuse2 libguard-perl libtypes-serialiser-perl xssproxy
+sudo apt i3blocks i3lock install dex libanyevent-i3-perl libasync-interrupt-perl libconfuse-common libev-perl libjson-xs-perl i3-wm  libanyevent-perl libcommon-sense-perl libconfuse2 libguard-perl libtypes-serialiser-perl xssproxy
 
