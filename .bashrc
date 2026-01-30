@@ -54,7 +54,7 @@ else
 fi
 
 if command -v bat >/dev/null 2>&1; then
-  alias cat='bat -p --theme gruvbox-dark'
+  alias cat='bat --theme gruvbox-dark -p'
 fi
 
 alias mkdir='mkdir -v'
