@@ -5,3 +5,4 @@ export FZF_DEFAULT_OPTS=" \
 --color=selected-bg:#c9cbd1 \
 --color=border:#8a8980,label:#545464"
 
+tmux set-environment -g FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS" 2>/dev/null
