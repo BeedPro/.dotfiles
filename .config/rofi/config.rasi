@@ -1,4 +1,4 @@
-@theme "gruvbox-dark-hard"
+@theme "gruvbox-light-hard"
 
 window {
     font: "monospace 12";
