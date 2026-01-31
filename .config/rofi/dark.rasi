@@ -1,0 +1,30 @@
+* {
+  rosewater: #a292a3;  /* normal magenta */
+  flamingo:  #e46876;  /* bright red */
+  pink:      #938aa9;  /* bright magenta */
+  mauve:     #938aa9;  /* bright magenta */
+  red:       #c4746e;  /* normal red */
+  maroon:    #e46876;  /* bright red */
+  peach:     #b6927b;  /* indexed 16 */
+  yellow:    #c4b28a;  /* normal yellow */
+  green:     #8a9a7b;  /* normal green */
+  teal:      #8ea4a2;  /* normal cyan */
+  sky:       #7fb4ca;  /* bright blue */
+  sapphire:  #8ba4b0;  /* normal blue */
+  blue:      #8ba4b0;  /* normal blue */
+  lavender:  #938aa9;  /* bright magenta */
+
+  text:      #C5C9C7;  /* primary foreground */
+  subtext1:  #c8c093;  /* normal white */
+  subtext0:  #A4A7A4;  /* bright black */
+  overlay2:  #A4A7A4;  /* bright black */
+  overlay1:  #393B44;  /* selection background */
+  overlay0:  #A4A7A4;  /* bright black */
+
+  surface2:  #393B44;  /* selection background */
+  surface1:  #090E13;  /* base */
+  surface0:  #090E13;  /* base */
+  base:      #090E13;  /* primary background */
+  mantle:    #090E13;  /* base */
+  crust:     #090E13;  /* deepest background */
+}

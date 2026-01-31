@@ -118,6 +118,51 @@ bindsym $mod+Mod1+r reload
 bindsym $mod+Mod1+Shift+r restart
 bindsym $mod+Mod1+c exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
+
+# Light
+set $base        #f2f1ef
+set $text        #545464
+set $crust       #14171d
+set $surface2    #c9cbd1
+set $overlay0    #8a8980
+
+set $accent      #624c83
+set $indicator   #b35b79
+set $alert       #e82424
+set $warning     #e98a00
+
+# Dark
+# set $base        #090E13
+# set $text        #C5C9C7
+# set $crust       #090E13
+# set $surface2    #393B44
+# set $overlay0    #A4A7A4
+#
+# set $accent      #938aa9
+# set $indicator   #a292a3
+# set $alert       #e46876
+# set $warning     #b6927b
+
+# class                  border      bg         text     indicator    child_border
+client.focused           $accent     $accent    $base    $indicator   $accent
+client.focused_inactive  $overlay0   $accent    $base    $indicator   $overlay0
+client.unfocused         $overlay0   $base      $text    $indicator   $overlay0
+client.urgent            $warning    $accent    $warning $overlay0    $warning
+client.placeholder       $overlay0   $accent    $base    $overlay0    $overlay0
+client.background        $base
+
 bar {
   status_command i3blocks
+  colors {
+    background         $base
+    statusline         $text
+    focused_statusline $text
+    focused_separator  $base
+
+    # target           border bg        text
+    focused_workspace  $base  $accent   $base
+    active_workspace   $base  $surface2 $text
+    inactive_workspace $base  $base     $text
+    urgent_workspace   $base  $alert    $crust
+  }
 }
