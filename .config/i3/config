@@ -122,7 +122,6 @@ bindsym $mod+Mod1+c exec "i3-nagbar -t warning -m 'You pressed the exit shortcut
 # Light
 set $base        #f2f1ef
 set $text        #545464
-set $crust       #14171d
 set $surface2    #c9cbd1
 set $overlay0    #8a8980
 
@@ -134,7 +133,6 @@ set $warning     #e98a00
 # Dark
 # set $base        #090E13
 # set $text        #C5C9C7
-# set $crust       #090E13
 # set $surface2    #393B44
 # set $overlay0    #A4A7A4
 #
@@ -163,6 +161,6 @@ bar {
     focused_workspace  $base  $accent   $base
     active_workspace   $base  $surface2 $text
     inactive_workspace $base  $base     $text
-    urgent_workspace   $base  $alert    $crust
+    urgent_workspace   $base  $alert    $base
   }
 }
