@@ -31,6 +31,8 @@ SYSTEM=(
   lxpolkit
   aspell
   aspell-en
+  fonts-noto
+  fonts-noto-color-emoji
 )
 
 X11_TOOLS=(
