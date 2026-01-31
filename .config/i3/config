@@ -125,7 +125,7 @@ set $text        #545464
 set $surface2    #c9cbd1
 set $overlay0    #8a8980
 
-set $accent      #624c83
+set $accent      #4d699b
 set $indicator   #b35b79
 set $alert       #e82424
 set $warning     #e98a00
@@ -136,7 +136,7 @@ set $warning     #e98a00
 # set $surface2    #393B44
 # set $overlay0    #A4A7A4
 #
-# set $accent      #938aa9
+# set $accent      #8ba4b0
 # set $indicator   #a292a3
 # set $alert       #e46876
 # set $warning     #b6927b
