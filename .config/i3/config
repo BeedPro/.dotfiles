@@ -18,7 +18,6 @@ workspace 9 output DP-4
 for_window [class="discord"] border normal
 
 assign [class="discord"] number 7
-assign [class="Beeper"] number 7
 assign [class="KeePassXC"] number 8
 assign [class="eu.betterbird.Betterbird"] number 9
 
