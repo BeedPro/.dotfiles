@@ -10,10 +10,10 @@ return {
         dark = "zen",
         light = "pearl",
       },
-      foreground = "saturated",
-      overrides = function()
+      overrides = function(colors)
         return {
           LspReferenceWrite = { underline = false },
+          WinSeparator = { fg = colors.palette.gray3 },
         }
       end,
     }
