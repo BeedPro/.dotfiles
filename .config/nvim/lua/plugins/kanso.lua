@@ -10,6 +10,7 @@ return {
         dark = "zen",
         light = "pearl",
       },
+      foreground = "saturated",
       overrides = function()
         return {
           LspReferenceWrite = { underline = false },
