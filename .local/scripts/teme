@@ -1,0 +1,191 @@
+#!/usr/bin/env python3
+from pathlib import Path
+from typing import Dict, Tuple
+import shutil
+
+
+def toggle_config(
+    path: Path,
+    light_to_dark: Dict[str, str],
+    detect_light: str,
+    name: str = "config",
+) -> Tuple[str, str]:
+    """Toggle the theme mode in the config at the path given
+
+    Args:
+        path: path to config file
+        light_to_dark: mapping from light to dark
+        detect_light: detecting if we are in light mode
+        name: name of the config file
+
+    Returns:
+        (old_mode, new_mode)
+
+    Raises:
+        FileNotFoundError: If the config file does not exist
+    """
+    if not path.exists():
+        raise FileNotFoundError(f"{path} not found")
+
+    text = path.read_text()
+
+    mapping: dict[str, str] = {}
+    old_mode: str = ""
+    new_mode: str = ""
+    if detect_light in text:
+        mapping = light_to_dark
+        old_mode = "light"
+        new_mode = "dark"
+    else:
+        mapping = {v: k for k, v in light_to_dark.items()}
+        old_mode = "dark"
+        new_mode = "light"
+
+    for src, dst in mapping.items():
+        text = text.replace(src, dst)
+
+    path.write_text(text)
+    return old_mode, new_mode
+
+
+def toggle_bashrc() -> None:
+    bashrc: Path = Path.home() / ".bashrc"
+
+    light_to_dark: dict[str, str] = {
+        "fzf/light.sh": "fzf/dark.sh",
+        "gruvbox-light": "gruvbox-dark",
+    }
+
+    old, new = toggle_config(
+        path=bashrc,
+        light_to_dark=light_to_dark,
+        detect_light="fzf/light.sh",
+        name="bashrc",
+    )
+
+    print(f"~/.bashrc: {old} => {new}")
+
+
+def toggle_nvim() -> None:
+    nvim_config: Path = Path.home() / ".config/nvim/lua/options.lua"
+
+    light_to_dark: dict[str, str] = {'o.background = "light"': 'o.background = "dark"'}
+
+    old, new = toggle_config(
+        path=nvim_config,
+        light_to_dark=light_to_dark,
+        detect_light='o.background = "light"',
+        name="options.lua",
+    )
+
+    print(f"~/.config/nvim/lua/options.lua: {old} => {new}")
+
+
+def toggle_alacritty() -> None:
+    alacritty_config: Path = Path.home() / ".config/alacritty/alacritty.toml"
+
+    light_to_dark: dict[str, str] = {"light.toml": "dark.toml"}
+
+    old, new = toggle_config(
+        path=alacritty_config,
+        light_to_dark=light_to_dark,
+        detect_light="light.toml",
+        name="alacritty.toml",
+    )
+
+    print(f"~/.config/alacritty/alacritty.toml: {old} => {new}")
+
+
+def toggle_dunst() -> None:
+    dunst_dir: Path = Path.home() / ".config/dunst"
+    dunstrc: Path = dunst_dir / "dunstrc"
+    themes_dir: Path = dunst_dir / "themes"
+
+    light_theme: Path = themes_dir / "light.conf"
+    dark_theme: Path = themes_dir / "dark.conf"
+
+    if not dunstrc.exists():
+        raise FileNotFoundError("dunstrc not found")
+
+    if not light_theme.exists() or not dark_theme.exists():
+        raise FileNotFoundError("Dunst theme files missing")
+
+    current = dunstrc.read_text()
+
+    if "theme: light" in current:
+        src = dark_theme
+        old = "light"
+        new = "dark"
+    else:
+        src = light_theme
+        old = "dark"
+        new = "light"
+
+    shutil.copyfile(src, dunstrc)
+
+    print(f"~/.config/dunst/dunstrc: {old} => {new}")
+
+
+def toggle_i3() -> None:
+    i3_dir = Path.home() / ".config/i3"
+    config = i3_dir / "config"
+
+    light_theme = i3_dir / "light.conf"
+    dark_theme = i3_dir / "dark.conf"
+
+    if not config.exists():
+        raise FileNotFoundError("i3 config not found")
+
+    if not light_theme.exists() or not dark_theme.exists():
+        raise FileNotFoundError("i3 theme files missing")
+
+    text = config.read_text()
+
+    marker = "# Theme: Auto-script switcher"
+    if marker not in text:
+        raise RuntimeError("Theme marker not found in i3 config")
+
+    head, current_theme = text.split(marker, 1)
+
+    if "# Light" in current_theme:
+        theme_file = dark_theme
+        old, new = "light", "dark"
+    else:
+        theme_file = light_theme
+        old, new = "dark", "light"
+
+    new_theme = theme_file.read_text().rstrip()
+
+    new_config = head.rstrip() + "\n\n" + marker + "\n\n" + new_theme + "\n"
+
+    config.write_text(new_config)
+
+    print(f"~/.config/i3/config: {old} => {new}")
+
+
+def toggle_rofi() -> None:
+    rofi_config: Path = Path.home() / ".config/rofi/config.rasi"
+
+    light_to_dark: dict[str, str] = {'@import "light"': '@import "dark"'}
+
+    old, new = toggle_config(
+        path=rofi_config,
+        light_to_dark=light_to_dark,
+        detect_light='@import "light"',
+        name="config.rasi",
+    )
+
+    print(f"~/.config/rofi/config.rasi: {old} => {new}")
+
+
+def main():
+    toggle_bashrc()
+    toggle_nvim()
+    toggle_alacritty()
+    toggle_dunst()
+    toggle_i3()
+    toggle_rofi()
+
+
+if __name__ == "__main__":
+    main()
