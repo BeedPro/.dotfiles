@@ -118,6 +118,7 @@ bindsym $mod+Mod1+r reload
 bindsym $mod+Mod1+Shift+r restart
 bindsym $mod+Mod1+c exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
+# Theme: Auto-script switcher
 
 # Light
 set $base        #f2f1ef
@@ -129,17 +130,6 @@ set $accent      #4d699b
 set $indicator   #b35b79
 set $alert       #e82424
 set $warning     #e98a00
-
-# Dark
-# set $base        #090E13
-# set $text        #C5C9C7
-# set $surface2    #393B44
-# set $overlay0    #A4A7A4
-#
-# set $accent      #8ba4b0
-# set $indicator   #a292a3
-# set $alert       #e46876
-# set $warning     #b6927b
 
 # class                  border      bg         text     indicator    child_border
 client.focused           $accent     $accent    $base    $indicator   $accent
