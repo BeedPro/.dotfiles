@@ -145,7 +145,7 @@ set $warning     #e98a00
 client.focused           $accent     $accent    $base    $indicator   $accent
 client.focused_inactive  $overlay0   $accent    $base    $indicator   $overlay0
 client.unfocused         $overlay0   $base      $text    $indicator   $overlay0
-client.urgent            $warning    $accent    $warning $overlay0    $warning
+client.urgent            $warning    $warning   $base    $overlay0    $warning
 client.placeholder       $overlay0   $accent    $base    $overlay0    $overlay0
 client.background        $base
 
