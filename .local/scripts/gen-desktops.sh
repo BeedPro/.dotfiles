@@ -9,6 +9,8 @@ TERMINAL=alacritty
 
 APPS=(
   "Godot|godot"
+  "Chat|$HOME/.local/scripts/bulk-open chat"
+  "Email|$HOME/.local/scripts/bulk-open email"
 )
 
 for entry in "${APPS[@]}"; do
