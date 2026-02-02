@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -e
+
+BATCH="$1"
+
+if [[ -z "$BATCH" ]]; then
+  echo "Usage: $0 {chat|email}"
+  exit 1
+fi
+
+case "$BATCH" in
+  chat)
+    URLS=(
+      "https://app.element.io/"
+      "https://discord.com/app"
+      "https://web.whatsapp.com/"
+    )
+    ;;
+  email)
+    URLS=(
+      "https://mail.google.com"
+      "https://outlook.live.com"
+      "https://outlook.office.com"
+      "https://mail.proton.me"
+    )
+    ;;
+  *)
+    echo "Unknown batch: $BATCH"
+    echo "Available batches: social, email, work"
+    exit 1
+    ;;
+esac
+
+# Open each URL in its own new window
+for url in "${URLS[@]}"; do
+  firefox --new-window "$url" &
+done
