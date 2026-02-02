@@ -6,7 +6,6 @@ mpd
 lxpolkit &
 
 flatpak run org.keepassxc.KeePassXC &
-flatpak run eu.betterbird.Betterbird &
 flatpak run com.borgbase.Vorta &
 
 xss-lock --transfer-sleep-lock -- slock --nofork &
