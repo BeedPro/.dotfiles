@@ -28,8 +28,8 @@
 (defalias
   lyr (layer-while-held layers)
   [   (multi f24 (tap-hold $tt $ht [ (layer-while-held layers)))
-  spc (multi f24 (tap-hold $tt $ht spc (layer-while-held numbers)))
-  tab (multi f24 (tap-hold $tt $ht tab (layer-while-held symbols)))
+  spc (multi f24 (tap-hold $tt $ht spc (layer-while-held symnum)))
+  tab (multi f24 (tap-hold $tt $ht tab (layer-while-held nav)))
 
   a (multi f24 (tap-hold $tt $ht a lmet))
   s (multi f24 (tap-hold $tt $ht s lalt))
@@ -54,43 +54,35 @@
   ftb (multi f24 (tap-hold $tt $ht tab (layer-while-held functions)))
 )
 
-(deflayer numbers
+(deflayer symnum
   XX        XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   XX   XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   1    2    3     4    5    6    7    8    9    0    @lyr   XX   XX   XX    XX     XX     XX   XX  XX
-  @ftb XX   del  prtsc S-3  _    left down up   rght ralt _    XX                            XX   XX  XX
-  XX   XX   del  _     _    _    home pgdn pgup end  _    _              XX    XX            XX   XX      XX
+  XX   1    2    3     4    5    6    7    8    9    0    @lyr XX   XX   XX    XX     XX     XX   XX  XX
+  @ftb S-=  =    S-[   S-]  S--  -    [    ]    S-;  ;     _   XX                            XX   XX  XX
+  XX   _    grv  S-\   \    S-'  '    S-#  #    /    S-/   _             XX    XX            XX   XX      XX
   XX   XX   XX              XX                                 XX   XX   XX    XX     XX
 )
 
 (defalias
   fsp (multi f24 (tap-hold $tt $ht spc (layer-while-held functions)))
-  ospp (multi lctl lalt =)
-  osps (multi lctl lshift lalt =)
 )
 
-(deflayer symbols
-  XX        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   S-1  S-'  #    S-4  S-5  S-6  S-7  S-8  grv  S-#  @lyr   XX   XX   XX    XX     XX     XX   XX  XX
-  XX   S-2  [    S-[  S-9  S-,  /    -    =    S-;  ;    XX   XX                            XX   XX  XX
-  XX   '    ]    S-]  S-0  S-.  \    S--  S-=  S-\  S-/  XX   XX              XX            XX   XX      XX
-  XX   XX   XX             @fsp                               XX   XX   XX    XX     XX
-)
-
-(defalias
-  rec (multi lctl lsft lalt =)
-  pau (multi lctl lalt =)
-  cli (multi lctl lalt -)
+(deflayer nav
+  XX         XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   prtsc pgup del  XX   XX   XX   XX   XX   XX   XX   @lyr XX   XX   XX    XX     XX     XX   XX  XX
+  XX   home  pgdn end  ins  XX   left down up   rght ralt XX   XX                            XX   XX  XX
+  XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX              XX            XX   XX      XX
+  XX   XX    XX             @fsp                               XX   XX   XX    XX     XX
 )
 
 (deflayer functions
   XX        XX   XX   XX   XX   XX    XX      XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   XX   XX   XX   XX   XX   XX    XX      XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   f1   f2   f3   f4   XX   XX    @rec    @cli  @pau  prev @lyr   XX   XX   XX    XX     XX     XX   XX  XX
+  XX   f1   f2   f3   f4   XX   XX    XX      XX    XX    prev @lyr XX   XX   XX    XX     XX     XX   XX  XX
   XX   f5   f6   f7   f8   XX   brdwn voldwn  volu  bru   pp   XX   XX                            XX   XX  XX
-  XX   f9   f10  f11  f12  XX   @ospp micmute mute  @osps next XX             XX    XX            XX   XX      XX
-  XX   XX   XX             XX                                      XX   XX   XX    XX     XX
+  XX   _    f9   f10  f11  f12  XX    micmute mute  XX    next XX              XX          XX     XX   XX      XX
+  XX   XX   XX             XX                                  XX   XX   XX    XX    XX
 )
 
 (deflayer qwerty
