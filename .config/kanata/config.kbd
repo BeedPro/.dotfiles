@@ -58,8 +58,8 @@
   XX        XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   XX   XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   1    2    3     4    5    6    7    8    9    0    @lyr XX   XX   XX    XX     XX     XX   XX  XX
-  @ftb S-=  =    S-[   S-]  S--  -    [    ]    S-;  ;     _   XX                            XX   XX  XX
-  XX   _    grv  S-\   \    S-'  '    S-#  #    /    S-/   _             XX    XX            XX   XX      XX
+  @ftb S-=  =    S-[   S-]  S--  -    [    ]    S-;  ;    lsft XX                            XX   XX  XX
+  XX   _    grv  S-\   \    S-'  '    S-#  #    /    S-/  _              XX    XX            XX   XX      XX
   XX   XX   XX              XX                                 XX   XX   XX    XX     XX
 )
 
