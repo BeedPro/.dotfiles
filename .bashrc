@@ -41,6 +41,7 @@ cdi() {
 }
 
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
+alias teme='~/.local/scripts/teme'
 
 alias vim="/usr/local/bin/nvim"
 alias svim="sudo -E /usr/local/bin/nvim"
