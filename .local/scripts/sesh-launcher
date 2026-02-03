@@ -76,17 +76,16 @@ def add_paths(
 def create_mapping(paths: list[str]) -> Dict[str, str]:
     src: List[str] = find_dirs(paths[0], 2)
     config: List[str] = find_dirs(paths[1])
+    compendium: List[str] = find_dirs(paths[2])
 
     out: Dict[str, str] = {
-        "agim": "~/Compendium/Agenda",
-        "slipbox": "~/Compendium/Slipbox",
-        "workspace": "~/Compendium/Workspace",
         "dotfiles": "~/.dotfiles",
         "scripts": "~/.local/scripts",
     }
 
     add_paths(out, src, "", paths[0])
     add_paths(out, config, "config/", paths[1])
+    add_paths(out, compendium, "compendium/", paths[2])
 
     return out
 
@@ -128,7 +127,6 @@ def fzf_select(items: List[str]) -> str:
         "--reverse",
         "--height=100%",
         "--exit-0",
-        "--color=bg:-1,bg+:-1,preview-bg:-1",
     ]
 
     p: Popen[str] = subprocess.Popen(
@@ -187,6 +185,7 @@ def main() -> None:
     paths: list[str] = [
         "~/.local/src",
         "~/.dotfiles/.config",
+        "~/Compendium",
     ]
 
     items, mapping = get_all_items(paths)
