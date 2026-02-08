@@ -181,26 +181,32 @@ def toggle_rofi() -> None:
 
 
 def set_wallpaper(mode: str) -> None:
+    wallpaper_dir = Path.home() / ".config/wallpaper"
+
     wallpapers = {
-        "light": Path.home() / ".config/wallpaper/light.jpg",
-        "dark": Path.home() / ".config/wallpaper/dark.jpg",
+        "light": wallpaper_dir / "light.jpg",
+        "dark": wallpaper_dir / "dark.jpg",
     }
 
     wallpaper = wallpapers.get(mode)
     if not wallpaper or not wallpaper.exists():
         raise FileNotFoundError(f"Wallpaper not found for mode: {mode}")
 
+    current = wallpaper_dir / "current.jpg"
+
+    shutil.copyfile(wallpaper, current)
+
     subprocess.run(
         [
             "feh",
             "--no-fehbg",
             "--bg-scale",
-            str(wallpaper),
+            str(current),
         ],
         check=True,
     )
 
-    print(f"Wallpaper set: {mode}")
+    print(f"Wallpaper set: {mode} → {current}")
 
 
 def set_color_scheme(mode: str) -> None:
