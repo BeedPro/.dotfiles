@@ -203,6 +203,23 @@ def set_wallpaper(mode: str) -> None:
     print(f"Wallpaper set: {mode}")
 
 
+def set_color_scheme(mode: str) -> None:
+    scheme = "prefer-dark" if mode == "dark" else "prefer-light"
+
+    subprocess.run(
+        [
+            "gsettings",
+            "set",
+            "org.gnome.desktop.interface",
+            "color-scheme",
+            scheme,
+        ],
+        check=True,
+    )
+
+    print(f"GTK color-scheme: {scheme}")
+
+
 def main():
     mode = toggle_bashrc()
     toggle_nvim()
@@ -212,6 +229,7 @@ def main():
     toggle_rofi()
 
     set_wallpaper(mode)
+    set_color_scheme(mode)
 
 
 if __name__ == "__main__":
