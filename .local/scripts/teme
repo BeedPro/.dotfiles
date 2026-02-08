@@ -124,7 +124,7 @@ def toggle_dunst() -> None:
         new = "light"
 
     shutil.copyfile(src, dunstrc)
-
+    subprocess.run(["killall", "dunst"], check=False)
     print(f"~/.config/dunst/dunstrc: {old} => {new}")
 
 
