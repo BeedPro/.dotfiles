@@ -2,6 +2,7 @@
 from pathlib import Path
 from typing import Dict, Tuple
 import shutil
+import subprocess
 
 
 def toggle_config(
@@ -48,7 +49,7 @@ def toggle_config(
     return old_mode, new_mode
 
 
-def toggle_bashrc() -> None:
+def toggle_bashrc() -> str:
     bashrc: Path = Path.home() / ".bashrc"
 
     light_to_dark: dict[str, str] = {
@@ -64,6 +65,7 @@ def toggle_bashrc() -> None:
     )
 
     print(f"~/.bashrc: {old} => {new}")
+    return new
 
 
 def toggle_nvim() -> None:
@@ -178,13 +180,38 @@ def toggle_rofi() -> None:
     print(f"~/.config/rofi/config.rasi: {old} => {new}")
 
 
+def set_wallpaper(mode: str) -> None:
+    wallpapers = {
+        "light": Path.home() / ".config/wallpaper/light.jpg",
+        "dark": Path.home() / ".config/wallpaper/dark.jpg",
+    }
+
+    wallpaper = wallpapers.get(mode)
+    if not wallpaper or not wallpaper.exists():
+        raise FileNotFoundError(f"Wallpaper not found for mode: {mode}")
+
+    subprocess.run(
+        [
+            "feh",
+            "--no-fehbg",
+            "--bg-scale",
+            str(wallpaper),
+        ],
+        check=True,
+    )
+
+    print(f"Wallpaper set: {mode}")
+
+
 def main():
-    toggle_bashrc()
+    mode = toggle_bashrc()
     toggle_nvim()
     toggle_alacritty()
     toggle_dunst()
     toggle_i3()
     toggle_rofi()
+
+    set_wallpaper(mode)
 
 
 if __name__ == "__main__":
