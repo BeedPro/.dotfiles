@@ -11,6 +11,7 @@ APPS=(
   "Godot|godot"
   "Chat|$HOME/.local/scripts/bulk-open chat"
   "Email|$HOME/.local/scripts/bulk-open email"
+  'Calendar|firefox --new-window "https://calendar.google.com" &'
 )
 
 for entry in "${APPS[@]}"; do
