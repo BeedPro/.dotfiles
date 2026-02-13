@@ -22,4 +22,4 @@ keyboard=$(setxkbmap -query | awk '
     /^variant/{variant=" ("$2")"}
     END{printf("%s%s",layout,variant)}')
 
-echo "[.] "$keyboard
+echo "󰌌 "$keyboard

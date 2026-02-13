@@ -74,14 +74,27 @@ def get_current_and_next(timings):
 
     for i, (name, t) in enumerate(parsed):
         if now < t:
-            current = parsed[i - 1][0] if i > 0 else "Isha"
+            if i > 0:
+                current_name = parsed[i - 1][0]
+                current_time = timings[current_name].split(" ")[0]
+            else:
+                current_name = "Isha"
+                current_time = timings["Isha"].split(" ")[0]
+
             next_name = name
             next_time = timings[name].split(" ")[0]
-            return current, next_name, next_time
+
+            return current_name, current_time, next_name, next_time
 
     # After Isha → current = Isha, next = tomorrow Fajr
+    current_name = "Isha"
+    current_time = timings["Isha"].split(" ")[0]
+
     fajr_time = parse_time_today(timings["Fajr"]) + timedelta(days=1)
-    return "Isha", "Fajr", fajr_time.strftime("%H:%M")
+    next_name = "Fajr"
+    next_time = fajr_time.strftime("%H:%M")
+
+    return current_name, current_time, next_name, next_time
 
 
 def main():
@@ -89,8 +102,8 @@ def main():
         data = load_prayer_times()
         timings = data["data"]["timings"]
 
-        current, next_name, next_time = get_current_and_next(timings)
-        print(f"[*] {current} > {next_name} {next_time}")
+        current_name, current_time, next_name, next_time = get_current_and_next(timings)
+        print(f"󰽥 {current_name} ({next_name} {next_time})")
 
     except Exception:
         print("Prayer --")
