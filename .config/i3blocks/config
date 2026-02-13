@@ -1,3 +1,7 @@
+[disk]
+command=~/.local/scripts/disk
+interval=30
+
 [keyboard]
 command=~/.local/scripts/xkblayout
 signal=10
@@ -6,10 +10,6 @@ interval=once
 [battery]
 command=~/.local/scripts/battery
 interval=60
-
-[disk]
-command=~/.local/scripts/disk
-interval=30
 
 [prayer]
 command=~/.local/scripts/prayer-times
