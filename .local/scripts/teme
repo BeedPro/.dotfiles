@@ -193,16 +193,17 @@ def set_wallpaper(mode: str) -> None:
         raise FileNotFoundError(f"Wallpaper not found for mode: {mode}")
 
     current = wallpaper_dir / "current.jpg"
-
     shutil.copyfile(wallpaper, current)
 
+    screenlayout_script = Path.home() / ".screenlayout/set-screens.sh"
+
+    if not screenlayout_script.exists():
+        raise FileNotFoundError(
+            f"Screen layout script not found: {screenlayout_script}"
+        )
+
     subprocess.run(
-        [
-            "feh",
-            "--no-fehbg",
-            "--bg-scale",
-            str(current),
-        ],
+        [str(screenlayout_script)],
         check=True,
     )
 
