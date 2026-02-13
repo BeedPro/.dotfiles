@@ -15,6 +15,9 @@ workspace 7 output DP-4 eDP-1
 workspace 8 output DP-4 eDP-1
 workspace 9 output DP-4 eDP-1
 
+gaps inner 0
+gaps outer 0
+
 for_window [class="discord"] border normal
 
 assign [class="KeePassXC"] number 9
