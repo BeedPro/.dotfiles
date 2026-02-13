@@ -11,6 +11,10 @@ interval=30
 command=~/.local/scripts/battery
 interval=60
 
+[prayer]
+command=~/.local/scripts/prayer-times
+interval=60
+
 [datetime]
 command=~/.local/scripts/datetime
 interval=5
