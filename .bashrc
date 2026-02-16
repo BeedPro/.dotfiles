@@ -88,3 +88,7 @@ PS1_CMD1=$(__git_ps1 ":%s")
 PS1='\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]${PS1_CMD1}\n\[\e[93m\]${PS1_VENV}\[\e[0m\]> '
 
 PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
