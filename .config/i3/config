@@ -126,16 +126,16 @@ bindsym $mod+Mod1+c exec "i3-nagbar -t warning -m 'You pressed the exit shortcut
 
 # Theme: Auto-script switcher
 
-# Dark
-set $base        #090E13
-set $text        #C5C9C7
-set $surface2    #393B44
-set $overlay0    #A4A7A4
+# Light
+set $base        #f2f1ef
+set $text        #545464
+set $surface2    #c9cbd1
+set $overlay0    #8a8980
 
-set $accent      #8ba4b0
-set $indicator   #a292a3
-set $alert       #e46876
-set $warning     #b6927b
+set $accent      #4d699b
+set $indicator   #b35b79
+set $alert       #e82424
+set $warning     #e98a00
 
 # class                  border      bg         text     indicator    child_border
 client.focused           $accent     $accent    $base    $indicator   $accent
