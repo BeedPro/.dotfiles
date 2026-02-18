@@ -1,4 +1,4 @@
-@import "dark"
+@import "light"
 
 * {
   selected-active-foreground:  @background;
