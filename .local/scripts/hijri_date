@@ -13,11 +13,6 @@ HIJRI_CACHE = "/tmp/hijri-date.json"
 API_URL = "https://api.aladhan.com/v1/gToH"
 
 
-# ----------------------------
-# Helpers
-# ----------------------------
-
-
 def gregorian_str(dt):
     return dt.strftime("%d-%m-%Y")
 
@@ -100,17 +95,12 @@ def fetch_hijri(gregorian_date):
     return data["data"]["hijri"]
 
 
-# ----------------------------
-# Main
-# ----------------------------
-
-
 def main():
     try:
         effective_date = effective_gregorian_date()
         cache_key = gregorian_str(effective_date)
     except Exception:
-        print("--")
+        print(":: --")
         return
 
     cache = load_cache()
@@ -125,11 +115,11 @@ def main():
             if cache:
                 hijri = cache["hijri"]
             else:
-                print("--")
+                print(":: --")
                 return
 
     print(
-        f"{hijri['year']}.{int(hijri['month']['number']):02d}.{int(hijri['day']):02d}"
+        f":: {hijri['year']}.{int(hijri['month']['number']):02d}.{int(hijri['day']):02d}"
     )
 
 
