@@ -2,10 +2,12 @@
 
 import json
 import os
+import subprocess
 from datetime import datetime, timedelta
 from urllib.request import Request, urlopen
 
 PRAYER_CACHE = "/tmp/prayer-times.json"
+PRAYER_SCRIPT = os.path.expanduser("~/.local/scripts/prayer-times")
 HIJRI_CACHE = "/tmp/hijri-date.json"
 
 API_URL = "https://api.aladhan.com/v1/gToH"
@@ -20,9 +22,18 @@ def gregorian_str(dt):
     return dt.strftime("%d-%m-%Y")
 
 
+def generate_cache():
+    subprocess.run(
+        [PRAYER_SCRIPT],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=True,
+    )
+
+
 def read_prayer_cache():
     if not os.path.exists(PRAYER_CACHE):
-        raise RuntimeError("Prayer cache missing")
+        generate_cache()
 
     with open(PRAYER_CACHE) as f:
         return json.load(f)
