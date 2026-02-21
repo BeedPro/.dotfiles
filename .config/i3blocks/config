@@ -1,5 +1,9 @@
 separator=false
 
+[battery]
+command=~/.local/scripts/battery
+interval=60
+
 [hijri]
 command=~/.local/scripts/hijri_date
 interval=60
@@ -11,7 +15,3 @@ interval=60
 [datetime]
 command=~/.local/scripts/datetime
 interval=5
-
-[battery]
-command=~/.local/scripts/battery
-interval=60
