@@ -1,3 +1,5 @@
+separator=false
+
 [battery]
 command=~/.local/scripts/battery
 interval=60
