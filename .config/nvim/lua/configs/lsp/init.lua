@@ -19,7 +19,7 @@ function M.setup()
     on_init = client.on_init,
   })
 
-  local servers = { "lua_ls", "ty", "clangd", "tinymist", "tailwindcss", "svelte", "gdscript" }
+  local servers = { "lua_ls", "ty", "clangd", "tinymist", "tailwindcss", "svelte", "gdscript", "biome" }
 
   for _, server in ipairs(servers) do
     local ok, config = pcall(require, "configs.lsp.servers." .. server)
