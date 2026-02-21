@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+
+import json
+import os
+from datetime import datetime, timedelta
+from urllib.request import Request, urlopen
+
+PRAYER_CACHE = "/tmp/prayer-times.json"
+HIJRI_CACHE = "/tmp/hijri-date.json"
+
+API_URL = "https://api.aladhan.com/v1/gToH"
+
+
+# ----------------------------
+# Helpers
+# ----------------------------
+
+
+def gregorian_str(dt):
+    return dt.strftime("%d-%m-%Y")
+
+
+def read_prayer_cache():
+    if not os.path.exists(PRAYER_CACHE):
+        raise RuntimeError("Prayer cache missing")
+
+    with open(PRAYER_CACHE) as f:
+        return json.load(f)
+
+
+def get_maghrib_time():
+    data = read_prayer_cache()
+    maghrib = data["data"]["timings"]["Maghrib"].split(" ")[0]
+    return datetime.strptime(maghrib, "%H:%M").time()
+
+
+def after_maghrib(maghrib_time):
+    return datetime.now().time() >= maghrib_time
+
+
+def effective_gregorian_date():
+    """
+    Before Maghrib  -> today
+    After Maghrib   -> tomorrow
+    """
+    today = datetime.now()
+    maghrib = get_maghrib_time()
+
+    if after_maghrib(maghrib):
+        return today + timedelta(days=1)
+
+    return today
+
+
+def load_cache():
+    if not os.path.exists(HIJRI_CACHE):
+        return None
+
+    try:
+        with open(HIJRI_CACHE) as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
+def save_cache(key, hijri_data):
+    payload = {
+        "key": key,
+        "hijri": hijri_data,
+    }
+
+    try:
+        with open(HIJRI_CACHE, "w") as f:
+            json.dump(payload, f)
+    except Exception:
+        pass
+
+
+def fetch_hijri(gregorian_date):
+    url = f"{API_URL}?date={gregorian_str(gregorian_date)}"
+    req = Request(url, headers={"User-Agent": "python"})
+
+    with urlopen(req, timeout=10) as response:
+        data = json.loads(response.read().decode())
+
+    if data.get("code") != 200:
+        raise RuntimeError("API error")
+
+    return data["data"]["hijri"]
+
+
+# ----------------------------
+# Main
+# ----------------------------
+
+
+def main():
+    try:
+        effective_date = effective_gregorian_date()
+        cache_key = gregorian_str(effective_date)
+    except Exception:
+        print("Hijri --")
+        return
+
+    cache = load_cache()
+
+    if cache and cache.get("key") == cache_key:
+        hijri = cache["hijri"]
+    else:
+        try:
+            hijri = fetch_hijri(effective_date)
+            save_cache(cache_key, hijri)
+        except Exception:
+            if cache:
+                hijri = cache["hijri"]
+            else:
+                print("Hijri --")
+                return
+
+    print(
+        f"󰃭 {hijri['year']}.{int(hijri['month']['number']):02d}.{int(hijri['day']):02d} AH"
+    )
+
+
+if __name__ == "__main__":
+    main()

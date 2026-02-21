@@ -15,6 +15,10 @@ interval=60
 command=~/.local/scripts/prayer-times
 interval=60
 
+[hijri]
+command=~/.local/scripts/hijri_date
+interval=60
+
 [datetime]
 command=~/.local/scripts/datetime
 interval=5
