@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-import os
 import json
-from urllib.request import urlopen
-from urllib.parse import urlencode
+import os
 from datetime import datetime, timedelta
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
 CACHE_FILE = "/tmp/prayer-times.json"
 
@@ -103,10 +103,10 @@ def main():
         timings = data["data"]["timings"]
 
         current_name, current_time, next_name, next_time = get_current_and_next(timings)
-        print(f"󰽥 {current_name} ({next_name} {next_time})")
+        print(f"{current_name} ({next_name} {next_time})")
 
     except Exception:
-        print("Prayer --")
+        print("--")
 
 
 if __name__ == "__main__":

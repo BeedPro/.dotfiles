@@ -110,7 +110,7 @@ def main():
         effective_date = effective_gregorian_date()
         cache_key = gregorian_str(effective_date)
     except Exception:
-        print("Hijri --")
+        print(":: --")
         return
 
     cache = load_cache()
@@ -129,7 +129,7 @@ def main():
                 return
 
     print(
-        f"󰃭 {hijri['year']}.{int(hijri['month']['number']):02d}.{int(hijri['day']):02d} AH"
+        f":: {hijri['year']}.{int(hijri['month']['number']):02d}.{int(hijri['day']):02d} AH"
     )
 
 
