@@ -4,7 +4,6 @@ require "mappings.neogen"
 require "mappings.dap"
 require "mappings.snacks"
 require "mappings.neotest"
-require "mappings.nvzone"
 require "mappings.conform"
 require "mappings.typst"
 
