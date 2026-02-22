@@ -32,6 +32,7 @@ local opts = {
       window = { border = "single" },
     },
   },
+  signature = { enabled = true },
 }
 
 return opts

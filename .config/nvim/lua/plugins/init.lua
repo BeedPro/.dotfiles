@@ -70,11 +70,6 @@ return {
   },
 
   {
-    "alexghergh/nvim-tmux-navigation",
-    lazy = false,
-  },
-
-  {
     "stevearc/conform.nvim",
     event = "BufWritePre",
     opts = require "configs.conform",
