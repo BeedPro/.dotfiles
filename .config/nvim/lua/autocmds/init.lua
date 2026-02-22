@@ -7,6 +7,7 @@ require "autocmds.typst"
 require "autocmds.django"
 require "autocmds.oil"
 
+require("autocmds.bigfile").setup {}
 require("autocmds.colorify").run()
 
 autocmd("TextYankPost", {
