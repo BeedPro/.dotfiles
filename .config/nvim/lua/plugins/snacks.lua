@@ -6,7 +6,7 @@ return {
     opts = {
       bigfile = { enabled = true },
       dashboard = { enabled = false },
-      input = { enabled = true },
+      input = { enabled = false },
       notifier = { enabled = true },
       quickfile = { enabled = true },
       statuscolumn = { enabled = true },
