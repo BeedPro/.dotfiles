@@ -6,7 +6,6 @@ return {
 
     dependencies = {
       "rafamadriz/friendly-snippets",
-      "fang2hou/blink-copilot",
       {
         "L3MON4D3/LuaSnip",
         dependencies = "rafamadriz/friendly-snippets",

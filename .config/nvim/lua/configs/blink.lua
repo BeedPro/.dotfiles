@@ -4,15 +4,7 @@ local opts = {
   appearance = { nerd_font_variant = "normal" },
   fuzzy = { implementation = "prefer_rust" },
   sources = {
-    default = { "lsp", "snippets", "buffer", "path", "copilot" },
-    providers = {
-      copilot = {
-        name = "copilot",
-        module = "blink-copilot",
-        async = true,
-        score_offset = 100, -- keeps Copilot near the top
-      },
-    },
+    default = { "lsp", "snippets", "buffer", "path" },
   },
 
   keymap = {
