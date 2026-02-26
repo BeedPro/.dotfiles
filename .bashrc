@@ -92,3 +92,6 @@ PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# opencode
+export PATH=/home/beed/.opencode/bin:$PATH
