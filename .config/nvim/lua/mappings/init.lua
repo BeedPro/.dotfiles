@@ -3,7 +3,6 @@ require "mappings.telescope"
 require "mappings.neogen"
 require "mappings.dap"
 require "mappings.snacks"
-require "mappings.neotest"
 require "mappings.conform"
 require "mappings.typst"
 
