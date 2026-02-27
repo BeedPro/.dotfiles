@@ -6,6 +6,7 @@ require "autocmds.conform"
 require "autocmds.typst"
 require "autocmds.django"
 require "autocmds.oil"
+require "autocmds.lsp_progress"
 
 require("autocmds.colorify").run()
 
