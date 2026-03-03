@@ -1,3 +1,6 @@
 #!/bin/bash
 
+# ~/.var/app/org.mozilla.firefox/config/mozilla/firefox
+# ~/.mozilla/firefox/
+
 ln -sf $HOME/.dotfiles/.mozilla/firefox/user.js $1
