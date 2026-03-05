@@ -159,4 +159,6 @@ bar {
     inactive_workspace $base  $base     $text
     urgent_workspace   $base  $alert    $base
   }
+  mode hide
+  modifier Mod5
 }
