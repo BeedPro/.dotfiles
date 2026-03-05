@@ -1,0 +1,22 @@
+/* Hide tab bar by default */
+#TabsToolbar {
+  display: none !important;
+}
+
+/* Hide navbar */
+#nav-bar {
+  margin-top: -40px !important;
+  opacity: 0 !important;
+  transition: all 0s !important;
+}
+
+/* Show navbar when URL bar (or anything inside toolbox) is focused */
+#navigator-toolbox:focus-within #nav-bar {
+  margin-top: 0 !important;
+  opacity: 1 !important;
+}
+
+/* Show tab bar when focusing URL bar (Ctrl+L) */
+#navigator-toolbox:focus-within #TabsToolbar {
+  display: flex !important;
+}

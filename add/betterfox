@@ -4,3 +4,4 @@
 # ~/.mozilla/firefox/
 
 ln -sf $HOME/.dotfiles/.mozilla/firefox/user.js $1
+ln -sf $HOME/.dotfiles/.mozilla/firefox/chrome $1
