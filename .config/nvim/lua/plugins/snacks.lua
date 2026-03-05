@@ -11,6 +11,7 @@ return {
       quickfile = { enabled = true },
       statuscolumn = { enabled = true },
       words = { enabled = true },
+      gh = { enabled = true },
       scroll = { enabled = false },
       indent = {
         enabled = false,
