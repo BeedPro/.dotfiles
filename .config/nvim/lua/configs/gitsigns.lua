@@ -57,7 +57,7 @@ return {
     map("n", "<leader>hS", gitsigns.stage_buffer, "[H]unk [S]tage buffer")
     map("n", "<leader>hR", gitsigns.reset_buffer, "[H]unk [R]eset buffer")
 
-    map("n", "<leader>hP", gitsigns.preview_hunk, "[H]unk [P]review")
+    map("n", "<leader>hp", gitsigns.preview_hunk, "[H]unk [P]review")
     map("n", "<leader>hi", gitsigns.preview_hunk_inline, "[H]unk preview [I]nline")
 
     map("n", "<leader>hb", function()
