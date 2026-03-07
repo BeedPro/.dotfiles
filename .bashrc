@@ -40,6 +40,11 @@ cdi() {
     clear
 }
 
+openpdf() {
+  setsid zathura "$@" >/dev/null 2>&1 & disown
+  exit
+}
+
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
 alias teme='~/.local/scripts/teme'
 
