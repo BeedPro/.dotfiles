@@ -7,6 +7,10 @@ local autocmd = vim.api.nvim_create_autocmd
 local M = {}
 
 function M.setup()
+  vim.diagnostic.config {
+    underline = false,
+  }
+
   autocmd("LspAttach", {
     callback = function(args)
       attach.on_attach(_, args.buf)
