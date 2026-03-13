@@ -1,26 +1,26 @@
-# theme: dark
+# theme: light
 
 [global]
-background = "#090e13"
-foreground = "#c5c9c7"
-frame_color = "#8ba4b0"
-highlight = "#8ba4b0"
+background = "#f2f1ef"
+foreground = "#545464"
+frame_color = "#4d699b"
+highlight = "#4d699b"
 separator_color = frame
 follow = mouse
 
 [urgency_low]
-frame_color = "#8a9a7b"
+frame_color = "#6f894e"
 timeout = 5
 
 [urgency_normal]
 timeout = 5
 
 [urgency_critical]
-frame_color = "#e46876"
+frame_color = "#c84053"
 
 [rule]
 appname = "peaclock"
-background = "#090e13"
-foreground = "#c5c9c7"
-frame_color = "#938aa9"
+background = "#f2f1ef"
+foreground = "#545464"
+frame_color = "#b35b79"
 timeout = 10
