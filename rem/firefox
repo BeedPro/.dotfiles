@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+sudo apt purge -y firefox || true
+sudo apt autoremove -y
+
+sudo rm -f /etc/apt/sources.list.d/mozilla.sources
+sudo rm -f /etc/apt/preferences.d/mozilla
+sudo rm -f /etc/apt/keyrings/packages.mozilla.org.asc
+
+sudo apt update
+
+echo "Removed Firefox from Mozilla apt repo"
