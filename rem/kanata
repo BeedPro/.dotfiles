@@ -1,11 +1,15 @@
 #!/bin/bash
+set -euo pipefail
 
-rm $HOME/.cargo/bin/kanata
+sudo systemctl disable --now kanata.service || true
 
-sudo rm /usr/bin/kanata
+if command -v cargo >/dev/null 2>&1; then
+  cargo uninstall kanata || true
+fi
+
+sudo rm -f /usr/bin/kanata
 sudo rm -rf /etc/kanata
-sudo rm /etc/systemd/system/kanata.service
+sudo rm -f /etc/systemd/system/kanata.service
+sudo systemctl daemon-reload
 
-echo "Uninstalled kanata"
-# sudo systemctl enable kanata
-# sudo systemctl enable kanata
+echo "Removed kanata"
