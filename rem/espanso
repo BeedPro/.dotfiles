@@ -1,12 +1,9 @@
 #!/bin/bash
+set -euo pipefail
 
-# Remove the x11 version of espanso
-sudo rm /opt/Espanso-X11.AppImage
-sudo rm /usr/local/bin/espanso-x11
-echo "Removed espanso-x11"
+sudo rm -f /opt/Espanso-X11.AppImage
+sudo rm -f /usr/local/bin/espanso-x11
+sudo rm -f /usr/local/bin/espanso
+rm -rf "$HOME/.local/src/espanso"
 
-sudo rm /usr/local/bin/espanso
-echo "Removed espanso-wayland"
-
-sudo rm /usr/local/bin/start-espanso
-echo "Removed start-espanso"
+echo "Removed espanso binaries installed by add/espanso"
