@@ -5,6 +5,7 @@ return {
   "clangd",
   "typescript-language-server",
   "tailwindcss-language-server",
+  "haskell-language-server",
   "svelte-language-server",
   "biome",
   "tinymist",
