@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+if command -v ghcup >/dev/null 2>&1; then
+  ghcup nuke -y || true
+fi
+
+rm -rf "$HOME/.ghcup" "$HOME/.cabal" "$HOME/.stack"
+
+echo "Removed ghcup and Haskell toolchain files"
