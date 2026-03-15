@@ -1,11 +1,14 @@
 return {
   -- LSP
-  "clangd",
-  "ty",
   "jdtls",
   "lua-language-server",
+  "ty",
+  "clangd",
+  "typescript-language-server",
+  "tailwindcss-language-server",
+  "svelte-language-server",
+  "biome",
   "tinymist",
-  "haskell-language-server",
 
   -- DAP
   "codelldb",
@@ -13,14 +16,11 @@ return {
   "java-debug-adapter",
   "java-test",
 
-  -- Linters
+  -- Linters / Formatters
   "ruff",
   "djlint",
-
-  -- Formatters
+  "stylua",
   "prettypst",
   "clang-format",
   "prettierd",
-  "stylua",
-  "fourmolu",
 }
