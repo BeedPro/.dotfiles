@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+
+rm -f "$HOME/.local/bin/getnf"
+rm -rf "$HOME/.local/share/getnf"
+
+echo "Removed getnf"
