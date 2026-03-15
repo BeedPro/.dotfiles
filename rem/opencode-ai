@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+
+rm -rf "$HOME/.opencode"
+rm -f "$HOME/.local/bin/opencode"
+
+echo "Removed OpenCode AI installer files"
