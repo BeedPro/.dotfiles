@@ -1,0 +1,9 @@
+#!/bin/bash
+set -euo pipefail
+
+sudo apt purge -y i3blocks i3lock dex libanyevent-i3-perl libasync-interrupt-perl libconfuse-common \
+  libev-perl libjson-xs-perl i3-wm libanyevent-perl libcommon-sense-perl libconfuse2 \
+  libguard-perl libtypes-serialiser-perl xssproxy || true
+sudo apt autoremove -y
+
+echo "Removed i3 packages from add/i3"
