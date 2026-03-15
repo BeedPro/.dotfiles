@@ -5,7 +5,6 @@ return {
     "vimdoc",
     "html",
     "css",
-    "java",
     "groovy",
     "python",
     "markdown",

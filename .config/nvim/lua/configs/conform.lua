@@ -7,7 +7,6 @@ local options = {
     htmldjango = { "djlint" },
     c = { "clang-format" },
     cpp = { "clang-format" },
-    java = { "clang-format" },
     css = { "biome" },
     html = { "biome" },
     markdown = { "prettierd" },

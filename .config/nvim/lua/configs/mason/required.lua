@@ -13,8 +13,6 @@ return {
   -- DAP
   "codelldb",
   "debugpy",
-  "java-debug-adapter",
-  "java-test",
 
   -- Linters / Formatters
   "ruff",
