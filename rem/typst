@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+if command -v cargo >/dev/null 2>&1; then
+  cargo uninstall typst-cli || true
+fi
+
+echo "Removed typst-cli"
