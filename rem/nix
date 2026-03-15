@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ -x /nix/nix-installer ]; then
+  sudo /nix/nix-installer uninstall --yes || true
+fi
+
+sudo systemctl disable --now nix-daemon.socket nix-daemon.service || true
+sudo rm -f /etc/systemd/system/nix-daemon.service
+sudo rm -f /etc/systemd/system/nix-daemon.socket
+sudo systemctl daemon-reload
+
+sudo rm -rf /nix
+
+echo "Removed Nix files. You may still want to remove nix build users manually."
