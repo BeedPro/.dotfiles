@@ -1,39 +1,29 @@
 #!/bin/bash
+set -euo pipefail
 
-sudo apt remove dunst
-sudo apt remove fastfetch
-sudo apt remove foot
-sudo apt remove mpd
-sudo apt remove mpv
-sudo apt remove ncmpcpp
-sudo apt remove nsxiv
-sudo apt remove picom
-sudo apt remove feh
-sudo apt remove xournalpp
-sudo apt remove tmux
-sudo apt remove swaybg
-sudo apt remove sent
-sudo apt remove policykit-1-gnome
-sudo apt remove network-manager network-manager-applet
-sudo apt remove curl
-sudo apt remove farbfeld
-sudo apt remove git
-sudo apt remove grim
-sudo apt remove libfcft-dev
-sudo apt remove libwlroots-0.18-dev
-sudo apt remove swaylock
-sudo apt remove wdisplays
-sudo apt remove wlr-randr
-sudo apt remove slurp
-sudo apt remove wl-clipboard
-sudo apt remove borgbackup
-sudo apt remove mediainfo
-sudo apt remove vim
-sudo apt remove acpi
-sudo apt remove brightnessctl
-sudo apt remove libnotify-bin
-sudo apt remove xclip
-sudo apt remove xdotool
-sudo apt remove maim
-sudo apt remove pulseaudio-utils
-sudo apt remove xkb-utils
+CORE_UTILS=(
+  bash-completion tmux vim git curl stow eza bat fd-find ripgrep du-dust git-lfs
+  python3-venv pipx rofi qalc alacritty
+)
+
+SYSTEM=(
+  acpi brightnessctl pulseaudio-utils libnotify-bin network-manager network-manager-applet
+  lxpolkit aspell aspell-en fonts-noto fonts-noto-color-emoji
+)
+
+X11_TOOLS=(picom feh xss-lock dunst nwg-look maim x11-xkb-utils xclip xdotool)
+MEDIA=(mpd mpc mpv nsxiv zathura xournalpp libavcodec-extra farbfeld)
+THEME=(adwaita-qt adwaita-icon-theme-full gnome-themes-extra)
+
+sudo apt purge -y "${CORE_UTILS[@]}" "${SYSTEM[@]}" "${X11_TOOLS[@]}" "${MEDIA[@]}" "${THEME[@]}"
+sudo apt autoremove -y
+
+if [ -L /usr/local/bin/bat ]; then
+  sudo rm -f /usr/local/bin/bat
+fi
+
+if [ -L /usr/local/bin/fd ]; then
+  sudo rm -f /usr/local/bin/fd
+fi
+
+echo "Removed packages installed by add/apt"
