@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+
+rm -rf "$HOME/.deno"
+rm -f "$HOME/.local/bin/deno"
+
+echo "Removed Deno"
