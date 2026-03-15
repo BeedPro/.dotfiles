@@ -25,6 +25,7 @@ local options = {
   format_on_save = function(bufnr)
     local excluded_filetypes = {
       scala = true,
+      cpp = true,
     }
 
     if excluded_filetypes[vim.bo[bufnr].filetype] then
