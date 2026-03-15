@@ -1,8 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-if command -v cargo >/dev/null 2>&1; then
-  cargo uninstall bluetui || true
-fi
-
-echo "Removed bluetui"
