@@ -1,5 +1,10 @@
 #!/bin/bash
+set -euo pipefail
 
-# rustup self uninstall
+if command -v rustup >/dev/null 2>&1; then
+  rustup self uninstall -y
+fi
 
-rm -rf $HOME/.cargo
+rm -rf "$HOME/.cargo" "$HOME/.rustup"
+
+echo "Removed Rust toolchain"
