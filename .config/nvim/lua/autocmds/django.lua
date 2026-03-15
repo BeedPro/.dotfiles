@@ -25,6 +25,10 @@ local function is_django_project(filepath)
 end
 
 local function html_looks_like_django(filepath)
+  if vim.fn.filereadable(filepath) ~= 1 then
+    return false
+  end
+
   local lines = vim.fn.readfile(filepath, "", 20) -- read first 20 lines
   for _, line in ipairs(lines) do
     if line:match "{%%" or line:match "{{" or line:match "{#" then
