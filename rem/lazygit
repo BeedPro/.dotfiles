@@ -1,5 +1,0 @@
-#!/bin/bash
-
-sudo rm /usr/local/bin/lazygit
-
-echo "Removed lazygit binary"

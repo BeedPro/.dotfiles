@@ -1,5 +1,0 @@
-#!/bin/bash
-
-sudo rm -rf /opt/grayjay
-sudo rm -rf /usr/local/bin/grayjay
-echo "Removed grayjay"
