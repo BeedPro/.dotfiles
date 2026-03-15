@@ -2,7 +2,6 @@ return {
   -- LSP
   "lua-language-server",
   "ty",
-  "pyright",
   "clangd",
   "typescript-language-server",
   "tailwindcss-language-server",
