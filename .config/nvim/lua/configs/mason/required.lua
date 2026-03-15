@@ -1,6 +1,5 @@
 return {
   -- LSP
-  "jdtls",
   "lua-language-server",
   "ty",
   "clangd",
