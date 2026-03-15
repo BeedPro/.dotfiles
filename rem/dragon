@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+sudo rm -f /usr/local/bin/dragon
+sudo rm -f /usr/local/share/man/man1/dragon.1
+rm -rf /tmp/dragon
+
+echo "Removed dragon"
