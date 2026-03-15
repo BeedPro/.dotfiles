@@ -6,14 +6,15 @@ exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id ~/.local/share/autostart.sh
 
 workspace 1 output DP-4 eDP-1
-workspace 2 output DP-0 HDMI-1
+workspace 2 output DP-4 eDP-1
 workspace 3 output DP-4 eDP-1
 workspace 4 output DP-4 eDP-1
-workspace 5 output DP-0 HDMI-1
+workspace 5 output DP-4 eDP-1
 workspace 6 output DP-4 eDP-1
 workspace 7 output DP-4 eDP-1
 workspace 8 output DP-4 eDP-1
 workspace 9 output DP-4 eDP-1
+workspace 10 output DP-0 HDMI-1
 
 gaps inner 0
 gaps outer 0
@@ -104,6 +105,9 @@ bindsym $mod+7 workspace number $ws7
 bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
 
+bindsym $mod+comma focus output left
+bindsym $mod+period focus output right
+
 bindsym $mod+Shift+1 move container to workspace number $ws1; workspace number $ws1
 bindsym $mod+Shift+2 move container to workspace number $ws2; workspace number $ws2
 bindsym $mod+Shift+3 move container to workspace number $ws3; workspace number $ws3
@@ -113,6 +117,9 @@ bindsym $mod+Shift+6 move container to workspace number $ws6; workspace number $
 bindsym $mod+Shift+7 move container to workspace number $ws7; workspace number $ws7
 bindsym $mod+Shift+8 move container to workspace number $ws8; workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9; workspace number $ws9
+
+bindsym $mod+Shift+comma move container to output left; focus output left
+bindsym $mod+Shift+period move container to output right; focus output right
 
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
