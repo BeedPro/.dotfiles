@@ -3,7 +3,6 @@
 export EDITOR=nvim
 
 export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
-export PATH="$HOME/.volta/bin:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
 export PATH="$HOME/.cache/scalacli/local-repo/bin/scala-cli:$PATH"
 export PATH="$HOME/.local/share/coursier/bin:$PATH"
