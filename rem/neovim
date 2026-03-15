@@ -1,5 +1,9 @@
 #!/bin/bash
+set -euo pipefail
 
-sudo rm -rfv /usr/local/bin/nvim
-sudo rm -rfv /usr/local/share/nvim/
-sudo rm -rfv /usr/local/lib/nvim
+sudo rm -f /usr/local/bin/nvim
+sudo rm -rf /usr/local/share/nvim
+sudo rm -rf /usr/local/lib/nvim
+sudo rm -f /usr/local/share/man/man1/nvim.1
+
+echo "Removed Neovim installed from source"
