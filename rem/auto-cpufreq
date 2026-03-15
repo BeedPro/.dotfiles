@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+if command -v auto-cpufreq-installer >/dev/null 2>&1; then
+  sudo auto-cpufreq-installer --remove || true
+fi
+
+sudo apt purge -y auto-cpufreq || true
+sudo apt autoremove -y
+
+echo "Removed auto-cpufreq"
