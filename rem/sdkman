@@ -1,6 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-rm -rf "$HOME/.sdkman"
-
-echo "Removed SDKMAN"
