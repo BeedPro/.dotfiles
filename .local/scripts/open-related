@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: $0 <file> [file ...]" >&2
+  exit 1
+fi
+
+if ! command -v file >/dev/null 2>&1; then
+  echo "Required command not found: file" >&2
+  exit 1
+fi
+
+declare -a images=()
+declare -a media=()
+declare -a docs=()
+declare -a others=()
+
+for path in "$@"; do
+  if [[ ! -e "$path" ]]; then
+    echo "Skipping missing path: $path" >&2
+    continue
+  fi
+
+  mime=$(file --mime-type -Lb -- "$path" 2>/dev/null || true)
+  lower_path=${path,,}
+
+  case "$mime" in
+    image/*)
+      images+=("$path")
+      ;;
+    video/*|audio/*)
+      media+=("$path")
+      ;;
+    application/pdf|application/postscript|application/epub+zip|application/x-djvu|image/vnd.djvu|application/vnd.ms-xpsdocument)
+      docs+=("$path")
+      ;;
+    *)
+      case "$lower_path" in
+        *.png|*.jpg|*.jpeg|*.gif|*.webp|*.bmp|*.tiff|*.svg|*.avif|*.heic|*.ico)
+          images+=("$path")
+          ;;
+        *.mp4|*.mkv|*.webm|*.mov|*.avi|*.flv|*.wmv|*.m4v|*.mp3|*.flac|*.ogg|*.wav|*.m4a|*.opus)
+          media+=("$path")
+          ;;
+        *.pdf|*.djvu|*.ps|*.eps|*.epub|*.xps)
+          docs+=("$path")
+          ;;
+        *)
+          others+=("$path")
+          ;;
+      esac
+      ;;
+  esac
+done
+
+open_group() {
+  local app="$1"
+  shift
+
+  [[ $# -eq 0 ]] && return 0
+
+  if command -v "$app" >/dev/null 2>&1; then
+    setsid "$app" "$@" >/dev/null 2>&1 &
+  elif command -v xdg-open >/dev/null 2>&1; then
+    for item in "$@"; do
+      setsid xdg-open "$item" >/dev/null 2>&1 &
+    done
+  else
+    echo "No opener available for: $app" >&2
+    return 1
+  fi
+}
+
+open_group nsxiv "${images[@]}"
+open_group mpv "${media[@]}"
+open_group zathura "${docs[@]}"
+open_group xdg-open "${others[@]}"

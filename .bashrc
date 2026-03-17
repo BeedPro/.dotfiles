@@ -40,8 +40,8 @@ cdi() {
     clear
 }
 
-openpdf() {
-  setsid zathura "$@" >/dev/null 2>&1 & disown
+openfile() {
+  "$HOME/.local/scripts/open-related" "$@"
   exit
 }
 
