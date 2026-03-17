@@ -1,0 +1,73 @@
+#!/bin/bash
+
+set -euo pipefail
+
+rm -rf /tmp/heroic-download
+mkdir /tmp/heroic-download
+cd /tmp/heroic-download
+
+
+if [[ "$(dpkg --print-architecture)" != "amd64" ]]; then
+  echo "This installer only supports amd64." >&2
+  exit 1
+fi
+
+api_url="https://api.github.com/repos/Heroic-Games-Launcher/HeroicGamesLauncher/releases/latest"
+tmp_dir="$(mktemp -d)"
+release_json="$tmp_dir/release.json"
+trap 'rm -rf "$tmp_dir"' EXIT
+
+curl -fsSL "$api_url" -o "$release_json"
+
+asset_info="$(python3 - "$release_json" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as release_file:
+    release = json.load(release_file)
+
+for asset in release.get("assets", []):
+    name = asset.get("name", "")
+    if not name.endswith("linux-amd64.deb"):
+        continue
+
+    digest = asset.get("digest", "")
+    if digest.startswith("sha256:"):
+        digest = digest.split(":", 1)[1]
+
+    print(asset.get("browser_download_url", ""))
+    print(name)
+    print(digest)
+    break
+else:
+    raise SystemExit("Could not find linux-amd64 .deb asset in latest release")
+PY
+)"
+
+mapfile -t asset_lines <<< "$asset_info"
+deb_url="${asset_lines[0]:-}"
+deb_name="${asset_lines[1]:-}"
+expected_sha="${asset_lines[2]:-}"
+
+if [[ -z "$deb_url" || -z "$deb_name" || -z "$expected_sha" ]]; then
+  echo "Failed to extract release download details." >&2
+  exit 1
+fi
+
+deb_path="$tmp_dir/$deb_name"
+
+echo "Downloading $deb_name..."
+curl -fL "$deb_url" -o "$deb_path"
+
+actual_sha="$(sha256sum "$deb_path" | cut -d ' ' -f1)"
+if [[ "$actual_sha" != "$expected_sha" ]]; then
+  echo "SHA256 mismatch for $deb_name" >&2
+  echo "Expected: $expected_sha" >&2
+  echo "Actual:   $actual_sha" >&2
+  exit 1
+fi
+
+echo "SHA256 verified. Installing Heroic..."
+sudo apt install -y "$deb_path"
+
+echo "Heroic installed successfully."
