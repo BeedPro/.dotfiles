@@ -17,6 +17,9 @@ tmp_dir="$(mktemp -d)"
 release_json="$tmp_dir/release.json"
 trap 'rm -rf "$tmp_dir"' EXIT
 
+# Allow the _apt sandbox user to read downloaded files.
+chmod 755 "$tmp_dir"
+
 curl -fsSL "$api_url" -o "$release_json"
 
 asset_info="$(python3 - "$release_json" <<'PY'
@@ -58,6 +61,7 @@ deb_path="$tmp_dir/$deb_name"
 
 echo "Downloading $deb_name..."
 curl -fL "$deb_url" -o "$deb_path"
+chmod 644 "$deb_path"
 
 actual_sha="$(sha256sum "$deb_path" | cut -d ' ' -f1)"
 if [[ "$actual_sha" != "$expected_sha" ]]; then
