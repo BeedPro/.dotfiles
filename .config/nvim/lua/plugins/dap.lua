@@ -21,14 +21,4 @@ return {
       require "configs.dap"
     end,
   },
-  {
-    "mfussenegger/nvim-dap-python",
-    ft = "python",
-    dependencies = {
-      "mfussenegger/nvim-dap",
-    },
-    config = function()
-      require "configs.dap.adapters.python"
-    end,
-  },
 }
