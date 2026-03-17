@@ -11,8 +11,10 @@ APPS=(
   "Godot|godot"
   "Chat|$HOME/.local/scripts/bulk-open chat"
   "Email|$HOME/.local/scripts/bulk-open email"
+  "Bookmarks|$HOME/.local/scripts/open-bookmark"
   "Libresprite|libresprite"
-  'Calendar|firefox --new-window "https://calendar.google.com" &'
+  'Google Calendar|firefox --new-window "https://calendar.google.com"'
+  'GitHub|firefox --new-window "https://github.com"'
 )
 
 for entry in "${APPS[@]}"; do

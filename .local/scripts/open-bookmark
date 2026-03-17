@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+BOOKMARKS_FILE="$HOME/Compendium/Journal/bookmarks.typ"
+
+if [[ ! -f "$BOOKMARKS_FILE" ]]; then
+  echo "Bookmark file not found: $BOOKMARKS_FILE" >&2
+  exit 1
+fi
+
+mapfile -t URLS < <(
+  grep -E '^[[:space:]]*-[[:space:]]*https?://' "$BOOKMARKS_FILE" \
+    | sed -E 's/^[[:space:]]*-[[:space:]]*//'
+)
+
+if [[ ${#URLS[@]} -eq 0 ]]; then
+  echo "No URLs found in: $BOOKMARKS_FILE" >&2
+  exit 1
+fi
+
+CHOICE=$(printf '%s\n' "${URLS[@]}" | rofi -dmenu -i -p "Bookmarks" -l 20) || exit 0
+
+if [[ -n "$CHOICE" ]]; then
+  firefox --new-tab "$CHOICE" >/dev/null 2>&1 &
+fi
