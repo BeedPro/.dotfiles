@@ -1,4 +1,5 @@
 local map = vim.keymap.set
-local neogit = require "neogit"
 
-map("n", "<leader>gg", neogit.open, { desc = "Open Neo[g]it UI" })
+map("n", "<leader>gg", function()
+  require("neogit").open()
+end, { desc = "Open Neo[g]it UI" })

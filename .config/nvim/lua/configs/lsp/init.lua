@@ -13,7 +13,7 @@ function M.setup()
 
   autocmd("LspAttach", {
     callback = function(args)
-      attach.on_attach(_, args.buf)
+      attach.on_attach(nil, args.buf)
     end,
   })
 

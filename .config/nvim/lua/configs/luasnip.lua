@@ -1,4 +1,4 @@
-opts = { history = true, updateevents = "TextChanged,TextChangedI" }
+local opts = { history = true, updateevents = "TextChanged,TextChangedI" }
 
 require("luasnip").config.set_config(opts)
 

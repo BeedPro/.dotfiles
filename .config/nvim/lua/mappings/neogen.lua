@@ -1,6 +1,5 @@
 local map = vim.keymap.set
-local neogen = require "neogen"
 
 map("n", "<leader>cn", function()
-  neogen.generate()
+  require("neogen").generate()
 end, { desc = "[C]omments [N]eogen" })

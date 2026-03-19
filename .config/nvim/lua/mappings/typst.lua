@@ -6,8 +6,8 @@ end, { desc = "Slip: new note" })
 
 map("n", "<leader>si", function()
   require("commands.typst").insert_note()
-end, { desc = "Slip: new note" })
+end, { desc = "Slip: insert note link" })
 
 map("n", "<leader>so", function()
   require("commands.typst").open_note()
-end, { desc = "Slip: new note" })
+end, { desc = "Slip: open note" })
