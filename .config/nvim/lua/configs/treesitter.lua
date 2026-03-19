@@ -1,4 +1,4 @@
-return {
+opts = {
   ensure_installed = {
     "vim",
     "lua",
@@ -25,3 +25,5 @@ return {
 
   indent = { enable = true, disable = { "cpp" } },
 }
+
+require("nvim-treesitter.configs").setup(opts)

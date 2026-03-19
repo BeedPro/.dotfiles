@@ -1,4 +1,4 @@
-local opts = {
+return {
   snippets = { preset = "luasnip" },
   cmdline = { enabled = true },
   appearance = { nerd_font_variant = "normal" },
@@ -36,5 +36,3 @@ local opts = {
   },
   signature = { enabled = true },
 }
-
-return opts

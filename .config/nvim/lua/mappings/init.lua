@@ -4,6 +4,8 @@ require "mappings.neogen"
 require "mappings.dap"
 require "mappings.conform"
 require "mappings.typst"
+require "mappings.neogit"
+require "mappings.whichkey"
 
 local map = vim.keymap.set
 

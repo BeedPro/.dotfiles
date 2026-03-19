@@ -1,4 +1,4 @@
-local M = {
+return {
   snippet_engine = "luasnip",
   languages = {
     python = {
@@ -9,5 +9,3 @@ local M = {
     },
   },
 }
-
-return M
