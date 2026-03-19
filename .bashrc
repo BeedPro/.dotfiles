@@ -41,7 +41,7 @@ cdi() {
 }
 
 openfile() {
-  "$HOME/.local/scripts/open-related" "$@"
+  "$HOME/.local/scripts/openfile" "$@"
   exit
 }
 

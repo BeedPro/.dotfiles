@@ -9,9 +9,9 @@ TERMINAL=alacritty
 
 APPS=(
   "Godot|godot"
-  "Chat|$HOME/.local/scripts/bulk-open chat"
-  "Email|$HOME/.local/scripts/bulk-open email"
-  "Bookmarks|$HOME/.local/scripts/open-bookmark"
+  "Chat|$HOME/.local/scripts/openapps chat"
+  "Email|$HOME/.local/scripts/openapps email"
+  "Bookmarks|$HOME/.local/scripts/openbms"
   "Libresprite|libresprite"
   'Google Calendar|firefox --new-window "https://calendar.google.com"'
   'GitHub|firefox --new-window "https://github.com"'

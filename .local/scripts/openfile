@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: $0 <file> [file ...]" >&2
+  exit 1
+fi
+
+if ! command -v xdg-open >/dev/null 2>&1; then
+  echo "Required command not found: xdg-open" >&2
+  exit 1
+fi
+
+for path in "$@"; do
+  if [[ ! -e "$path" ]]; then
+    echo "Skipping missing path: $path" >&2
+    continue
+  fi
+
+  setsid xdg-open "$path" >/dev/null 2>&1 &
+done
