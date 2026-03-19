@@ -15,10 +15,10 @@ require("kanso").setup {
       Underlined = { underline = false, undercurl = false },
 
       -- spell
-      SpellBad = { fg = colors.palette.red, underline = false, undercurl = false },
-      SpellCap = { underline = false, undercurl = false },
-      SpellLocal = { underline = false, undercurl = false },
-      SpellRare = { underline = false, undercurl = false },
+      SpellBad = { underline = false, undercurl = true },
+      SpellCap = { underline = false, undercurl = true },
+      SpellLocal = { underline = false, undercurl = true },
+      SpellRare = { underline = false, undercurl = true },
 
       -- lsp
       LspReferenceWrite = { underline = false, undercurl = false },
