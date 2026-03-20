@@ -1,6 +1,6 @@
 return {
   winbar = {
-    sections = { "scopes", "watches", "exceptions", "breakpoints", "threads", "repl", "console" },
+    sections = { "sessions", "threads", "scopes", "breakpoints", "watches", "exceptions", "repl", "console" },
     default_section = "scopes",
     controls = { enabled = true },
   },
