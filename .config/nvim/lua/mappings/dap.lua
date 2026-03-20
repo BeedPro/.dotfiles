@@ -16,12 +16,24 @@ map("n", "<Up>", function()
   require("dap").restart_frame()
 end, { desc = "[D]ap [R]estart Frame" })
 
-map("n", "<leader>b", function()
+map("n", "<leader>db", function()
   require("dap").toggle_breakpoint()
 end, { desc = "[D]ap Toggle [B]reakpoint" })
 
-map("n", "<leader>dd", function()
+map("n", "<leader>dw", function()
+  require("dap-view").add_expr()
+end, { desc = "[D]ap Toggle [B]reakpoint" })
+
+map("n", "<leader>dc", function()
+  require("dap-view").jump_to_view "console"
+end, { desc = "[D]ap Toggle [B]reakpoint" })
+
+map("n", "<leader>dr", function()
   require("dap").continue()
+end, { desc = "[D]ap [C]ontinue" })
+
+map("n", "<leader>dR", function()
+  require("dap").restart()
 end, { desc = "[D]ap [C]ontinue" })
 
 map("n", "<leader>dl", function()
