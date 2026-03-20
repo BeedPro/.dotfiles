@@ -24,10 +24,6 @@ map("n", "<leader>dw", function()
   require("dap-view").add_expr()
 end, { desc = "[D]ap Toggle [B]reakpoint" })
 
-map("n", "<leader>dc", function()
-  require("dap-view").jump_to_view "console"
-end, { desc = "[D]ap Toggle [B]reakpoint" })
-
 map("n", "<leader>dr", function()
   require("dap").continue()
 end, { desc = "[D]ap [C]ontinue" })
