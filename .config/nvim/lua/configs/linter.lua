@@ -5,6 +5,7 @@ lint.linters_by_ft = {
   typescript = { "biomejs" },
   python = { "ruff" },
   htmldjango = { "djlint" },
+  gdscript = { "gdlint" },
 }
 
 local autocmd = vim.api.nvim_create_autocmd

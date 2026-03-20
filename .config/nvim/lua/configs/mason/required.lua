@@ -21,4 +21,5 @@ return {
   "prettypst",
   "clang-format",
   "prettierd",
+  "gdtoolkit",
 }

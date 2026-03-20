@@ -16,6 +16,7 @@ local options = {
     typescript = { "biome" },
     json = { "biome" },
     svelte = { "biome" },
+    gdscript = { "gdformat" },
     ["_"] = { "trim_whitespace" },
   },
 
