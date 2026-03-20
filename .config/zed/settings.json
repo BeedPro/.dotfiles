@@ -1,4 +1,14 @@
 {
+  "disable_ai": true,
+  "agent": {
+    "favorite_models": [],
+    "inline_assistant_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-5-mini",
+      "enable_thinking": false
+    },
+    "model_parameters": []
+  },
   "agent_servers": {
     "codex-acp": {
       "type": "registry"
