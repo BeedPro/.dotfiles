@@ -1,3 +1,5 @@
+-- Credit: used from NvChad Colorify (legacy/community module).
+
 local fn = vim.fn
 local api = vim.api
 local conf = require "configs.colorify"

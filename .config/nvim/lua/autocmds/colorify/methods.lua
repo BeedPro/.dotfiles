@@ -1,3 +1,5 @@
+-- Credit: used from NvChad Colorify (legacy/community module).
+
 local api = vim.api
 local set_extmark = api.nvim_buf_set_extmark
 local conf = require "configs.colorify"

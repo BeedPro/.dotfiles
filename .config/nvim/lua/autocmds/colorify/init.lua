@@ -1,3 +1,5 @@
+-- Credit: used from NvChad Colorify (legacy/community module).
+
 local M = {}
 local api = vim.api
 

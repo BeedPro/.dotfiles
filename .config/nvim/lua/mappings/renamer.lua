@@ -1,3 +1,6 @@
+-- Credit: used from NvChad UI renamer implementation.
+-- Source: https://github.com/NvChad/ui/blob/v2.5/lua/nvchad/lsp/renamer.lua
+
 local lsp = vim.lsp
 local api = vim.api
 
