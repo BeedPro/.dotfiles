@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-doc-name, undefined-field
 local autocmd = vim.api.nvim_create_autocmd
 ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
 local progress = vim.defaulttable()
