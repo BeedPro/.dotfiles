@@ -1,10 +1,16 @@
 local lint = require "lint"
 
 lint.linters_by_ft = {
+  css = { "biomejs" },
+  html = { "biomejs" },
   javascript = { "biomejs" },
-  typescript = { "biomejs" },
+  javascriptreact = { "biomejs" },
+  json = { "biomejs" },
   python = { "ruff" },
   htmldjango = { "djlint" },
+  svelte = { "biomejs" },
+  typescript = { "biomejs" },
+  typescriptreact = { "biomejs" },
   gdscript = { "gdlint" },
 }
 
