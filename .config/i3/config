@@ -25,8 +25,8 @@ for_window [class="discord"] border normal
 
 assign [class="KeePassXC"] number 9
 
-default_border pixel 1
-hide_edge_borders both
+default_border normal 1
+hide_edge_borders smart_no_gaps
 
 for_window [title="^floating$"] floating enable
 for_window [class="^floating$"] floating enable
