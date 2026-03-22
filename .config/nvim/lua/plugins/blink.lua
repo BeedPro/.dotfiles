@@ -1,9 +1,12 @@
-return {
-  "saghen/blink.cmp",
-  version = "1.*",
-  event = { "InsertEnter", "CmdLineEnter" },
+vim.pack.add({
+  {
+    src = "https://github.com/saghen/blink.cmp",
+    version = vim.version.range("1"),
+  },
+})
 
-  opts_extend = { "sources.default" },
+vim.cmd.packadd "blink.cmp"
 
-  opts = require "configs.blink",
-}
+local opts = require "configs.blink"
+
+require("blink.cmp").setup(opts)
