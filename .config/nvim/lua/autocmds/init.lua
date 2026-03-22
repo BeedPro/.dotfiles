@@ -8,7 +8,6 @@ require "autocmds.bigfile"
 require "autocmds.typst"
 require "autocmds.django"
 require "autocmds.oil"
-require "autocmds.lsp_progress"
 
 autocmd("TextYankPost", {
   callback = function()
