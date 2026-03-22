@@ -1,7 +1,9 @@
-vim.pack.add {
-  "https://github.com/stevearc/conform.nvim",
-}
+vim.schedule(function()
+  vim.pack.add {
+    "https://github.com/stevearc/conform.nvim",
+  }
 
-local opts = require "configs.conform"
+  local opts = require "configs.conform"
 
-require("conform").setup(opts)
+  require("conform").setup(opts)
+end)

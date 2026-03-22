@@ -1,7 +1,9 @@
-vim.pack.add {
-  "https://github.com/danymat/neogen",
-}
+vim.schedule(function()
+  vim.pack.add {
+    "https://github.com/danymat/neogen",
+  }
 
-local opts = require "configs.neogen"
+  local opts = require "configs.neogen"
 
-require("neogen").setup(opts)
+  require("neogen").setup(opts)
+end)

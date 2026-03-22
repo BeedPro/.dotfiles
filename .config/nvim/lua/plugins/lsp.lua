@@ -1,5 +1,7 @@
-vim.pack.add {
-  "https://github.com/neovim/nvim-lspconfig",
-}
+vim.schedule(function()
+  vim.pack.add {
+    "https://github.com/neovim/nvim-lspconfig",
+  }
 
-require("configs.lsp").setup()
+  require("configs.lsp").setup()
+end)

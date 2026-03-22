@@ -1,4 +1,3 @@
----@diagnostic disable: different-requires
 require "plugins.kanso"
 require "plugins.plenary"
 require "plugins.friendly-snippets"

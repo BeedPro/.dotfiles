@@ -1,5 +1,7 @@
-vim.pack.add {
-  "https://github.com/mfussenegger/nvim-dap",
-}
+vim.schedule(function()
+  vim.pack.add {
+    "https://github.com/mfussenegger/nvim-dap",
+  }
 
-require "configs.dap"
+  require "configs.dap"
+end)

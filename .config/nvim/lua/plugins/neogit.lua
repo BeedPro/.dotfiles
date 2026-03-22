@@ -1,3 +1,5 @@
-vim.pack.add {
-  "https://github.com/NeogitOrg/neogit",
-}
+vim.schedule(function()
+  vim.pack.add {
+    "https://github.com/NeogitOrg/neogit",
+  }
+end)

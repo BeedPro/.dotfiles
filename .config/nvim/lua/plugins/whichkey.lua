@@ -1,7 +1,9 @@
-vim.pack.add {
-  "https://github.com/folke/which-key.nvim",
-}
+vim.schedule(function()
+  vim.pack.add {
+    "https://github.com/folke/which-key.nvim",
+  }
 
-local opts = require "configs.whichkey"
+  local opts = require "configs.whichkey"
 
-require("which-key").setup(opts)
+  require("which-key").setup(opts)
+end)
