@@ -1,7 +1,7 @@
-return {
-  "mfussenegger/nvim-lint",
-  event = { "BufReadPost", "BufWritePost", "InsertLeave", "BufEnter" },
-  config = function()
-    require "configs.linter"
-  end,
+vim.pack.add {
+  "https://github.com/mfussenegger/nvim-lint",
 }
+
+vim.cmd.packadd "nvim-lint"
+
+require "configs.linter"

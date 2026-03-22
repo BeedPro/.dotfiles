@@ -1,6 +1,7 @@
-return {
-  "mfussenegger/nvim-dap",
-  config = function()
-    require "configs.dap"
-  end,
+vim.pack.add {
+  "https://github.com/mfussenegger/nvim-dap",
 }
+
+vim.cmd.packadd "nvim-dap"
+
+require "configs.dap"

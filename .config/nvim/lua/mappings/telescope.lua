@@ -13,7 +13,7 @@ map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "[F]ind [H]elp" 
 map("n", "<leader>fm", "<cmd>Telescope marks<CR>", { desc = "[F]ind [M]arks" })
 map("n", "<leader>fp", function()
   require("telescope.builtin").find_files {
-    cwd = vim.fs.joinpath(vim.fn.stdpath "data", "lazy"),
+    cwd = vim.fs.joinpath(vim.fn.stdpath "data", "site", "pack", "core", "opt"),
   }
 end, { desc = "[F]ind Neovim [P]ackages" })
 map("n", "<leader>fz", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "[F]ind Fu[Z]zy Buffer" })
