@@ -73,7 +73,16 @@ alias apt='sudo apt'
 alias grep='grep --color=auto'
 
 alias fonts='fc-list | grep -ioE ": [^:]*$1[^:]+:" | sed -E "s/(^: |:)//g" | tr , "\n" | sort | uniq'
-alias largefiles='sudo find / -xdev -type f -size +500M -exec ls -lh {} \;'
+
+alias largefiles='sudo find . -xdev -type f -size +500M -printf "%10s %TY-%Tm-%Td %TH:%TM %p\n" 2>/dev/null \
+| sort -nr \
+| numfmt --to=iec --suffix=B --padding=7 --field=1'
+alias countfiles='sudo bash -c '\''for t in files links directories; do echo $(find . -type ${t:0:1} 2>/dev/null | wc -l) $t; done'\'''
+alias diskspace='sudo bash -c '\''du -S . 2>/dev/null | sort -nr | less'\'''
+alias folders='sudo du -h --max-depth=1 . 2>/dev/null'
+alias foldersort='sudo bash -c '\''find . -maxdepth 1 -type d -print0 2>/dev/null | xargs -0 du -sk | sort -rn'\'''
+alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
+
 eval "$(fzf --bash)"
 
 if [ -f /usr/share/bash-completion/bash_completion ]; then
