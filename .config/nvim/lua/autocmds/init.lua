@@ -2,7 +2,6 @@ local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
 require "autocmds.ready"
-require "autocmds.numbertoggle"
 require "autocmds.conform"
 require "autocmds.bigfile"
 require "autocmds.typst"
