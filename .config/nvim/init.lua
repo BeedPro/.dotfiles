@@ -15,6 +15,8 @@ require("lazy").setup({
   { import = "plugins" },
 }, lazy_config)
 
+vim.cmd "packadd nvim.undotree"
+
 require "options"
 require "autocmds"
 require "commands"
