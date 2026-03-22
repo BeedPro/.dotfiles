@@ -1,17 +1,17 @@
 return {
   {
-    name = "Current file (local-lua-dbg, lua)",
+    name = "Current file (lua)",
     type = "local-lua",
     request = "launch",
     cwd = "${workspaceFolder}",
     program = {
-      lua = "lua5.1",
+      lua = "lua",
       file = "${file}",
     },
     args = {},
   },
   {
-    name = "Current file (local-lua-dbg, luajit)",
+    name = "Current file (luajit)",
     type = "local-lua",
     request = "launch",
     cwd = "${workspaceFolder}",
