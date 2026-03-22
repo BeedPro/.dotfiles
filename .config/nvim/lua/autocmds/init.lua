@@ -10,8 +10,6 @@ require "autocmds.django"
 require "autocmds.oil"
 require "autocmds.lsp_progress"
 
-require("autocmds.colorify").run()
-
 autocmd("TextYankPost", {
   callback = function()
     vim.highlight.on_yank { higroup = "IncSearch", timeout = 200 }
