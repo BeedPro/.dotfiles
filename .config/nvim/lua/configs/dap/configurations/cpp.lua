@@ -1,6 +1,6 @@
 return {
   {
-    name = "LLDB: Launch",
+    name = "Launch file",
     type = "codelldb",
     request = "launch",
     program = function()
@@ -12,7 +12,7 @@ return {
     console = "integratedTerminal",
   },
   {
-    name = "LLDB: Launch (args)",
+    name = "Launch file (args)",
     type = "codelldb",
     request = "launch",
     program = function()

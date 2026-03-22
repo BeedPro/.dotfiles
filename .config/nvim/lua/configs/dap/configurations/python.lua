@@ -4,7 +4,7 @@ return {
   {
     type = "python",
     request = "launch",
-    name = "Python: file",
+    name = "Launch file",
     program = "${file}",
     console = "integratedTerminal",
     pythonPath = python_adapter.resolve_python,
@@ -12,7 +12,7 @@ return {
   {
     type = "python",
     request = "launch",
-    name = "Python: file (args)",
+    name = "Launch file (args)",
     program = "${file}",
     args = function()
       local args_string = vim.fn.input "Arguments: "
@@ -29,7 +29,7 @@ return {
   {
     type = "python",
     request = "attach",
-    name = "Python: attach",
+    name = "Attach process",
     connect = function()
       local host = vim.fn.input "Host [127.0.0.1]: "
       host = host ~= "" and host or "127.0.0.1"
@@ -40,7 +40,7 @@ return {
   {
     type = "python",
     request = "launch",
-    name = "Python: doctest",
+    name = "Run doctest",
     module = "doctest",
     args = { "${file}" },
     noDebug = true,

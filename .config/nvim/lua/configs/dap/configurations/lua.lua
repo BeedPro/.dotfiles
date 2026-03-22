@@ -1,6 +1,6 @@
 return {
   {
-    name = "Current file (lua)",
+    name = "Launch file (lua)",
     type = "local-lua",
     request = "launch",
     cwd = "${workspaceFolder}",
@@ -11,7 +11,7 @@ return {
     args = {},
   },
   {
-    name = "Current file (luajit)",
+    name = "Launch file (luajit)",
     type = "local-lua",
     request = "launch",
     cwd = "${workspaceFolder}",

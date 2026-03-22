@@ -2,30 +2,21 @@ return {
   {
     type = "pwa-node",
     request = "launch",
-    name = "Node: launch file",
+    name = "Launch file",
     program = "${file}",
     cwd = "${workspaceFolder}",
   },
   {
     type = "pwa-node",
     request = "attach",
-    name = "Node: attach process",
+    name = "Attach process",
     processId = require("dap.utils").pick_process,
     cwd = "${workspaceFolder}",
   },
   {
     type = "firefox",
     request = "launch",
-    name = "Firefox: launch localhost",
-    reAttach = true,
-    url = "http://localhost:3000",
-    webRoot = "${workspaceFolder}",
-    firefoxExecutable = "/usr/bin/firefox",
-  },
-  {
-    type = "firefox",
-    request = "launch",
-    name = "Firefox: launch custom URL",
+    name = "Launch browser",
     reAttach = true,
     url = function()
       local host = vim.fn.input "Host [localhost]: "
