@@ -13,6 +13,8 @@ return {
   -- DAP
   "codelldb",
   "debugpy",
+  "js-debug-adapter",
+  "firefox-debug-adapter",
 
   -- Linters / Formatters
   "ruff",
