@@ -9,7 +9,7 @@ cd $PROJECT_DIR
 
 # Dependencies
 sudo apt update
-sudo apt-get install ninja-build gettext cmake curl build-essential lua5.3 liblua5.3-dev
+sudo apt-get install ninja-build gettext cmake curl build-essential lua5.3 liblua5.3-dev luajit
 
 # Clone
 git clone --depth 1 -b nightly https://github.com/neovim/neovim $PROJECT
