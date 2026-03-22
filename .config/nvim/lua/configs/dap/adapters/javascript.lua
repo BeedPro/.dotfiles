@@ -2,15 +2,15 @@ local dap = require "dap"
 
 local home = os.getenv "HOME"
 local mason_home = home .. "/.local/share/nvim/mason"
+local js_debug_adapter = mason_home .. "/bin/js-debug-adapter"
 
 dap.adapters["pwa-node"] = {
   type = "server",
-  host = "127.0.0.1",
+  host = "localhost",
   port = "${port}",
   executable = {
-    command = "node",
+    command = js_debug_adapter,
     args = {
-      mason_home .. "/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
       "${port}",
     },
   },
