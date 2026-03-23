@@ -1,9 +1,5 @@
-vim.schedule(function()
-  vim.pack.add {
-    "https://github.com/stevearc/oil.nvim",
-  }
-
-  local opts = require "configs.oil"
-
-  require("oil").setup(opts)
-end)
+return {
+  "stevearc/oil.nvim",
+  opts = require "configs.oil",
+  cmd = "Oil",
+}

@@ -1,7 +1,5 @@
-vim.pack.add {
-  "https://github.com/folke/which-key.nvim",
+return {
+  "folke/which-key.nvim",
+  event = "VeryLazy",
+  opts = require "configs.whichkey",
 }
-
-local opts = require "configs.whichkey"
-
-require("which-key").setup(opts)

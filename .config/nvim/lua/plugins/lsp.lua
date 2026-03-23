@@ -1,5 +1,7 @@
-vim.pack.add {
-  "https://github.com/neovim/nvim-lspconfig",
+return {
+  "neovim/nvim-lspconfig",
+  event = "User FilePost",
+  config = function()
+    require("configs.lsp").setup()
+  end,
 }
-
-require("configs.lsp").setup()

@@ -20,26 +20,3 @@ autocmd("BufRead", {
     vim.bo.filetype = "dosini"
   end,
 })
-
-autocmd("PackChanged", {
-  desc = "Handle nvim-treesitter updates",
-  group = augroup("NvimTreesitterPackChangedUpdateHandler", { clear = true }),
-  callback = function(event)
-    local is_treesitter = event.data and event.data.spec and event.data.spec.name == "nvim-treesitter"
-    if not is_treesitter or event.data.kind ~= "update" then
-      return
-    end
-
-    vim.notify("nvim-treesitter updated, running TSUpdate...", vim.log.levels.INFO)
-
-    local ok = pcall(function()
-      vim.cmd "TSUpdate"
-    end)
-
-    if ok then
-      vim.notify("TSUpdate completed successfully!", vim.log.levels.INFO)
-    else
-      vim.notify("TSUpdate command not available yet, skipping", vim.log.levels.WARN)
-    end
-  end,
-})

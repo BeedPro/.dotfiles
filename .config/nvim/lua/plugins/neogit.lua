@@ -1,5 +1,4 @@
-vim.schedule(function()
-  vim.pack.add {
-    "https://github.com/NeogitOrg/neogit",
-  }
-end)
+return {
+  "NeogitOrg/neogit",
+  cmd = "Neogit",
+}

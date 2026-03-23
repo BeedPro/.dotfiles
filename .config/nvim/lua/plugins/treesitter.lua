@@ -1,8 +1,10 @@
-vim.pack.add {
-  {
-    src = "https://github.com/nvim-treesitter/nvim-treesitter",
-    version = "master",
-  },
+return {
+  "nvim-treesitter/nvim-treesitter",
+  branch = "master",
+  event = { "BufReadPost", "BufNewFile" },
+  cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+  build = ":TSUpdate",
+  config = function()
+    require "configs.treesitter"
+  end,
 }
-
-require "configs.treesitter"

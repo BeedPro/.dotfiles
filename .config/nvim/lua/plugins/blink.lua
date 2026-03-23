@@ -1,16 +1,9 @@
-local autocmd = vim.api.nvim_create_autocmd
+return {
+  "saghen/blink.cmp",
+  version = "1.*",
+  event = { "InsertEnter", "CmdLineEnter" },
 
-autocmd({ "InsertEnter", "CmdLineEnter" }, {
-  once = true,
-  callback = function()
-    vim.pack.add {
-      {
-        src = "https://github.com/saghen/blink.cmp",
-        version = vim.version.range "1",
-      },
-    }
-    local opts = require "configs.blink"
+  opts_extend = { "sources.default" },
 
-    require("blink.cmp").setup(opts)
-  end,
-})
+  opts = require "configs.blink",
+}

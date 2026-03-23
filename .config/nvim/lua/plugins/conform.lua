@@ -1,9 +1,5 @@
-vim.schedule(function()
-  vim.pack.add {
-    "https://github.com/stevearc/conform.nvim",
-  }
-
-  local opts = require "configs.conform"
-
-  require("conform").setup(opts)
-end)
+return {
+  "stevearc/conform.nvim",
+  event = "BufWritePre",
+  opts = require "configs.conform",
+}

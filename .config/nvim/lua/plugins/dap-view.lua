@@ -1,9 +1,5 @@
-vim.schedule(function()
-  vim.pack.add {
-    "https://github.com/igorlfs/nvim-dap-view",
-  }
-
-  local opts = require "configs.dap.view"
-
-  require("dap-view").setup(opts)
-end)
+return {
+  "igorlfs/nvim-dap-view",
+  lazy = false,
+  opts = require "configs.dap.view",
+}

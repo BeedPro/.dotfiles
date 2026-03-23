@@ -1,7 +1,6 @@
-vim.schedule(function()
-  vim.pack.add {
-    "https://github.com/L3MON4D3/LuaSnip",
-  }
-
-  require "configs.luasnip"
-end)
+return {
+  "L3MON4D3/LuaSnip",
+  config = function()
+    require "configs.luasnip"
+  end,
+}

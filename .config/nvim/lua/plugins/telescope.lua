@@ -1,7 +1,7 @@
-vim.pack.add {
-  "https://github.com/nvim-telescope/telescope.nvim",
+return {
+  "nvim-telescope/telescope.nvim",
+  cmd = "Telescope",
+  opts = function()
+    return require "configs.telescope"
+  end,
 }
-
-local opts = require "configs.telescope"
-
-require("telescope").setup(opts)

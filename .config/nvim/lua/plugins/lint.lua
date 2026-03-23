@@ -1,7 +1,7 @@
-vim.schedule(function()
-  vim.pack.add {
-    "https://github.com/mfussenegger/nvim-lint",
-  }
-
-  require "configs.linter"
-end)
+return {
+  "mfussenegger/nvim-lint",
+  event = { "BufReadPost", "BufWritePost", "InsertLeave", "BufEnter" },
+  config = function()
+    require "configs.linter"
+  end,
+}

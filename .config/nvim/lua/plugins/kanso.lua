@@ -1,5 +1,8 @@
-vim.pack.add {
-  "https://github.com/webhooked/kanso.nvim",
+return {
+  "webhooked/kanso.nvim",
+  lazy = false,
+  priority = 1000,
+  config = function()
+    require "configs.kanso"
+  end,
 }
-
-require "configs.kanso"
