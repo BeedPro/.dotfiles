@@ -1,80 +1,83 @@
 {
-  "disable_ai": true,
-  "agent": {
-    "favorite_models": [],
-    "inline_assistant_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-5-mini",
-      "enable_thinking": false
+    "edit_predictions": {
+        "mode": "subtle",
     },
-    "model_parameters": []
-  },
-  "agent_servers": {
-    "codex-acp": {
-      "type": "registry"
+    "disable_ai": false,
+    "agent": {
+        "single_file_review": false,
+        "favorite_models": [],
+        "inline_assistant_model": {
+            "provider": "copilot_chat",
+            "model": "gpt-5-mini",
+            "enable_thinking": false,
+        },
+        "model_parameters": [],
     },
-    "opencode": {
-      "type": "registry"
-    }
-  },
-  "telemetry": {
-    "diagnostics": false,
-    "metrics": false
-  },
-  "vim_mode": true,
-  "vim": {
-    "use_system_clipboard": "never",
-    "use_smartcase_find": true,
-    "toggle_relative_line_numbers": true,
-    "highlight_on_yank_duration": 200
-  },
-  "tab_size": 4,
-  "preferred_line_length": 80,
-  "soft_wrap": "none",
-  "cursor_blink": false,
-  "relative_line_numbers": "enabled",
-  "gutter": {
-    "line_numbers": true
-  },
-  "scroll_beyond_last_line": "off",
-  "vertical_scroll_margin": 0,
-  "format_on_save": "on",
-  "ui_font_size": 16,
-  "buffer_font_size": 15,
-  "theme": {
-    "mode": "system",
-    "light": "Kanso Pearl (No italics)",
-    "dark": "Kanso Zen (No italics)"
-  },
-  "git": {
-    "inline_blame": {
-      "enabled": false
-    }
-  },
-  "languages": {
-    "Lua": {
-      "formatter": "language_server"
+    "agent_servers": {
+        "codex-acp": {
+            "type": "registry",
+        },
+        "opencode": {
+            "type": "registry",
+        },
     },
-    "Python": {
-      "formatter": "language_server"
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false,
     },
-    "JavaScript": {
-      "formatter": "language_server"
+    "vim_mode": true,
+    "vim": {
+        "use_system_clipboard": "never",
+        "use_smartcase_find": true,
+        "toggle_relative_line_numbers": true,
+        "highlight_on_yank_duration": 200,
     },
-    "TypeScript": {
-      "formatter": "language_server"
+    "preferred_line_length": 80,
+    "soft_wrap": "none",
+    "cursor_blink": false,
+    "relative_line_numbers": "enabled",
+    "gutter": {
+        "line_numbers": true,
     },
-    "JSON": {
-      "formatter": "language_server"
+    "scroll_beyond_last_line": "off",
+    "vertical_scroll_margin": 0,
+    "format_on_save": "on",
+    "ui_font_size": 16,
+    "buffer_font_size": 15,
+    "theme": {
+        "mode": "system",
+        "light": "Kanso Pearl (No italics)",
+        "dark": "Kanso Zen (No italics)",
     },
-    "Svelte": {
-      "formatter": "language_server"
+    "git": {
+        "inline_blame": {
+            "enabled": false,
+        },
     },
-    "C": {
-      "format_on_save": "off"
+    "languages": {
+        "Lua": {
+            "formatter": "language_server",
+        },
+        "Python": {
+            "formatter": "language_server",
+        },
+        "JavaScript": {
+            "formatter": "language_server",
+        },
+        "TypeScript": {
+            "formatter": "language_server",
+        },
+        "JSON": {
+            "formatter": "language_server",
+        },
+        "Svelte": {
+            "formatter": "language_server",
+        },
+        "C": {
+            "format_on_save": "off",
+        },
+        "C++": {
+            "format_on_save": "off",
+        },
     },
-    "C++": {
-      "format_on_save": "off"
-    }
-  }
 }
