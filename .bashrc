@@ -15,6 +15,8 @@ export SDKMAN_DIR="$HOME/.sdkman"
 [ -f "$HOME/.deno/env" ] && source "$HOME/.deno/env"
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
+if [[ 1 -eq $__ETC_PROFILE_NIX_SOURCED ]] && ! type -p nix-shell > /dev/null; then unset __ETC_PROFILE_NIX_SOURCED && source /etc/profile.d/nix.sh; fi
+
 set -o vi
 
 shopt -s histappend
