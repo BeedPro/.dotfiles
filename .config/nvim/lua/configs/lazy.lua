@@ -1,6 +1,5 @@
 return {
   defaults = { lazy = true },
-  install = { colorscheme = { "moonfly" } },
 
   ui = {
     icons = {
