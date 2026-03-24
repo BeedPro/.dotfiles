@@ -5,54 +5,73 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 from subprocess import CompletedProcess, Popen
-from typing import Dict, Iterable, List, Tuple
+from typing import Dict, Iterable, List, Sequence, Tuple
 
 SRC_DIR: Path = Path.home() / ".local" / "src"
 SRC_DIR.mkdir(parents=True, exist_ok=True)
+
+
+@dataclass(frozen=True)
+class DirectorySource:
+    base_dir: Path
+    depth: int
+    key_prefix: str = ""
+
+
+@dataclass(frozen=True)
+class LauncherConfig:
+    static_targets: Dict[str, Path]
+    directory_sources: Sequence[DirectorySource]
+    default_target: Path
+
+
+CONFIG = LauncherConfig(
+    static_targets={
+        "dotfiles": Path("~/.dotfiles"),
+        "scripts": Path("~/.local/scripts"),
+    },
+    directory_sources=(
+        DirectorySource(base_dir=Path("~/.local/src"), depth=2),
+        DirectorySource(
+            base_dir=Path("~/.dotfiles/.config"), depth=1, key_prefix="config/"
+        ),
+        DirectorySource(
+            base_dir=Path("~/Compendium"), depth=1, key_prefix="compendium/"
+        ),
+    ),
+    default_target=Path("~"),
+)
+
 
 def run(cmd: list[str], **kwargs) -> CompletedProcess[str]:
     return subprocess.run(cmd, check=True, text=True, **kwargs)
 
 
-def is_valid_base(path: Path) -> bool:
-    return path.is_dir()
+def find_dirs(base_dir: Path, depth: int = 1) -> List[str]:
+    if depth < 1:
+        return []
 
-
-def relative_depth(root: str, base_depth: int) -> int:
-    return len(Path(root).parts) - base_depth
-
-
-def handle_depth(
-    root: str,
-    dirs: List[str],
-    current: int,
-    target: int,
-    base: Path,
-    result: List[str],
-) -> None:
-    if current > target:
-        dirs.clear()
-        return
-
-    if current == target:
-        rel: Path = Path(root).resolve().relative_to(base)
-        result.append(rel.as_posix())
-        dirs.clear()
-
-
-def find_dirs(input: str, depth: int = 1) -> List[str]:
-    base: Path = Path(input).expanduser().resolve()
-    if not is_valid_base(base):
+    base: Path = base_dir.expanduser().resolve()
+    if not base.is_dir():
         return []
 
     result: List[str] = []
     base_depth: int = len(base.parts)
 
     for root, dirs, _ in os.walk(base):
-        current: int = relative_depth(root, base_depth)
-        handle_depth(root, dirs, current, depth, base, result)
+        current: int = len(Path(root).parts) - base_depth
+
+        if current > depth:
+            dirs.clear()
+            continue
+
+        if current == depth:
+            rel: Path = Path(root).relative_to(base)
+            result.append(rel.as_posix())
+            dirs.clear()
 
     return result
 
@@ -61,26 +80,28 @@ def add_paths(
     out: Dict[str, str],
     items: Iterable[str],
     prefix: str,
-    base: str,
+    base: Path,
 ) -> None:
+    resolved_base: Path = base.expanduser().resolve()
+
     for p in items:
         key: str = f"{prefix}{p}" if prefix else p
-        out[key] = f"{base}/{p}"
+        out[key] = str((resolved_base / p).as_posix())
 
 
-def create_mapping(paths: list[str]) -> Dict[str, str]:
-    src: List[str] = find_dirs(paths[0], 2)
-    config: List[str] = find_dirs(paths[1])
-    compendium: List[str] = find_dirs(paths[2])
-
+def create_mapping(config: LauncherConfig) -> Dict[str, str]:
     out: Dict[str, str] = {
-        "dotfiles": "~/.dotfiles",
-        "scripts": "~/.local/scripts",
+        name: str(path.expanduser().resolve())
+        for name, path in config.static_targets.items()
     }
 
-    add_paths(out, src, "", paths[0])
-    add_paths(out, config, "config/", paths[1])
-    add_paths(out, compendium, "compendium/", paths[2])
+    for source in config.directory_sources:
+        add_paths(
+            out=out,
+            items=find_dirs(source.base_dir, source.depth),
+            prefix=source.key_prefix,
+            base=source.base_dir,
+        )
 
     return out
 
@@ -93,12 +114,12 @@ def get_tmux_items() -> List[str]:
             text=True,
         )
         return out.splitlines()
-    except subprocess.CalledProcessError:
+    except (subprocess.CalledProcessError, FileNotFoundError):
         return []
 
 
-def get_all_items(paths: list[str]) -> Tuple[List[str], Dict[str, str]]:
-    mapping: dict[str, str] = create_mapping(paths)
+def get_all_items(config: LauncherConfig) -> Tuple[List[str], Dict[str, str]]:
+    mapping: dict[str, str] = create_mapping(config)
 
     tmux: set[str] = set(get_tmux_items())
     keys: set[str] = set(mapping)
@@ -164,13 +185,7 @@ def ensure_session(name: str, directory: Path) -> None:
 
 
 def main() -> None:
-    paths: list[str] = [
-        "~/.local/src",
-        "~/.dotfiles/.config",
-        "~/Compendium",
-    ]
-
-    items, mapping = get_all_items(paths)
+    items, mapping = get_all_items(CONFIG)
     selected: str = fzf_select(items)
 
     if not selected:
@@ -179,7 +194,7 @@ def main() -> None:
     if selected in mapping:
         target = Path(mapping[selected]).expanduser().resolve()
     else:
-        target = Path("~").expanduser().resolve()
+        target = CONFIG.default_target.expanduser().resolve()
 
     ensure_session(selected, target)
 
