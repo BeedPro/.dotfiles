@@ -5,17 +5,12 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
-import argparse
 from pathlib import Path
 from subprocess import CompletedProcess, Popen
-from typing import Iterable, List, Dict, Tuple
+from typing import Dict, Iterable, List, Tuple
 
 SRC_DIR: Path = Path.home() / ".local" / "src"
 SRC_DIR.mkdir(parents=True, exist_ok=True)
-
-TMUX_ICON: str = "@"
-CONFIG_ICON: str = "+"
-
 
 def run(cmd: list[str], **kwargs) -> CompletedProcess[str]:
     return subprocess.run(cmd, check=True, text=True, **kwargs)
@@ -111,10 +106,10 @@ def get_all_items(paths: list[str]) -> Tuple[List[str], Dict[str, str]]:
     display: List[str] = []
 
     for name in sorted(tmux):
-        display.append(f"{TMUX_ICON} {name}")
+        display.append(name)
 
     for name in sorted(keys - tmux):
-        display.append(f"{CONFIG_ICON} {name}")
+        display.append(name)
 
     return display, mapping
 
@@ -168,20 +163,7 @@ def ensure_session(name: str, directory: Path) -> None:
         run(["tmux", "attach-session", "-t", name])
 
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-o",
-        "--output",
-        action="store_true",
-        help="Output the selected directory and exit",
-    )
-    return parser.parse_args()
-
-
 def main() -> None:
-    args = parse_args()
-
     paths: list[str] = [
         "~/.local/src",
         "~/.dotfiles/.config",
@@ -189,7 +171,7 @@ def main() -> None:
     ]
 
     items, mapping = get_all_items(paths)
-    selected: str = fzf_select(items)[2:]
+    selected: str = fzf_select(items)
 
     if not selected:
         return
@@ -198,10 +180,6 @@ def main() -> None:
         target = Path(mapping[selected]).expanduser().resolve()
     else:
         target = Path("~").expanduser().resolve()
-
-    if args.output:
-        print(target)
-        return
 
     ensure_session(selected, target)
 
