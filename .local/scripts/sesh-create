@@ -1,16 +1,38 @@
 #!/usr/bin/env python3
 
-import re
+from __future__ import annotations
+
 import curses
 import os
+import re
 import subprocess
 import sys
+from dataclasses import dataclass
 from pathlib import Path
+from subprocess import CompletedProcess
+from typing import Sequence
 
-SRC_DIR = Path.home() / ".local" / "src"
-SRC_DIR.mkdir(parents=True, exist_ok=True)
 
-EXIT_SIGNAL = "__ESC_EXIT__"
+@dataclass(frozen=True)
+class AppConfig:
+    prompt: str
+    exit_signal: str
+    src_dir: Path
+
+
+CONFIG = AppConfig(
+    prompt="Name: ",
+    exit_signal="__ESC_EXIT__",
+    src_dir=Path.home() / ".local" / "src",
+)
+
+GIT_URL_RE = re.compile(r"^(https?://|git@[^:]+:|ssh://git@[^/]+/|gh:)")
+REPO_CLEAN_PATTERNS: Sequence[tuple[str, str]] = (
+    (r"^ssh://git@[^/]+/", ""),
+    (r"^git@[^:]+:", ""),
+    (r"^https?://[^/]+/", ""),
+    (r"(\.git)?$", ""),
+)
 
 
 def is_esc(ch: int) -> bool:
@@ -97,15 +119,15 @@ def curses_loop(stdscr, prompt: str) -> str:
     while True:
         ch = stdscr.getch()
 
+        if esc_armed and is_esc(ch):
+            return CONFIG.exit_signal
+
         buf, pos, done, esc_armed = handle_key(
             ch,
             buf,
             pos,
             esc_armed,
         )
-
-        if esc_armed and is_esc(ch):
-            return EXIT_SIGNAL
 
         render_line(stdscr, prompt, buf, pos)
 
@@ -117,8 +139,12 @@ def curses_input(prompt: str) -> str:
     return curses.wrapper(curses_loop, prompt)
 
 
-def run(cmd, check=True):
+def run(cmd: list[str], check: bool = True) -> CompletedProcess[bytes]:
     return subprocess.run(cmd, check=check)
+
+
+def ensure_src_dir(path: Path) -> None:
+    path.mkdir(parents=True, exist_ok=True)
 
 
 def has_session(name: str) -> bool:
@@ -146,25 +172,29 @@ def ensure_session(name: str, directory: Path | None = None) -> None:
 
 
 def is_git_url(value: str) -> bool:
-    return bool(re.match(r"^(https?://|git@[^:]+:|ssh://git@[^/]+/|gh:)", value))
+    return bool(GIT_URL_RE.match(value))
 
 
 def clean_repo_path(url: str) -> str:
-    cleaned = re.sub(r"^ssh://git@[^/]+/", "", url)
-    cleaned = re.sub(r"^git@[^:]+:", "", cleaned)
-    cleaned = re.sub(r"^https?://[^/]+/", "", cleaned)
-    cleaned = re.sub(r"(\.git)?$", "", cleaned)
+    cleaned = url
+    for pattern, replacement in REPO_CLEAN_PATTERNS:
+        cleaned = re.sub(pattern, replacement, cleaned)
     return cleaned
 
 
 def main() -> None:
-    value = curses_input("Name: ")
+    ensure_src_dir(CONFIG.src_dir)
+    value = curses_input(CONFIG.prompt).strip()
 
-    if value == EXIT_SIGNAL:
+    if value == CONFIG.exit_signal:
         return
+
+    if not value:
+        return
+
     if is_git_url(value):
         clean = clean_repo_path(value)
-        repo_dir = SRC_DIR / clean
+        repo_dir = CONFIG.src_dir / clean
 
         if not (repo_dir / ".git").is_dir():
             repo_dir.parent.mkdir(parents=True, exist_ok=True)
