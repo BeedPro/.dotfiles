@@ -32,7 +32,6 @@ source $HOME/.config/fzf/light.sh
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH="$HOME/.go"
 
-alias t="tmux new-session -A -s home"
 alias cdt="$HOME/.local/scripts/sesh-launcher"
 
 openfile() {
