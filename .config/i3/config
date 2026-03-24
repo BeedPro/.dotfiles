@@ -49,11 +49,9 @@ bindsym $mod+Print exec --no-startup-id ~/.local/scripts/screenshot.sh window
 bindsym $mod+Shift+Print exec --no-startup-id ~/.local/scripts/screenshot.sh screen
 bindsym $mod+Tab workspace back_and_forth
 
-set $terminal alacritty
 set $browser firefox
 
-bindsym $mod+Return exec --no-startup-id $terminal -e tmux new-session -A -s home
-bindsym $mod+Shift+Return exec --no-startup-id $terminal
+bindsym $mod+Return exec --no-startup-id alacritty
 bindsym $mod+w exec --no-startup-id $browser
 bindsym $mod+Shift+w exec --no-startup-id $browser --private-window
 

@@ -2,6 +2,7 @@
 
 import re
 import curses
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -130,13 +131,18 @@ def has_session(name: str) -> bool:
 
 
 def ensure_session(name: str, directory: Path | None = None) -> None:
+    inside_tmux = "TMUX" in os.environ
+
     if not has_session(name):
         cmd = ["tmux", "new-session", "-ds", name]
         if directory:
             cmd += ["-c", str(directory)]
         run(cmd)
 
-    run(["tmux", "switch-client", "-t", name])
+    if inside_tmux:
+        run(["tmux", "switch-client", "-t", name])
+    else:
+        run(["tmux", "attach-session", "-t", name])
 
 
 def is_git_url(value: str) -> bool:

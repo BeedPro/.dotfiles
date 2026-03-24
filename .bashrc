@@ -32,7 +32,8 @@ source $HOME/.config/fzf/light.sh
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH="$HOME/.go"
 
-alias cdt="$HOME/.local/scripts/sesh-launcher"
+alias ts="$HOME/.local/scripts/sesh-create"
+alias tsi="$HOME/.local/scripts/sesh-launcher"
 
 openfile() {
   "$HOME/.local/scripts/openfile" "$@"
