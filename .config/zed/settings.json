@@ -56,28 +56,136 @@
   },
   "languages": {
     "Lua": {
-      "formatter": "language_server",
+      "formatter": {
+        "external": {
+          "command": "stylua",
+          "arguments": ["--stdin-filepath", "{buffer_path}", "-"],
+        },
+      },
+    },
+    "Typst": {
+      "formatter": {
+        "external": {
+          "command": "prettypst",
+          "arguments": ["--stdin-filepath", "{buffer_path}"],
+        },
+      },
     },
     "Python": {
-      "formatter": "language_server",
+      "formatter": "ruff",
+    },
+    "HTML (Django)": {
+      "formatter": {
+        "external": {
+          "command": "djlint",
+          "arguments": ["--reformat", "--quiet", "-"],
+        },
+      },
+    },
+    "Django HTML": {
+      "formatter": {
+        "external": {
+          "command": "djlint",
+          "arguments": ["--reformat", "--quiet", "-"],
+        },
+      },
+    },
+    "HTML": {
+      "formatter": {
+        "external": {
+          "command": "biome",
+          "arguments": ["format", "--stdin-file-path", "{buffer_path}"],
+        },
+      },
+    },
+    "CSS": {
+      "formatter": {
+        "external": {
+          "command": "biome",
+          "arguments": ["format", "--stdin-file-path", "{buffer_path}"],
+        },
+      },
+    },
+    "Markdown": {
+      "formatter": {
+        "external": {
+          "command": "prettierd",
+          "arguments": ["{buffer_path}"],
+        },
+      },
     },
     "JavaScript": {
-      "formatter": "language_server",
+      "formatter": {
+        "external": {
+          "command": "biome",
+          "arguments": ["format", "--stdin-file-path", "{buffer_path}"],
+        },
+      },
+    },
+    "JSX": {
+      "formatter": {
+        "external": {
+          "command": "biome",
+          "arguments": ["format", "--stdin-file-path", "{buffer_path}"],
+        },
+      },
     },
     "TypeScript": {
-      "formatter": "language_server",
+      "formatter": {
+        "external": {
+          "command": "biome",
+          "arguments": ["format", "--stdin-file-path", "{buffer_path}"],
+        },
+      },
+    },
+    "TSX": {
+      "formatter": {
+        "external": {
+          "command": "biome",
+          "arguments": ["format", "--stdin-file-path", "{buffer_path}"],
+        },
+      },
     },
     "JSON": {
-      "formatter": "language_server",
+      "formatter": {
+        "external": {
+          "command": "biome",
+          "arguments": ["format", "--stdin-file-path", "{buffer_path}"],
+        },
+      },
     },
     "Svelte": {
-      "formatter": "language_server",
+      "formatter": {
+        "external": {
+          "command": "biome",
+          "arguments": ["format", "--stdin-file-path", "{buffer_path}"],
+        },
+      },
     },
     "C": {
-      "format_on_save": "off",
+      "formatter": {
+        "external": {
+          "command": "clang-format",
+          "arguments": ["--assume-filename", "{buffer_path}"],
+        },
+      },
     },
     "C++": {
+      "formatter": {
+        "external": {
+          "command": "clang-format",
+          "arguments": ["--assume-filename", "{buffer_path}"],
+        },
+      },
       "format_on_save": "off",
+    },
+    "GDScript": {
+      "formatter": {
+        "external": {
+          "command": "gdformat",
+          "arguments": ["-"],
+        },
+      },
     },
   },
 }
