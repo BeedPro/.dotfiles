@@ -1,14 +1,13 @@
 local dap = require "dap"
 
-local home = os.getenv "HOME"
-local mason_home = home .. "/.local/share/nvim/mason"
-local local_lua_package = mason_home .. "/packages/local-lua-debugger-vscode/extension"
+local mason_home = vim.fs.joinpath(vim.fn.stdpath "data", "mason")
+local local_lua_package = vim.fs.joinpath(mason_home, "packages", "local-lua-debugger-vscode", "extension")
 
 dap.adapters["local-lua"] = {
   type = "executable",
   command = "node",
   args = {
-    local_lua_package .. "/extension/debugAdapter.js",
+    vim.fs.joinpath(local_lua_package, "extension", "debugAdapter.js"),
   },
   enrich_config = function(config, on_config)
     if not config.extensionPath then

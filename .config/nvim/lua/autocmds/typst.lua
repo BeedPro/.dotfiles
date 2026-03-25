@@ -18,7 +18,7 @@ autocmd({ "BufEnter", "BufWritePost" }, {
     end
 
     local dir = vim.fn.fnamemodify(filepath, ":h")
-    local outpath = "/tmp/render.pdf"
+    local outpath = vim.fs.joinpath(vim.fn.stdpath "cache", "typst-render.pdf")
 
     vim.fn.jobstart({ "typst", "compile", filepath, outpath }, {
       cwd = dir,

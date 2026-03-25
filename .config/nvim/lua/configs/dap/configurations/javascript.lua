@@ -1,3 +1,5 @@
+local firefox = vim.fn.exepath "firefox"
+
 return {
   {
     type = "pwa-node",
@@ -26,6 +28,6 @@ return {
       return "http://" .. host .. ":" .. port
     end,
     webRoot = "${workspaceFolder}",
-    firefoxExecutable = "/usr/bin/firefox",
+    firefoxExecutable = firefox ~= "" and firefox or "firefox",
   },
 }

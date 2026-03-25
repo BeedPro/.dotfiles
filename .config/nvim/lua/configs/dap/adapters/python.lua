@@ -9,10 +9,10 @@ end
 
 local function python_executable(venv)
   if is_windows() then
-    return venv .. "\\Scripts\\python.exe"
+    return vim.fs.joinpath(venv, "Scripts", "python.exe")
   end
 
-  return venv .. "/bin/python"
+  return vim.fs.joinpath(venv, "bin", "python")
 end
 
 function M.resolve_python()
@@ -24,15 +24,15 @@ function M.resolve_python()
   venv_path = os.getenv "CONDA_PREFIX"
   if venv_path then
     if is_windows() then
-      return venv_path .. "\\python.exe"
+      return vim.fs.joinpath(venv_path, "python.exe")
     end
 
-    return venv_path .. "/bin/python"
+    return vim.fs.joinpath(venv_path, "bin", "python")
   end
 
   local root = vim.fn.getcwd()
   for _, folder in ipairs { "venv", ".venv", "env", ".env" } do
-    local path = root .. "/" .. folder
+    local path = vim.fs.joinpath(root, folder)
     local stat = uv.fs_stat(path)
     if stat and stat.type == "directory" then
       return python_executable(path)
@@ -42,8 +42,7 @@ function M.resolve_python()
   return "python3"
 end
 
-local home = os.getenv "HOME"
-local debugpy_python = home .. "/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+local debugpy_python = python_executable(vim.fs.joinpath(vim.fn.stdpath "data", "mason", "packages", "debugpy", "venv"))
 
 dap.adapters.python = function(cb, config)
   if config.request == "attach" then

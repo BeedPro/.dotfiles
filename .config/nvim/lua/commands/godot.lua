@@ -2,12 +2,12 @@ local command = vim.api.nvim_create_user_command
 
 local function find_godot_project_root()
   local cwd = vim.fn.getcwd()
-  local search_paths = { "", "/.." }
+  local search_paths = { cwd, vim.fn.fnamemodify(cwd, ":h") }
 
-  for _, relative_path in ipairs(search_paths) do
-    local project_file = cwd .. relative_path .. "/project.godot"
+  for _, path in ipairs(search_paths) do
+    local project_file = vim.fs.joinpath(path, "project.godot")
     if vim.uv.fs_stat(project_file) then
-      return cwd .. relative_path
+      return path
     end
   end
 
@@ -15,7 +15,7 @@ local function find_godot_project_root()
 end
 
 local function is_server_running(project_path)
-  local server_pipe = project_path .. "/server.pipe"
+  local server_pipe = vim.fs.joinpath(project_path, "server.pipe")
   return vim.uv.fs_stat(server_pipe) ~= nil
 end
 
@@ -32,7 +32,7 @@ local function start_godot_server_if_needed()
     return
   end
 
-  vim.fn.serverstart(godot_project_path .. "/server.pipe")
+  vim.fn.serverstart(vim.fs.joinpath(godot_project_path, "server.pipe"))
   vim.notify "Godot Neovim server started"
 end
 

@@ -4,10 +4,10 @@ local function is_django_project(filepath)
   -- Walk up directories to find "manage.py" or "settings.py"
   local dir = vim.fn.fnamemodify(filepath, ":p:h")
 
-  while dir and dir ~= "/" do
-    local manage_py = dir .. "/manage.py"
-    local settings_py = dir .. "/project/settings.py"
-    local settings_glob = vim.fn.glob(dir .. "/**/settings.py")
+  while dir do
+    local manage_py = vim.fs.joinpath(dir, "manage.py")
+    local settings_py = vim.fs.joinpath(dir, "project", "settings.py")
+    local settings_glob = vim.fn.glob(vim.fs.joinpath(dir, "**", "settings.py"))
 
     if vim.uv.fs_stat(manage_py) or vim.uv.fs_stat(settings_py) or settings_glob ~= "" then
       return true
