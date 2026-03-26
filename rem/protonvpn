@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+sudo apt purge -y proton-vpn-gnome-desktop protonvpn protonvpn-cli protonvpn-gui protonvpn-stable-release || true
+sudo apt autoremove -y
+
+sudo rm -f /etc/apt/sources.list.d/protonvpn-stable.list
+sudo rm -f /etc/apt/sources.list.d/protonvpn.list
+sudo rm -f /etc/apt/trusted.gpg.d/protonvpn-stable.gpg
+sudo rm -f /usr/share/keyrings/protonvpn-stable-archive-keyring.gpg
+sudo apt update
+
+echo "Removed Proton VPN packages and apt source"
