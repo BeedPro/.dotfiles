@@ -34,6 +34,7 @@ export GOPATH="$HOME/.go"
 
 alias ts="$HOME/.local/scripts/sesh-create"
 alias tsi="$HOME/.local/scripts/sesh-launcher"
+alias pvpn="$HOME/.local/scripts/pvpn"
 
 openfile() {
   "$HOME/.local/scripts/openfile" "$@"

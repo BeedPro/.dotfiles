@@ -1,0 +1,188 @@
+#!/usr/bin/env python3
+
+import re
+import shutil
+import subprocess
+import sys
+
+
+EXIT_OK = 0
+EXIT_CANCELLED = 1
+EXIT_USAGE = 2
+EXIT_COMMAND_NOT_FOUND = 127
+
+MIN_TABLE_COLUMNS = 2
+TABLE_COLUMN_SPLIT_PATTERN = r"\s{2,}"
+
+FZF_HEIGHT = "40%"
+FZF_LAYOUT = "reverse"
+
+
+def run(command: list[str]) -> int:
+    try:
+        return subprocess.run(command).returncode
+    except FileNotFoundError:
+        print("Error: required command not found.", file=sys.stderr)
+        return EXIT_COMMAND_NOT_FOUND
+
+
+def run_capture(command: list[str]) -> tuple[int, str, str]:
+    try:
+        proc = subprocess.run(command, capture_output=True, text=True)
+    except FileNotFoundError:
+        return (EXIT_COMMAND_NOT_FOUND, "", "required command not found")
+    return (proc.returncode, proc.stdout, proc.stderr)
+
+
+def is_separator_line(line: str) -> bool:
+    stripped = line.strip()
+    return bool(stripped) and all(ch in {"-", " "} for ch in stripped)
+
+
+def fzf_select(options: list[str], prompt: str) -> str | None:
+    if not options:
+        return None
+    if shutil.which("fzf") is None:
+        print("Error: 'fzf' is required for interactive selection.", file=sys.stderr)
+        return None
+
+    proc = subprocess.run(
+        [
+            "fzf",
+            "--prompt",
+            prompt,
+            "--height",
+            FZF_HEIGHT,
+            "--layout",
+            FZF_LAYOUT,
+            "--border",
+        ],
+        input="\n".join(options),
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        return None
+    return proc.stdout.strip()
+
+
+def list_countries() -> list[tuple[str, str]]:
+    code, out, err = run_capture(["protonvpn", "countries", "list"])
+    if code != 0:
+        if err.strip():
+            print(err.strip(), file=sys.stderr)
+        return []
+
+    countries: list[tuple[str, str]] = []
+    for line in out.splitlines():
+        if not line.strip() or line.startswith("Country") or is_separator_line(line):
+            continue
+        parts = re.split(TABLE_COLUMN_SPLIT_PATTERN, line.strip())
+        if len(parts) >= MIN_TABLE_COLUMNS:
+            name = parts[0].strip()
+            country_code = parts[1].strip()
+            countries.append((country_code, name))
+    return countries
+
+
+def list_cities(country: str) -> list[str]:
+    code, out, err = run_capture(["protonvpn", "cities", "list", country])
+    if code != 0:
+        if err.strip():
+            print(err.strip(), file=sys.stderr)
+        return []
+
+    seen: set[str] = set()
+    cities: list[str] = []
+    for line in out.splitlines():
+        stripped = line.strip()
+        if (
+            not stripped
+            or stripped.startswith("Cities in ")
+            or stripped.startswith("City")
+            or is_separator_line(stripped)
+        ):
+            continue
+        city = re.split(TABLE_COLUMN_SPLIT_PATTERN, stripped)[0].strip()
+        if city and city not in seen:
+            seen.add(city)
+            cities.append(city)
+    return cities
+
+
+def usage() -> None:
+    print(
+        "Usage:\n"
+        "  pvpn [fast|country|city]\n"
+        "  pvpn country <COUNTRY_CODE_OR_NAME>\n"
+        "  pvpn city <CITY_NAME>\n\n"
+        "Behavior:\n"
+        "  - No args: connect to fastest server\n"
+        "  - Missing country/city value: pick via fzf\n\n"
+        "Examples:\n"
+        "  pvpn\n"
+        "  pvpn fast\n"
+        "  pvpn country US\n"
+        "  pvpn city Paris"
+    )
+
+
+def choose_country() -> str | None:
+    countries = list_countries()
+    if not countries:
+        print("Error: could not load country list.", file=sys.stderr)
+        return None
+    labels = [f"{code}  {name}" for code, name in countries]
+    selected = fzf_select(labels, "Country> ")
+    if not selected:
+        return None
+    return selected.split()[0]
+
+
+def choose_city() -> str | None:
+    country = choose_country()
+    if not country:
+        return None
+    cities = list_cities(country)
+    if not cities:
+        print(f"Error: no cities found for {country}.", file=sys.stderr)
+        return None
+    return fzf_select(cities, "City> ")
+
+
+def main() -> int:
+    if len(sys.argv) == 1:
+        mode = "fast"
+    else:
+        mode = sys.argv[1].lower()
+
+    if mode in {"-h", "--help", "help"}:
+        usage()
+        return EXIT_OK
+
+    if mode == "fast":
+        return run(["protonvpn", "connect"])
+
+    if mode == "country":
+        country = " ".join(sys.argv[2:]).strip() if len(sys.argv) > 2 else ""
+        if not country:
+            country = choose_country() or ""
+        if not country:
+            return EXIT_CANCELLED
+        return run(["protonvpn", "connect", "--country", country])
+
+    if mode == "city":
+        city = " ".join(sys.argv[2:]).strip() if len(sys.argv) > 2 else ""
+        if not city:
+            city = choose_city() or ""
+        if not city:
+            return EXIT_CANCELLED
+        return run(["protonvpn", "connect", "--city", city])
+
+    print(f"Error: unknown mode '{mode}'.", file=sys.stderr)
+    usage()
+    return EXIT_USAGE
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
