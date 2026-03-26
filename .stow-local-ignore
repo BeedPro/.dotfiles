@@ -24,6 +24,20 @@ _darcs
 ^/COPYING
 .local/share/fonts
 
+# Python cache and tooling artifacts
+__pycache__
+.*\.py[cod]
+.*\$py\.class
+\.pytest_cache
+\.mypy_cache
+\.ruff_cache
+\.hypothesis
+\.pyre
+\.tox
+\.nox
+\.coverage
+\.coverage\..+
+
 add
 rem
 srv
