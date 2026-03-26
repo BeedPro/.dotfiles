@@ -1,9 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-sudo apt purge -y mullvad-vpn || true
-sudo apt autoremove -y
-
-sudo rm -f /usr/local/bin/mullvad-vpn /usr/local/bin/mullvad-gui
-
-echo "Removed Mullvad VPN"
