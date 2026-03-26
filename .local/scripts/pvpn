@@ -55,7 +55,6 @@ def fzf_select(options: list[str], prompt: str) -> str | None:
             FZF_HEIGHT,
             "--layout",
             FZF_LAYOUT,
-            "--border",
         ],
         input="\n".join(options),
         capture_output=True,
