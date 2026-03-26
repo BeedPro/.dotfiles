@@ -25,7 +25,7 @@ for_window [class="discord"] border normal
 
 assign [class="KeePassXC"] number 9
 
-default_border normal 1
+default_border pixel 1
 hide_edge_borders smart_no_gaps
 
 for_window [title="^floating$"] floating enable
@@ -153,8 +153,8 @@ set $warning     #b6927b
 
 # class                  border      bg         text     indicator    child_border
 client.focused           $accent     $accent    $base    $indicator   $accent
-client.focused_inactive  $overlay0   $accent    $base    $indicator   $overlay0
-client.unfocused         $overlay0   $base      $text    $indicator   $overlay0
+client.focused_inactive  $surface2   $base      $text    $surface2    $surface2
+client.unfocused         $surface2   $base      $text    $surface2    $surface2
 client.urgent            $warning    $warning   $base    $overlay0    $warning
 client.placeholder       $overlay0   $accent    $base    $overlay0    $overlay0
 client.background        $base
