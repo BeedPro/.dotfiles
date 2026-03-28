@@ -27,7 +27,7 @@
 
 (defalias
   lyr (layer-while-held layers)
-  [   (multi f24 (tap-hold $tt $ht [ (layer-while-held layers)))
+  c   (multi f24 (tap-hold $tt $ht c (layer-while-held layers)))
   spc (multi f24 (tap-hold $tt $ht spc (layer-while-held symnum)))
   tab (multi f24 (tap-hold $tt $ht tab (layer-while-held nav)))
 
@@ -55,7 +55,7 @@
   XX   q    w    e    r    t    XX   y    u    i    o    p    XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   @a   @s   @d   @f   g    XX   h    @j   @k   @l   @bsc XX   XX   XX    XX     XX     XX   XX  XX
   XX   z    x    c    v    b    XX   n    m    ,    .    ret  XX                            XX   XX  XX
-  XX   XX   XX   XX   XX   @tab @lyr esc  @spc XX   XX   XX             XX    XX            XX   XX      XX
+  XX   XX   XX   XX   @lyr @spc @tab esc  @spc XX   XX   XX             XX    XX            XX   XX      XX
   XX   lmet XX             XX                                 ralt XX   XX    XX     XX
 )
 
@@ -65,10 +65,10 @@
 
 (deflayer symnum
   XX        XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX   XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   1    2    3     4    5    6    7    8    9    0    @lyr XX   XX   XX    XX     XX     XX   XX  XX
-  @ftb @usc @eq  @sbr  @ebr -    S-=  @ssr @esr @col @scl _    XX                            XX   XX  XX
-  XX   _    grv  S-\   \    S-'  '    S-#  #    /    S-/  _              XX    XX            XX   XX      XX
+  XX   1    2    3     4    5    XX   6    7    8    9    0    XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   @usc @eq  @sbr  @ebr -    XX   S-=  @ssr @esr @col @scl XX   XX   XX    XX     XX     XX   XX  XX
+  XX   _    grv  S-\   \    S-'  XX   '    S-#  #    /    S-/  XX                            XX   XX  XX
+  XX   XX   XX   XX    XX   XX   @ftb esc  XX   XX   XX   XX             XX    XX            XX   XX      XX
   XX   XX   XX              XX                                 XX   XX   XX    XX     XX
 )
 
@@ -78,28 +78,28 @@
 
 (deflayer nav
   XX         XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   prtsc pgup del  XX   XX   XX   XX   XX   XX   XX   @lyr XX   XX   XX    XX     XX     XX   XX  XX
-  XX   home  pgdn end  ins  XX   left down up   rght ralt XX   XX                            XX   XX  XX
-  XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX              XX            XX   XX      XX
-  XX   XX    XX             @fsp                               XX   XX   XX    XX     XX
+  XX   prtsc pgup del  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   home  pgdn end  ins  XX   XX   left down up   rght XX   XX   XX   XX    XX     XX     XX   XX  XX
+  XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                            XX   XX  XX
+  XX   XX    XX   XX   XX   @fsp XX   ralt @fsp XX   XX   XX             XX    XX            XX   XX      XX
+  XX   XX    XX             XX                                 XX   XX   XX    XX     XX
 )
 
 (deflayer functions
-  XX        XX   XX   XX   XX   XX    XX      XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX   XX   XX   XX   XX   XX    XX      XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   f1   f2   f3   f4   XX   XX    XX      XX    XX    prev @lyr XX   XX   XX    XX     XX     XX   XX  XX
-  XX   f5   f6   f7   f8   XX   brdwn voldwn  volu  bru   pp   XX   XX                            XX   XX  XX
-  XX   _    f9   f10  f11  f12  XX    micmute mute  XX    next XX              XX          XX     XX   XX      XX
-  XX   XX   XX             XX                                  XX   XX   XX    XX    XX
+  XX        XX   XX   XX   XX   XX   XX      XX      XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   f1   f2   f3   f4   XX   XX   XX      XX      XX    XX   prev XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   f5   f6   f7   f8   XX   XX   brdwn   voldwn  volu  bru  pp   XX   XX   XX    XX     XX     XX   XX  XX
+  XX   f9   f10  f11  f12  XX   XX   XX      micmute mute  XX   next XX                            XX   XX  XX
+  XX   XX   XX   XX   XX   XX   XX   XX      XX      XX    XX   XX        XX   XX                  XX   XX      XX
+  XX   XX   XX             XX                                   XX   XX   XX   XX    XX
 )
 
 (deflayer qwerty
   esc       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  prtsc scrlck pause  nlck kp/ kp* kp-
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc ins   home   pgup   kp7  kp8 kp9 kp+
-  tab  q    w    e    r    t    y    u    i    o    p    @[   ]    ret  del   end    pgdn   kp4  kp5 kp6
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    ret  del   end    pgdn   kp4  kp5 kp6
   caps a    s    d    f    g    h    j    k    l    ;    '    #                             kp1  kp2 kp3
-  lsft \    z    x    c    v    b    n    m    ,    .    /         rsft       up            kp0  kp.     kprt
+  lsft \    z    x    @c   v    b    n    m    ,    .    /         rsft       up            kp0  kp.     kprt
   lctl lmet lalt           spc                                ralt rctl left  down   right
 )
 
