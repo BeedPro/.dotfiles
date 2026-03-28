@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # ~/.var/app/org.mozilla.firefox/config/mozilla/firefox
 # ~/.mozilla/firefox/

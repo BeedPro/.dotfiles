@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 sudo apt remove firefox-esr
 sudo apt update && sudo apt upgrade

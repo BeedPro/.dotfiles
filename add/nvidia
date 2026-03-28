@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # Install headers, detection tool, and drivers
 sudo apt install -y linux-headers-generic nvidia-detect

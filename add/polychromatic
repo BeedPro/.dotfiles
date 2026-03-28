@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+
+curl -fsSL 'https://debian.polychromatic.app/key.asc' | sudo gpg --dearmour --yes -o /usr/share/keyrings/polychromatic.gpg
+
+source /etc/os-release
+echo "deb [signed-by=/usr/share/keyrings/polychromatic.gpg] https://debian.polychromatic.app ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/polychromatic.list >/dev/null
+
+sudo apt-get update
+
+sudo apt install -y polychromatic openrazer-meta
+
+sudo gpasswd -a "$USER" plugdev
+
+echo "Please reboot for the changes to take effect."

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # Enable 32-bit architecture
 sudo dpkg --add-architecture i386
