@@ -52,11 +52,11 @@
 
 (deflayer base
   XX        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   _    _    _    _    _    _    _    _    _    _    @lyr XX   XX   XX    XX     XX     XX   XX  XX
-  @tab @a   @s   @d   @f   _    _    @j   @k   @l   @bsc esc  XX                            XX   XX  XX
-  XX   XX   _    _    _    _    _    _    _    _    _    ret            XX    XX            XX   XX      XX
-  XX   lmet XX             @spc                               ralt XX   XX    XX     XX
+  XX   q    w    e    r    t    XX   y    u    i    o    p    XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   @a   @s   @d   @f   g    XX   h    @j   @k   @l   @bsc XX   XX   XX    XX     XX     XX   XX  XX
+  XX   z    x    c    v    b    XX   n    m    ,    .    ret  XX                            XX   XX  XX
+  XX   XX   XX   XX   XX   @tab @lyr esc  @spc XX   XX   XX             XX    XX            XX   XX      XX
+  XX   lmet XX             XX                                 ralt XX   XX    XX     XX
 )
 
 (defalias
