@@ -55,7 +55,7 @@
   XX   q    w    e    r    t    XX   y    u    i    o    p    XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   @a   @s   @d   @f   g    XX   h    @j   @k   @l   @bsc XX   XX   XX    XX     XX     XX   XX  XX
   XX   z    x    c    v    b    XX   n    m    ,    .    ret  XX                            XX   XX  XX
-  XX   XX   XX   XX   @lyr @tab esc  esc  @spc XX   XX   XX             XX    XX            XX   XX      XX
+  XX   XX   XX   XX   @lyr @tab ralt esc  @spc XX   XX   XX             XX    XX            XX   XX      XX
   XX   XX   lmet           XX                                 ralt XX   XX    XX     XX
 )
 
@@ -68,7 +68,7 @@
   XX   1    2    3     4    5    XX   6    7    8    9    0    XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   @usc @eq  @sbr  @ebr -    XX   S-=  @ssr @esr @col @scl XX   XX   XX    XX     XX     XX   XX  XX
   XX   _    grv  S-\   \    S-'  XX   '    S-#  #    /    S-/  XX                            XX   XX  XX
-  XX   XX   XX   XX    XX   @ftb esc  esc  XX   XX   XX   XX             XX    XX            XX   XX      XX
+  XX   XX   XX   XX    XX   @ftb ralt esc  XX   XX   XX   XX             XX    XX            XX   XX      XX
   XX   XX   XX              XX                                 XX   XX   XX    XX     XX
 )
 
@@ -81,7 +81,7 @@
   XX   prtsc pgup del  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   home  pgdn end  ins  XX   XX   left down up   rght XX   XX   XX   XX    XX     XX     XX   XX  XX
   XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                            XX   XX  XX
-  XX   XX    XX   XX   XX   XX   esc  esc  @fsp XX   XX   XX             XX    XX            XX   XX      XX
+  XX   XX    XX   XX   XX   XX   ralt esc  @fsp XX   XX   XX             XX    XX            XX   XX      XX
   XX   XX    XX             XX                                 XX   XX   XX    XX     XX
 )
 
