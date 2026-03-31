@@ -27,7 +27,7 @@
 
 (defalias
   lyr (layer-while-held layers)
-  c   (multi f24 (tap-hold $tt $ht c (layer-while-held layers)))
+  yrs (multi f24 (tap-hold $tt $ht rsft (layer-while-held layers)))
   spc (multi f24 (tap-hold $tt $ht spc (layer-while-held sym)))
   tab (multi f24 (tap-hold $tt $ht tab (layer-while-held nav)))
 
@@ -99,7 +99,7 @@
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc ins   home   pgup   kp7  kp8 kp9 kp+
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    ret  del   end    pgdn   kp4  kp5 kp6
   caps a    s    d    f    g    h    j    k    l    ;    '    #                             kp1  kp2 kp3
-  lsft \    z    x    @c   v    b    n    m    ,    .    /         rsft       up            kp0  kp.     kprt
+  lsft \    z    x    c    v    b    n    m    ,    .    /         @yrs       up            kp0  kp.     kprt
   lctl lmet lalt           spc                                ralt rctl left  down   right
 )
 
