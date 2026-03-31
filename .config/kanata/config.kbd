@@ -39,15 +39,6 @@
   k (multi f24 (tap-hold $tt $ht k rsft))
   l (multi f24 (tap-hold $tt $ht l lalt))
   ; (multi f24 (tap-hold $tt $ht ; rmet))
-
-  usc (multi f24 (tap-hold $tt $ht S-- lmet))
-  eq (multi f24 (tap-hold $tt $ht = lalt))
-  sbr (multi f24 (tap-hold $tt $ht S-9 lsft))
-  ebr (multi f24 (tap-hold $tt $ht S-0 lctl))
-  ssr (multi f24 (tap-hold $tt $ht [ rctl))
-  esr (multi f24 (tap-hold $tt $ht ] rsft))
-  col (multi f24 (tap-hold $tt $ht S-; lalt))
-  scl (multi f24 (tap-hold $tt $ht ; rmet))
 )
 
 (deflayer base
@@ -67,7 +58,7 @@
   XX        XX   XX    XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   S-1  S-2  S-3   S-4  S-5  XX   S-6  S-7  S-8  grv  S-grv XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   S--  =    S-9   S-0  -    XX   S-=  [    ]    S-[  S-]   XX   XX   XX    XX     XX     XX   XX  XX
-  XX   XX   XX   \     S-\  XX   XX   XX   #    S-#  '    S-'   XX                            XX   XX  XX
+  XX   \    S-\  '     S-'  XX   XX   XX   #    S-#  XX   XX    XX                            XX   XX  XX
   XX   XX   XX   XX    XX   @ftb XX   XX   XX   XX   XX   XX              XX    XX            XX   XX      XX
   XX   XX   XX              XX                                  XX   XX   XX    XX     XX
 )
