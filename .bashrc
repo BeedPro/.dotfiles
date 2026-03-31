@@ -34,7 +34,6 @@ export GOPATH="$HOME/.go"
 
 alias ts="$HOME/.local/scripts/sesh-create"
 alias tsi="$HOME/.local/scripts/sesh-launcher"
-alias pvpn="$HOME/.local/scripts/pvpn"
 
 openfile() {
   "$HOME/.local/scripts/openfile" "$@"
@@ -42,9 +41,6 @@ openfile() {
 }
 
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
-
-alias vim="/usr/local/bin/nvim"
-alias svim="sudo -E /usr/local/bin/nvim"
 
 if command -v eza >/dev/null 2>&1; then
   alias ls='eza'
