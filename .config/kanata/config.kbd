@@ -28,7 +28,7 @@
 (defalias
   lyr (layer-while-held layers)
   c   (multi f24 (tap-hold $tt $ht c (layer-while-held layers)))
-  spc (multi f24 (tap-hold $tt $ht spc (layer-while-held symnum)))
+  spc (multi f24 (tap-hold $tt $ht spc (layer-while-held sym)))
   tab (multi f24 (tap-hold $tt $ht tab (layer-while-held nav)))
 
   a (multi f24 (tap-hold $tt $ht a lmet))
@@ -38,7 +38,7 @@
   j (multi f24 (tap-hold $tt $ht j rctl))
   k (multi f24 (tap-hold $tt $ht k rsft))
   l (multi f24 (tap-hold $tt $ht l lalt))
-  bsc (multi f24 (tap-hold $tt $ht bspc rmet))
+  ; (multi f24 (tap-hold $tt $ht ; rmet))
 
   usc (multi f24 (tap-hold $tt $ht S-- lmet))
   eq (multi f24 (tap-hold $tt $ht = lalt))
@@ -53,9 +53,9 @@
 (deflayer base
   XX        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   q    w    e    r    t    XX   y    u    i    o    p    XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   @a   @s   @d   @f   g    XX   h    @j   @k   @l   @bsc XX   XX   XX    XX     XX     XX   XX  XX
-  XX   z    x    c    v    b    XX   n    m    ,    .    ret  XX                            XX   XX  XX
-  XX   XX   XX   XX   @lyr @tab @spc esc  @spc XX   XX   XX             XX    XX            XX   XX      XX
+  XX   @a   @s   @d   @f   g    XX   h    @j   @k   @l   @;   XX   XX   XX    XX     XX     XX   XX  XX
+  XX   z    x    c    v    b    XX   n    m    ,    .    /    XX                            XX   XX  XX
+  XX   XX   XX   XX   @lyr @tab bspc ret  @spc XX   XX   XX             XX    XX            XX   XX      XX
   XX   XX   lmet           XX                                 ralt XX   XX    XX     XX
 )
 
@@ -63,13 +63,13 @@
   ftb (multi f24 (tap-hold $tt $ht tab (layer-while-held functions)))
 )
 
-(deflayer symnum
-  XX        XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   1    2    3     4    5    XX   6    7    8    9    0    XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   @usc @eq  @sbr  @ebr -    XX   S-=  @ssr @esr @col @scl XX   XX   XX    XX     XX     XX   XX  XX
-  XX   grv  S-\   \    S-'  XX   XX   '    S-#  #    /    S-/  XX                            XX   XX  XX
-  XX   XX   XX   XX    XX   @ftb XX   esc  XX   XX   XX   XX             XX    XX            XX   XX      XX
-  XX   XX   XX              XX                                 XX   XX   XX    XX     XX
+(deflayer sym
+  XX        XX   XX    XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   S-1  S-2  S-3   S-4  S-5  XX   S-6  S-7  S-8  grv  S-grv XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   S--  =    S-9   S-0  -    XX   S-=  [    ]    S-[  S-]   XX   XX   XX    XX     XX     XX   XX  XX
+  XX   XX   XX   \     S-\  XX   XX   XX   #    S-#  '    S-'   XX                            XX   XX  XX
+  XX   XX   XX   XX    XX   @ftb XX   XX   XX   XX   XX   XX              XX    XX            XX   XX      XX
+  XX   XX   XX              XX                                  XX   XX   XX    XX     XX
 )
 
 (defalias
@@ -77,12 +77,12 @@
 )
 
 (deflayer nav
-  XX         XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   prtsc pgup del  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   home  pgdn end  ins  XX   XX   left down up   rght XX   XX   XX   XX    XX     XX     XX   XX  XX
-  XX   XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                            XX   XX  XX
-  XX   XX    XX   XX   XX   XX   ralt esc  @fsp XX   XX   XX             XX    XX            XX   XX      XX
-  XX   XX    XX             XX                                 XX   XX   XX    XX     XX
+  XX         XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   1     2     3    4    5    XX   6    7    8    9    0    XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   ins   prtsc del  caps XX   XX   left down up   rght esc  XX   XX   XX    XX     XX     XX   XX  XX
+  XX   XX    XX    XX   XX   XX   XX   home pgdn pgup end  XX   XX                            XX   XX  XX
+  XX   XX    XX    XX   XX   XX   XX   ralt @fsp XX   XX   XX             XX    XX            XX   XX      XX
+  XX   XX    XX              XX                                 XX   XX   XX    XX     XX
 )
 
 (deflayer functions
