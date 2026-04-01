@@ -13,7 +13,7 @@ sudo apt update
 sudo apt-get install ninja-build gettext cmake curl build-essential lua5.3 liblua5.3-dev luajit
 
 # Clone
-git clone --depth 1 -b nightly https://github.com/neovim/neovim $PROJECT
+git clone --depth 1 -b v0.12.0 https://github.com/neovim/neovim $PROJECT
 cd $PROJECT
 
 # Build
