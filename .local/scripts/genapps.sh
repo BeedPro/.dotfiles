@@ -13,6 +13,7 @@ APPS=(
   "Email|$HOME/.local/scripts/openapps email"
   "Bookmarks|$HOME/.local/scripts/openbms"
   "Libresprite|libresprite"
+  "VIAL|vial"
   'Google Calendar|firefox --new-window "https://calendar.google.com"'
   'GitHub|firefox --new-window "https://github.com"'
 )
