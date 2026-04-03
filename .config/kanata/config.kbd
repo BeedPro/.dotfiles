@@ -28,7 +28,7 @@
 (defalias
   lyr (layer-while-held layers)
   yrs (multi f24 (tap-hold $tt $ht rsft (layer-while-held layers)))
-  spc (multi f24 (tap-hold $tt $ht spc (layer-while-held sym)))
+  spc (multi f24 (tap-hold $tt $ht spc (layer-while-held symnum)))
   tab (multi f24 (tap-hold $tt $ht tab (layer-while-held nav)))
 
   a (multi f24 (tap-hold $tt $ht a lmet))
@@ -39,6 +39,15 @@
   k (multi f24 (tap-hold $tt $ht k rsft))
   l (multi f24 (tap-hold $tt $ht l lalt))
   ; (multi f24 (tap-hold $tt $ht ; rmet))
+
+  usc (multi f24 (tap-hold $tt $ht S-- lmet))
+  eql (multi f24 (tap-hold $tt $ht = lalt))
+  brs (multi f24 (tap-hold $tt $ht S-9 lsft))
+  bre (multi f24 (tap-hold $tt $ht S-0 lctl))
+  srs (multi f24 (tap-hold $tt $ht [ rctl))
+  sre (multi f24 (tap-hold $tt $ht ] rsft))
+  sqs (multi f24 (tap-hold $tt $ht S-[ lalt))
+  sqe (multi f24 (tap-hold $tt $ht S-] rmet))
 )
 
 (deflayer base
@@ -46,7 +55,7 @@
   XX   q    w    e    r    t    XX   y    u    i    o    p    XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   @a   @s   @d   @f   g    XX   h    @j   @k   @l   @;   XX   XX   XX    XX     XX     XX   XX  XX
   XX   z    x    c    v    b    XX   n    m    ,    .    /    XX                            XX   XX  XX
-  XX   XX   XX   XX   XX   @tab ret  bspc @spc XX   XX   XX             @lyr  XX            XX   XX      XX
+  XX   XX   XX   XX   XX   @spc bspc ret  @tab XX   XX   XX             @lyr  XX            XX   XX      XX
   XX   XX   lmet           XX                                 ralt XX   XX    XX     XX
 )
 
@@ -54,26 +63,30 @@
   ftb (multi f24 (tap-hold $tt $ht tab (layer-while-held functions)))
 )
 
-(deflayer sym
+(deflayer symnum
   XX        XX   XX    XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   S-1  S-2  S-3   S-4  S-5  XX   S-6  S-7  S-8  grv  S-grv XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   S--  =    S-9   S-0  -    XX   S-=  [    ]    S-[  S-]   XX   XX   XX    XX     XX     XX   XX  XX
-  XX   \    S-\  '     S-'  XX   XX   XX   #    S-#  XX   XX    XX                            XX   XX  XX
-  XX   XX   XX   XX    XX   @ftb XX   XX   XX   XX   XX   XX              XX    XX            XX   XX      XX
+  XX   1    2    3     4    5    XX   6    7    8    9    0     XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   @usc @eql @brs  @bre -    XX   S-=  @srs @sre @sqs @sqe  XX   XX   XX    XX     XX     XX   XX  XX
+  XX   \    S-\  '     S-'  XX   XX   XX   #    S-#  grv  S-grv XX                            XX   XX  XX
+  XX   XX   XX   XX    XX   XX   XX   XX   @ftb XX   XX   XX              XX    XX            XX   XX      XX
   XX   XX   XX              XX                                  XX   XX   XX    XX     XX
 )
 
 (defalias
   fsp (multi f24 (tap-hold $tt $ht spc (layer-while-held functions)))
+  mau (movemouse-accel-up 3 500 1 5)
+  mal (movemouse-accel-left 3 500 1 5)
+  mad (movemouse-accel-down 3 500 1 5)
+  mar (movemouse-accel-right 3 500 1 5)
 )
 
 (deflayer nav
-  XX         XX    XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   1     2     3    4    5    XX   6    7    8    9    0    XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   ins   prtsc del  caps XX   XX   left down up   rght esc  XX   XX   XX    XX     XX     XX   XX  XX
-  XX   XX    XX    XX   XX   XX   XX   home pgdn pgup end  XX   XX                            XX   XX  XX
-  XX   XX    XX    XX   XX   XX   XX   ralt @fsp XX   XX   XX             XX    XX            XX   XX      XX
-  XX   XX    XX              XX                                 XX   XX   XX    XX     XX
+  XX         XX    XX   XX   XX   XX   XX   XX    XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   XX    mmid  @mau mrgt mwu  XX   ins  prtsc del  caps XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   XX    @mal  @mad @mar mwd  XX   left down  up   rght esc  XX   XX   XX    XX     XX     XX   XX  XX
+  XX   XX    XX    XX   XX   XX   XX   home pgdn  pgup end  XX   XX                            XX   XX  XX
+  XX   XX    XX    XX   XX   @fsp mlft XX   XX    XX   XX   XX             XX    XX            XX   XX      XX
+  XX   XX    XX              XX                                  XX   XX   XX    XX     XX
 )
 
 (deflayer functions
