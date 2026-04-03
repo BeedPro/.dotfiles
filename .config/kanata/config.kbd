@@ -64,12 +64,12 @@
 )
 
 (deflayer symnum
-  XX        XX   XX    XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   1    2    3     4    5    XX   6    7    8    9    0     XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   @usc @eql @brs  @bre -    XX   S-=  @srs @sre @sqs @sqe  XX   XX   XX    XX     XX     XX   XX  XX
-  XX   \    S-\  '     S-'  XX   XX   XX   #    S-#  grv  S-grv XX                            XX   XX  XX
-  XX   XX   XX   XX    XX   XX   XX   XX   @ftb XX   XX   XX              XX    XX            XX   XX      XX
-  XX   XX   XX              XX                                  XX   XX   XX    XX     XX
+  XX        XX    XX    XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   1    2     3     4    5    XX   6    7    8    9    0     XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   @usc @eql  @brs  @bre -    XX   S-=  @srs @sre @sqs @sqe  XX   XX   XX    XX     XX     XX   XX  XX
+  XX   grv  S-grv \     S-\  XX   XX   XX   '    S-'  #    S-#   XX                            XX   XX  XX
+  XX   XX   XX    XX    XX   XX   XX   XX   @ftb XX   XX   XX              XX    XX            XX   XX      XX
+  XX   XX   XX               XX                                  XX   XX   XX    XX     XX
 )
 
 (defalias
