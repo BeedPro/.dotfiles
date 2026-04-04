@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+
+sudo apt update
+sudo apt install -y wireguard
+
+printf '%s\n' \
+  'WireGuard installed.' \
+  '' \
+  'Client setup:' \
+  '1. Put your VPN config at /etc/wireguard/wg0.conf' \
+  '2. Connect with: sudo wg-quick up wg0' \
+  '3. Check status with: sudo wg' \
+  '4. Disconnect with: sudo wg-quick down wg0' \
+  '5. Enable on boot with: sudo systemctl enable --now wg-quick@wg0'
