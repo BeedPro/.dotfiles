@@ -2,7 +2,7 @@
 set -euo pipefail
 
 sudo apt update
-sudo apt install -y wireguard
+sudo apt install -y wireguard resolvconf
 
 printf '%s\n' \
   'WireGuard installed.' \
