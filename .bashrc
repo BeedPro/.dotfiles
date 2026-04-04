@@ -59,8 +59,6 @@ alias rm='rm -v'
 alias mv='mv -v'
 alias cp='cp -v'
 
-alias python='python3'
-alias apt='sudo apt'
 alias grep='grep --color=auto'
 
 alias fonts='fc-list | grep -ioE ": [^:]*$1[^:]+:" | sed -E "s/(^: |:)//g" | tr , "\n" | sort | uniq'
