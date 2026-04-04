@@ -81,12 +81,12 @@
 )
 
 (deflayer nav
-  XX         XX    XX   XX   XX   XX   XX   XX    XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX    mmid  @mau mrgt mwu  XX   ins  prtsc del  caps XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX    @mal  @mad @mar mwd  XX   left down  up   rght esc  XX   XX   XX    XX     XX     XX   XX  XX
-  XX   XX    XX    XX   XX   XX   XX   home pgdn  pgup end  XX   XX                            XX   XX  XX
-  XX   XX    XX    XX   XX   @fsp mlft XX   XX    XX   XX   XX             XX    XX            XX   XX      XX
-  XX   XX    XX              XX                                  XX   XX   XX    XX     XX
+  XX         XX    XX   XX   XX   XX   XX   XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   XX    mmid  @mau mrgt mwu  XX   XX   prtsc del   ins  caps XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   XX    @mal  @mad @mar mwd  XX   left down  up    rght esc  XX   XX   XX    XX     XX     XX   XX  XX
+  XX   XX    XX    XX   XX   XX   XX   home pgdn  pgup  end  XX   XX                            XX   XX  XX
+  XX   XX    XX    XX   XX   @fsp mlft XX   XX    XX    XX   XX             XX    XX            XX   XX      XX
+  XX   XX    XX              XX                                   XX   XX   XX    XX     XX
 )
 
 (deflayer functions
