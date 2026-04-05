@@ -27,6 +27,7 @@
 
 (defalias
   lyr (layer-while-held layers)
+  fun (layer-while-held functions)
   yrs (multi f24 (tap-hold $tt $ht esc (layer-while-held layers)))
   spc (multi f24 (tap-hold $tt $ht spc (layer-while-held symnum)))
   tab (multi f24 (tap-hold $tt $ht tab (layer-while-held nav)))
@@ -55,7 +56,7 @@
   XX   q    w    e    r    t    XX   y    u    i    o    p    XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   @a   @s   @d   @f   g    XX   h    @j   @k   @l   @;   XX   XX   XX    XX     XX     XX   XX  XX
   XX   z    x    c    v    b    XX   n    m    ,    .    /    XX                            XX   XX  XX
-  XX   XX   XX   XX   XX   @spc bspc ret  @tab esc  XX   XX             @lyr  XX            XX   XX      XX
+  XX   XX   XX   XX   @fun @spc bspc ret  @tab esc  XX   XX             @lyr  XX            XX   XX      XX
   XX   XX   lmet           XX                                 ralt XX   XX    XX     XX
 )
 
@@ -82,10 +83,10 @@
 
 (deflayer nav
   XX         XX    XX   XX   XX   XX   XX   XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX    mmid  @mau mrgt mwu  XX   XX   prtsc del   ins  caps XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX    @mal  @mad @mar mwd  XX   left down  up    rght esc  XX   XX   XX    XX     XX     XX   XX  XX
-  XX   XX    XX    XX   XX   XX   XX   home pgdn  pgup  end  XX   XX                            XX   XX  XX
-  XX   XX    XX    XX   XX   @fsp mlft XX   XX    XX    XX   XX             XX    XX            XX   XX      XX
+  XX   XX    mwl   @mau mwr  mwu  XX   XX   prtsc del   ins  caps XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   mlft  @mal  @mad @mar mrgt XX   left down  up    rght esc  XX   XX   XX    XX     XX     XX   XX  XX
+  XX   XX    XX    mmid XX   mwd  XX   home pgdn  pgup  end  XX   XX                            XX   XX  XX
+  XX   XX    XX    XX   lsft @fsp lctl XX   XX    XX    XX   XX             XX    XX            XX   XX      XX
   XX   XX    XX              XX                                   XX   XX   XX    XX     XX
 )
 
