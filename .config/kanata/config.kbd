@@ -27,6 +27,9 @@
 
 (defalias
   lyr (layer-while-held layers)
+  fun (layer-while-held functions)
+  nvr (layer-while-held nav)
+  sym (layer-while-held symnum)
   yrs (multi f24 (tap-hold $tt $ht rsft (layer-while-held layers)))
   spc (multi f24 (tap-hold $tt $ht spc (layer-while-held symnum)))
   tab (multi f24 (tap-hold $tt $ht tab (layer-while-held nav)))
@@ -52,10 +55,10 @@
 
 (deflayer base
   XX        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   q    w    e    r    t    XX   y    u    i    o    p    XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   @a   @s   @d   @f   g    XX   h    @j   @k   @l   @;   XX   XX   XX    XX     XX     XX   XX  XX
-  XX   z    x    c    v    b    XX   n    m    ,    .    /    XX                            XX   XX  XX
-  XX   XX   XX   XX   XX   @spc bspc ret  @tab XX   XX   XX             @lyr  XX            XX   XX      XX
+  esc  q    w    e    r    t    XX   y    u    i    o    p    bspc XX   XX    XX     XX     XX   XX  XX  XX
+  tab  @a   @s   @d   @f   g    XX   h    @j   @k   @l   @;   ret  XX   XX    XX     XX     XX   XX  XX
+  @nvr z    x    c    v    b    XX   n    m    ,    .    /    del                           XX   XX  XX
+  XX   XX   XX   XX   @fun @spc bspc ret  @tab ralt XX   XX             @lyr  XX            XX   XX      XX
   XX   XX   lmet           XX                                 ralt XX   XX    XX     XX
 )
 
