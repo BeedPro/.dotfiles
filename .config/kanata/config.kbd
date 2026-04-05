@@ -75,26 +75,29 @@
 
 (defalias
   fsp (multi f24 (tap-hold $tt $ht spc (layer-while-held functions)))
+)
+
+(deflayer nav
+  XX         XX     XX   XX   XX   XX   XX   XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   1     2      3    4    5    XX   XX   prtsc del   ins  caps XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   6     7      8    9    0    XX   left down  up    rght esc  XX   XX   XX    XX     XX     XX   XX  XX
+  XX   brdwn voldwn volu bru  mute XX   home pgdn  pgup  end  XX   XX                            XX   XX  XX
+  XX   XX    XX     XX   XX   @fsp XX   XX   XX    XX    XX   XX             XX    XX            XX   XX      XX
+  XX   XX    XX               XX                                   XX   XX   XX    XX     XX
+)
+
+(defalias
   mau (movemouse-accel-up 3 500 1 5)
   mal (movemouse-accel-left 3 500 1 5)
   mad (movemouse-accel-down 3 500 1 5)
   mar (movemouse-accel-right 3 500 1 5)
 )
 
-(deflayer nav
-  XX         XX    XX   XX   XX   XX   XX   XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX    mwl   @mau mwr  mwu  XX   XX   prtsc del   ins  caps XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   mlft  @mal  @mad @mar mrgt XX   left down  up    rght esc  XX   XX   XX    XX     XX     XX   XX  XX
-  XX   XX    XX    mmid XX   mwd  XX   home pgdn  pgup  end  XX   XX                            XX   XX  XX
-  XX   XX    XX    XX   lsft @fsp lctl XX   XX    XX    XX   XX             XX    XX            XX   XX      XX
-  XX   XX    XX              XX                                   XX   XX   XX    XX     XX
-)
-
 (deflayer functions
   XX        XX   XX   XX   XX   XX   XX      XX      XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   f1   f2   f3   f4   XX   XX   XX      XX      XX    XX   prev XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   f5   f6   f7   f8   XX   XX   brdwn   voldwn  volu  bru  pp   XX   XX   XX    XX     XX     XX   XX  XX
-  XX   f9   f10  f11  f12  XX   XX   XX      micmute mute  XX   next XX                            XX   XX  XX
+  XX   f1   f2   f3   f4   XX   XX   lctl    mlft    mmid  mrgt lsft XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   f5   f6   f7   f8   XX   XX   @mal    @mad    @mau  @mar mlft XX   XX   XX    XX     XX     XX   XX  XX
+  XX   f9   f10  f11  f12  XX   XX   mwl     mwd     mwu   mwr  XX   XX                            XX   XX  XX
   XX   XX   XX   XX   XX   XX   XX   XX      XX      XX    XX   XX        XX   XX                  XX   XX      XX
   XX   XX   XX             XX                                   XX   XX   XX   XX    XX
 )
