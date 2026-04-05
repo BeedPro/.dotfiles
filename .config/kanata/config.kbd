@@ -27,7 +27,7 @@
 
 (defalias
   lyr (layer-while-held layers)
-  yrs (multi f24 (tap-hold $tt $ht rsft (layer-while-held layers)))
+  yrs (multi f24 (tap-hold $tt $ht esc (layer-while-held layers)))
   spc (multi f24 (tap-hold $tt $ht spc (layer-while-held symnum)))
   tab (multi f24 (tap-hold $tt $ht tab (layer-while-held nav)))
 
@@ -51,11 +51,11 @@
 )
 
 (deflayer base
-  XX        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  @lyr      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   q    w    e    r    t    XX   y    u    i    o    p    XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   @a   @s   @d   @f   g    XX   h    @j   @k   @l   @;   XX   XX   XX    XX     XX     XX   XX  XX
   XX   z    x    c    v    b    XX   n    m    ,    .    /    XX                            XX   XX  XX
-  XX   XX   XX   XX   XX   @spc bspc ret  @tab XX   XX   XX             @lyr  XX            XX   XX      XX
+  XX   XX   XX   XX   XX   @spc bspc ret  @tab esc  XX   XX             @lyr  XX            XX   XX      XX
   XX   XX   lmet           XX                                 ralt XX   XX    XX     XX
 )
 
@@ -99,26 +99,22 @@
 )
 
 (deflayer qwerty
-  esc       f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  prtsc scrlck pause  nlck kp/ kp* kp-
+  @yrs      f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12  prtsc scrlck pause  nlck kp/ kp* kp-
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc ins   home   pgup   kp7  kp8 kp9 kp+
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    ret  del   end    pgdn   kp4  kp5 kp6
   caps a    s    d    f    g    h    j    k    l    ;    '    #                             kp1  kp2 kp3
-  lsft \    z    x    c    v    b    n    m    ,    .    /         @yrs       up            kp0  kp.     kprt
+  lsft \    z    x    c    v    b    n    m    ,    .    /         rsft       up            kp0  kp.     kprt
   lctl lmet lalt           spc                                ralt rctl left  down   right
 )
 
 (defalias
   qwt (layer-switch qwerty)
-  clg (multi lmet f12 (switch
-    ((base-layer base)) (layer-switch qwerty) break
-    ((base-layer qwerty)) (layer-switch base) break
-  ))
 )
 
 (deflayer layers
   XX        XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   lrld @qwt @clg XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX
+  XX   lrld @qwt XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX
   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX                            XX   XX  XX
   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX             XX    XX            XX   XX      XX
   XX   XX   XX             XX                                 XX   XX   XX    XX     XX
