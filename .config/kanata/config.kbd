@@ -92,8 +92,8 @@
 (deflayer functions
   XX        XX   XX   XX   XX   XX   XX      XX      XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   f1   f2   f3   f4   XX   XX   lctl    mlft    mmid  mrgt lsft XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   f5   f6   f7   f8   XX   XX   @mal    @mad    @mau  @mar mlft XX   XX   XX    XX     XX     XX   XX  XX
-  XX   f9   f10  f11  f12  XX   XX   mwl     mwd     mwu   mwr  XX   XX                            XX   XX  XX
+  XX   f5   f6   f7   f8   lsft XX   @mal    @mad    @mau  @mar mlft XX   XX   XX    XX     XX     XX   XX  XX
+  XX   f9   f10  f11  f12  lctl XX   mwl     mwd     mwu   mwr  XX   XX                            XX   XX  XX
   XX   XX   XX   XX   XX   XX   XX   XX      XX      XX    XX   XX        XX   XX                  XX   XX      XX
   XX   XX   XX             XX                                   XX   XX   XX   XX    XX
 )
