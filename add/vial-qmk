@@ -1,8 +1,44 @@
 #!/bin/bash
 
+# README:
+# This script installs dependencies and sets up a local clone of Vial QMK at:
+#   $HOME/.local/src/vial-kb/vial-qmk
+#
+# What it does:
+# 1) Installs ARM/QMK-related packages with apt
+# 2) Clones (or updates) the vial-qmk repository
+# 3) Syncs git submodules
+# 4) Installs QMK CLI
+# 5) Registers the repo with QMK CLI
+#
+# Build examples:
+#   cd $HOME/.local/src/vial-kb/vial-qmk
+#   make keychron/v4/iso:vial
+#   make crkbd/rev4:vial
+#
+# Flash examples:
+#   make keychron/v4/iso:vial:flash
+#   make crkbd/rev4:vial:flash
+#
+# Corne (crkbd) rev4 firmware notes:
+#   https://github.com/foostan/crkbd/blob/main/docs/firmware/rev4/firmware_en.md
+#   https://github.com/vial-kb/vial-qmk/tree/vial/keyboards/crkbd
+#
+# Vial-only udev setup (run manually if Vial cannot detect your keyboard):
+#   export USER_GID=$(id -g)
+#   sudo --preserve-env=USER_GID sh -c 'echo "KERNEL==\"hidraw*\", SUBSYSTEM==\"hidraw\", ATTRS{serial}==\"*vial:f64c2b3c*\", MODE=\"0660\", GROUP=\"$USER_GID\", TAG+=\"uaccess\", TAG+=\"udev-acl\"" > /etc/udev/rules.d/59-vial.rules'
+#   sudo rm -f /etc/udev/rules.d/99-vial.rules /etc/udev/rules.d/92-viia.rules
+#   sudo udevadm control --reload-rules && sudo udevadm trigger
+#
+# Notes:
+# - Replug keyboard after reloading udev rules.
+# - Restart the Vial app after applying rules.
+
 set -euo pipefail
 
 SRC_PATH="$HOME/.local/src/vial-kb/vial-qmk"
+
+printf "[vial-qmk] For setup notes (including Vial udev), read this script header: %s\n\n" "$0"
 
 printf "[vial-qmk] Installing build dependencies...\n"
 sudo apt-get update
@@ -33,42 +69,4 @@ curl -fsSL https://install.qmk.fm | sh
 printf "[vial-qmk] Registering firmware path with QMK CLI...\n"
 qmk setup -H "$SRC_PATH" -y
 
-printf "\n[vial-qmk] Setup complete.\n"
-printf "You can now build firmware with:\n"
-printf "  cd %s\n" "$SRC_PATH"
-printf "  make keychron/v4/iso:vial\n"
-printf "  make crkbd/rev4:vial\n"
-printf "\nTo flash your keyboard:\n"
-printf "  make keychron/v4/iso:vial:flash\n"
-printf "  make crkbd/rev4:vial:flash\n"
-
-printf "\nCorne (crkbd) rev4 firmware notes:\n"
-printf "  https://github.com/foostan/crkbd/blob/main/docs/firmware/rev4/firmware_en.md\n"
-
-KEYBOARDS_DIR="$SRC_PATH/keyboards"
-TARGET_KEYBOARD_DIR="$SRC_PATH/keyboards/keychron/v4"
-
-if [ -d "$KEYBOARDS_DIR" ]; then
-  printf "\n----- keyboards directory (top level) -----\n"
-  ls -1 "$KEYBOARDS_DIR"
-fi
-
-if [ -d "$TARGET_KEYBOARD_DIR" ]; then
-  printf "\n----- keychron/v4 directory contents -----\n"
-  ls -1 "$TARGET_KEYBOARD_DIR"
-else
-  printf "\n[vial-qmk] Could not find keyboard directory: %s\n" "$TARGET_KEYBOARD_DIR"
-fi
-
-README_PATH="$SRC_PATH/keyboards/keychron/v4/readme.md"
-if [ ! -f "$README_PATH" ]; then
-  README_PATH="$SRC_PATH/keyboards/keychron/v4/README.md"
-fi
-
-if [ -f "$README_PATH" ]; then
-  printf "\n----- keychron/v4 README -----\n"
-  cat "$README_PATH"
-  printf "\n----- end README -----\n"
-else
-  printf "\n[vial-qmk] Could not find keychron/v4 README in the repo.\n"
-fi
+printf "\n[vial-qmk] Setup complete. Read this script header for usage/build/flash notes: %s\n" "$0"
