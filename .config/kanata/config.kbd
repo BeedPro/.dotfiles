@@ -39,10 +39,10 @@
 )
 
 (deflayer funnav
-  XX        XX   XX   XX   XX   XX   XX    XX   XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  esc  f1   f2   f3   f4   f5   f6   f7    f8   f9    f10  f11  f12  XX   XX    XX     XX     XX   XX  XX  XX
-  XX   XX   XX   XX   XX   XX   XX   prtsc del  ins   caps XX   XX   XX   XX    XX     XX     XX   XX  XX
-  XX   XX   XX   XX   XX   XX   left down  up   right XX   XX   XX                            XX   XX  XX
-  XX   XX   XX   XX   XX   XX   home pgdn  pgup end   XX   XX             XX    XX            XX   XX      XX
-  XX   XX   XX             XX                                   XX   XX   XX    XX     XX
+  XX         XX   XX   XX   XX   XX   XX    XX   XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  S-grv f1   f2   f3   f4   f5   f6   f7    f8   f9    f10  f11  f12  XX   XX    XX     XX     XX   XX  XX  XX
+  grv   XX   XX   XX   XX   XX   XX   prtsc del  ins   caps XX   XX   XX   XX    XX     XX     XX   XX  XX
+  XX    XX   XX   XX   XX   XX   left down  up   right XX   XX   XX                            XX   XX  XX
+  XX    XX   XX   XX   XX   XX   home pgdn  pgup end   XX   XX             XX    XX            XX   XX      XX
+  XX    XX   XX             XX                                   XX   XX   XX    XX     XX
 )
