@@ -60,12 +60,12 @@
 )
 
 (deflayer navnums
-  XX         XX     XX   XX   XX   XX   XX   XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   1     2      3    4    5    XX   pp   prtsc del   ins  caps XX   XX   XX    XX     XX     XX   XX  XX  XX
-  @sym 6     7      8    9    0    XX   left down  up    rght esc  XX   XX   XX    XX     XX     XX   XX  XX
-  lmet brdwn voldwn volu bru  mute XX   home pgdn  pgup  end  XX   XX                            XX   XX  XX
-  XX   XX    XX     XX   XX   @fsp XX   XX   XX    XX    XX   XX             XX    XX            XX   XX      XX
-  XX   XX    XX               XX                                   XX   XX   XX    XX     XX
+  XX         XX     XX   XX   XX     XX  XX   XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   1     2      3    bru  volu   XX  pp   prtsc del   ins  caps XX   XX   XX    XX     XX     XX   XX  XX  XX
+  @sym 4     5      6    0    mute   XX  left down  up    rght esc  XX   XX   XX    XX     XX     XX   XX  XX
+  lmet 7     8      9    brdn voldwn XX  home pgdn  pgup  end  XX   XX                            XX   XX  XX
+  XX   XX    XX     XX   XX   @fsp   XX  XX   XX    XX    XX   XX             XX    XX            XX   XX      XX
+  XX   XX    XX               XX                                    XX   XX   XX    XX     XX
 )
 
 (defalias
@@ -73,12 +73,12 @@
 )
 
 (deflayer symbols
-  XX        XX    XX    XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   S-1  S-2   S-3   S-4  S-5  XX   S-=  -    S--  S-,  S-.   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   S-6  S-7   S-8   S-9  S-0  XX   =    [    ]    S-[  S-]   XX   XX   XX    XX     XX     XX   XX  XX
-  lmet grv  S-grv \     S-\  XX   XX   XX   '    S-'  #    S-#   XX                            XX   XX  XX
-  XX   XX   XX    XX    XX   XX   XX   XX   @ftb XX   XX   XX              XX    XX            XX   XX      XX
-  XX   XX   XX               XX                                  XX   XX   XX    XX     XX
+  XX        XX    XX    XX   XX    XX   XX   XX   XX   XX   XX    XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   S-1  S-2   S-3   grv  S-grv XX   S-=  -    S--  S-[  S-]   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   S-6  S-7   S-8   S-0  XX    XX   =    S-9  S-0  [    ]     XX   XX   XX    XX     XX     XX   XX  XX
+  lmet S-7  S-8   S-9   \    S-\   XX   XX   '    S-'  #    S-#   XX                            XX   XX  XX
+  XX   XX   XX    XX    XX   XX    XX   XX   @ftb XX   XX   XX              XX    XX            XX   XX      XX
+  XX   XX   XX               XX                                   XX   XX   XX    XX     XX
 )
 
 
