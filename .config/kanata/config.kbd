@@ -27,64 +27,60 @@
 
 (defalias
   lyr (layer-while-held layers)
-  fun (layer-while-held functions)
-  yrs (multi f24 (tap-hold $tt $ht esc (layer-while-held layers)))
-  spc (multi f24 (tap-hold $tt $ht spc (layer-while-held symnum)))
-  tab (multi f24 (tap-hold $tt $ht tab (layer-while-held nav)))
+  num (layer-while-held navnums)
+
+  spc (multi f24 (tap-hold $tt $ht spc (layer-while-held symbols)))
+  tab (multi f24 (tap-hold $tt $ht tab (layer-while-held navnums)))
+  bsc (multi f24 (tap-hold $tt $ht bspc (layer-while-held functions)))
 
   a (multi f24 (tap-hold $tt $ht a lmet))
   s (multi f24 (tap-hold $tt $ht s lalt))
   d (multi f24 (tap-hold $tt $ht d lsft))
   f (multi f24 (tap-hold $tt $ht f lctl))
+
   j (multi f24 (tap-hold $tt $ht j rctl))
   k (multi f24 (tap-hold $tt $ht k rsft))
   l (multi f24 (tap-hold $tt $ht l lalt))
   ; (multi f24 (tap-hold $tt $ht ; rmet))
-
-  usc (multi f24 (tap-hold $tt $ht S-- lmet))
-  eql (multi f24 (tap-hold $tt $ht = lalt))
-  brs (multi f24 (tap-hold $tt $ht S-9 lsft))
-  bre (multi f24 (tap-hold $tt $ht S-0 lctl))
-  srs (multi f24 (tap-hold $tt $ht [ rctl))
-  sre (multi f24 (tap-hold $tt $ht ] rsft))
-  sqs (multi f24 (tap-hold $tt $ht S-[ lalt))
-  sqe (multi f24 (tap-hold $tt $ht S-] rmet))
 )
 
 (deflayer base
   @lyr      XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   q    w    e    r    t    XX   y    u    i    o    p    XX   XX   XX    XX     XX     XX   XX  XX  XX
   XX   @a   @s   @d   @f   g    XX   h    @j   @k   @l   @;   XX   XX   XX    XX     XX     XX   XX  XX
-  XX   z    x    c    v    b    XX   n    m    ,    .    /    XX                            XX   XX  XX
-  XX   XX   XX   XX   @fun @spc bspc ret  @tab esc  XX   XX             @lyr  XX            XX   XX      XX
-  XX   XX   lmet           XX                                 ralt XX   XX    XX     XX
+  lmet z    x    c    v    b    XX   n    m    ,    .    /    XX                            XX   XX  XX
+  XX   XX   XX   XX   @num @spc @bsc ret  @tab esc  XX   XX             XX    XX            XX   XX      XX
+  XX   XX   XX             XX                                 XX   XX   XX    XX     XX
+)
+
+(defalias
+  sym (layer-while-held symbols)
+
+  fsp (multi f24 (tap-hold $tt $ht spc (layer-while-held functions)))
+)
+
+(deflayer navnums
+  XX         XX     XX   XX   XX   XX   XX   XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   1     2      3    4    5    XX   pp   prtsc del   ins  caps XX   XX   XX    XX     XX     XX   XX  XX  XX
+  @sym 6     7      8    9    0    XX   left down  up    rght esc  XX   XX   XX    XX     XX     XX   XX  XX
+  lmet brdwn voldwn volu bru  mute XX   home pgdn  pgup  end  XX   XX                            XX   XX  XX
+  XX   XX    XX     XX   XX   @fsp XX   XX   XX    XX    XX   XX             XX    XX            XX   XX      XX
+  XX   XX    XX               XX                                   XX   XX   XX    XX     XX
 )
 
 (defalias
   ftb (multi f24 (tap-hold $tt $ht tab (layer-while-held functions)))
 )
 
-(deflayer symnum
+(deflayer symbols
   XX        XX    XX    XX   XX   XX   XX   XX   XX   XX   XX    XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   1    2     3     4    5    XX   6    7    8    9    0     XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   @usc @eql  @brs  @bre -    XX   S-=  @srs @sre @sqs @sqe  XX   XX   XX    XX     XX     XX   XX  XX
-  XX   grv  S-grv \     S-\  XX   XX   XX   '    S-'  #    S-#   XX                            XX   XX  XX
+  XX   S-1  S-2   S-3   S-4  S-5  XX   S-=  -    S--  S-,  S-.   XX   XX   XX    XX     XX     XX   XX  XX  XX
+  XX   S-6  S-7   S-8   S-9  S-0  XX   =    [    ]    S-[  S-]   XX   XX   XX    XX     XX     XX   XX  XX
+  lmet grv  S-grv \     S-\  XX   XX   XX   '    S-'  #    S-#   XX                            XX   XX  XX
   XX   XX   XX    XX    XX   XX   XX   XX   @ftb XX   XX   XX              XX    XX            XX   XX      XX
   XX   XX   XX               XX                                  XX   XX   XX    XX     XX
 )
 
-(defalias
-  fsp (multi f24 (tap-hold $tt $ht spc (layer-while-held functions)))
-)
-
-(deflayer nav
-  XX         XX     XX   XX   XX   XX   XX   XX    XX    XX   XX   XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   1     2      3    4    5    XX   XX   prtsc del   ins  caps XX   XX   XX    XX     XX     XX   XX  XX  XX
-  XX   6     7      8    9    0    XX   left down  up    rght esc  XX   XX   XX    XX     XX     XX   XX  XX
-  XX   brdwn voldwn volu bru  mute XX   home pgdn  pgup  end  XX   XX                            XX   XX  XX
-  XX   XX    XX     XX   XX   @fsp XX   XX   XX    XX    XX   XX             XX    XX            XX   XX      XX
-  XX   XX    XX               XX                                   XX   XX   XX    XX     XX
-)
 
 (defalias
   mau (movemouse-accel-up 3 500 1 5)
@@ -100,6 +96,10 @@
   XX   f9   f10  f11  f12  XX   XX   mwl     mwd     mwu   mwr  XX   XX                            XX   XX  XX
   XX   XX   XX   XX   XX   XX   XX   XX      XX      XX    XX   XX        XX   XX                  XX   XX      XX
   XX   XX   XX             XX                                   XX   XX   XX   XX    XX
+)
+
+(defalias
+  yrs (multi f24 (tap-hold $tt $ht esc (layer-while-held layers)))
 )
 
 (deflayer qwerty
