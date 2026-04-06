@@ -54,8 +54,6 @@
 )
 
 (defalias
-  sym (layer-while-held symbols)
-
   fsp (multi f24 (tap-hold $tt $ht spc (layer-while-held functions)))
 )
 
