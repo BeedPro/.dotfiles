@@ -7,6 +7,7 @@ export PATH="$HOME/.volta/bin:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
 export PATH="$HOME/.cache/scalacli/local-repo/bin/scala-cli:$PATH"
 export PATH="$HOME/.local/share/coursier/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 export SDKMAN_DIR="$HOME/.sdkman"
 
@@ -60,7 +61,7 @@ alias mv='mv -v'
 alias cp='cp -v'
 
 alias grep='grep --color=auto'
-
+alias python='python3'
 alias fonts='fc-list | grep -ioE ": [^:]*$1[^:]+:" | sed -E "s/(^: |:)//g" | tr , "\n" | sort | uniq'
 
 alias largefiles='sudo find . -xdev -type f -size +500M -printf "%10s %TY-%Tm-%Td %TH:%TM %p\n" 2>/dev/null \
