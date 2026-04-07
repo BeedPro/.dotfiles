@@ -3,6 +3,7 @@ nm-applet &
 gtk-launch syncthing-start &
 dunst &
 mpd
+killall lxpolkit polkit-mate-authentication-agent-1 2>/dev/null
 lxpolkit &
 
 flatpak run org.keepassxc.KeePassXC &
