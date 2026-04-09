@@ -1,0 +1,284 @@
+layout: {qmk_keyboard: crkbd/rev4_0/standard, layout_name: LAYOUT_split_3x6_3_ex2}
+layers:
+  L0:
+  - PGUP
+  - Q
+  - W
+  - E
+  - R
+  - T
+  - MUTE
+  - VOLU
+  - Y
+  - U
+  - I
+  - O
+  - P
+  - UP
+  - LGUI
+  - {t: A, h: LGUI}
+  - {t: S, h: LALT}
+  - {t: D, h: LSFT}
+  - {t: F, h: LCTL}
+  - G
+  - MPLY
+  - VOLD
+  - H
+  - {t: J, h: LCTL}
+  - {t: K, h: LSFT}
+  - {t: L, h: LALT}
+  - {t: ;, h: LGUI}
+  - RALT
+  - PGDN
+  - Z
+  - X
+  - C
+  - V
+  - B
+  - N
+  - M
+  - ','
+  - .
+  - .
+  - DOWN
+  - L3
+  - {t: SPC, h: L2}
+  - {t: BSPC, h: L4}
+  - ENT
+  - {t: TAB, h: L3}
+  - ESC
+  L1:
+  - TAB
+  - Q
+  - W
+  - E
+  - R
+  - T
+  - MUTE
+  - {t: ▽, type: trans}
+  - Y
+  - U
+  - I
+  - O
+  - P
+  - {t: ▽, type: trans}
+  - LSFT
+  - A
+  - S
+  - D
+  - F
+  - G
+  - MPLY
+  - VOLD
+  - H
+  - J
+  - K
+  - L
+  - ;
+  - RSFT
+  - LCTL
+  - Z
+  - X
+  - C
+  - V
+  - B
+  - N
+  - M
+  - ','
+  - .
+  - /
+  - RCTL
+  - {t: ESC, h: L2}
+  - SPC
+  - {t: BSPC, h: L4}
+  - ENT
+  - ESC
+  - LGUI
+  L2:
+  - ESC
+  - '7'
+  - '8'
+  - '9'
+  - BRIU
+  - VOLU
+  - {t: ▽, type: trans}
+  - MPRV
+  - MPLY
+  - PSCR
+  - DEL
+  - INS
+  - MNXT
+  - ''
+  - LGUI
+  - '4'
+  - '5'
+  - '6'
+  - '0'
+  - MUTE
+  - {t: ▽, type: trans}
+  - MNXT
+  - LEFT
+  - DOWN
+  - UP
+  - RGHT
+  - ESC
+  - RALT
+  - ''
+  - '1'
+  - '2'
+  - '3'
+  - BRID
+  - VOLD
+  - HOME
+  - PGDN
+  - PGUP
+  - END
+  - MPRV
+  - ''
+  - ''
+  - {type: held}
+  - ''
+  - LGUI
+  - L4
+  - LALT
+  L3:
+  - ''
+  - Sft+7
+  - Sft+8
+  - Sft+9
+  - '`'
+  - Sft+`
+  - {t: ▽, type: trans}
+  - MPRV
+  - Sft+=
+  - Sft+-
+  - '['
+  - ']'
+  - Sft+'
+  - ''
+  - LGUI
+  - Sft+4
+  - Sft+5
+  - Sft+6
+  - Sft+0
+  - ''
+  - {t: ▽, type: trans}
+  - MNXT
+  - '='
+  - '-'
+  - Sft+9
+  - Sft+0
+  - ''''
+  - RALT
+  - ''
+  - Sft+1
+  - Sft+2
+  - Sft+3
+  - NUBS
+  - Sft+NUBS
+  - '#'
+  - Sft+#
+  - Sft+[
+  - Sft+]
+  - ''
+  - ''
+  - {t: LALT, type: held}
+  - L4
+  - LGUI
+  - ''
+  - ''
+  - ''
+  L4:
+  - ESC
+  - F9
+  - F10
+  - F11
+  - F12
+  - LGUI
+  - {t: ▽, type: trans}
+  - {t: L1, h: toggle}
+  - CAPS
+  - MS BTN3
+  - MS BTN2
+  - LALT
+  - ''
+  - ''
+  - LALT
+  - F5
+  - F6
+  - F7
+  - F8
+  - LCTL
+  - {t: ▽, type: trans}
+  - {t: L0, h: toggle}
+  - MS LEFT
+  - MS DOWN
+  - MS UP
+  - MS RGHT
+  - MS BTN1
+  - RALT
+  - LGUI
+  - F1
+  - F2
+  - F3
+  - F4
+  - LSFT
+  - MS WHLL
+  - MS WHLD
+  - MS WHLU
+  - MS WHLR
+  - ''
+  - ''
+  - ''
+  - ''
+  - {type: held}
+  - MS BTN1
+  - MS BTN2
+  - MS BTN3
+  L5:
+  - PEQL
+  - P7
+  - P8
+  - P9
+  - PSLS
+  - PAST
+  - MUTE
+  - VOLU
+  - MPLY
+  - PSCR
+  - DEL
+  - INS
+  - PSCR
+  - {t: L1, h: toggle}
+  - PCMM
+  - P4
+  - P5
+  - P6
+  - P0
+  - ''
+  - MPLY
+  - VOLD
+  - LEFT
+  - DOWN
+  - UP
+  - RGHT
+  - ESC
+  - LSFT
+  - PDOT
+  - P1
+  - P2
+  - P3
+  - PMNS
+  - PPLS
+  - HOME
+  - PGDN
+  - PGUP
+  - END
+  - LGUI
+  - LALT
+  - NUM
+  - SPC
+  - BSPC
+  - PENT
+  - TAB
+  - LCTL
