@@ -55,7 +55,7 @@ layers:
   - R
   - T
   - MUTE
-  - {t: ▽, type: trans}
+  - VOLU
   - Y
   - U
   - I
@@ -157,7 +157,7 @@ layers:
   - Sft+'
   - ''
   - LGUI
-  - Sft+4
+  - $
   - Sft+5
   - Sft+6
   - Sft+0
@@ -171,22 +171,22 @@ layers:
   - ''''
   - RALT
   - ''
-  - Sft+1
-  - Sft+2
+  - '!'
+  - '"'
   - Sft+3
   - NUBS
-  - Sft+NUBS
+  - '|'
   - '#'
   - Sft+#
   - Sft+[
   - Sft+]
   - ''
   - ''
-  - {t: LALT, type: held}
+  - LALT
   - L4
   - LGUI
   - ''
-  - ''
+  - {type: held}
   - ''
   L4:
   - ESC
