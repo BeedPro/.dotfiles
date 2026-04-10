@@ -49,10 +49,10 @@ bindsym Print exec --no-startup-id ~/.local/scripts/screenshot.sh selection
 bindsym $mod+Print exec --no-startup-id ~/.local/scripts/screenshot.sh window
 bindsym $mod+Shift+Print exec --no-startup-id ~/.local/scripts/screenshot.sh screen
 bindsym $mod+Tab workspace back_and_forth
-bindsym $mod+Mod1+h workspace prev
-bindsym $mod+Mod1+l workspace next
-bindsym $mod+Mod1+Shift+h move container to workspace prev
-bindsym $mod+Mod1+Shift+l move container to workspace next
+bindsym $mod+Left workspace prev
+bindsym $mod+Right workspace next
+bindsym $mod+Shift+Left move container to workspace prev
+bindsym $mod+Shift+Right move container to workspace next
 
 set $browser firefox
 

@@ -17,6 +17,7 @@ local options = {
     json = { "biome" },
     svelte = { "biome" },
     gdscript = { "gdformat" },
+    tex = { "tex-fmt" },
     ["_"] = { "trim_whitespace" },
   },
 
