@@ -36,11 +36,6 @@ export GOPATH="$HOME/.go"
 alias ts="$HOME/.local/scripts/sesh-create"
 alias tsi="$HOME/.local/scripts/sesh-launcher"
 
-openfile() {
-  "$HOME/.local/scripts/openfile" "$@"
-  exit
-}
-
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
 
 if command -v eza >/dev/null 2>&1; then
