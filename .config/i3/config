@@ -38,6 +38,7 @@ tiling_drag modifier titlebar
 
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
 bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 bindsym XF86MonBrightnessUp   exec --no-startup-id ~/.local/scripts/brightness up
 bindsym XF86MonBrightnessDown exec --no-startup-id ~/.local/scripts/brightness down
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.local/scripts/volume up
