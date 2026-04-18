@@ -62,8 +62,6 @@ MEDIA=(
 
 THEME=(
   adwaita-qt
-  adwaita-icon-theme-full
-  gnome-themes-extra
   arc-theme
   papirus-icon-theme
 )
@@ -80,9 +78,9 @@ if [ -f /usr/bin/fdfind ]; then
 fi
 
 if [ -f /usr/bin/mpd ]; then
-  mkdir -p $HOME/.local/share/mpd/playlists
-  mkdir -p $HOME/.cache/mpd
-  mkdir -p $HOME/.config/mpd
+  mkdir -p "$HOME/.local/share/mpd/playlists"
+  mkdir -p "$HOME/.cache/mpd"
+  mkdir -p "$HOME/.config/mpd"
 fi
 
 echo "Installation complete!"
