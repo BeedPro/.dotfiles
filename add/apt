@@ -64,6 +64,8 @@ THEME=(
   adwaita-qt
   adwaita-icon-theme-full
   gnome-themes-extra
+  arc-theme
+  papirus-icon-theme
 )
 
 echo "Installing all packages..."
