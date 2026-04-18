@@ -1,19 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
-sudo apt install flatpak
+sudo apt update
+sudo apt install -y flatpak gnome-software-plugin-flatpak
 
-sudo apt install gnome-software-plugin-flatpak
-
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+sudo flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 # flatpak remote-add --if-not-exists unmojang https://unmojang.github.io/unmojang-flatpak/index.flatpakrepo
 
-read -rp "Do you want to restart now? (y/N): " restart_choice
-restart_choice=${restart_choice:-N}
-
-if [[ "$restart_choice" =~ ^[Yy]$ ]]; then
-    echo "Restarting system..."
-    sudo reboot
-else
-    echo "Restart skipped."
-fi
+echo "Flatpak installed and Flathub added. Log out and back in if apps do not appear yet."

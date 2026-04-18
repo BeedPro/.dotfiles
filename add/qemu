@@ -1,19 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
-# https://christitus.com/vm-setup-in-linux/
+if ! grep -Eq '(vmx|svm)' /proc/cpuinfo; then
+  echo "CPU virtualization extensions not detected (vmx/svm)." >&2
+  exit 1
+fi
 
-# Check if virtualisation is installed
-egrep -c '(vmx|svm)' /proc/cpuinfo
+sudo apt update
+sudo apt install -y qemu-kvm qemu-system qemu-utils python3 python3-pip libvirt-clients libvirt-daemon-system bridge-utils virtinst libvirt-daemon virt-manager
 
-sudo apt install qemu-kvm qemu-system qemu-utils python3 python3-pip libvirt-clients libvirt-daemon-system bridge-utils virtinst libvirt-daemon virt-manager -y
-
-sudo systemctl status libvirtd.service
-sudo virsh net-start default
+sudo systemctl enable --now libvirtd.service
 sudo virsh net-autostart default
+sudo virsh net-start default || true
 
-sudo usermod -aG libvirt $USER
-sudo usermod -aG libvirt-qemu $USER
-sudo usermod -aG kvm $USER
-sudo usermod -aG input $USER
-sudo usermod -aG disk $USER
+for group in libvirt libvirt-qemu kvm input disk; do
+  if id -nG "$USER" | tr ' ' '\n' | grep -qx "$group"; then
+    continue
+  fi
+
+  sudo usermod -aG "$group" "$USER"
+done
+
+echo "QEMU/libvirt configured. Log out and back in for new group memberships to apply."

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 # Configuration
@@ -20,18 +20,17 @@ sudo apt install -y \
 
 echo "Step 2: Cloning repository..."
 mkdir -p "$SRC_DIR"
-if [ -d "$REPO_DIR" ]; then
-    rm -rf "$REPO_DIR"
+
+if [ -d "$REPO_DIR/.git" ]; then
+    git -C "$REPO_DIR" pull --ff-only
+else
+    git clone --depth 1 "$REPO_URL" "$REPO_DIR"
 fi
 
-git clone --depth 1 "$REPO_URL" "$REPO_DIR"
 cd "$REPO_DIR" || exit 1
 
 echo "Step 3: Building and installing auto-cpufreq..."
 sudo ./auto-cpufreq-installer
-
-echo "Step 4: Cleaning up source files..."
-rm -rf "$REPO_DIR"
 
 echo "------------------------------------------------"
 echo "Installation of auto-cpufreq is complete!"

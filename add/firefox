@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
-sudo apt remove firefox-esr
-sudo apt update && sudo apt upgrade
-sudo apt-get install wget
+sudo apt remove -y firefox-esr
+sudo apt-get update
+sudo apt-get install -y wget gpg
 
 sudo install -d -m 0755 /etc/apt/keyrings
 
@@ -25,4 +25,5 @@ Pin: origin packages.mozilla.org
 Pin-Priority: 1000
 ' | sudo tee /etc/apt/preferences.d/mozilla
 
-sudo apt-get update && sudo apt-get install firefox
+sudo apt-get update
+sudo apt-get install -y firefox

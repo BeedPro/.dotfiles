@@ -1,5 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
-sudo apt i3blocks i3lock install dex libanyevent-i3-perl libasync-interrupt-perl libconfuse-common libev-perl libjson-xs-perl i3-wm  libanyevent-perl libcommon-sense-perl libconfuse2 libguard-perl libtypes-serialiser-perl xssproxy
+sudo apt update
 
+PACKAGES=(
+  dex
+  i3-wm
+  i3blocks
+  i3lock
+  xssproxy
+)
+
+sudo apt install -y "${PACKAGES[@]}"

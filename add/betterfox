@@ -1,8 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 # ~/.var/app/org.mozilla.firefox/config/mozilla/firefox
 # ~/.mozilla/firefox/
 
-ln -sf $HOME/.dotfiles/.mozilla/firefox/user.js $1
-ln -sf $HOME/.dotfiles/.mozilla/firefox/chrome $1
+if [[ $# -ne 1 ]]; then
+  echo "Usage: $0 <firefox-profile-dir>" >&2
+  exit 1
+fi
+
+profile_dir="$1"
+
+if [[ ! -d "$profile_dir" ]]; then
+  echo "Firefox profile directory not found: $profile_dir" >&2
+  exit 1
+fi
+
+ln -sfn "$HOME/.dotfiles/.mozilla/firefox/user.js" "$profile_dir/user.js"
+ln -sfn "$HOME/.dotfiles/.mozilla/firefox/chrome" "$profile_dir/chrome"
