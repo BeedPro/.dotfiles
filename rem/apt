@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 CORE_UTILS=(
@@ -13,9 +13,9 @@ SYSTEM=(
 
 X11_TOOLS=(picom feh xss-lock dunst nwg-look maim x11-xkb-utils xclip xdotool)
 MEDIA=(mpd mpc mpv nsxiv zathura xournalpp libavcodec-extra farbfeld)
-THEME=(adwaita-qt adwaita-icon-theme-full gnome-themes-extra)
+THEME=(adwaita-qt arc-theme papirus-icon-theme)
 
-sudo apt purge -y "${CORE_UTILS[@]}" "${SYSTEM[@]}" "${X11_TOOLS[@]}" "${MEDIA[@]}" "${THEME[@]}"
+sudo apt purge -y "${CORE_UTILS[@]}" "${SYSTEM[@]}" "${X11_TOOLS[@]}" "${MEDIA[@]}" "${THEME[@]}" || true
 sudo apt autoremove -y
 
 if [ -L /usr/local/bin/bat ]; then

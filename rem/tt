@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo rm -f /usr/local/bin/tt
+sudo rm -f /usr/share/man/man1/tt.1.gz
+
+echo "Removed tt binary and man page"

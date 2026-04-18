@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo apt purge -y texlive-full latexmk biber || true
+sudo apt autoremove -y
+
+echo "Removed LaTeX packages from add/latex"

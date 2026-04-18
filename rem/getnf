@@ -1,3 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-rm $HOME/.local/bin/getnf
+rm -f "$HOME/.local/bin/getnf"

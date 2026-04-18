@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SRC_PATH="$HOME/.local/src/vial-kb/vial-qmk"
+
+if command -v pipx >/dev/null 2>&1; then
+  pipx uninstall qmk || true
+fi
+
+sudo apt purge -y \
+  gcc-arm-none-eabi \
+  binutils-arm-none-eabi \
+  libnewlib-arm-none-eabi \
+  dfu-util \
+  dfu-programmer || true
+sudo apt autoremove -y
+
+rm -rf "$SRC_PATH"
+
+echo "Removed Vial QMK toolchain and source checkout"

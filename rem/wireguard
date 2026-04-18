@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 sudo systemctl disable --now wg-quick@wg0 2>/dev/null || true
 
-sudo apt purge -y wireguard wireguard-tools || true
+sudo apt purge -y wireguard resolvconf || true
 sudo apt autoremove -y
 
 printf '%s\n' \
