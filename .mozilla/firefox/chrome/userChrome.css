@@ -1,8 +1,0 @@
-/* Hide tab bar by default */
-#TabsToolbar {
-  display: none !important;
-}
-
-#sidebar-header {
-  display: none !important;
-}
