@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sudo rm /opt/chromium
+sudo rm -f /usr/local/bin/chromium
+sudo rm $HOME/.local/share/applications/chromium.desktop
+
+echo "Removed chromium"
