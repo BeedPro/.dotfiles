@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-rm $HOME/.local/share/applications/helium.desktop
-sudo rm -rf /usr/local/bin/helium
-sudo rm -rf /opt/helium.AppImage
-
-echo "Removed helium"
