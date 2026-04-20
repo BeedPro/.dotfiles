@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mkdir -p /tmp/helium-download
+cd /tmp/helium-download
+
+REPO="imputnet/helium-linux"
+
+# Get latest release JSON
+json=$(curl -fsSL "https://api.github.com/repos/$REPO/releases/latest")
+
+# Extract AppImage URL (x86_64)
+url=$(printf '%s\n' "$json" \
+  | grep -oE '"browser_download_url":[[:space:]]*"[^"]*x86_64\.AppImage' \
+  | sed 's/.*"//' \
+  | head -n1)
+
+# Fallback if naming differs slightly (optional)
+if [ -z "$url" ]; then
+  url=$(printf '%s\n' "$json" \
+    | grep -oE '"browser_download_url":[[:space:]]*"[^"]*\.AppImage' \
+    | sed 's/.*"//' \
+    | head -n1)
+fi
+
+if [ -z "$url" ]; then
+  echo "Could not find an AppImage URL in latest release for $REPO" >&2
+  exit 1
+fi
+
+echo "Downloading: $url"
+curl -fL -o helium.AppImage "$url"
+chmod +x helium.AppImage
+sudo mv /tmp/helium-download/helium.AppImage /opt/helium.AppImage
+sudo ln -sf /opt/helium.AppImage /usr/local/bin/helium
+rm -rf /tmp/helium-download
