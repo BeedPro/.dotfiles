@@ -25,6 +25,7 @@ CORE_UTILS=(
 
 SYSTEM=(
   acpi
+  gpick
   brightnessctl
   pulseaudio-utils
   libnotify-bin
