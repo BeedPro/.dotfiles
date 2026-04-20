@@ -29,5 +29,6 @@ require("lazy").setup({
   require "plugins.telescope",
   require "plugins.treesitter",
   require "plugins.undotree",
-  require "plugins.whichkey"
+  require "plugins.whichkey",
+  require "plugins.icons",
 }, lazy_config)
