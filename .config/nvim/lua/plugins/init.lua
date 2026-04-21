@@ -30,5 +30,4 @@ require("lazy").setup({
   require "plugins.treesitter",
   require "plugins.undotree",
   require "plugins.whichkey",
-  require "plugins.icons",
 }, lazy_config)
