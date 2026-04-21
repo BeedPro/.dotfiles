@@ -24,7 +24,7 @@ function M.setup()
   })
 
   local servers =
-    { "lua_ls", "pyright", "clangd", "tinymist", "ts_ls", "tailwindcss", "svelte", "gdscript", "biome", "texlab" }
+    { "lua_ls", "ty", "clangd", "tinymist", "ts_ls", "tailwindcss", "svelte", "gdscript", "biome", "texlab" }
 
   for _, server in ipairs(servers) do
     local ok, config = pcall(require, "configs.lsp.servers." .. server)
