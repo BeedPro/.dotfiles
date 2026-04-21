@@ -211,20 +211,58 @@ def set_wallpaper(mode: str) -> None:
 
 
 def set_color_scheme(mode: str) -> None:
-    scheme = "prefer-dark" if mode == "dark" else "prefer-light"
+    themes = {
+        "light": {
+            "gtk": "Arc-Lighter",
+            "icons": "Papirus-Light",
+        },
+        "dark": {
+            "gtk": "Arc-Dark",
+            "icons": "Papirus-Dark",
+        },
+    }
+
+    theme = themes.get(mode)
+    if not theme:
+        raise ValueError(f"Unknown mode: {mode}")
 
     subprocess.run(
-        [
-            "gsettings",
-            "set",
-            "org.gnome.desktop.interface",
-            "color-scheme",
-            scheme,
-        ],
+        ["gsettings", "set", "org.gnome.desktop.interface", "gtk-theme", theme["gtk"]],
+        check=True,
+    )
+    subprocess.run(
+        ["gsettings", "set", "org.gnome.desktop.interface", "icon-theme", theme["icons"]],
         check=True,
     )
 
-    print(f"GTK color-scheme: {scheme}")
+    gtk3_settings: Path = Path.home() / ".config/gtk-3.0/settings.ini"
+
+    if not gtk3_settings.exists():
+        gtk3_settings.parent.mkdir(parents=True, exist_ok=True)
+        gtk3_settings.write_text("[Settings]\n")
+
+    text = gtk3_settings.read_text()
+    lines = []
+    found_gtk = False
+    found_icon = False
+    for line in text.splitlines():
+        if line.startswith("gtk-theme-name="):
+            lines.append(f'gtk-theme-name={theme["gtk"]}')
+            found_gtk = True
+        elif line.startswith("gtk-icon-theme-name="):
+            lines.append(f'gtk-icon-theme-name={theme["icons"]}')
+            found_icon = True
+        else:
+            lines.append(line)
+
+    if not found_gtk:
+        lines.append(f'gtk-theme-name={theme["gtk"]}')
+    if not found_icon:
+        lines.append(f'gtk-icon-theme-name={theme["icons"]}')
+
+    gtk3_settings.write_text("\n".join(lines) + "\n")
+
+    print(f"GTK theme: {theme['gtk']}, icons: {theme['icons']}")
 
 
 def main():
