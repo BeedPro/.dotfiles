@@ -4,7 +4,12 @@ set -euo pipefail
 sudo apt purge -y gh || true
 sudo apt autoremove -y
 
+if command -v extrepo >/dev/null 2>&1; then
+  sudo extrepo disable github-cli || true
+fi
+
 sudo rm -f /etc/apt/sources.list.d/github-cli.list
+sudo rm -f /etc/apt/sources.list.d/github-cli.list.disabled
 sudo rm -f /etc/apt/keyrings/githubcli-archive-keyring.gpg
 sudo apt update
 

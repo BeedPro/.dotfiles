@@ -9,3 +9,5 @@ sudo rm -f /etc/apt/keyrings/syncthing-archive-keyring.gpg
 sudo apt update
 
 echo "Removed Syncthing and apt source"
+echo "Script does not use extrepo due to GPG key issues found during 2026-04-22"
+echo "Please update this script to use extrepo when issue fixed"

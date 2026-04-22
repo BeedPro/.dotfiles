@@ -18,6 +18,13 @@ THEME=(adwaita-qt arc-theme papirus-icon-theme)
 sudo apt purge -y "${CORE_UTILS[@]}" "${SYSTEM[@]}" "${X11_TOOLS[@]}" "${MEDIA[@]}" "${THEME[@]}" || true
 sudo apt autoremove -y
 
+if command -v extrepo >/dev/null 2>&1; then
+  sudo extrepo disable debian_backports || true
+fi
+
+sudo rm -f /etc/apt/sources.list.d/debian-backports.sources
+sudo rm -f /etc/apt/sources.list.d/debian-backports.sources.disabled
+
 if [ -L /usr/local/bin/bat ]; then
   sudo rm -f /usr/local/bin/bat
 fi

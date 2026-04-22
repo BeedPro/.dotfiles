@@ -2,6 +2,9 @@
 set -euo pipefail
 
 sudo apt update
+sudo apt install -y extrepo
+sudo extrepo update
+sudo extrepo enable debian_backports
 
 CORE_UTILS=(
   bash-completion

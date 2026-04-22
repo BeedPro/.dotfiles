@@ -4,7 +4,12 @@ set -euo pipefail
 sudo apt purge -y firefox || true
 sudo apt autoremove -y
 
+if command -v extrepo >/dev/null 2>&1; then
+  sudo extrepo disable mozilla || true
+fi
+
 sudo rm -f /etc/apt/sources.list.d/mozilla.sources
+sudo rm -f /etc/apt/sources.list.d/mozilla.sources.disabled
 sudo rm -f /etc/apt/preferences.d/mozilla
 sudo rm -f /etc/apt/keyrings/packages.mozilla.org.asc
 

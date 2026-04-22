@@ -14,3 +14,7 @@ echo "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://ap
 # Update and install syncthing:
 sudo apt-get update
 sudo apt-get install syncthing
+
+echo "Installed via syncthing documentations"
+echo "Script does not use extrepo due to GPG key issues found during 2026-04-22"
+echo "Please update this script to use extrepo when issue fixed"

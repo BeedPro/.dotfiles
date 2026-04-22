@@ -4,8 +4,14 @@ set -euo pipefail
 sudo apt purge -y proton-vpn-gnome-desktop protonvpn protonvpn-cli protonvpn-gui protonvpn-stable-release || true
 sudo apt autoremove -y
 
+if command -v extrepo >/dev/null 2>&1; then
+  sudo extrepo disable protonvpn || true
+fi
+
 sudo rm -f /etc/apt/sources.list.d/protonvpn-stable.list
 sudo rm -f /etc/apt/sources.list.d/protonvpn.list
+sudo rm -f /etc/apt/sources.list.d/protonvpn-stable.sources
+sudo rm -f /etc/apt/sources.list.d/protonvpn-stable.sources.disabled
 sudo rm -f /etc/apt/trusted.gpg.d/protonvpn-stable.gpg
 sudo rm -f /usr/share/keyrings/protonvpn-stable-archive-keyring.gpg
 sudo apt update
