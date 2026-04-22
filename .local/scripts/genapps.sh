@@ -9,7 +9,6 @@ TERMINAL=alacritty
 
 APPS=(
   "Godot|godot"
-  "Chromium|env GOOGLE_API_KEY=no GOOGLE_DEFAULT_CLIENT_ID=no GOOGLE_DEFAULT_CLIENT_SECRET=no chromium"
   "Helium|helium"
   "Chat|$HOME/.local/scripts/openapps chat"
   "Email|$HOME/.local/scripts/openapps email"
