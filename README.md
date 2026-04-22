@@ -65,3 +65,5 @@ After changing sources, run:
 ```bash
 sudo apt update
 ```
+
+Also add `non-free` and `contrib` to `/etc/extrepo/config.yaml` when you install `extrepo`.
