@@ -13,8 +13,6 @@ return {
     ghciEnv = vim.empty_dict(),
     ghciPrompt = "ghci> ",
     ghciInitialPrompt = "ghci> ",
-    ghciCmd = "stack ghci --with-ghc="
-      .. ghci_dap
-      .. " --test --no-load --no-build --main-is TARGET --ghci-options -fprint-evld-with-show",
+    ghciCmd = "stack ghci --with-ghc=" .. ghci_dap .. " --main-is TARGET --ghci-options -fprint-evld-with-show",
   },
 }
