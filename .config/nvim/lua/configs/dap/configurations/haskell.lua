@@ -1,4 +1,4 @@
-local ghci_dap = vim.fn.stdpath "data" .. "mason/bin" .. "/ghci-dap"
+local ghci_dap = vim.fn.stdpath "data" .. "/mason/bin" .. "/ghci-dap"
 
 return {
   {
