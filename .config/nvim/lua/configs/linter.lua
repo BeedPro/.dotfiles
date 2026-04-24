@@ -7,6 +7,7 @@ lint.linters_by_ft = {
   javascriptreact = { "biomejs" },
   json = { "biomejs" },
   python = { "ruff" },
+  haskell = { "hlint" },
   htmldjango = { "djlint" },
   svelte = { "biomejs" },
   typescript = { "biomejs" },

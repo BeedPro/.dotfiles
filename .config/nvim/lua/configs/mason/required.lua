@@ -28,4 +28,5 @@ return {
   "gdtoolkit",
   "tex-fmt",
   "fourmolu",
+  "hlint",
 }
