@@ -27,4 +27,5 @@ return {
   "prettierd",
   "gdtoolkit",
   "tex-fmt",
+  "fourmolu",
 }

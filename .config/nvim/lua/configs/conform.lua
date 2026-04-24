@@ -6,6 +6,7 @@ local options = {
     djangohtml = { "djlint" },
     htmldjango = { "djlint" },
     c = { "clang-format" },
+    haskell = { "fourmolu" },
     cpp = { "clang-format" },
     css = { "biome" },
     html = { "biome" },
