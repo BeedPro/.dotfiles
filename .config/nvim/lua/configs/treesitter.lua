@@ -1,4 +1,6 @@
-return {
+local M = {}
+
+M.required = {
   "c",
   "cpp",
   "css",
@@ -21,3 +23,5 @@ return {
   "vimdoc",
   "yaml",
 }
+
+return M
