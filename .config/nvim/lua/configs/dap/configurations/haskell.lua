@@ -1,11 +1,4 @@
 local ghci_dap = vim.fn.stdpath "data" .. "mason/bin" .. "/ghci-dap"
-if vim.fn.executable(ghci_dap) ~= 1 then
-  ghci_dap = vim.fn.exepath "ghci-dap"
-end
-
-if ghci_dap == "" then
-  ghci_dap = "ghci-dap"
-end
 
 return {
   {
