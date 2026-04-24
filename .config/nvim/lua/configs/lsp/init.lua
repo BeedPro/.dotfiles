@@ -17,24 +17,23 @@ function M.setup()
     end,
   })
 
-  -- Default config for all servers
   vim.lsp.config("*", {
     capabilities = caps.capabilities,
     on_init = client.on_init,
   })
 
-  local servers =
-    { "lua_ls", "ty", "clangd", "tinymist", "ts_ls", "tailwindcss", "svelte", "gdscript", "biome", "texlab" }
-
-  for _, server in ipairs(servers) do
-    local ok, config = pcall(require, "configs.lsp.servers." .. server)
-
-    if ok then
-      vim.lsp.config(server, config)
-    else
-      vim.lsp.config(server, {})
-    end
-  end
+  local servers = {
+    "lua_ls",
+    "ty",
+    "clangd",
+    "tinymist",
+    "ts_ls",
+    "tailwindcss",
+    "svelte",
+    "gdscript",
+    "biome",
+    "texlab",
+  }
 
   vim.lsp.enable(servers)
 end
