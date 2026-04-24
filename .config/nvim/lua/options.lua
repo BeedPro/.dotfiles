@@ -34,8 +34,8 @@ o.splitright = true
 o.timeoutlen = 400
 o.undofile = true
 
-o.foldmethod = "expr"
-o.foldexpr = "nvim_treesitter#foldexpr()"
+vim.wo[0][0].foldmethod = "expr"
+vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
 o.foldlevel = 99
 o.foldtext = "v:folddashes.substitute(getline(v:foldstart),'/\\*\\|\\*/\\|{{{\\d\\=','','g')"
 
