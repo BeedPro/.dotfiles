@@ -16,6 +16,7 @@ return {
   "debugpy",
   "js-debug-adapter",
   "firefox-debug-adapter",
+  "haskell-debug-adapter",
 
   -- Linters / Formatters
   "ruff",
