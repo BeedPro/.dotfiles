@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+if command -v cargo >/dev/null 2>&1; then
+  cargo uninstall tree-sitter-cli || true
+fi
+
+rm -f "$HOME/.cargo/bin/tree-sitter"
+
+sudo apt purge -y clang libclang-dev llvm-dev || true
+sudo apt autoremove -y
+
+echo "Removed tree-sitter-cli and its apt dependencies"
