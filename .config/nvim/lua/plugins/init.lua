@@ -33,3 +33,4 @@ require("lazy").setup({
 }, lazy_config)
 
 require "plugins.undotree"
+require "plugins.difftool"
