@@ -22,6 +22,7 @@ require("lazy").setup({
   require "plugins.lsp",
   require "plugins.luasnip",
   require "plugins.mason",
+  require "plugins.mini-icons",
   require "plugins.neogen",
   require "plugins.neogit",
   require "plugins.oil",
