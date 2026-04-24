@@ -9,7 +9,6 @@ return {
   "svelte-language-server",
   "biome",
   "tinymist",
-  "texlab",
 
   -- DAP
   "codelldb",
@@ -27,7 +26,6 @@ return {
   "clang-format",
   "prettierd",
   "gdtoolkit",
-  "tex-fmt",
   "fourmolu",
   "hlint",
 }
