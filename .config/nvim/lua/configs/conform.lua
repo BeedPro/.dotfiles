@@ -1,6 +1,7 @@
 local options = {
   formatters_by_ft = {
     lua = { "stylua" },
+    prolog = { "prolog" },
     typst = { "prettypst" },
     python = { "ruff_format", "ruff_organize_imports" },
     djangohtml = { "djlint" },
