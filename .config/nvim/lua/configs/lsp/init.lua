@@ -34,6 +34,7 @@ function M.setup()
     "biome",
     "texlab",
     "hls",
+    "prolog_ls",
   }
 
   vim.lsp.enable(servers)

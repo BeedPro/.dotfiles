@@ -1,0 +1,3 @@
+#!/bin/bash
+sudo apt install swi-prolog
+swipl -g "pack_install(lsp_server)." -g halt
