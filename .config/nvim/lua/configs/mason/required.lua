@@ -1,31 +1,31 @@
 return {
   -- LSP
-  "lua-language-server",
   "ty",
   "clangd",
+  "haskell-language-server",
+  "tinymist",
+  "lua-language-server",
+  "biome",
   "typescript-language-server",
   "tailwindcss-language-server",
-  "haskell-language-server",
   "svelte-language-server",
-  "biome",
-  "tinymist",
 
   -- DAP
-  "codelldb",
   "debugpy",
+  "codelldb",
+  "haskell-debug-adapter",
   "js-debug-adapter",
   "firefox-debug-adapter",
-  "haskell-debug-adapter",
 
   -- Linters / Formatters
   "ruff",
-  "cpplint",
   "djlint",
-  "stylua",
-  "prettypst",
+  "cpplint",
   "clang-format",
-  "prettierd",
-  "gdtoolkit",
   "fourmolu",
   "hlint",
+  "prettypst",
+  "stylua",
+  "prettierd",
+  "gdtoolkit",
 }
