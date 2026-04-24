@@ -8,3 +8,9 @@ ls.add_snippets("all", {
     t "Hello, world!\\n",
   }),
 })
+
+ls.add_snippets("all", {
+  s("checkhealth_luasnips", {
+    t "Yes, luasnips works!",
+  }),
+})

@@ -1,2 +1,7 @@
 {
+  "checkhealth": {
+    "prefix": "checkhealth_vscode",
+    "body": ["Yes, vscode works!"],
+    "description": "Check vscode snippets"
+  }
 }
