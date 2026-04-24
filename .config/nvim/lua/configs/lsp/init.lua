@@ -33,6 +33,7 @@ function M.setup()
     "gdscript",
     "biome",
     "texlab",
+    "hls",
   }
 
   vim.lsp.enable(servers)

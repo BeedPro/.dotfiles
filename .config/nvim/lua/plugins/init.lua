@@ -16,7 +16,6 @@ require("lazy").setup({
   require "plugins.diffview",
   require "plugins.friendly-snippets",
   require "plugins.gitsigns",
-  require "plugins.haskell",
   require "plugins.kanso",
   require "plugins.lint",
   require "plugins.lsp",
