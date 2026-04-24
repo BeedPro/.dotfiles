@@ -20,6 +20,7 @@ return {
 
   -- Linters / Formatters
   "ruff",
+  "cpplint",
   "djlint",
   "stylua",
   "prettypst",
