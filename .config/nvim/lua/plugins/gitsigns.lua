@@ -1,5 +1,5 @@
 return {
   "lewis6991/gitsigns.nvim",
-  event = "User FilePost",
+  event = { "BufReadPre", "BufNewFile" },
   opts = require "configs.gitsigns",
 }
