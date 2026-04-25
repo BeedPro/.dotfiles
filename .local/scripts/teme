@@ -9,7 +9,6 @@ def toggle_config(
     path: Path,
     light_to_dark: Dict[str, str],
     detect_light: str,
-    name: str = "config",
 ) -> Tuple[str, str]:
     """Toggle the theme mode in the config at the path given
 
@@ -17,8 +16,6 @@ def toggle_config(
         path: path to config file
         light_to_dark: mapping from light to dark
         detect_light: detecting if we are in light mode
-        name: name of the config file
-
     Returns:
         (old_mode, new_mode)
 
@@ -30,17 +27,12 @@ def toggle_config(
 
     text = path.read_text()
 
-    mapping: dict[str, str] = {}
-    old_mode: str = ""
-    new_mode: str = ""
     if detect_light in text:
         mapping = light_to_dark
-        old_mode = "light"
-        new_mode = "dark"
+        old_mode, new_mode = "light", "dark"
     else:
         mapping = {v: k for k, v in light_to_dark.items()}
-        old_mode = "dark"
-        new_mode = "light"
+        old_mode, new_mode = "dark", "light"
 
     for src, dst in mapping.items():
         text = text.replace(src, dst)
@@ -61,7 +53,6 @@ def toggle_bashrc() -> str:
         path=bashrc,
         light_to_dark=light_to_dark,
         detect_light="fzf/light.sh",
-        name="bashrc",
     )
 
     print(f"~/.bashrc: {old} => {new}")
@@ -77,7 +68,6 @@ def toggle_nvim() -> None:
         path=nvim_config,
         light_to_dark=light_to_dark,
         detect_light='o.background = "light"',
-        name="options.lua",
     )
 
     print(f"~/.config/nvim/lua/options.lua: {old} => {new}")
@@ -92,7 +82,6 @@ def toggle_alacritty() -> None:
         path=alacritty_config,
         light_to_dark=light_to_dark,
         detect_light="light.toml",
-        name="alacritty.toml",
     )
 
     print(f"~/.config/alacritty/alacritty.toml: {old} => {new}")
@@ -174,7 +163,6 @@ def toggle_rofi() -> None:
         path=rofi_config,
         light_to_dark=light_to_dark,
         detect_light='@import "light"',
-        name="config.rasi",
     )
 
     print(f"~/.config/rofi/config.rasi: {old} => {new}")
@@ -210,7 +198,7 @@ def set_wallpaper(mode: str) -> None:
     print(f"Wallpaper set: {mode} → {current}")
 
 
-def set_color_scheme(mode: str) -> None:
+def set_color_scheme() -> None:
     subprocess.run(["nwg-look"], check=True)
 
 
@@ -223,7 +211,7 @@ def main():
     toggle_rofi()
 
     set_wallpaper(mode)
-    set_color_scheme(mode)
+    set_color_scheme()
 
 
 if __name__ == "__main__":
