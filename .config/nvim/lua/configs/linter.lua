@@ -1,19 +1,19 @@
 local lint = require "lint"
 
 lint.linters_by_ft = {
-  cpp = { "cpplint" },
+  python = { "ruff" },
+  htmldjango = { "djlint" },
   c = { "cpplint" },
-  css = { "biomejs" },
-  html = { "biomejs" },
+  cpp = { "cpplint" },
+  haskell = { "hlint" },
+  typescript = { "biomejs" },
+  typescriptreact = { "biomejs" },
   javascript = { "biomejs" },
   javascriptreact = { "biomejs" },
   json = { "biomejs" },
-  python = { "ruff" },
-  haskell = { "hlint" },
-  htmldjango = { "djlint" },
+  html = { "biomejs" },
+  css = { "biomejs" },
   svelte = { "biomejs" },
-  typescript = { "biomejs" },
-  typescriptreact = { "biomejs" },
   gdscript = { "gdlint" },
 }
 

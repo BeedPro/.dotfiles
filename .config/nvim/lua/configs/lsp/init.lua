@@ -23,18 +23,17 @@ function M.setup()
   })
 
   local servers = {
-    "lua_ls",
     "ty",
     "clangd",
+    "hls",
     "tinymist",
+    "prolog_ls",
+    "lua_ls",
+    "biome",
     "ts_ls",
     "tailwindcss",
     "svelte",
     "gdscript",
-    "biome",
-    "texlab",
-    "hls",
-    "prolog_ls",
   }
 
   vim.lsp.enable(servers)
