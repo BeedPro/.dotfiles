@@ -19,6 +19,7 @@ class DirectorySource:
     base_dir: Path
     depth: int
     key_prefix: str = ""
+    include_hidden: bool = False
 
 
 @dataclass(frozen=True)
@@ -41,6 +42,7 @@ CONFIG = LauncherConfig(
         DirectorySource(
             base_dir=Path("~/Compendium"), depth=1, key_prefix="compendium/"
         ),
+        DirectorySource(base_dir=Path("~"), depth=1, key_prefix="home/"),
     ),
     default_target=Path("~"),
 )
@@ -50,7 +52,7 @@ def run(cmd: list[str], **kwargs) -> CompletedProcess[str]:
     return subprocess.run(cmd, check=True, text=True, **kwargs)
 
 
-def find_dirs(base_dir: Path, depth: int = 1) -> List[str]:
+def find_dirs(base_dir: Path, depth: int = 1, include_hidden: bool = False) -> List[str]:
     if depth < 1:
         return []
 
@@ -62,6 +64,9 @@ def find_dirs(base_dir: Path, depth: int = 1) -> List[str]:
     base_depth: int = len(base.parts)
 
     for root, dirs, _ in os.walk(base):
+        if not include_hidden:
+            dirs[:] = [d for d in dirs if not d.startswith(".")]
+
         current: int = len(Path(root).parts) - base_depth
 
         if current > depth:
@@ -98,7 +103,7 @@ def create_mapping(config: LauncherConfig) -> Dict[str, str]:
     for source in config.directory_sources:
         add_paths(
             out=out,
-            items=find_dirs(source.base_dir, source.depth),
+            items=find_dirs(source.base_dir, source.depth, source.include_hidden),
             prefix=source.key_prefix,
             base=source.base_dir,
         )
