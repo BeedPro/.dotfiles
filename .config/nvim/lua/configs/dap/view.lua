@@ -1,13 +1,14 @@
 return {
   winbar = {
-    sections = { "sessions", "threads", "scopes", "breakpoints", "watches", "exceptions", "repl", "console" },
+    sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl" },
     default_section = "scopes",
     controls = { enabled = true },
   },
   windows = {
     terminal = {
       size = 0.40,
-      position = "left",
+      position = "right",
+      hide = { "delve" },
     },
   },
   auto_toggle = true,
