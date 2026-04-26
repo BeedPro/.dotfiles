@@ -182,6 +182,17 @@ def clean_repo_path(url: str) -> str:
     return cleaned
 
 
+def is_tmp_path(value: str) -> bool:
+    return value.startswith("tmp/")
+
+
+def tmp_target_dir(value: str) -> Path | None:
+    relative = value[len("tmp/") :].strip("/")
+    if not relative:
+        return None
+    return Path("/tmp") / relative
+
+
 def main() -> None:
     ensure_src_dir(CONFIG.src_dir)
     value = curses_input(CONFIG.prompt).strip()
@@ -190,6 +201,15 @@ def main() -> None:
         return
 
     if not value:
+        return
+
+    if is_tmp_path(value):
+        tmp_dir = tmp_target_dir(value)
+        if tmp_dir is None:
+            return
+
+        tmp_dir.mkdir(parents=True, exist_ok=True)
+        ensure_session(value, tmp_dir)
         return
 
     if is_git_url(value):
