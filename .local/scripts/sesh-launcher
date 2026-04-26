@@ -32,6 +32,7 @@ class LauncherConfig:
 CONFIG = LauncherConfig(
     static_targets={
         "dotfiles": Path("~/.dotfiles"),
+        "home": Path("~"),
         "scripts": Path("~/.local/scripts"),
     },
     directory_sources=(
