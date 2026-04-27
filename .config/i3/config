@@ -56,6 +56,9 @@ bindsym $mod+Shift+Left move container to workspace prev
 bindsym $mod+Shift+Right move container to workspace next
 
 set $browser firefox
+set $files thunar
+
+bindsym $mod+e exec --no-startup-id $files
 
 bindsym $mod+Return exec --no-startup-id alacritty
 bindsym $mod+w exec --no-startup-id $browser
@@ -92,7 +95,7 @@ bindsym $mod+m fullscreen toggle
 
 bindsym $mod+s layout stacking
 bindsym $mod+t layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+g layout toggle split
 
 bindsym $mod+Shift+f floating toggle
 
