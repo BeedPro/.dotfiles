@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import json
 import shutil
 import subprocess
 from pathlib import Path
@@ -204,6 +205,29 @@ def toggle_rofi() -> None:
     print(f"~/.config/rofi/config.rasi: {old} => {new}")
 
 
+def toggle_opencode(mode: str) -> None:
+    opencode_config: Path = Path.home() / ".config/opencode/tui.json"
+
+    if not opencode_config.exists():
+        raise FileNotFoundError(f"{opencode_config} not found")
+
+    theme_by_mode = {
+        "dark": "kanso-zen",
+        "light": "kanso-pearl",
+    }
+
+    theme = theme_by_mode.get(mode)
+    if theme is None:
+        raise ValueError(f"Unsupported mode: {mode}")
+
+    config = json.loads(opencode_config.read_text())
+    old_theme = config.get("theme", "<unset>")
+    config["theme"] = theme
+    opencode_config.write_text(json.dumps(config, indent=2) + "\n")
+
+    print(f"~/.config/opencode/tui.json: {old_theme} => {theme}")
+
+
 def set_wallpaper(mode: str) -> None:
     wallpaper_dir = Path.home() / ".config/wallpaper"
 
@@ -246,6 +270,7 @@ def main():
     toggle_i3()
     toggle_zathura()
     toggle_rofi()
+    toggle_opencode(mode)
 
     set_wallpaper(mode)
     set_color_scheme()
