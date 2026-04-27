@@ -5,6 +5,7 @@ require "autocmds.bigfile"
 require "autocmds.typst"
 require "autocmds.django"
 require "autocmds.oil"
+require "autocmds.godot"
 
 autocmd("TextYankPost", {
   callback = function()
