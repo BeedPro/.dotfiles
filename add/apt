@@ -27,6 +27,7 @@ CORE_UTILS=(
 )
 
 SYSTEM=(
+  mediainfo
   acpi
   gpick
   brightnessctl

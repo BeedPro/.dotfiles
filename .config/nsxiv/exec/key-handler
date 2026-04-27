@@ -1,33 +1,73 @@
 #!/bin/sh
 
+rofi_select() {
+  prompt="$1"
+  printf "%s\n" "$2" | rofi -dmenu -i -p "$prompt"
+}
+
+rofi_input() {
+  prompt="$1"
+  initial="$2"
+  printf "%s" "$initial" | rofi -dmenu -p "$prompt"
+}
+
+copy_to_clipboard() {
+  kind="$1"
+  payload="$2"
+  wayland_msg="$3"
+  x11_msg="$4"
+
+  if [ -n "$WAYLAND_DISPLAY" ] && command -v wl-copy >/dev/null; then
+    if [ "$kind" = "file" ]; then
+      wl-copy < "$payload" && notify-send -i "$payload" "$wayland_msg"
+    else
+      printf "%s\n" "$payload" | wl-copy && notify-send "$wayland_msg"
+    fi
+  elif command -v xclip >/dev/null; then
+    if [ "$kind" = "file" ]; then
+      xclip -selection clipboard -t image/png -i "$payload" && notify-send -i "$payload" "$x11_msg"
+    else
+      printf "%s\n" "$payload" | xclip -selection clipboard && notify-send "$x11_msg"
+    fi
+  else
+    notify-send "Clipboard tool not found (xclip or wl-copy)."
+  fi
+}
+
+if ! command -v rofi >/dev/null 2>&1; then
+  notify-send "rofi is not installed."
+  exit 1
+fi
+
 while read -r file; do
   fullpath="$(pwd)/$file"
+
   case "$1" in
     "w")
-      echo "$WALL" > $HOME/.config/wallpaper/wall-path
-      echo "$WALL" >> $HOME/.config/wallpaper/history-path
-      cp "$file" ~/.config/wallpaper/current.jpg &&
-      cp "$file" /tmp/wallpaper.jpg &&
+      echo "$WALL" > "$HOME/.config/wallpaper/wall-path"
+      echo "$WALL" >> "$HOME/.config/wallpaper/history-path"
+
+      cp "$file" "$HOME/.config/wallpaper/current.jpg" &&
+      cp "$file" "/tmp/wallpaper.jpg" &&
       if [ "$XDG_SESSION_TYPE" = "wayland" ] && command -v bemenu >/dev/null 2>&1; then
-        swaybg -i $HOME/.config/wallpaper/current.jpg -m fill &
+        swaybg -i "$HOME/.config/wallpaper/current.jpg" -m fill &
       else
-        feh --no-fehbg --bg-scale ~/.config/wallpaper/current.jpg &
+        feh --no-fehbg --bg-scale "$HOME/.config/wallpaper/current.jpg" &
       fi
-      notify-send -i ~/.config/wallpaper/current.jpg "Wallpaper changed."
+
+      notify-send -i "$HOME/.config/wallpaper/current.jpg" "Wallpaper changed."
       ;;
 
     "C-d")
-		  [ "$(printf "No\\nYes" | dmenu -i -p "Really delete $file?")" = "Yes" ] && rm "$file" && notify-send "$file deleted."
+      confirm="$(rofi_select "Really delete $file?" "No
+Yes")"
+      if [ "$confirm" = "Yes" ]; then
+        rm "$file" && notify-send "$file deleted."
+      fi
       ;;
 
     "C-c")
-      if [ -n "$WAYLAND_DISPLAY" ] && command -v wl-copy >/dev/null; then
-        wl-copy < "$file" && notify-send -i "$file" "Image copied to clipboard (Wayland)"
-      elif command -v xclip >/dev/null; then
-        xclip -selection clipboard -t image/png -i "$file" && notify-send -i "$file" "Image copied to clipboard (X11)"
-      else
-        notify-send "Clipboard tool not found (xclip or wl-copy)."
-      fi
+      copy_to_clipboard "file" "$file" "Image copied to clipboard (Wayland)" "Image copied to clipboard (X11)"
       ;;
 
     "C-r")
@@ -35,40 +75,30 @@ while read -r file; do
       ;;
 
     "y")
-      if [ -n "$WAYLAND_DISPLAY" ] && command -v wl-copy >/dev/null; then
-        printf "%s\n" "$fullpath" | wl-copy && notify-send "File path copied to clipboard (Wayland)"
-      elif command -v xclip >/dev/null; then
-        printf "%s\n" "$fullpath" | xclip -selection clipboard &&
-        notify-send "File path copied to clipboard (X11)"
-      else
-        notify-send "Clipboard tool not found (xclip or wl-copy)."
-      fi
+      copy_to_clipboard "text" "$fullpath" "File path copied to clipboard (Wayland)" "File path copied to clipboard (X11)"
       ;;
 
     "r")
       current_name="$(basename "$file")"
       dir_name="$(dirname "$file")"
-      new_name=$(echo "$current_name" | dmenu -p "Rename to:")
+      new_name="$(rofi_input "Rename to:" "$current_name")"
 
       if [ -n "$new_name" ]; then
-        mv -- "$file" "$dir_name/$new_name" &&
-        notify-send -i "$dir_name/$new_name" "Renamed to $new_name"
+        mv -- "$file" "$dir_name/$new_name" && notify-send -i "$dir_name/$new_name" "Renamed to $new_name"
       fi
       ;;
 
     "m")
       if command -v "$HOME/.local/scripts/dbrowse" >/dev/null; then
-        target_dir=$("$HOME/.local/scripts/dbrowse")
-        [ -n "$target_dir" ] && mv "$file" "$target_dir" &&
-        notify-send -i "$file" "Moved to $target_dir"
+        target_dir="$("$HOME/.local/scripts/dbrowse")"
+        [ -n "$target_dir" ] && mv "$file" "$target_dir" && notify-send -i "$file" "Moved to $target_dir"
       fi
       ;;
 
     "c")
       if command -v "$HOME/.local/scripts/dbrowse" >/dev/null; then
-        target_dir=$("$HOME/.local/scripts/dbrowse")
-        [ -n "$target_dir" ] && cp "$file" "$target_dir" &&
-        notify-send -i "$file" "Copied to $target_dir"
+        target_dir="$("$HOME/.local/scripts/dbrowse")"
+        [ -n "$target_dir" ] && cp "$file" "$target_dir" && notify-send -i "$file" "Copied to $target_dir"
       fi
       ;;
 
@@ -76,8 +106,7 @@ while read -r file; do
       if command -v thunar >/dev/null; then
         thunar "$file" &
         notify-send -i "$file" "Opened in Thunar"
-        # pkill -n nsxiv
-        kill $PPID
+        kill "$PPID"
         exit 0
       else
         notify-send "Thunar is not installed."
