@@ -1,7 +1,3 @@
-set selection-clipboard clipboard
-
-# Theme: Auto-script switcher
-
 # Dark
 # Theme: Dark
 set notification-error-bg       "#090E13"
