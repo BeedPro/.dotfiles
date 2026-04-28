@@ -5,6 +5,12 @@ return {
   fuzzy = { implementation = "prefer_rust" },
   sources = {
     default = { "lsp", "snippets", "buffer", "path" },
+    providers = {
+      spell = {
+        name = "Spell",
+        module = "blink-cmp-spell",
+      },
+    },
   },
 
   keymap = {
