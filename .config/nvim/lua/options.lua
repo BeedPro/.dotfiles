@@ -11,6 +11,7 @@ o.splitkeep = "screen"
 o.clipboard = ""
 o.cursorline = true
 o.cursorlineopt = "both"
+o.completeopt = "menu,popup,noselect"
 
 o.expandtab = true
 o.autoindent = true
