@@ -10,6 +10,7 @@ map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "[F]ind [F]iles
 map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "[F]ind [W]ords" })
 map("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { desc = "[F]ind [B]uffers" })
 map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "[F]ind [H]elp" })
+map("n", "<leader>fk", "<cmd>Telescope keymaps<CR>", { desc = "[F]ind [K]eymaps" })
 map("n", "<leader>fm", "<cmd>Telescope marks<CR>", { desc = "[F]ind [M]arks" })
 map("n", "<leader>fp", function()
   require("telescope.builtin").find_files {
