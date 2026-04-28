@@ -23,14 +23,6 @@ local options = {
   },
 
   format_on_save = function(bufnr)
-    local excluded_filetypes = {
-      cpp = true,
-    }
-
-    if excluded_filetypes[vim.bo[bufnr].filetype] then
-      return nil
-    end
-
     if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
       return
     end
