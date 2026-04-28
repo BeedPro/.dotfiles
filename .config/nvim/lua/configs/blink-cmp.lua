@@ -9,6 +9,10 @@ return {
       spell = {
         name = "Spell",
         module = "blink-cmp-spell",
+        opts = {
+          max_entries = 20,
+          keep_all_entries = true,
+        },
       },
     },
   },
