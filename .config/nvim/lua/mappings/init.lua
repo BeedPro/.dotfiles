@@ -5,6 +5,7 @@ require "mappings.dap"
 require "mappings.conform"
 require "mappings.neogit"
 require "mappings.whichkey"
+require "mappings.blink"
 
 local map = vim.keymap.set
 

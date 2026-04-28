@@ -10,7 +10,6 @@ return {
   keymap = {
     preset = "none",
 
-    ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
     ["<C-e>"] = { "hide", "fallback" },
     ["<C-y>"] = { "accept", "fallback" },
 
@@ -32,6 +31,15 @@ return {
       auto_show = true,
       auto_show_delay_ms = 200,
       window = { border = "single" },
+    },
+    menu = {
+      auto_show = false,
+      draw = {
+        columns = {
+          { "label", "label_description", gap = 1 },
+          { "kind" },
+        },
+      },
     },
   },
   signature = { enabled = true },
