@@ -33,3 +33,4 @@ require("lazy").setup({
 
 require "plugins.undotree"
 require "plugins.difftool"
+require("vim._core.ui2").enable {}

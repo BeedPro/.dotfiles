@@ -3,8 +3,6 @@ vim.g.lua_snippets_path = vim.fs.joinpath(vim.fn.stdpath "config", "snippets", "
 vim.g.snipmate_snippets_path = vim.fs.joinpath(vim.fn.stdpath "config", "snippets", "snipmate")
 vim.g.vscode_snippets_path = vim.fs.joinpath(vim.fn.stdpath "config", "snippets", "vscode")
 
-require("vim._core.ui2").enable {}
-
 require "plugins"
 require "options"
 require "autocmds"
