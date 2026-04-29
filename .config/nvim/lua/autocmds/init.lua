@@ -20,3 +20,9 @@ autocmd("BufRead", {
     vim.bo.filetype = "dosini"
   end,
 })
+
+autocmd("FileType", {
+  callback = function()
+    pcall(vim.treesitter.start)
+  end,
+})

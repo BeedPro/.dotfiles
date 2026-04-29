@@ -5,8 +5,6 @@ opt_local.spell = true
 opt_local.spelllang = "en_gb"
 opt_local.colorcolumn = "80"
 
-vim.treesitter.start()
-
 local function grep_section_name_and_insert()
   local ok_builtin, builtin = pcall(require, "telescope.builtin")
   local ok_actions, actions = pcall(require, "telescope.actions")
