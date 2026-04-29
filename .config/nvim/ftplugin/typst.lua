@@ -45,7 +45,13 @@ local function grep_section_name_and_insert()
   }
 end
 
-map("i", "<C-i>", grep_section_name_and_insert, {
-  buffer = true,
-  desc = "Search Typst sections and insert filename",
-})
+local current_file = vim.api.nvim_buf_get_name(0)
+local parent_dir = vim.fn.fnamemodify(current_file, ":h:t")
+local grandparent_dir = vim.fn.fnamemodify(current_file, ":h:h:t")
+
+if parent_dir == "Slipbox" or (grandparent_dir == "Slipbox" and parent_dir == ".example") then
+  map("i", "<C-i>", grep_section_name_and_insert, {
+    buffer = true,
+    desc = "Search Typst sections and insert filename",
+  })
+end
