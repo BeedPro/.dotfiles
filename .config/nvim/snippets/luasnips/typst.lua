@@ -5,79 +5,42 @@ local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
 
-local function id_from_filename()
-  local name = vim.fn.expand "%:t:r"
-  -- extract YYYYMMDDHHMM
-  return name:match "^(%d%d%d%d%d%d%d%d%d%d%d%d)" or ""
-end
-
-local function title_from_filename()
-  local filename = vim.fn.expand "%:t:r"
-
-  -- remove leading YYYYMMDDHHMM + optional separator
-  filename = filename:gsub("^%d%d%d%d%d%d%d%d%d%d%d%d[-_]?", "")
-
-  filename = filename:gsub("_", " ")
-
-  filename = filename:lower():gsub("(%f[%a]%a)", string.upper)
-
-  return filename
-end
-
 ls.add_snippets("typst", {
-  s("main", {
+  s("zettel", {
     t {
-      '#import "preamble/style.typ": style',
+      '#import ".utility/style.typ": style',
       "#show: style",
       "",
-      "",
+      '#let title = "',
     },
-    t "ID = ",
-    f(id_from_filename),
+    i(1, "Title"),
+    t {
+      '"',
+      "#let id = ",
+    },
+    f(function()
+      return vim.fn.expand "%:t:r"
+    end),
     t {
       "",
       "",
-      ":",
+      "#id",
     },
-    i(1),
-    t {
-      ":",
-      "",
-      "= ",
-    },
-    f(title_from_filename),
-    t { "", "" },
-    i(2),
-    t { "", "", "= Links" },
-    t { "", "", '#bibliography("sources.yaml")' },
-  }),
-})
-
-ls.add_snippets("typst", {
-  s("baby", {
-    t {
-      '#import "preamble/style.typ": style',
-      "#show: style",
-      "",
-      "",
-    },
-    t "ID = ",
-    f(id_from_filename),
+    i(2, ":ghost:"),
     t {
       "",
       "",
-      ":",
-    },
-    i(1),
-    t {
-      ":baby:",
+      "= #title",
       "",
-      "= ",
     },
-    f(title_from_filename),
-    t { "", "" },
-    i(2),
-    t { "", "", "= Links" },
-    t { "", "", '#bibliography("sources.yaml")' },
+    i(0),
+    t {
+      "",
+      "",
+      "= Links",
+      "",
+      "",
+      '#bibliography(".utility/sources.yaml")',
+    },
   }),
 })
