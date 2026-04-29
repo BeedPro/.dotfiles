@@ -43,7 +43,7 @@ o.foldtext = "v:folddashes.substitute(getline(v:foldstart),'/\\*\\|\\*/\\|{{{\\d
 o.updatetime = 250
 
 opt.fillchars = { eob = " " }
-opt.guicursor = ""
+opt.guicursor = "n-v-c-sm-i-ci-ve-r-cr-o:block-Cursor,a:blinkon0"
 opt.shortmess:append "sI"
 opt.wrap = false
 
