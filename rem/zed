@@ -1,8 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-rm -rf "$HOME/.local/zed.app"
-rm -f "$HOME/.local/bin/zed"
-rm -f "$HOME/.local/share/applications/zed.desktop"
-
-echo "Removed Zed"
