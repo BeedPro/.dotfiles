@@ -1,26 +1,59 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+BOOKMARKS_FILE="$HOME/Compendium/Journal/bookmarks.txt"
 
-BOOKMARKS_FILE="$HOME/Compendium/Journal/bookmarks.typ"
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      printf 'Usage: %s [bookmarks_file]\n' "$(basename "$0")"
+      exit 0
+      ;;
+    -*)
+      printf 'Error: unknown option: %s\n' "$1" >&2
+      exit 1
+      ;;
+    *)
+      BOOKMARKS_FILE="$1"
+      shift
+      ;;
+  esac
+done
 
 if [[ ! -f "$BOOKMARKS_FILE" ]]; then
-  echo "Bookmark file not found: $BOOKMARKS_FILE" >&2
+  printf 'Error: bookmarks file not found: %s\n' "$BOOKMARKS_FILE" >&2
   exit 1
 fi
 
-mapfile -t URLS < <(
-  grep -E '^[[:space:]]*-[[:space:]]*https?://' "$BOOKMARKS_FILE" \
-    | sed -E 's/^[[:space:]]*-[[:space:]]*//'
-)
+# Show bookmark names (left side of |) in rofi
+CHOICE="$(awk -F'|' 'NF>=2 {print $1}' "$BOOKMARKS_FILE" | rofi -dmenu -i -p "Bookmarks")"
 
-if [[ ${#URLS[@]} -eq 0 ]]; then
-  echo "No URLs found in: $BOOKMARKS_FILE" >&2
+# Exit if nothing selected
+[[ -z "$CHOICE" ]] && exit 0
+
+# Find the URL (right side of |) for the selected name
+URL="$(awk -F'|' -v choice="$CHOICE" '$1 == choice {print $2; exit}' "$BOOKMARKS_FILE")"
+
+# Exit if no matching URL found
+[[ -z "$URL" ]] && exit 1
+
+# Copy URL to clipboard
+if [[ "${XDG_SESSION_TYPE:-}" == "wayland" ]]; then
+  if command -v wl-copy >/dev/null 2>&1; then
+    printf '%s' "$URL" | wl-copy
+  else
+    printf 'Error: wayland session detected but wl-copy is not installed\n' >&2
+    exit 1
+  fi
+elif [[ "${XDG_SESSION_TYPE:-}" == "x11" ]]; then
+  if command -v xclip >/dev/null 2>&1; then
+    printf '%s' "$URL" | xclip -selection clipboard
+  elif command -v xsel >/dev/null 2>&1; then
+    printf '%s' "$URL" | xsel --clipboard --input
+  else
+    printf 'Error: x11 session detected but neither xclip nor xsel is installed\n' >&2
+    exit 1
+  fi
+else
+  printf 'Error: unsupported or unknown session type: %s\n' "${XDG_SESSION_TYPE:-unset}" >&2
   exit 1
-fi
-
-CHOICE=$(printf '%s\n' "${URLS[@]}" | rofi -dmenu -i -p "Bookmarks" -l 20) || exit 0
-
-if [[ -n "$CHOICE" ]]; then
-  firefox --new-tab "$CHOICE" >/dev/null 2>&1 &
 fi
