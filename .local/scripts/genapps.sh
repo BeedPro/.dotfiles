@@ -12,7 +12,7 @@ APPS=(
   "Helium|helium"
   "Chat|$HOME/.local/scripts/openapps chat"
   "Email|$HOME/.local/scripts/openapps email"
-  "Bookmarks|$HOME/.local/scripts/openbms"
+  "Bookmarks|$HOME/.local/scripts/bookmarks"
   "Libresprite|libresprite"
   "Vial|vial"
   'Google Calendar|firefox --new-window "https://calendar.google.com"'
