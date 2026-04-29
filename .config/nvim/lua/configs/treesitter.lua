@@ -23,6 +23,7 @@ M.required = {
   "vimdoc",
   "yaml",
   "prolog",
+  "bash",
 }
 
 return M
