@@ -1,4 +1,16 @@
-local caps = require "configs.lsp.capabilities"
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+capabilities.textDocument.completion.completionItem = {
+  preselectSupport = true,
+  commitCharactersSupport = true,
+  resolveSupport = {
+    properties = {
+      "documentation",
+      "detail",
+      "additionalTextEdits",
+    },
+  },
+}
 
 local M = {}
 
@@ -8,7 +20,7 @@ function M.setup()
   }
 
   vim.lsp.config("*", {
-    capabilities = caps.capabilities,
+    capabilities = capabilities,
   })
 
   local servers = {
