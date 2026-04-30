@@ -1,5 +1,5 @@
 require "mappings.oil"
-require "mappings.telescope"
+require "mappings.fzf-lua"
 require "mappings.neogen"
 require "mappings.dap"
 require "mappings.conform"

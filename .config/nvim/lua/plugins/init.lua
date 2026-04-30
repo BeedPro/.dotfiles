@@ -26,8 +26,7 @@ require("lazy").setup({
   require "plugins.neogen",
   require "plugins.kanso",
   require "plugins.oil",
-  require "plugins.telescope",
-  require "plugins.plenary",
+  require "plugins.fzf-lua",
   require "plugins.whichkey",
   require "plugins.lazydev",
 }, lazy_config)
