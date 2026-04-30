@@ -53,7 +53,9 @@ def run(cmd: list[str], **kwargs) -> CompletedProcess[str]:
     return subprocess.run(cmd, check=True, text=True, **kwargs)
 
 
-def find_dirs(base_dir: Path, depth: int = 1, include_hidden: bool = False) -> List[str]:
+def find_dirs(
+    base_dir: Path, depth: int = 1, include_hidden: bool = False
+) -> List[str]:
     if depth < 1:
         return []
 
@@ -164,10 +166,11 @@ def fzf_select(items: List[str]) -> str:
 
 def ensure_session(name: str, directory: Path) -> None:
     inside_tmux: bool = "TMUX" in os.environ
+    target_name: str = f"={name}"
 
     if (
         subprocess.run(
-            ["tmux", "has-session", "-t", name],
+            ["tmux", "has-session", "-t", target_name],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         ).returncode
@@ -185,9 +188,9 @@ def ensure_session(name: str, directory: Path) -> None:
         )
 
     if inside_tmux:
-        run(["tmux", "switch-client", "-t", name])
+        run(["tmux", "switch-client", "-t", target_name])
     else:
-        run(["tmux", "attach-session", "-t", name])
+        run(["tmux", "attach-session", "-t", target_name])
 
 
 def main() -> None:
