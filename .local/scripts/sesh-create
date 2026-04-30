@@ -193,6 +193,10 @@ def tmp_target_dir(value: str) -> Path | None:
     return Path("/tmp") / relative
 
 
+def normalize_session_name(value: str) -> str:
+    return value.replace(".", "_")
+
+
 def main() -> None:
     ensure_src_dir(CONFIG.src_dir)
     value = curses_input(CONFIG.prompt).strip()
@@ -209,7 +213,7 @@ def main() -> None:
             return
 
         tmp_dir.mkdir(parents=True, exist_ok=True)
-        ensure_session(value, tmp_dir)
+        ensure_session(normalize_session_name(value), tmp_dir)
         return
 
     if is_git_url(value):
@@ -220,10 +224,10 @@ def main() -> None:
             repo_dir.parent.mkdir(parents=True, exist_ok=True)
             run(["git", "clone", value, str(repo_dir)])
 
-        ensure_session(clean, repo_dir)
+        ensure_session(normalize_session_name(clean), repo_dir)
         return
 
-    session_name = value
+    session_name = normalize_session_name(value)
     cwd = Path.cwd()
 
     ensure_session(session_name, cwd)
