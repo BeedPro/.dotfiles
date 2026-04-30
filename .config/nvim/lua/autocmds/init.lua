@@ -7,6 +7,7 @@ require "autocmds.django"
 require "autocmds.oil"
 require "autocmds.opener"
 require "autocmds.lsp"
+require "autocmds.luasnip"
 
 autocmd("TextYankPost", {
   callback = function()
