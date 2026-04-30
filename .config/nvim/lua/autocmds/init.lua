@@ -8,6 +8,7 @@ require "autocmds.oil"
 require "autocmds.opener"
 require "autocmds.lsp"
 require "autocmds.luasnip"
+require "autocmds.lint"
 
 autocmd("TextYankPost", {
   callback = function()
