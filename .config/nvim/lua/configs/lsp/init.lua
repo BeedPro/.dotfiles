@@ -1,4 +1,3 @@
-local client = require "configs.lsp.client"
 local caps = require "configs.lsp.capabilities"
 
 local M = {}
@@ -10,7 +9,6 @@ function M.setup()
 
   vim.lsp.config("*", {
     capabilities = caps.capabilities,
-    on_init = client.on_init,
   })
 
   local servers = {
