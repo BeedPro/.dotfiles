@@ -1,11 +1,5 @@
 local small_window_max_cols = 120
 local small_window_max_lines = 35
-local preview_layout = "flex"
-local preview_flip_columns = 120
-local preview_vertical = "down:45%"
-local preview_horizontal = "right:55%"
-local keymaps_preview_layout = "vertical"
-local keymaps_preview_vertical = "down:60%"
 
 return {
   { "telescope", "hide" },
@@ -29,36 +23,22 @@ return {
       border = "single",
       preview = {
         hidden = small,
-        layout = preview_layout,
-        flip_columns = preview_flip_columns,
-        vertical = preview_vertical,
-        horizontal = preview_horizontal,
+        layout = "flex",
+        flip_columns = 120,
+        vertical = "down:45%",
+        horizontal = "right:55%",
         border = "single",
       },
     }
   end,
   files = {
     cwd_prompt = false,
-    winopts = {
-      preview = {
-        layout = preview_layout,
-        flip_columns = preview_flip_columns,
-      },
-    },
-  },
-  grep = {
-    winopts = {
-      preview = {
-        layout = preview_layout,
-        flip_columns = preview_flip_columns,
-      },
-    },
   },
   keymaps = {
     winopts = {
       preview = {
-        layout = keymaps_preview_layout,
-        vertical = keymaps_preview_vertical,
+        layout = "vertical",
+        vertical = "down:60%",
       },
     },
   },
