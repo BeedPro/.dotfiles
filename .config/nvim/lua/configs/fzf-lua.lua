@@ -24,4 +24,12 @@ return {
   files = {
     cwd_prompt = false,
   },
+  keymaps = {
+    winopts = {
+      preview = {
+        layout = "vertical",
+        vertical = "down:60%",
+      },
+    },
+  },
 }
