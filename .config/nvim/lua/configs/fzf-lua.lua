@@ -5,6 +5,7 @@ return {
     git_icons = false,
     color_icons = false,
   },
+  fzf_colors = true,
   fzf_opts = {
     ["--layout"] = "reverse",
   },
