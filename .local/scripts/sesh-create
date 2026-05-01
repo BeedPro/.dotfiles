@@ -36,7 +36,7 @@ REPO_CLEAN_PATTERNS: Sequence[tuple[str, str]] = (
 
 
 def is_esc(ch: int) -> bool:
-    return ch == 27
+    return ch in (27, curses.KEY_EXIT)
 
 
 def move_left(pos: int) -> int:
@@ -79,30 +79,30 @@ def handle_key(
     ch: int,
     buf: list[str],
     pos: int,
-    esc_armed: bool,
-) -> tuple[list[str], int, bool, bool]:
+) -> tuple[list[str], int, bool]:
     if is_esc(ch):
-        return buf, pos, False, not esc_armed
+        return buf, pos, True
 
     if ch in (10, 13):
-        return buf, pos, True, False
+        return buf, pos, True
 
     if ch == curses.KEY_LEFT:
-        return buf, move_left(pos), False, False
+        return buf, move_left(pos), False
 
     if ch == curses.KEY_RIGHT:
-        return buf, move_right(pos, len(buf)), False, False
+        return buf, move_right(pos, len(buf)), False
 
     if ch in (curses.KEY_BACKSPACE, 127):
-        return buf, backspace(buf, pos), False, False
+        return buf, backspace(buf, pos), False
 
     if ch == curses.KEY_DC:
-        return buf, delete(buf, pos), False, False
+        return buf, delete(buf, pos), False
 
-    return buf, insert_char(buf, pos, ch), False, False
+    return buf, insert_char(buf, pos, ch), False
 
 
 def curses_loop(stdscr, prompt: str) -> str:
+    curses.set_escdelay(25)
     curses.curs_set(1)
     curses.start_color()
     curses.use_default_colors()
@@ -112,26 +112,18 @@ def curses_loop(stdscr, prompt: str) -> str:
 
     buf: list[str] = []
     pos = 0
-    esc_armed = False
-
     render_line(stdscr, prompt, buf, pos)
 
     while True:
         ch = stdscr.getch()
 
-        if esc_armed and is_esc(ch):
-            return CONFIG.exit_signal
-
-        buf, pos, done, esc_armed = handle_key(
-            ch,
-            buf,
-            pos,
-            esc_armed,
-        )
+        buf, pos, done = handle_key(ch, buf, pos)
 
         render_line(stdscr, prompt, buf, pos)
 
         if done:
+            if is_esc(ch):
+                return CONFIG.exit_signal
             return "".join(buf)
 
 
