@@ -21,4 +21,7 @@ return {
       border = "single",
     },
   },
+  files = {
+    cwd_prompt = false,
+  },
 }
