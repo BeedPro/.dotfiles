@@ -13,7 +13,7 @@ require("lazy").setup({
   require "plugins.lsp",
   require "plugins.treesitter",
   require "plugins.conform",
-  require "plugins.lint",
+  require "plugins.nvim-lint",
   require "plugins.blink-cmp",
   require "plugins.blink-cmp-spell",
   require "plugins.dap",
