@@ -39,3 +39,11 @@ end, { desc = "[D]ap Run [L]ast" })
 map("n", "<leader>dt", function()
   require("dap").terminate()
 end, { desc = "[D]ap [T]erminate" })
+
+map("n", "<leader>dk", function()
+  require("dap-view").hover()
+end, { desc = "[D]ap [T]erminate" })
+
+map("n", "<leader>dv", function()
+  require("dap-view").virtual_text_toggle()
+end, { desc = "[D]ap [T]erminate" })
