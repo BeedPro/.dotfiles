@@ -1,4 +1,5 @@
 local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
 
 local function open_on_start(data)
   local is_dir = vim.fn.isdirectory(data.file) == 1
@@ -17,5 +18,6 @@ local function open_on_start(data)
 end
 
 autocmd("VimEnter", {
+  group = augroup("OilOpenOnStart", { clear = true }),
   callback = open_on_start,
 })

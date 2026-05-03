@@ -1,6 +1,8 @@
 local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
 
 autocmd({ "BufEnter", "BufWritePost" }, {
+  group = augroup("TypstAutoCompile", { clear = true }),
   pattern = "*.typ",
   callback = function(ev)
     if vim.bo[ev.buf].buftype ~= "" then

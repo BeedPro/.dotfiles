@@ -12,6 +12,7 @@ require "autocmds.luasnip"
 require "autocmds.nvim-lint"
 
 autocmd("TextYankPost", {
+  group = augroup("HighlightYank", { clear = true }),
   callback = function()
     vim.hl.on_yank { higroup = "IncSearch", timeout = 200 }
   end,
@@ -26,6 +27,7 @@ autocmd("BufRead", {
 })
 
 autocmd("FileType", {
+  group = augroup("TreesitterFileTypeStart", { clear = true }),
   callback = function()
     pcall(vim.treesitter.start)
   end,

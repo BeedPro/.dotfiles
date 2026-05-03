@@ -1,4 +1,5 @@
 local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
 
 local function is_django_project(filepath)
   -- Walk up directories to find "manage.py" or "settings.py"
@@ -39,6 +40,7 @@ local function html_looks_like_django(filepath)
 end
 
 autocmd({ "BufRead", "BufNewFile" }, {
+  group = augroup("DjangoHtmlFt", { clear = true }),
   pattern = "*.html",
   callback = function(args)
     local file = args.file
