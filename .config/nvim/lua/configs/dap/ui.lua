@@ -1,7 +1,14 @@
-local sign = vim.fn.sign_define
+local M = {}
 
-sign("DapBreakpoint", { text = "B", texthl = "DapBreakpoint" })
-sign("DapBreakpointCondition", { text = "B", texthl = "DapBreakpointCondition" })
-sign("DapLogPoint", { text = "L", texthl = "DapLogPoint" })
-sign("DapStopped", { text = ">", texthl = "DapStopped", linehl = "DapStopped", numhl = "DapStopped" })
-sign("DapBreakpointRejected", { text = "X", texthl = "DapStopped", linehl = "DapStopped", numhl = "DapStopped" })
+M.setup = function()
+  local sign = vim.fn.sign_define
+  local hl = vim.api.nvim_set_hl
+
+  hl(0, "debugPC", {
+    link = "Visual",
+  })
+
+  sign("DapStopped", { text = "> ", texthl = "SignColumn", linehl = "debugPC" })
+end
+
+return M
