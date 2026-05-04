@@ -119,3 +119,4 @@ __pycache__/
 .nox/
 .coverage
 .coverage.*
+Session.vim
