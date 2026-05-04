@@ -74,6 +74,6 @@ end
 if in_slipbox_tree() then
   map("n", "<leader>fn", search_slipbox_titles, {
     buffer = true,
-    desc = 'Search Typst files for "= "" in cwd',
+    desc = "[F]ind Slipbox [N]otes by Title",
   })
 end

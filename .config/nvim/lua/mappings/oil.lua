@@ -6,4 +6,4 @@ map("n", "<leader>.", function()
   else
     require("oil").open()
   end
-end, { desc = "[.] Toggle Oil" })
+end, { desc = "[O]il Toggle" })
