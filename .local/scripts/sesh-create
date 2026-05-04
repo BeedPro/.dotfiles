@@ -23,7 +23,7 @@ class AppConfig:
 CONFIG = AppConfig(
     prompt="Name: ",
     exit_signal="__ESC_EXIT__",
-    src_dir=Path.home() / ".local" / "src",
+    src_dir=Path.home() / "Projects",
 )
 
 GIT_URL_RE = re.compile(r"^(https?://|git@[^:]+:|ssh://git@[^/]+/|gh:)")

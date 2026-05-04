@@ -10,7 +10,7 @@ from pathlib import Path
 from subprocess import CompletedProcess, Popen
 from typing import Dict, Iterable, List, Sequence, Tuple
 
-SRC_DIR: Path = Path.home() / ".local" / "src"
+SRC_DIR: Path = Path.home() / "Projects"
 SRC_DIR.mkdir(parents=True, exist_ok=True)
 
 
@@ -36,7 +36,7 @@ CONFIG = LauncherConfig(
         "scripts": Path("~/.local/scripts"),
     },
     directory_sources=(
-        DirectorySource(base_dir=Path("~/.local/src"), depth=2),
+        DirectorySource(base_dir=Path("~/Projects"), depth=2),
         DirectorySource(
             base_dir=Path("~/.dotfiles/.config"), depth=1, key_prefix="config/"
         ),
