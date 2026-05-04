@@ -15,5 +15,5 @@ map("n", "<leader>mso", function()
 end, { desc = "[M]ini [S][O]urce Session" })
 
 map("n", "<leader>mds", function()
-  MiniSessions.select("delete", { force = true })
+  MiniSessions.select "delete"
 end, { desc = "[M]ini [D]elete [S]ession" })

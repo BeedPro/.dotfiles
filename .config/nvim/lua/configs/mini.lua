@@ -1,2 +1,4 @@
 local sessions = require "mini.sessions"
-sessions.setup {}
+sessions.setup {
+  force = { read = false, write = true, delete = true },
+}
