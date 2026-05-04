@@ -50,12 +50,6 @@ if command -v bat >/dev/null 2>&1; then
   alias cat='bat --theme gruvbox-dark -p'
 fi
 
-if command -v fd >/dev/null 2>&1; then
-  export FZF_ALT_C_COMMAND='fd --type d --strip-cwd-prefix --exclude .git'
-else
-  export FZF_ALT_C_COMMAND='find . -type d ! -path "*/.*"'
-fi
-
 alias mkdir='mkdir -v'
 alias rm='rm -v'
 alias mv='mv -v'
