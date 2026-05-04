@@ -19,9 +19,9 @@ autocmd("FileType", {
     map("n", "gd", function()
       detail = not detail
       if detail then
-        require("oil").set_columns { "icon", "permissions", "size", "mtime" }
+        require("oil").set_columns { "permissions", "size", "mtime" }
       else
-        require("oil").set_columns { "icon" }
+        require("oil").set_columns {}
       end
     end, { buffer = args.buf, desc = "Toggle file detail view" })
   end,
