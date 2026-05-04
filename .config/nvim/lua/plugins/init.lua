@@ -28,6 +28,7 @@ require("lazy").setup({
   require "plugins.oil",
   require "plugins.fzf-lua",
   require "plugins.lazydev",
+  require "plugins.mini",
 }, lazy_config)
 
 require "plugins.undotree"
