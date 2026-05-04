@@ -164,9 +164,14 @@ def fzf_select(items: List[str]) -> str:
     return stdout.strip()
 
 
+def normalize_session_name(name: str) -> str:
+    return name.replace(".", "_")
+
+
 def ensure_session(name: str, directory: Path) -> None:
     inside_tmux: bool = "TMUX" in os.environ
-    target_name: str = f"={name}"
+    session_name: str = normalize_session_name(name)
+    target_name: str = f"={session_name}"
 
     if (
         subprocess.run(
@@ -181,7 +186,7 @@ def ensure_session(name: str, directory: Path) -> None:
                 "tmux",
                 "new-session",
                 "-ds",
-                name,
+                session_name,
                 "-c",
                 str(directory.expanduser().resolve()),
             ]
