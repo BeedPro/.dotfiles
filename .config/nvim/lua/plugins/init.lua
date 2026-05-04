@@ -25,6 +25,7 @@ require("lazy").setup({
   require "plugins.friendly-snippets",
   require "plugins.neogen",
   require "plugins.kanso",
+  require "plugins.marko",
   require "plugins.oil",
   require "plugins.fzf-lua",
   require "plugins.lazydev",
