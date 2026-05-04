@@ -34,6 +34,9 @@ return {
   files = {
     cwd_prompt = false,
   },
+  oldfiles = {
+    cwd_only = true,
+  },
   keymaps = {
     winopts = {
       preview = {

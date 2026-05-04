@@ -1,6 +1,7 @@
 local map = vim.keymap.set
 
 map("n", "<leader>fa", "<cmd>FzfLua files<CR>", { desc = "[F]ind [A]ll Files" })
+map("n", "<leader>fr", "<cmd>FzfLua oldfiles<CR>", { desc = "[F]ind [R]ecent Files (cwd)" })
 map("n", "<leader>ff", "<cmd>FzfLua files hidden=false<CR>", { desc = "[F]ind [F]iles" })
 map("n", "<leader>fw", "<cmd>FzfLua live_grep<CR>", { desc = "[F]ind [W]ords" })
 map("n", "<leader>fb", "<cmd>FzfLua buffers<CR>", { desc = "[F]ind [B]uffers" })
