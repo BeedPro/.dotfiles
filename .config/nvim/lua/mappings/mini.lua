@@ -12,4 +12,8 @@ end, { desc = "[M]ini add [S]ession" })
 
 map("n", "<leader>mso", function()
   MiniSessions.select "read"
-end, { desc = "[M]ini add [S]ession" })
+end, { desc = "[M]ini [S][O]urce Session" })
+
+map("n", "<leader>mds", function()
+  MiniSessions.select("delete", { force = true })
+end, { desc = "[M]ini [D]elete [S]ession" })
