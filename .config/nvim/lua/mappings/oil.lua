@@ -1,4 +1,8 @@
 local map = vim.keymap.set
+local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
+local detail = false
+local oil_group = augroup("OilMappings", { clear = true })
 
 map("n", "<leader>.", function()
   if vim.bo.filetype == "oil" then
@@ -7,3 +11,18 @@ map("n", "<leader>.", function()
     require("oil").open()
   end
 end, { desc = "[O]il Toggle" })
+
+autocmd("FileType", {
+  group = oil_group,
+  pattern = "oil",
+  callback = function(args)
+    map("n", "gd", function()
+      detail = not detail
+      if detail then
+        require("oil").set_columns { "icon", "permissions", "size", "mtime" }
+      else
+        require("oil").set_columns { "icon" }
+      end
+    end, { buffer = args.buf, desc = "Toggle file detail view" })
+  end,
+})
