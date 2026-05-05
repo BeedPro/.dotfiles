@@ -98,8 +98,13 @@ nnoremap <leader>fh :Helptags<CR>
 nnoremap <leader>fk :Maps<CR>
 nnoremap <leader>fm :Marks<CR>
 nnoremap <leader>fz :BLines<CR>
-nnoremap gd :LspGotoDefinition<CR>
+
 nnoremap grr :LspShowReferences<CR>
+nnoremap gri :LspGotoImpl<CR>
+nnoremap grt :LspGotoTypeDef<CR>
+nnoremap gO :LspDocumentSymbol<CR>
+nnoremap gD :LspGotoDeclaration<CR>
+nnoremap gd :LspGotoDefinition<CR>
 nnoremap K :LspHover<CR>
 
 " colors
