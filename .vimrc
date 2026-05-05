@@ -3,6 +3,7 @@
 " Core behavior
 filetype plugin indent on
 set expandtab
+set background=dark
 set shiftwidth=4
 set softtabstop=4
 set tabstop=4
@@ -38,16 +39,14 @@ endif
 
 " Plugins
 call plug#begin('~/.vim/plugged')
-Plug 'ghifarit53/tokyonight-vim'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'itchyny/lightline.vim'
 Plug 'yegappan/lsp'
 Plug 'cocopon/iceberg.vim'
 call plug#end()
 
 " Colorscheme
-silent! colorscheme tokyonight
+silent! colorscheme iceberg
 
 " FZF keymaps
 nnoremap <leader>ff :Files<CR>
@@ -60,35 +59,19 @@ nnoremap <leader>fg :Rg<Space>
 nnoremap <leader>fc :execute 'Rg ' . expand('%:t:r')<CR>
 nnoremap <leader>fi :Files ~/.vim<CR>
 
-" Lightline
-set laststatus=2
-let g:lightline = {
-      \ 'colorscheme' : 'tokyonight',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
-      \   'right': [ [ 'lineinfo' ], [ 'fileformat', 'fileencoding', 'filetype' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead',
-      \   'filename': 'LightlineFilename'
+" Built-in LSP plugin setup
+let lspOpts = #{
+      \ autoHighlightDiags: v:true,
+      \ autoComplete: v:false
       \ }
-      \ }
-
-function! LightlineFilename()
-  return expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
-endfunction
-
-" Built-in LSP plugin setup (Rust)
-let lspOpts = #{autoHighlightDiags: v:true}
 autocmd User LspSetup call LspOptionsSet(lspOpts)
 
 let lspServers = [
       \ #{
-      \   name: 'rust-analyzer',
-      \   filetype: ['rust'],
-      \   path: 'rust-analyzer',
-      \   args: []
+      \   name: 'ty',
+      \   filetype: ['python'],
+      \   path: 'ty',
+      \   args: ['server']
       \ }
       \ ]
 
@@ -101,10 +84,9 @@ nnoremap K :LspHover<CR>
 nnoremap gl :LspDiag current<CR>
 nnoremap <leader>nd :LspDiag next \| LspDiag current<CR>
 nnoremap <leader>pd :LspDiag prev \| LspDiag current<CR>
-inoremap <silent> <C-Space> <C-x><C-o>
 
 " Set omnifunc for completion
-autocmd FileType rust setlocal omnifunc=lsp#complete
+autocmd FileType python setlocal omnifunc=lsp#complete
 
 " ASCII diagnostic signs
 autocmd User LspSetup call LspOptionsSet(#{
