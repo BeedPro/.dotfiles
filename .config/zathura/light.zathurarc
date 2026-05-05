@@ -25,8 +25,8 @@ set inputbar-fg                 "#22262D"
 set statusbar-bg                "#F2F1EF"
 set statusbar-fg                "#22262D"
 
-set highlight-color             "#77713F"
-set highlight-active-color      "#C84053"
+set highlight-color             "#80E98A00"
+set highlight-active-color      "#80C84053"
 
 set default-bg                  "#F2F1EF"
 set default-fg                  "#22262D"
