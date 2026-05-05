@@ -44,6 +44,8 @@ set softtabstop=4
 set tabstop=4
 set number
 set relativenumber
+set hlsearch
+set incsearch
 set smartindent
 set showmatch
 set backspace=indent,eol,start
