@@ -8,7 +8,7 @@ if empty(glob(s:plug_path))
 endif
 
 call plug#begin('~/.vim/plugged')
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'yegappan/lsp'
 Plug 'cocopon/iceberg.vim'
@@ -89,15 +89,15 @@ function! ToggleNetrw()
 endfunction
 
 nnoremap <silent> <leader>. :call ToggleNetrw()<CR>
+nnoremap <leader>fa :Files<CR>
+nnoremap <leader>fr :History<CR>
 nnoremap <leader>ff :Files<CR>
-nnoremap <leader>fo :History<CR>
+nnoremap <leader>fw :Rg <C-r><C-w><CR>
 nnoremap <leader>fb :Buffers<CR>
-nnoremap <leader>fq :CList<CR>
 nnoremap <leader>fh :Helptags<CR>
-nnoremap <leader>fs :Rg <C-r><C-w><CR>
-nnoremap <leader>fg :Rg<Space>
-nnoremap <leader>fc :execute 'Rg ' . expand('%:t:r')<CR>
-nnoremap <leader>fi :Files ~/.vim<CR>
+nnoremap <leader>fk :Maps<CR>
+nnoremap <leader>fm :Marks<CR>
+nnoremap <leader>fz :BLines<CR>
 nnoremap gd :LspGotoDefinition<CR>
 nnoremap grr :LspShowReferences<CR>
 nnoremap K :LspHover<CR>
