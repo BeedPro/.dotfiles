@@ -53,7 +53,8 @@ set backspace=indent,eol,start
 " lsp
 let lspOpts = #{
       \ autoHighlightDiags: v:true,
-      \ autoComplete: v:false
+      \ autoComplete: v:false,
+      \ showSignature: v:false
       \ }
 autocmd User LspSetup call LspOptionsSet(lspOpts)
 
@@ -88,6 +89,11 @@ function! ToggleNetrw()
   Ex
 endfunction
 
+function! s:ShowSignatureOnce() abort
+  let b:lsp_signature_once = 1
+  LspShowSignature
+endfunction
+
 nnoremap <silent> <leader>. :call ToggleNetrw()<CR>
 nnoremap <leader>fa :Files<CR>
 nnoremap <leader>fr :History<CR>
@@ -99,6 +105,7 @@ nnoremap <leader>fk :Maps<CR>
 nnoremap <leader>fm :Marks<CR>
 nnoremap <leader>fz :BLines<CR>
 
+nnoremap grn :LspRename<CR>
 nnoremap grr :LspShowReferences<CR>
 nnoremap gri :LspGotoImpl<CR>
 nnoremap grt :LspGotoTypeDef<CR>
@@ -106,6 +113,12 @@ nnoremap gO :LspDocumentSymbol<CR>
 nnoremap gD :LspGotoDeclaration<CR>
 nnoremap gd :LspGotoDefinition<CR>
 nnoremap K :LspHover<CR>
+inoremap <silent> <C-s> <C-o>:call <SID>ShowSignatureOnce()<CR>
+
+augroup LspSignatureOnce
+  autocmd!
+  autocmd InsertCharPre * if exists('b:lsp_signature_once') && b:lsp_signature_once | if exists('*popup_clear') | silent! call popup_clear() | endif | silent! pclose | unlet b:lsp_signature_once | endif
+augroup END
 
 " colors
 silent! colorscheme iceberg
