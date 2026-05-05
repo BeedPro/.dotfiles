@@ -1,130 +1,115 @@
-let mapleader = ' '
+" Basic Vim setup inspired by Tony's vanilla Vim workflow
 
-set nocompatible
+" Core behavior
 filetype plugin indent on
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set number
+set relativenumber
+set smartindent
+set showmatch
+set backspace=indent,eol,start
 syntax on
 
-let s:data_dir = '~/.vim'
-if empty(glob(s:data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo ' . s:data_dir . '/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+" Leader key
+let mapleader = ' '
+
+" Toggle netrw with <leader>.
+function! ToggleNetrw()
+  for winnr in range(1, winnr('$'))
+    if getbufvar(winbufnr(winnr), '&filetype') ==# 'netrw'
+      bd
+      return
+    endif
+  endfor
+  Ex
+endfunction
+
+nnoremap <silent> <leader>. :call ToggleNetrw()<CR>
+
+" vim-plug bootstrap
+let s:plug_path = expand('~/.vim/autoload/plug.vim')
+if empty(glob(s:plug_path))
+  silent execute '!curl -fLo ' . shellescape(s:plug_path) . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+" Plugins
 call plug#begin('~/.vim/plugged')
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'ghifarit53/tokyonight-vim'
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'itchyny/lightline.vim'
+Plug 'yegappan/lsp'
+Plug 'cocopon/iceberg.vim'
 call plug#end()
 
-set background=dark
+" Colorscheme
+silent! colorscheme tokyonight
+
+" FZF keymaps
+nnoremap <leader>ff :Files<CR>
+nnoremap <leader>fo :History<CR>
+nnoremap <leader>fb :Buffers<CR>
+nnoremap <leader>fq :CList<CR>
+nnoremap <leader>fh :Helptags<CR>
+nnoremap <leader>fs :Rg <C-r><C-w><CR>
+nnoremap <leader>fg :Rg<Space>
+nnoremap <leader>fc :execute 'Rg ' . expand('%:t:r')<CR>
+nnoremap <leader>fi :Files ~/.vim<CR>
+
+" Lightline
 set laststatus=2
-set noshowmode
-set clipboard=
-set cursorline
-set expandtab
-set autoindent
-set smartindent
-set shiftwidth=2
-set tabstop=2
-set softtabstop=2
-set ignorecase
-set smartcase
-set mouse=a
-set number
-set relativenumber
-set numberwidth=2
-set noruler
-set signcolumn=yes
-set splitbelow
-set splitright
-set timeoutlen=400
-set undofile
-set foldmethod=indent
-set foldlevel=99
-set foldtext=substitute(getline(v:foldstart),'/*\|*/\|{{{\d\=','','g')
-set updatetime=250
-set fillchars=eob:\ 
-set guicursor=
-set shortmess+=sI
-set nowrap
-set whichwrap+=<,>,[,],h,l
+let g:lightline = {
+      \ 'colorscheme' : 'tokyonight',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+      \   'right': [ [ 'lineinfo' ], [ 'fileformat', 'fileencoding', 'filetype' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead',
+      \   'filename': 'LightlineFilename'
+      \ }
+      \ }
 
-let g:fzf_layout = { 'window': { 'width': 0.87, 'height': 0.80 } }
-
-command! -bang -nargs=? FilesAll call fzf#vim#files(
-      \ <q-args>,
-      \ {'source': 'rg --files --hidden --follow --glob "!.git/*"'},
-      \ <bang>0)
-
-nnoremap <silent> <leader>fa :FilesAll<CR>
-nnoremap <silent> <leader>ff :Files<CR>
-nnoremap <silent> <leader>fw :Rg<CR>
-nnoremap <silent> <leader>fb :Buffers<CR>
-nnoremap <silent> <leader>fh :Helptags<CR>
-nnoremap <silent> <leader>fm :Marks<CR>
-nnoremap <silent> <leader>fz :BLines<CR>
-
-augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &number | set relativenumber | endif
-  autocmd BufLeave,FocusLost,InsertEnter,WinLeave * if &number | set norelativenumber | endif
-augroup END
-
-function! s:is_django_project(filepath) abort
-  let l:dir = fnamemodify(a:filepath, ':p:h')
-  while !empty(l:dir) && l:dir !=# '/'
-    if filereadable(l:dir . '/manage.py')
-      return 1
-    endif
-    if filereadable(l:dir . '/project/settings.py')
-      return 1
-    endif
-    if !empty(glob(l:dir . '/**/settings.py'))
-      return 1
-    endif
-
-    let l:parent = fnamemodify(l:dir, ':h')
-    if l:parent ==# l:dir
-      break
-    endif
-    let l:dir = l:parent
-  endwhile
-  return 0
+function! LightlineFilename()
+  return expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
 endfunction
 
-function! s:html_looks_like_django(filepath) abort
-  if !filereadable(a:filepath)
-    return 0
-  endif
+" Built-in LSP plugin setup (Rust)
+let lspOpts = #{autoHighlightDiags: v:true}
+autocmd User LspSetup call LspOptionsSet(lspOpts)
 
-  for l:line in readfile(a:filepath, '', 20)
-    if l:line =~# '{%' || l:line =~# '{{' || l:line =~# '{#'
-      return 1
-    endif
-  endfor
+let lspServers = [
+      \ #{
+      \   name: 'rust-analyzer',
+      \   filetype: ['rust'],
+      \   path: 'rust-analyzer',
+      \   args: []
+      \ }
+      \ ]
 
-  return 0
-endfunction
+autocmd User LspSetup call LspAddServer(lspServers)
 
-function! s:open_binary_with_system(file) abort
-  if has('macunix')
-    let l:open_cmd = 'open'
-  elseif has('win32') || has('win64')
-    let l:open_cmd = 'start'
-  else
-    let l:open_cmd = 'xdg-open'
-  endif
+" LSP key mappings
+nnoremap gd :LspGotoDefinition<CR>
+nnoremap gr :LspShowReferences<CR>
+nnoremap K :LspHover<CR>
+nnoremap gl :LspDiag current<CR>
+nnoremap <leader>nd :LspDiag next \| LspDiag current<CR>
+nnoremap <leader>pd :LspDiag prev \| LspDiag current<CR>
+inoremap <silent> <C-Space> <C-x><C-o>
 
-  call jobstart([l:open_cmd, a:file], {'detach': v:true})
-  silent! bdelete!
-endfunction
+" Set omnifunc for completion
+autocmd FileType rust setlocal omnifunc=lsp#complete
 
-augroup filetype_migration
-  autocmd!
-  autocmd BufRead,BufNewFile *.html if <SID>is_django_project(expand('<afile>:p')) || expand('<afile>:p') =~# '/templates/' || <SID>html_looks_like_django(expand('<afile>:p')) | setfiletype htmldjango | else | setfiletype html | endif
-  autocmd BufReadPost *.pdf,*.png,*.jpg,*.jpeg,*.gif,*.bmp,*.svg,*.xopp call <SID>open_binary_with_system(expand('%:p'))
-  autocmd FileType markdown setlocal conceallevel=2
-  autocmd FileType cpp,cs setlocal shiftwidth=4 tabstop=4
-  autocmd FileType html setlocal tabstop=2 shiftwidth=2 expandtab
-  autocmd FileType python setlocal colorcolumn=80
-  autocmd FileType typst setlocal spell spelllang=en_gb colorcolumn=80
-augroup END
+" ASCII diagnostic signs
+autocmd User LspSetup call LspOptionsSet(#{
+    \   diagSignErrorText: 'E',
+    \   diagSignWarningText: 'W',
+    \   diagSignInfoText: 'I',
+    \   diagSignHintText: 'H',
+    \ })
