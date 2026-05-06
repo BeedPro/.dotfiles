@@ -33,6 +33,18 @@ let g:fzf_colors = {
       \ 'header':  ['fg', 'Comment']
       \ }
 
+if executable('fd')
+  let $FZF_DEFAULT_COMMAND = 'fd --type f --strip-cwd-prefix --exclude .git'
+else
+  let $FZF_DEFAULT_COMMAND = "find . -type f -not -path '*/.git/*' -not -path '*/.*'"
+endif
+
+if executable('fd')
+  command! -bang -nargs=? -complete=dir FilesAll call fzf#vim#files(<q-args>, { 'source': 'fd --type f --hidden --follow --no-ignore --strip-cwd-prefix --exclude .git' }, <bang>0)
+else
+  command! -bang -nargs=? -complete=dir FilesAll call fzf#vim#files(<q-args>, { 'source': "find . -type f -not -path '*/.git/*'" }, <bang>0)
+endif
+
 " options
 filetype plugin indent on
 syntax on
@@ -121,7 +133,7 @@ function! s:ShowSignatureOnce() abort
 endfunction
 
 nnoremap <silent> <leader>. :call ToggleNetrw()<CR>
-nnoremap <leader>fa :Files<CR>
+nnoremap <leader>fa :FilesAll<CR>
 nnoremap <leader>fr :History<CR>
 nnoremap <leader>ff :Files<CR>
 nnoremap <leader>fw :Rg <C-r><C-w><CR>
