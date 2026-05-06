@@ -73,7 +73,7 @@ set foldmethod=indent
 set foldlevel=99
 set foldtext=substitute(getline(v:foldstart),'/\*\|\*/\|{{{\d\=','','g')
 set updatetime=250
-set fillchars=eob:\ 
+set fillchars=eob:\
 set guicursor=
 set shortmess+=sI
 set nowrap
@@ -150,6 +150,7 @@ nnoremap gO :LspDocumentSymbol<CR>
 nnoremap gD :LspGotoDeclaration<CR>
 nnoremap gd :LspGotoDefinition<CR>
 nnoremap K :LspHover<CR>
+nnoremap <C-w>d :LspDiagCurrent<CR>
 inoremap <silent> <C-s> <C-o>:call <SID>ShowSignatureOnce()<CR>
 
 augroup LspSignatureOnce
