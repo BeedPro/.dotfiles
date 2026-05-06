@@ -158,4 +158,10 @@ augroup LspSignatureOnce
 augroup END
 
 " colors
+if has('termguicolors')
+  set termguicolors
+else
+  set t_Co=256
+endif
+
 silent! colorscheme iceberg
