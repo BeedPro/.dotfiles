@@ -138,9 +138,10 @@ nnoremap <leader>fh :Helptags<CR>
 nnoremap <leader>fk :Maps<CR>
 nnoremap <leader>fm :Marks<CR>
 nnoremap <leader>fz :BLines<CR>
-nnoremap [q :cprev<CR>
-nnoremap ]q :cnext<CR>
+nnoremap <leader>ds :LspDiagShow<CR>
 
+nnoremap gra :LspCodeAction<CR>
+nnoremap grn :LspRename<CR>
 nnoremap grn :LspRename<CR>
 nnoremap grr :LspShowReferences<CR>
 nnoremap gri :LspGotoImpl<CR>
