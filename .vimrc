@@ -35,13 +35,9 @@ let g:fzf_colors = {
 
 if executable('fd')
   let $FZF_DEFAULT_COMMAND = 'fd --type f --strip-cwd-prefix --exclude .git'
-else
-  let $FZF_DEFAULT_COMMAND = "find . -type f -not -path '*/.git/*' -not -path '*/.*'"
-endif
-
-if executable('fd')
   command! -bang -nargs=? -complete=dir FilesAll call fzf#vim#files(<q-args>, { 'source': 'fd --type f --hidden --follow --no-ignore --strip-cwd-prefix --exclude .git' }, <bang>0)
 else
+  let $FZF_DEFAULT_COMMAND = "find . -type f -not -path '*/.git/*' -not -path '*/.*'"
   command! -bang -nargs=? -complete=dir FilesAll call fzf#vim#files(<q-args>, { 'source': "find . -type f -not -path '*/.git/*'" }, <bang>0)
 endif
 
