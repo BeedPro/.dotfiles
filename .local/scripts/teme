@@ -74,6 +74,22 @@ def toggle_nvim() -> None:
     print(f"~/.config/nvim/lua/options.lua: {old} => {new}")
 
 
+def toggle_vim() -> None:
+    vim_config: Path = Path.home() / ".vimrc"
+
+    light_to_dark: dict[str, str] = {
+        "set background=light": "set background=dark",
+    }
+
+    old, new = toggle_config(
+        path=vim_config,
+        light_to_dark=light_to_dark,
+        detect_light="set background=light",
+    )
+
+    print(f"~/.vimrc: {old} => {new}")
+
+
 def toggle_alacritty() -> None:
     alacritty_config: Path = Path.home() / ".config/alacritty/alacritty.toml"
 
@@ -302,6 +318,7 @@ def set_color_scheme() -> None:
 def main():
     mode = toggle_bashrc()
     toggle_nvim()
+    toggle_vim()
     toggle_alacritty()
     toggle_dunst()
     toggle_i3()
