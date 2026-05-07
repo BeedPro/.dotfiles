@@ -6,6 +6,8 @@ return {
   },
 
   ui = {
+    border = "single",
+    backdrop = 100,
     icons = {
       ft = "[F]",
       lazy = "[L] ",
