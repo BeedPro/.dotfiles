@@ -21,6 +21,7 @@ return {
       row = 0.5,
       col = 0.5,
       border = "single",
+      backdrop = 100,
       preview = {
         hidden = small,
         layout = "flex",
