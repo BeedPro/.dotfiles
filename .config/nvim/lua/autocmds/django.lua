@@ -44,13 +44,14 @@ autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*.html",
   callback = function(args)
     local file = args.file
+    local normalized = file:gsub("\\", "/")
 
     if
-      is_django_project(file)
-      or file:match "/templates/"
-      or file:match "/templates/.+%.html$"
-      or file:match "/app_name/templates/"
-      or html_looks_like_django(file)
+      is_django_project(normalized)
+      or normalized:match "/templates/"
+      or normalized:match "/templates/.+%.html$"
+      or normalized:match "/app_name/templates/"
+      or html_looks_like_django(normalized)
     then
       vim.bo.filetype = "htmldjango"
     else

@@ -6,7 +6,7 @@ return {
     workspace = "${workspaceFolder}",
     startup = "${file}",
     stopOnEntry = true,
-    logFile = vim.fn.stdpath "data" .. "/haskell-dap.log",
+    logFile = vim.fs.joinpath(vim.fn.stdpath "data", "haskell-dap.log"),
     logLevel = "WARNING",
     ghciEnv = vim.empty_dict(),
     ghciPrompt = "ghci> ",
