@@ -24,7 +24,6 @@ M.required = {
   "yaml",
   "prolog",
   "bash",
-  "go",
 }
 
 return M
