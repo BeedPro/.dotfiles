@@ -94,18 +94,6 @@ luac.out
 *.x86_64
 *.hex
 
-
-.config/peaclock/history
-.local/share/dwm/dwm
-.local/share/st/st
-.local/share/sent/sent
-.local/share/dmenu/dmenu
-.local/share/dwmblocks/dwmblocks
-.config/atuin/atuin-receipt.json
-.local/share/slock/slock
-.local/share/dmenu/stest
-.config/nvim/.session.vim
-
 # ---> Python
 __pycache__/
 *.py[cod]
@@ -119,4 +107,16 @@ __pycache__/
 .nox/
 .coverage
 .coverage.*
+
+# ---> Dotfiles
+.config/peaclock/history
+.local/share/dwm/dwm
+.local/share/st/st
+.local/share/sent/sent
+.local/share/dmenu/dmenu
+.local/share/dwmblocks/dwmblocks
+.config/atuin/atuin-receipt.json
+.local/share/slock/slock
+.local/share/dmenu/stest
 Session.vim
+*.spl
