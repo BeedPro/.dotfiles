@@ -14,4 +14,4 @@ interval=60
 
 [datetime]
 command=~/.local/scripts/datetime
-interval=5
+interval=1
