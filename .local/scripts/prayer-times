@@ -103,7 +103,11 @@ def main():
         timings = data["data"]["timings"]
 
         current_name, current_time, next_name, next_time = get_current_and_next(timings)
-        print(f"{current_name} ({next_name} {next_time})")
+        hh, mm = next_time.split(":", 1)
+        mm_hh = f"{mm}:{hh}"
+        current_initial = current_name[:2]
+        next_initial = next_name[:2]
+        print(f"{current_initial}:{next_initial}[{mm_hh}]")
 
     except Exception:
         print("--")
