@@ -1,4 +1,6 @@
 set $mod Mod4
+set $browser firefox
+set $files thunar
 
 font pango:monospace 12
 
@@ -22,6 +24,13 @@ gaps outer 0
 focus_wrapping workspace
 
 for_window [class="discord"] border normal
+
+for_window [class=$browser title="WhatsApp.*"] move --no-auto-back-and-forth to workspace number 7
+for_window [class=$browser title="Discord.*"] move --no-auto-back-and-forth to workspace number 7
+for_window [class=$browser title="Element.*"] move --no-auto-back-and-forth to workspace number 7
+
+for_window [class=$browser title=".*Gmail.*"] move --no-auto-back-and-forth to workspace number 8
+for_window [class=$browser title=".*Outlook.*"] move --no-auto-back-and-forth to workspace number 8
 
 assign [class="KeePassXC"] number 9
 
@@ -54,9 +63,6 @@ bindsym $mod+Left workspace prev
 bindsym $mod+Right workspace next
 bindsym $mod+Shift+Left move container to workspace prev
 bindsym $mod+Shift+Right move container to workspace next
-
-set $browser firefox
-set $files thunar
 
 bindsym $mod+e exec --no-startup-id $files
 
@@ -101,38 +107,28 @@ bindsym $mod+Shift+f floating toggle
 
 bindsym $mod+f focus mode_toggle
 
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
 
-bindsym $mod+1 workspace number $ws1
-bindsym $mod+2 workspace number $ws2
-bindsym $mod+3 workspace number $ws3
-bindsym $mod+4 workspace number $ws4
-bindsym $mod+5 workspace number $ws5
-bindsym $mod+6 workspace number $ws6
-bindsym $mod+7 workspace number $ws7
-bindsym $mod+8 workspace number $ws8
-bindsym $mod+9 workspace number $ws9
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
 
 bindsym $mod+comma focus output left
 bindsym $mod+period focus output right
-
-bindsym $mod+Shift+1 move container to workspace number $ws1
-bindsym $mod+Shift+2 move container to workspace number $ws2
-bindsym $mod+Shift+3 move container to workspace number $ws3
-bindsym $mod+Shift+4 move container to workspace number $ws4
-bindsym $mod+Shift+5 move container to workspace number $ws5
-bindsym $mod+Shift+6 move container to workspace number $ws6
-bindsym $mod+Shift+7 move container to workspace number $ws7
-bindsym $mod+Shift+8 move container to workspace number $ws8
-bindsym $mod+Shift+9 move container to workspace number $ws9
 
 bindsym $mod+Shift+comma move container to output left
 bindsym $mod+Shift+period move container to output right
