@@ -23,13 +23,6 @@ gaps outer 0
 
 focus_wrapping workspace
 
-for_window [class=$browser title="WhatsApp.*"] move --no-auto-back-and-forth to workspace number 7
-for_window [class=$browser title="Discord.*"] move --no-auto-back-and-forth to workspace number 7
-for_window [class=$browser title="Element.*"] move --no-auto-back-and-forth to workspace number 7
-
-for_window [class=$browser title=".*Gmail.*"] move --no-auto-back-and-forth to workspace number 8
-for_window [class=$browser title=".*Outlook.*"] move --no-auto-back-and-forth to workspace number 8
-
 assign [class="KeePassXC"] number 9
 
 default_border pixel 1
