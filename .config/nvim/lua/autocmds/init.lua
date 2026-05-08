@@ -32,3 +32,8 @@ autocmd("FileType", {
     pcall(vim.treesitter.start)
   end,
 })
+
+autocmd("VimResized", {
+  group = augroup("AutoResizeSplits", { clear = true }),
+  command = "wincmd =",
+})
