@@ -102,12 +102,11 @@ def main():
         data = load_prayer_times()
         timings = data["data"]["timings"]
 
-        current_name, current_time, next_name, next_time = get_current_and_next(timings)
+        current_name, _, next_name, next_time = get_current_and_next(timings)
         hh, mm = next_time.split(":", 1)
-        mm_hh = f"{mm}:{hh}"
         current_initial = current_name[:2]
         next_initial = next_name[:2]
-        print(f"{current_initial}:{next_initial}[{mm_hh}]")
+        print(f"{current_initial}:{next_initial}[{hh}:{mm}]")
 
     except Exception:
         print("--")
