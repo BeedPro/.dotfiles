@@ -16,6 +16,8 @@ vim.diagnostic.config {
   underline = false,
 }
 
+vim.lsp.document_color.enable(false)
+
 vim.lsp.config("*", {
   capabilities = capabilities,
 })
