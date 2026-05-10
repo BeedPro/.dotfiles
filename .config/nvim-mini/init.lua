@@ -215,6 +215,43 @@ vim.api.nvim_create_autocmd("VimResized", {
   command = "wincmd =",
 })
 
+vim.api.nvim_create_autocmd("BufReadPre", {
+  group = vim.api.nvim_create_augroup("BigFile", { clear = true }),
+  callback = function(args)
+    local file = vim.api.nvim_buf_get_name(args.buf)
+    if file == "" then
+      return
+    end
+
+    local ok, stat = pcall(vim.uv.fs_stat, file)
+    if not ok or not stat or stat.size <= 1024 * 1024 * 1.5 then
+      return
+    end
+
+    vim.b[args.buf].bigfile = true
+
+    vim.opt_local.foldmethod = "manual"
+    vim.opt_local.swapfile = false
+    vim.opt_local.undofile = false
+    vim.opt_local.spell = false
+    vim.opt_local.list = false
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("BigFile", { clear = false }),
+  callback = function(args)
+    if not vim.b[args.buf].bigfile then
+      return
+    end
+
+    pcall(vim.treesitter.stop, args.buf)
+    pcall(vim.api.nvim_buf_call, args.buf, function()
+      vim.cmd.syntax "off"
+    end)
+  end,
+})
+
 ---- Autocmds.oil
 vim.api.nvim_create_autocmd("VimEnter", {
   group = vim.api.nvim_create_augroup("OilOpenOnStart", { clear = true }),
