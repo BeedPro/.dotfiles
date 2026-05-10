@@ -44,17 +44,8 @@ while read -r file; do
 
   case "$1" in
     "w")
-      echo "$WALL" > "$HOME/.config/wallpaper/wall-path"
-      echo "$WALL" >> "$HOME/.config/wallpaper/history-path"
-
       cp "$file" "$HOME/.config/wallpaper/current.jpg" &&
-      cp "$file" "/tmp/wallpaper.jpg" &&
-      if [ "$XDG_SESSION_TYPE" = "wayland" ] && command -v bemenu >/dev/null 2>&1; then
-        swaybg -i "$HOME/.config/wallpaper/current.jpg" -m fill &
-      else
-        feh --no-fehbg --bg-scale "$HOME/.config/wallpaper/current.jpg" &
-      fi
-
+      $HOME/.screenlayout/set-screens.sh
       notify-send -i "$HOME/.config/wallpaper/current.jpg" "Wallpaper changed."
       ;;
 
