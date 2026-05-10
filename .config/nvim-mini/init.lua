@@ -3,10 +3,19 @@ vim.g.mapleader = " "
 -- Plugins
 vim.pack.add {
   "https://github.com/neovim/nvim-lspconfig",
+  "https://github.com/mfussenegger/nvim-lint",
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/stevearc/oil.nvim",
   "https://github.com/ibhagwan/fzf-lua",
   "https://github.com/nvim-mini/mini.nvim",
+  "https://github.com/mohseenrm/marko.nvim",
+}
+
+---- Plugins.nvim-lint
+require("lint").linters_by_ft = {
+  python = { "ruff" },
+  c = { "cpplint" },
+  cpp = { "cpplint" },
 }
 
 ---- Plugins.lazydev
@@ -37,7 +46,7 @@ require("fzf-lua").setup {
   fzf_opts = {
     ["--layout"] = "reverse",
   },
----@diagnostic disable-next-line: assign-type-mismatch
+  ---@diagnostic disable-next-line: assign-type-mismatch
   winopts = function()
     local small = vim.o.columns < 120 or vim.o.lines < 35
 
@@ -88,6 +97,9 @@ require("mini.hipatterns").setup {
     hex_color = require("mini.hipatterns").gen_highlighter.hex_color { style = "inline", inline_text = "█ " },
   },
 }
+
+---- Plugins.marko
+require("marko").setup {}
 
 -- LSP
 local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -201,6 +213,26 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("VimResized", {
   group = vim.api.nvim_create_augroup("AutoResizeSplits", { clear = true }),
   command = "wincmd =",
+})
+
+---- Autocmds.oil
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = vim.api.nvim_create_augroup("OilOpenOnStart", { clear = true }),
+  callback = function(data)
+    local is_dir = vim.fn.isdirectory(data.file) == 1
+    local no_name = data.file == "" and vim.bo[data.buf].buftype == ""
+
+    if not is_dir and not no_name then
+      return
+    end
+
+    if is_dir then
+      vim.schedule(function()
+        vim.cmd.cd(data.file)
+        vim.cmd("Oil " .. vim.fn.fnameescape(data.file))
+      end)
+    end
+  end,
 })
 
 -- Mappings
