@@ -3,9 +3,17 @@ vim.g.mapleader = " "
 -- Plugins
 vim.pack.add {
   "https://github.com/neovim/nvim-lspconfig",
+  "https://github.com/folke/lazydev.nvim",
   "https://github.com/stevearc/oil.nvim",
   "https://github.com/ibhagwan/fzf-lua",
   "https://github.com/nvim-mini/mini.nvim",
+}
+
+---- Plugins.lazydev
+require("lazydev").setup {
+  library = {
+    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+  },
 }
 
 ---- Plugins.oil
@@ -29,6 +37,7 @@ require("fzf-lua").setup {
   fzf_opts = {
     ["--layout"] = "reverse",
   },
+---@diagnostic disable-next-line: assign-type-mismatch
   winopts = function()
     local small = vim.o.columns < 120 or vim.o.lines < 35
 
@@ -78,6 +87,37 @@ require("mini.hipatterns").setup {
     note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
     hex_color = require("mini.hipatterns").gen_highlighter.hex_color { style = "inline", inline_text = "█ " },
   },
+}
+
+-- LSP
+local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
+
+lsp_capabilities.textDocument.completion.completionItem = {
+  preselectSupport = true,
+  commitCharactersSupport = true,
+  resolveSupport = {
+    properties = {
+      "documentation",
+      "detail",
+      "additionalTextEdits",
+    },
+  },
+}
+
+vim.diagnostic.config {
+  underline = false,
+}
+
+vim.lsp.document_color.enable(false)
+
+vim.lsp.config("*", {
+  capabilities = lsp_capabilities,
+})
+
+vim.lsp.enable {
+  "ty",
+  "clangd",
+  "lua_ls",
 }
 
 -- Options
