@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-target_dir="$HOME/Pictures/walls"
+target_dir="$HOME/Pictures/Wallpapers"
 
 mkdir -p "$HOME/Pictures"
 
