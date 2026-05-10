@@ -18,6 +18,12 @@ autocmd("BufReadPre", {
 
     vim.b[args.buf].bigfile = true
 
+    vim.notify(
+      ("Big file detected: %.2f MiB"):format(stat.size / 1024 / 1024),
+      vim.log.levels.WARN,
+      { title = "BigFile" }
+    )
+
     vim.opt_local.foldmethod = "manual"
     vim.opt_local.swapfile = false
     vim.opt_local.undofile = false
