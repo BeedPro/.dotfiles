@@ -11,6 +11,10 @@ vim.pack.add {
   "https://github.com/mohseenrm/marko.nvim",
 }
 
+vim.cmd.packadd "nvim.undotree"
+require("vim._core.ui2").enable {}
+
+
 ---- Plugins.nvim-lint
 require("lint").linters_by_ft = {
   python = { "ruff" },
