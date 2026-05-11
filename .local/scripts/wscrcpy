@@ -5,6 +5,7 @@ import re
 import shlex
 import subprocess
 import sys
+import time
 
 
 def run(cmd):
@@ -78,22 +79,60 @@ def choose_device(devices, auto_yes=False):
 
 
 def get_wlan_ip(serial):
-    result = run(
-        ["adb", "-s", serial, "shell", "ip", "-f", "inet", "addr", "show", "wlan0"]
-    )
-    if result.returncode == 0:
-        match = re.search(r"inet\s+(\d+\.\d+\.\d+\.\d+)/", result.stdout)
-        if match:
-            return match.group(1)
-
-    # Fallback method
+    # 1) Try discovering Wi-Fi interface via route table.
     result = run(["adb", "-s", serial, "shell", "ip", "route"])
     if result.returncode == 0:
         for line in result.stdout.splitlines():
-            if " wlan0 " in f" {line} ":
-                src = re.search(r"\bsrc\s+(\d+\.\d+\.\d+\.\d+)", line)
-                if src:
-                    return src.group(1)
+            dev_match = re.search(r"\bdev\s+(\S+)", line)
+            if not dev_match:
+                continue
+            dev = dev_match.group(1)
+            if "wlan" not in dev.lower() and "wifi" not in dev.lower():
+                continue
+
+            src = re.search(r"\bsrc\s+(\d+\.\d+\.\d+\.\d+)", line)
+            if src:
+                return src.group(1)
+
+            addr = run(
+                ["adb", "-s", serial, "shell", "ip", "-f", "inet", "addr", "show", dev]
+            )
+            if addr.returncode == 0:
+                match = re.search(r"inet\s+(\d+\.\d+\.\d+\.\d+)/", addr.stdout)
+                if match:
+                    return match.group(1)
+
+    # 2) Fallback: scan all IPv4 interfaces, prefer wlan/wifi names.
+    result = run(["adb", "-s", serial, "shell", "ip", "-o", "-4", "addr", "show"])
+    if result.returncode == 0:
+        candidates = []
+        for line in result.stdout.splitlines():
+            iface = re.search(r"^\d+:\s+([^\s:]+)", line)
+            ip = re.search(r"\binet\s+(\d+\.\d+\.\d+\.\d+)/", line)
+            if not iface or not ip:
+                continue
+            name = iface.group(1).lower()
+            addr = ip.group(1)
+            if addr.startswith("127."):
+                continue
+            if "wlan" in name or "wifi" in name:
+                return addr
+            candidates.append(addr)
+        if candidates:
+            return candidates[0]
+
+    # 3) Android properties often expose DHCP-assigned Wi-Fi IP.
+    iface_result = run(["adb", "-s", serial, "shell", "getprop", "wifi.interface"])
+    iface_name = iface_result.stdout.strip() if iface_result.returncode == 0 else ""
+    prop_keys = ["dhcp.wlan0.ipaddress", "dhcp.wlan1.ipaddress"]
+    if iface_name:
+        prop_keys.insert(0, f"dhcp.{iface_name}.ipaddress")
+
+    for key in prop_keys:
+        prop = run(["adb", "-s", serial, "shell", "getprop", key])
+        value = prop.stdout.strip() if prop.returncode == 0 else ""
+        if re.fullmatch(r"\d+\.\d+\.\d+\.\d+", value):
+            return value
 
     return None
 
@@ -141,7 +180,14 @@ def main():
             ["adb", "-s", serial, "tcpip", port], "Failed to enable adb TCP mode"
         )
 
-        ip = get_wlan_ip(serial)
+        # adbd restarts after `adb tcpip`; give it a moment and retry.
+        ip = None
+        for _ in range(6):
+            ip = get_wlan_ip(serial)
+            if ip:
+                break
+            time.sleep(0.5)
+
         if not ip:
             print("Could not determine phone Wi-Fi IP.", file=sys.stderr)
             print("Make sure Wi-Fi is enabled and connected.", file=sys.stderr)
