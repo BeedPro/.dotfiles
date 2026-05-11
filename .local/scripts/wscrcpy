@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+
+import re
+import shlex
+import subprocess
+import sys
+
+
+def run(cmd):
+    return subprocess.run(cmd, text=True, capture_output=True)
+
+
+def run_or_exit(cmd, err_msg):
+    result = run(cmd)
+    if result.returncode != 0:
+        details = result.stderr.strip() or result.stdout.strip() or "unknown error"
+        print(f"{err_msg}: {details}", file=sys.stderr)
+        sys.exit(1)
+    return result
+
+
+def check_dependency(binary):
+    result = run(["bash", "-lc", f"command -v {shlex.quote(binary)}"])
+    return result.returncode == 0
+
+
+def parse_adb_devices(output):
+    devices = []
+    for line in output.splitlines():
+        line = line.strip()
+        if not line or line.startswith("List of devices"):
+            continue
+        if "\t" not in line:
+            continue
+        serial, state = line.split("\t", 1)
+        if state.strip() == "device":
+            devices.append(serial)
+    return devices
+
+
+def choose_device(devices):
+    if not devices:
+        print("No connected/authorized adb devices found.", file=sys.stderr)
+        print(
+            "Tip: connect USB, unlock phone, and accept the debug prompt.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    if len(devices) == 1:
+        only = devices[0]
+        answer = input(f"Use device {only}? [Y/n]: ").strip().lower()
+        if answer in {"", "y", "yes"}:
+            return only
+        print("Cancelled.")
+        sys.exit(0)
+
+    print("Available adb devices:")
+    for idx, serial in enumerate(devices, start=1):
+        print(f"  {idx}) {serial}")
+
+    while True:
+        raw = input(f"Choose device [1-{len(devices)}]: ").strip()
+        if raw.isdigit():
+            i = int(raw)
+            if 1 <= i <= len(devices):
+                return devices[i - 1]
+        print("Invalid choice. Try again.")
+
+
+def get_wlan_ip(serial):
+    result = run(
+        ["adb", "-s", serial, "shell", "ip", "-f", "inet", "addr", "show", "wlan0"]
+    )
+    if result.returncode == 0:
+        match = re.search(r"inet\s+(\d+\.\d+\.\d+\.\d+)/", result.stdout)
+        if match:
+            return match.group(1)
+
+    # Fallback method
+    result = run(["adb", "-s", serial, "shell", "ip", "route"])
+    if result.returncode == 0:
+        for line in result.stdout.splitlines():
+            if " wlan0 " in f" {line} ":
+                src = re.search(r"\bsrc\s+(\d+\.\d+\.\d+\.\d+)", line)
+                if src:
+                    return src.group(1)
+
+    return None
+
+
+def parse_tcp_serial(serial):
+    match = re.fullmatch(r"(\d+\.\d+\.\d+\.\d+):(\d+)", serial)
+    if not match:
+        return None, None
+    return match.group(1), match.group(2)
+
+
+def main():
+    if not check_dependency("adb"):
+        print("adb is not installed or not in PATH.", file=sys.stderr)
+        sys.exit(1)
+    if not check_dependency("scrcpy"):
+        print("scrcpy is not installed or not in PATH.", file=sys.stderr)
+        sys.exit(1)
+
+    devices_out = run_or_exit(["adb", "devices"], "Failed to list adb devices")
+    serial = choose_device(parse_adb_devices(devices_out.stdout))
+
+    ip_from_serial, port_from_serial = parse_tcp_serial(serial)
+
+    if ip_from_serial and port_from_serial:
+        target = serial
+        print(f"Using existing wireless device {target}...")
+    else:
+        port_input = input("ADB TCP port [5555]: ").strip()
+        port = port_input if port_input else "5555"
+        if not port.isdigit():
+            print("Port must be numeric.", file=sys.stderr)
+            sys.exit(1)
+
+        print(f"Enabling TCP mode on {serial}:{port}...")
+        run_or_exit(
+            ["adb", "-s", serial, "tcpip", port], "Failed to enable adb TCP mode"
+        )
+
+        ip = get_wlan_ip(serial)
+        if not ip:
+            print("Could not determine phone Wi-Fi IP.", file=sys.stderr)
+            print("Make sure Wi-Fi is enabled and connected.", file=sys.stderr)
+            sys.exit(1)
+
+        target = f"{ip}:{port}"
+        print(f"Connecting to {target}...")
+        conn = run(["adb", "connect", target])
+        conn_text = (conn.stdout + conn.stderr).strip()
+        if conn.returncode != 0 and "already connected" not in conn_text.lower():
+            print(f"adb connect failed: {conn_text}", file=sys.stderr)
+            sys.exit(1)
+
+    print(f"Launching scrcpy on {target}...")
+    extra_args = sys.argv[1:]
+    try:
+        subprocess.run(["scrcpy", "-s", target, *extra_args], check=False)
+    finally:
+        print("Done.")
+
+
+if __name__ == "__main__":
+    main()
