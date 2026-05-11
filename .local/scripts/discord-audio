@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STATE_FILE="${XDG_RUNTIME_DIR:-/tmp}/discord-audio-modules-${UID}.state"
+SINK_NAME="discord_mic"
+SINK_DESC="Discord-Virtual-Mic"
+
+usage() {
+  cat <<'EOF'
+Usage: discord-audio <load|unload|status>
+
+  load    Create virtual mic sink and loop back to default output
+  unload  Remove loopback and virtual sink created by this script
+  status  Show whether virtual devices/modules are active
+EOF
+}
+
+module_id_by_name() {
+  local mod_name="$1"
+  pactl list short modules | awk -v mod="$mod_name" '$2 == mod { print $1 }'
+}
+
+load_modules() {
+  local null_id loop_id
+
+  if pactl list short sinks | awk '{print $2}' | grep -qx "$SINK_NAME"; then
+    echo "Virtual sink '$SINK_NAME' already exists."
+    null_id="$(module_id_by_name module-null-sink | tail -n 1 || true)"
+  else
+    null_id="$(pactl load-module module-null-sink sink_name="$SINK_NAME" sink_properties=device.description="$SINK_DESC")"
+    echo "Loaded module-null-sink id=$null_id"
+  fi
+
+  loop_id="$(pactl load-module module-loopback source="${SINK_NAME}.monitor" sink=@DEFAULT_SINK@ latency_msec=20)"
+  echo "Loaded module-loopback id=$loop_id"
+
+  {
+    echo "NULL_ID=${null_id:-}"
+    echo "LOOP_ID=${loop_id:-}"
+  } > "$STATE_FILE"
+
+  echo "Done. In Discord set Input Device to: Monitor of $SINK_DESC"
+}
+
+unload_modules() {
+  local null_id="" loop_id=""
+
+  if [[ -f "$STATE_FILE" ]]; then
+    # shellcheck disable=SC1090
+    source "$STATE_FILE"
+    null_id="${NULL_ID:-}"
+    loop_id="${LOOP_ID:-}"
+  fi
+
+  if [[ -n "$loop_id" ]]; then
+    pactl unload-module "$loop_id" 2>/dev/null || true
+  fi
+
+  if [[ -n "$null_id" ]]; then
+    pactl unload-module "$null_id" 2>/dev/null || true
+  fi
+
+  pactl list short modules | awk '/module-loopback/ && /source=discord_mic.monitor/ {print $1}' | while read -r id; do
+    [[ -n "$id" ]] && pactl unload-module "$id" || true
+  done
+
+  pactl list short modules | awk '/module-null-sink/ && /sink_name=discord_mic/ {print $1}' | while read -r id; do
+    [[ -n "$id" ]] && pactl unload-module "$id" || true
+  done
+
+  rm -f "$STATE_FILE"
+  echo "Unloaded discord virtual audio modules."
+}
+
+show_status() {
+  echo "Sinks:"
+  pactl list short sinks | awk -v sink="$SINK_NAME" '$2 == sink || NR == 1 { print }'
+  echo
+  echo "Sources:"
+  pactl list short sources | awk -v src="${SINK_NAME}.monitor" '$2 == src || NR == 1 { print }'
+  echo
+  echo "Modules:"
+  pactl list short modules | awk '/module-null-sink|module-loopback/ && /discord_mic|source=discord_mic.monitor|sink_name=discord_mic/ { print }'
+}
+
+case "${1:-}" in
+  load)
+    load_modules
+    ;;
+  unload)
+    unload_modules
+    ;;
+  status)
+    show_status
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
