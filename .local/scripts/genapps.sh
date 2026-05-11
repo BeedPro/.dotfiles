@@ -10,6 +10,7 @@ TERMINAL=alacritty
 APPS=(
   "Godot|godot"
   "Helium|helium"
+  "wscrcpy|$HOME/.local/scripts/wscrcpy -y"
   "Chat|$HOME/.local/scripts/openapps chat"
   "Email|$HOME/.local/scripts/openapps email"
   "Bookmarks|$HOME/.local/scripts/bookmarks"
