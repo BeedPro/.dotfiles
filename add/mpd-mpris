@@ -3,6 +3,6 @@
 go install github.com/natsukagami/mpd-mpris/cmd/mpd-mpris@latest
 mkdir -p $HOME/.config/systemd/user
 cd $HOME/.config/systemd/user
-ln -sf ../../../.dotfiles/.config/systemd/mpd-mpris mpd-mpris.service
+ln -sf ../../../.dotfiles/.config/systemd/user/mpd-mpris.service mpd-mpris.service
 systemctl --user --now enable mpd-mpris
 systemctl --user status mpd-mpris
