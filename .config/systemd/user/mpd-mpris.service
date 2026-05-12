@@ -6,7 +6,7 @@ Description=mpd-mpris: An implementation of the MPRIS protocol for MPD
 After=mpd.service
 
 [Service]
-ExecStart=/usr/local/go/bin/mpd-mpris -no-instance -network unix -host /tmp/mpd_socket
+ExecStart=%h/.go/bin/mpd-mpris -no-instance -network unix -host /tmp/mpd_socket
 Restart=on-failure
 
 [Install]
