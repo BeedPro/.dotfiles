@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euo pipefail
+
+systemctl --user disable --now mpd-mpris || true
+rm -f "$HOME/.config/systemd/user/mpd-mpris.service"
+systemctl --user daemon-reload
+
+if command -v go >/dev/null 2>&1; then
+  go uninstall github.com/natsukagami/mpd-mpris/cmd/mpd-mpris@latest || true
+fi
+
+rm -f "$HOME/go/bin/mpd-mpris"
+
+echo "Removed mpd-mpris"
