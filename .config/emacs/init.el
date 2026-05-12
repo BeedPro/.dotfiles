@@ -9,6 +9,8 @@
       global-auto-revert-non-file-buffers t
       native-comp-async-report-warnings-errors nil)
 
+(load-theme 'gruber-darker t)
+
 (repeat-mode 1)
 (blink-cursor-mode 0)
 (menu-bar-mode 0)
@@ -50,4 +52,5 @@
 (when (file-exists-p custom-file)
   (load custom-file t))
 
-(load-theme 'wombat)
+;; Packages can be defered using :defer
+(use-package gruber-darker-theme)
