@@ -9,8 +9,6 @@
       global-auto-revert-non-file-buffers t
       native-comp-async-report-warnings-errors nil)
 
-(load-theme 'doom-material-dark t)
-
 (repeat-mode 1)
 (blink-cursor-mode 0)
 (menu-bar-mode 0)
@@ -54,7 +52,15 @@
   (load custom-file t))
 
 ;; Packages can be defered using :defer
-(use-package doom-themes)
+(use-package doom-themes
+  :init
+  (set-face-attribute 'line-number nil :slant 'normal)
+  (set-face-attribute 'line-number-current-line nil :slant 'normal)
+  :custom
+  (doom-themes-enable-italic nil)
+  :config
+  (load-theme 'doom-material-dark t))
+
 (use-package doom-modeline
   :init
   (setq doom-modeline-icon nil
