@@ -9,7 +9,7 @@
       global-auto-revert-non-file-buffers t
       native-comp-async-report-warnings-errors nil)
 
-(load-theme 'gruber-darker t)
+(load-theme 'doom-material-dark t)
 
 (repeat-mode 1)
 (blink-cursor-mode 0)
@@ -34,9 +34,10 @@
 
 (package-initialize)
 
-(unless package-archive-contents
-  (package-refresh-contents))
+(unless (package-installed-p 'use-package)
+  (user-error "use-package is not installed. Run M-x package-install RET use-package RET"))
 
+;; Run M-x package-refresh-contents manually when needed.
 (require 'use-package)
 
 (setq use-package-always-ensure t)
@@ -53,4 +54,24 @@
   (load custom-file t))
 
 ;; Packages can be defered using :defer
-(use-package gruber-darker-theme)
+(use-package doom-themes)
+(use-package doom-modeline
+  :init
+  (setq doom-modeline-icon nil
+        doom-modeline-major-mode-icon nil
+        doom-modeline-major-mode-color-icon nil
+        doom-modeline-buffer-state-icon nil
+        doom-modeline-buffer-modification-icon nil
+        doom-modeline-lsp-icon nil
+        doom-modeline-time-icon nil
+        doom-modeline-time-live-icon nil
+        doom-modeline-time-analogue-clock nil
+        doom-modeline-vcs-icon nil
+        doom-modeline-check-icon nil
+        doom-modeline-persp-icon nil
+        doom-modeline-modal-icon nil
+        doom-modeline-modal-modern-icon nil
+        doom-modeline-unicode-fallback nil
+        doom-modeline-unicode-number nil)
+  :config
+  (doom-modeline-mode 1))
