@@ -257,7 +257,8 @@
     "vim.leader": "<space>",
     "vim.handleKeys": {
         "<C-a>": false,
-        "<C-f>": false
+        "<C-f>": false,
+        "<C-y>": false
     },
     "extensions.experimental.affinity": {
         "vscodevim.vim": 1
