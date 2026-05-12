@@ -294,7 +294,7 @@ def set_wallpaper(mode: str) -> None:
         raise FileNotFoundError(f"Wallpaper not found for mode: {mode}")
 
     current = wallpaper_dir / "current.jpg"
-    current_solid = wallpaper_dir / "solid" / "current.jpg"
+    current_solid = wallpaper_dir / ".solid" / "current.jpg"
     shutil.copyfile(wallpaper, current)
     shutil.copyfile(wallpaper, current_solid)
 
