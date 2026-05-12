@@ -33,6 +33,7 @@ CONFIG = LauncherConfig(
     static_targets={
         "dotfiles": Path("~/.dotfiles"),
         "home": Path("~"),
+        "tmp": Path("/tmp"),
         "local/scripts": Path("~/.local/scripts"),
     },
     directory_sources=(
