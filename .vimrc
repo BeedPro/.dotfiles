@@ -10,8 +10,6 @@ endif
 call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'yegappan/lsp'
-Plug 'cocopon/iceberg.vim'
 Plug 'machakann/vim-highlightedyank'
 call plug#end()
 
@@ -84,33 +82,6 @@ set smartindent
 set showmatch
 set backspace=indent,eol,start
 
-" lsp
-let lspOpts = #{
-      \ autoHighlightDiags: v:true,
-      \ autoComplete: v:false,
-      \ showSignature: v:false
-      \ }
-autocmd User LspSetup call LspOptionsSet(lspOpts)
-
-let lspServers = [
-      \ #{
-      \   name: 'ty',
-      \   filetype: ['python'],
-      \   path: 'ty',
-      \   args: ['server']
-      \ }
-      \ ]
-autocmd User LspSetup call LspAddServer(lspServers)
-
-autocmd FileType python setlocal omnifunc=lsp#complete
-
-autocmd User LspSetup call LspOptionsSet(#{
-    \ diagSignErrorText: 'E',
-    \ diagSignWarningText: 'W',
-    \ diagSignInfoText: 'I',
-    \ diagSignHintText: 'H',
-    \ })
-
 " keybinds
 function! ToggleNetrw()
   for winnr in range(1, winnr('$'))
@@ -123,11 +94,6 @@ function! ToggleNetrw()
   Ex
 endfunction
 
-function! s:ShowSignatureOnce() abort
-  let b:lsp_signature_once = 1
-  LspShowSignature
-endfunction
-
 nnoremap <silent> <leader>. :call ToggleNetrw()<CR>
 nnoremap <leader>fa :FilesAll<CR>
 nnoremap <leader>fr :History<CR>
@@ -138,25 +104,6 @@ nnoremap <leader>fh :Helptags<CR>
 nnoremap <leader>fk :Maps<CR>
 nnoremap <leader>fm :Marks<CR>
 nnoremap <leader>fz :BLines<CR>
-nnoremap <leader>ds :LspDiagShow<CR>
-
-nnoremap gra :LspCodeAction<CR>
-nnoremap grn :LspRename<CR>
-nnoremap grn :LspRename<CR>
-nnoremap grr :LspShowReferences<CR>
-nnoremap gri :LspGotoImpl<CR>
-nnoremap grt :LspGotoTypeDef<CR>
-nnoremap gO :LspDocumentSymbol<CR>
-nnoremap gD :LspGotoDeclaration<CR>
-nnoremap gd :LspGotoDefinition<CR>
-nnoremap K :LspHover<CR>
-nnoremap <C-w>d :LspDiagCurrent<CR>
-inoremap <silent> <C-s> <C-o>:call <SID>ShowSignatureOnce()<CR>
-
-augroup LspSignatureOnce
-  autocmd!
-  autocmd InsertCharPre * if exists('b:lsp_signature_once') && b:lsp_signature_once | if exists('*popup_clear') | silent! call popup_clear() | endif | silent! pclose | unlet b:lsp_signature_once | endif
-augroup END
 
 " colors
 if has('termguicolors')
@@ -165,4 +112,4 @@ else
   set t_Co=256
 endif
 
-silent! colorscheme iceberg
+silent! colorscheme slate
