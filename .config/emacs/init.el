@@ -59,7 +59,7 @@
   :custom
   (doom-themes-enable-italic nil)
   :config
-  (load-theme 'doom-one t))
+  (load-theme 'doom-tomorrow-night t))
 
 (use-package doom-modeline
   :init

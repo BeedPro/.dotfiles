@@ -94,13 +94,13 @@ def toggle_emacs() -> None:
     emacs_config: Path = Path.home() / ".config/emacs/init.el"
 
     light_to_dark: dict[str, str] = {
-        "(load-theme 'doom-one-light t)": "(load-theme 'doom-one t)",
+        "(load-theme 'doom-tomorrow-day t)": "(load-theme 'doom-tomorrow-night t)",
     }
 
     old, new = toggle_config(
         path=emacs_config,
         light_to_dark=light_to_dark,
-        detect_light="(load-theme 'doom-one-light t)",
+        detect_light="(load-theme 'doom-tomorrow-day t)",
     )
 
     print(f"~/.config/emacs/init.el: {old} => {new}")
