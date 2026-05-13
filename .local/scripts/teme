@@ -90,6 +90,28 @@ def toggle_vim() -> None:
     print(f"~/.vimrc: {old} => {new}")
 
 
+def toggle_emacs() -> None:
+    emacs_config: Path = Path.home() / ".config/emacs/init.el"
+
+    light_to_dark: dict[str, str] = {
+        "(load-theme 'doom-one-light t)": "(load-theme 'doom-one t)",
+    }
+
+    old, new = toggle_config(
+        path=emacs_config,
+        light_to_dark=light_to_dark,
+        detect_light="(load-theme 'doom-one-light t)",
+    )
+
+    print(f"~/.config/emacs/init.el: {old} => {new}")
+
+
+def restart_emacs_daemon() -> None:
+    subprocess.run(["killall", "emacs"], check=False)
+    subprocess.run(["emacs", "--daemon"], check=True)
+    print("Emacs daemon restarted")
+
+
 def toggle_alacritty() -> None:
     alacritty_config: Path = Path.home() / ".config/alacritty/alacritty.toml"
 
@@ -321,6 +343,8 @@ def main():
     mode = toggle_bashrc()
     toggle_nvim()
     toggle_vim()
+    toggle_emacs()
+    restart_emacs_daemon()
     toggle_alacritty()
     toggle_dunst()
     toggle_i3()
