@@ -87,3 +87,7 @@
         doom-modeline-unicode-number nil)
   :config
   (doom-modeline-mode 1))
+
+(use-package magit
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
