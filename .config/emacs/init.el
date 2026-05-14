@@ -1,4 +1,6 @@
 ;; -*- lexical-binding: t; -*-
+
+;; Startup Defaults
 (setq inhibit-startup-message t
       auto-save-default nil
       make-backup-files nil
@@ -9,6 +11,7 @@
       global-auto-revert-non-file-buffers t
       native-comp-async-report-warnings-errors nil)
 
+;; Global modes
 (repeat-mode 1)
 (blink-cursor-mode 0)
 (menu-bar-mode 0)
@@ -23,6 +26,7 @@
 (global-visual-line-mode 1)
 (global-auto-revert-mode 1)
 
+;; Package management
 (require 'package)
 
 (setq package-archives
@@ -40,6 +44,7 @@
 
 (setq use-package-always-ensure t)
 
+;; Editing defaults
 (setq-default indent-tabs-mode nil
               tab-width 2
               display-line-numbers-type 'relative)
@@ -47,11 +52,12 @@
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; Custom file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file t))
 
-;; Packages can be defered using :defer
+;; Packages
 (use-package doom-themes
   :init
   (set-face-attribute 'line-number nil :slant 'normal)
