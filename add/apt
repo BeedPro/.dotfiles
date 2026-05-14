@@ -6,6 +6,8 @@ sudo apt install -y extrepo
 sudo extrepo update
 sudo extrepo enable debian_backports
 
+# sudo apt install emacs
+
 CORE_UTILS=(
   bash-completion
   tmux
