@@ -42,7 +42,8 @@
 ;; Run M-x package-refresh-contents manually when needed.
 (require 'use-package)
 
-(setq use-package-always-ensure t)
+(setq use-package-always-ensure t
+      use-package-always-defer t)
 
 ;; Editing defaults
 (setq-default indent-tabs-mode nil
@@ -59,6 +60,7 @@
 
 ;; Packages
 (use-package doom-themes
+  :defer nil
   :init
   (set-face-attribute 'line-number nil :slant 'normal)
   (set-face-attribute 'line-number-current-line nil :slant 'normal)
@@ -68,6 +70,7 @@
   (load-theme 'doom-tomorrow-night t))
 
 (use-package doom-modeline
+  :defer nil
   :init
   (setq doom-modeline-icon nil
         doom-modeline-major-mode-icon nil
@@ -89,5 +92,26 @@
   (doom-modeline-mode 1))
 
 (use-package magit
+  :bind ("C-x g" . magit-status)
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+(use-package org
+  :ensure nil
+  :bind (("C-c a" . org-agenda)
+         ("C-c c" . org-capture))
+  :init
+  (setq org-directory (expand-file-name "org" (getenv "HOME"))
+        org-agenda-files (list org-directory)
+        org-default-notes-file (expand-file-name "inbox.org" org-directory)
+        org-log-done 'time
+        org-startup-indented t
+        org-hide-emphasis-markers t)
+  :config
+  (setq org-capture-templates
+        '(("t" "Todo" entry
+           (file+headline org-default-notes-file "Tasks")
+           "* TODO %?\n%U\n")
+          ("n" "Note" entry
+           (file+headline org-default-notes-file "Notes")
+           "* %?\n%U\n"))))
