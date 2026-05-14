@@ -113,3 +113,4 @@ else
 endif
 
 silent! colorscheme slate
+" silent! colorscheme zellner
