@@ -95,25 +95,3 @@
   :bind ("C-x g" . magit-status)
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-
-(use-package org
-  :ensure nil
-  :bind (("C-c a" . org-agenda)
-         ("C-c c" . org-capture))
-  :init
-  (setq org-directory (expand-file-name "Compendium/org" (getenv "HOME"))
-        org-agenda-files (if (file-directory-p org-directory)
-                             (directory-files-recursively org-directory "\\.org\\'" nil t)
-                           (list org-directory))
-        org-default-notes-file (expand-file-name "inbox.org" org-directory)
-        org-log-done 'time
-        org-startup-indented t
-        org-hide-emphasis-markers t)
-  :config
-  (setq org-capture-templates
-        '(("t" "Todo" entry
-           (file+headline org-default-notes-file "Tasks")
-           "* TODO %?\n%U\n")
-          ("n" "Note" entry
-           (file+headline org-default-notes-file "Notes")
-           "* %?\n%U\n"))))
