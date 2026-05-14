@@ -101,8 +101,10 @@
   :bind (("C-c a" . org-agenda)
          ("C-c c" . org-capture))
   :init
-  (setq org-directory (expand-file-name "org" (getenv "HOME"))
-        org-agenda-files (list org-directory)
+  (setq org-directory (expand-file-name "Compendium/org" (getenv "HOME"))
+        org-agenda-files (if (file-directory-p org-directory)
+                             (directory-files-recursively org-directory "\\.org\\'" nil t)
+                           (list org-directory))
         org-default-notes-file (expand-file-name "inbox.org" org-directory)
         org-log-done 'time
         org-startup-indented t
