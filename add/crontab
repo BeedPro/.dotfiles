@@ -1,41 +1,56 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-script_path="$HOME/.local/scripts/keepass-backup"
-db_path_default="$HOME/Compendium/Keepass/Databases/BeedDB.kdbx"
-db_path="${1:-$db_path_default}"
-max_backups="${2:-24}"
-schedule="${3:-0 * * * *}"
-log_path="$HOME/.local/state/keepass-backup.log"
-tag="# keepass-backup-hourly"
+add_or_replace_cronjob() {
+  local tag="$1"
+  local schedule="$2"
+  local command="$3"
+  local remove_pattern="${4:-}"
+  local cron_line="${schedule} ${command} ${tag}"
+  local tmp_file
 
-if ! [[ "$max_backups" =~ ^[1-9][0-9]*$ ]]; then
-  printf 'max_backups must be a positive integer, got: %s\n' "$max_backups" >&2
-  exit 1
-fi
+  tmp_file="$(mktemp)"
 
-if [ ! -x "$script_path" ]; then
-  printf 'Backup script is missing or not executable: %s\n' "$script_path" >&2
-  exit 1
-fi
+  if crontab -l >"$tmp_file" 2>/dev/null; then
+    :
+  else
+    : >"$tmp_file"
+  fi
 
-mkdir -p "$HOME/.local/state"
+  grep -vF "$tag" "$tmp_file" >"${tmp_file}.next" || true
+  if [ -n "$remove_pattern" ]; then
+    grep -vF "$remove_pattern" "${tmp_file}.next" >"${tmp_file}.clean" || true
+    mv "${tmp_file}.clean" "${tmp_file}.next"
+  fi
+  mv "${tmp_file}.next" "$tmp_file"
+  printf '%s\n' "$cron_line" >>"$tmp_file"
+  crontab "$tmp_file"
+  rm -f "$tmp_file"
 
-cron_line="$schedule $script_path \"$db_path\" $max_backups >> $log_path 2>&1 $tag"
+  printf 'Installed cron entry:\n%s\n' "$cron_line"
+}
 
-tmp_file="$(mktemp)"
-trap 'rm -f "$tmp_file"' EXIT
+setup_keepass_backup_cron() {
+  local script_path="$HOME/.local/scripts/keepass-backup"
+  local db_path_default="$HOME/Compendium/Keepass/Databases/BeedDB.kdbx"
+  local db_path="${1:-$db_path_default}"
+  local max_backups="${2:-24}"
+  local schedule="${3:-0 * * * *}"
+  local log_path="$HOME/.local/state/keepass-backup.log"
+  local tag="# keepass-backup-hourly"
 
-if crontab -l >"$tmp_file" 2>/dev/null; then
-  :
-else
-  : >"$tmp_file"
-fi
+  if ! [[ "$max_backups" =~ ^[1-9][0-9]*$ ]]; then
+    printf 'max_backups must be a positive integer, got: %s\n' "$max_backups" >&2
+    exit 1
+  fi
 
-grep -vF "$tag" "$tmp_file" >"${tmp_file}.next" || true
-mv "${tmp_file}.next" "$tmp_file"
-printf '%s\n' "$cron_line" >>"$tmp_file"
+  if [ ! -x "$script_path" ]; then
+    printf 'Backup script is missing or not executable: %s\n' "$script_path" >&2
+    exit 1
+  fi
 
-crontab "$tmp_file"
+  mkdir -p "$HOME/.local/state"
+  add_or_replace_cronjob "$tag" "$schedule" "$script_path \"$db_path\" $max_backups >> $log_path 2>&1" "$script_path $db_path"
+}
 
-printf 'Installed cron entry:\n%s\n' "$cron_line"
+setup_keepass_backup_cron "$@"
