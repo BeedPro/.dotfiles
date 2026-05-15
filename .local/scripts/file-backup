@@ -2,8 +2,8 @@
 set -euo pipefail
 
 if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-  printf 'Usage: %s <kdbx-path> [max-backups]\n' "${0##*/}" >&2
-  printf 'Example: %s @Databases/Passwords.kdbx 15\n' "${0##*/}" >&2
+  printf 'Usage: %s <file-path> [max-backups]\n' "${0##*/}" >&2
+  printf 'Example: %s @Documents/notes.txt 15\n' "${0##*/}" >&2
   exit 1
 fi
 
@@ -25,23 +25,36 @@ if [ ! -f "$input_path" ]; then
 fi
 
 filename="$(basename -- "$input_path")"
-dbname="${filename%.kdbx}"
+name_root="${filename%.*}"
+extension="${filename##*.}"
 
-if [ "$dbname" = "$filename" ]; then
-  printf 'Expected a .kdbx file, got: %s\n' "$filename" >&2
-  exit 1
+if [ "$name_root" = "$filename" ]; then
+  extension=""
 fi
 
-backup_dir="$HOME/.local/state/KeePass/${dbname}"
+if [ -z "$name_root" ]; then
+  name_root="backup"
+fi
+
+extension_dir="$extension"
+if [ -z "$extension_dir" ]; then
+  extension_dir="noext"
+fi
+
+backup_dir="$HOME/.local/state/file-backups/${extension_dir}/${name_root}/backups"
 timestamp="$(date +%Y%m%d%H%M%S)"
-target_path="${backup_dir}/${timestamp}.kdbx"
+if [ -n "$extension" ]; then
+  target_path="${backup_dir}/${timestamp}.${extension}"
+else
+  target_path="${backup_dir}/${timestamp}"
+fi
 
 mkdir -p "$backup_dir"
 cp -- "$input_path" "$target_path"
 
 printf '[%s] Created: %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$target_path"
 
-mapfile -t backup_files < <(ls -1 "$backup_dir"/*.kdbx 2>/dev/null | sort)
+mapfile -t backup_files < <(ls -1 "$backup_dir"/* 2>/dev/null | sort)
 backup_count="${#backup_files[@]}"
 
 if [ "$backup_count" -gt "$max_backups" ]; then
