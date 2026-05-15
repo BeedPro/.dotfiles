@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_path="$HOME/.local/scripts/keepass-backup"
+db_path_default="$HOME/Compendium/Keepass/Databases/BeedDB.kdbx"
+db_path="${1:-$db_path_default}"
+max_backups="${2:-24}"
+schedule="${3:-0 * * * *}"
+log_path="$HOME/.local/state/keepass-backup.log"
+tag="# keepass-backup-hourly"
+
+if ! [[ "$max_backups" =~ ^[1-9][0-9]*$ ]]; then
+  printf 'max_backups must be a positive integer, got: %s\n' "$max_backups" >&2
+  exit 1
+fi
+
+if [ ! -x "$script_path" ]; then
+  printf 'Backup script is missing or not executable: %s\n' "$script_path" >&2
+  exit 1
+fi
+
+mkdir -p "$HOME/.local/state"
+
+cron_line="$schedule $script_path \"$db_path\" $max_backups >> $log_path 2>&1 $tag"
+
+tmp_file="$(mktemp)"
+trap 'rm -f "$tmp_file"' EXIT
+
+if crontab -l >"$tmp_file" 2>/dev/null; then
+  :
+else
+  : >"$tmp_file"
+fi
+
+grep -vF "$tag" "$tmp_file" >"${tmp_file}.next" || true
+mv "${tmp_file}.next" "$tmp_file"
+printf '%s\n' "$cron_line" >>"$tmp_file"
+
+crontab "$tmp_file"
+
+printf 'Installed cron entry:\n%s\n' "$cron_line"
