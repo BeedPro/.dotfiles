@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-STATE_FILE="${XDG_RUNTIME_DIR:-/tmp}/discord-audio-modules-${UID}.state"
-SINK_NAME="discord_mic"
-SINK_DESC="Discord-Virtual-Mic"
+STATE_FILE="${XDG_RUNTIME_DIR:-/tmp}/share-audio-modules-${UID}.state"
+SINK_NAME="share_mic"
+SINK_DESC="Share-Virtual-Mic"
 
 usage() {
   cat <<'EOF'
-Usage: discord-audio <load|unload|status>
+Usage: share-audio <load|unload|status>
 
   load    Create virtual mic sink and loop back to default output
   unload  Remove loopback and virtual sink created by this script
@@ -39,7 +39,7 @@ load_modules() {
     echo "LOOP_ID=${loop_id:-}"
   } > "$STATE_FILE"
 
-  echo "Done. In Discord set Input Device to: Monitor of $SINK_DESC"
+  echo "Done. In your app set Input Device to: Monitor of $SINK_DESC"
 }
 
 unload_modules() {
@@ -60,16 +60,16 @@ unload_modules() {
     pactl unload-module "$null_id" 2>/dev/null || true
   fi
 
-  pactl list short modules | awk '/module-loopback/ && /source=discord_mic.monitor/ {print $1}' | while read -r id; do
+  pactl list short modules | awk -v src="source=${SINK_NAME}.monitor" '$0 ~ /module-loopback/ && $0 ~ src {print $1}' | while read -r id; do
     [[ -n "$id" ]] && pactl unload-module "$id" || true
   done
 
-  pactl list short modules | awk '/module-null-sink/ && /sink_name=discord_mic/ {print $1}' | while read -r id; do
+  pactl list short modules | awk -v sink="sink_name=${SINK_NAME}" '$0 ~ /module-null-sink/ && $0 ~ sink {print $1}' | while read -r id; do
     [[ -n "$id" ]] && pactl unload-module "$id" || true
   done
 
   rm -f "$STATE_FILE"
-  echo "Unloaded discord virtual audio modules."
+  echo "Unloaded shared virtual audio modules."
 }
 
 show_status() {
@@ -80,7 +80,7 @@ show_status() {
   pactl list short sources | awk -v src="${SINK_NAME}.monitor" '$2 == src || NR == 1 { print }'
   echo
   echo "Modules:"
-  pactl list short modules | awk '/module-null-sink|module-loopback/ && /discord_mic|source=discord_mic.monitor|sink_name=discord_mic/ { print }'
+  pactl list short modules | awk -v sink="${SINK_NAME}" -v src="source=${SINK_NAME}.monitor" -v sink_arg="sink_name=${SINK_NAME}" '$0 ~ /module-null-sink|module-loopback/ && ($0 ~ sink || $0 ~ src || $0 ~ sink_arg) { print }'
 }
 
 case "${1:-}" in

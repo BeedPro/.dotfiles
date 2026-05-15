@@ -5,7 +5,7 @@ set $files thunar
 font pango:monospace 12
 
 exec --no-startup-id dex --autostart --environment i3
-exec --no-startup-id ~/.local/share/autostart.sh
+exec --no-startup-id ~/.local/share/autostart
 
 workspace 1 output DP-4 eDP-1
 workspace 2 output DP-4 eDP-1
@@ -59,9 +59,9 @@ bindsym XF86AudioLowerVolume exec --no-startup-id ~/.local/scripts/volume down
 bindsym XF86AudioMute exec --no-startup-id ~/.local/scripts/volume mute
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 bindsym $mod+F12 exec --no-startup-id ~/.local/scripts/xswapkb
-bindsym Print exec --no-startup-id ~/.local/scripts/screenshot.sh selection
-bindsym $mod+Print exec --no-startup-id ~/.local/scripts/screenshot.sh window
-bindsym $mod+Shift+Print exec --no-startup-id ~/.local/scripts/screenshot.sh screen
+bindsym Print exec --no-startup-id ~/.local/scripts/screenshot selection
+bindsym $mod+Print exec --no-startup-id ~/.local/scripts/screenshot window
+bindsym $mod+Shift+Print exec --no-startup-id ~/.local/scripts/screenshot screen
 bindsym $mod+Tab workspace back_and_forth
 bindsym $mod+Left workspace prev
 bindsym $mod+Right workspace next
@@ -76,8 +76,8 @@ bindsym $mod+Shift+w exec --no-startup-id ~/.local/scripts/bookmarks
 
 bindsym $mod+x exec --no-startup-id i3lock -c "#000000"
 
-bindsym $mod+Shift+x exec --no-startup-id ~/.local/scripts/powermenu.sh
-bindsym $mod+Shift+c exec --no-startup-id ~/.local/scripts/killmenu.sh
+bindsym $mod+Shift+x exec --no-startup-id ~/.local/scripts/powermenu
+bindsym $mod+Shift+c exec --no-startup-id ~/.local/scripts/killmenu
 
 bindsym $mod+c kill
 
