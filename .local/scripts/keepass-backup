@@ -41,7 +41,7 @@ target_path="${backup_dir}/${timestamp}.kdbx"
 mkdir -p "$backup_dir"
 cp -- "$input_path" "$target_path"
 
-printf 'Backup created: %s\n' "$target_path"
+printf '[%s] Created: %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$target_path"
 
 mapfile -t backup_files < <(ls -1 "$backup_dir"/*.kdbx 2>/dev/null | sort)
 backup_count="${#backup_files[@]}"
@@ -50,6 +50,6 @@ if [ "$backup_count" -gt "$max_backups" ]; then
   delete_count=$((backup_count - max_backups))
   for ((i = 0; i < delete_count; i++)); do
     rm -f -- "${backup_files[$i]}"
-    printf 'Deleted old backup: %s\n' "${backup_files[$i]}"
+    printf '[%s] Deleted: %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "${backup_files[$i]}"
   done
 fi
