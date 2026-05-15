@@ -4,6 +4,7 @@
 (setq inhibit-startup-message t
       auto-save-default nil
       make-backup-files nil
+      ring-bell-function 'ignore
       set-mark-command-repeat-pop t
       large-file-warning-threshold nil
       vc-follow-symlinks t
