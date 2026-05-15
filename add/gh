@@ -9,5 +9,3 @@ sudo extrepo enable github-cli
 
 sudo apt update
 sudo apt install -y gh
-
-gh extension install dlvhdr/gh-dash
