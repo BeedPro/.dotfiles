@@ -60,6 +60,12 @@
   (load custom-file t))
 
 ;; Packages
+(use-package dired
+  :ensure nil
+  :config
+  (setq dired-listing-switches "-alh --group-directories-first")
+  (setenv "LC_COLLATE" "C"))
+
 (use-package doom-themes
   :defer nil
   :init
