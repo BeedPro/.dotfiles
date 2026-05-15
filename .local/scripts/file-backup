@@ -41,7 +41,7 @@ if [ -z "$extension_dir" ]; then
   extension_dir="noext"
 fi
 
-backup_dir="$HOME/.local/state/file-backups/${extension_dir}/${name_root}/backups"
+backup_dir="$HOME/.local/state/file-backups/${extension_dir}/${name_root}"
 timestamp="$(date +%Y%m%d%H%M%S)"
 if [ -n "$extension" ]; then
   target_path="${backup_dir}/${timestamp}.${extension}"
