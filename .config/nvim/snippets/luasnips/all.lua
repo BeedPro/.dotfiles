@@ -23,3 +23,19 @@ ls.add_snippets("all", {
     end),
   }),
 })
+
+ls.add_snippets("all", {
+  s("tid", {
+    f(function()
+      return os.date "%H%M%S"
+    end),
+  }),
+})
+
+ls.add_snippets("all", {
+  s("did", {
+    f(function()
+      return os.date "%Y%m%d"
+    end),
+  }),
+})
