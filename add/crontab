@@ -36,7 +36,6 @@ setup_keepass_backup_cron() {
   local db_path="${1:-$db_path_default}"
   local max_backups="${2:-24}"
   local schedule="${3:-0 * * * *}"
-  local log_path="$HOME/.local/state/keepass-backup.log"
   local tag="# keepass-backup-hourly"
 
   if ! [[ "$max_backups" =~ ^[1-9][0-9]*$ ]]; then
@@ -49,8 +48,7 @@ setup_keepass_backup_cron() {
     exit 1
   fi
 
-  mkdir -p "$HOME/.local/state"
-  add_or_replace_cronjob "$tag" "$schedule" "$script_path \"$db_path\" $max_backups >> $log_path 2>&1" "$script_path $db_path"
+  add_or_replace_cronjob "$tag" "$schedule" "$script_path \"$db_path\" $max_backups" "$script_path $db_path"
 }
 
 setup_keepass_backup_cron "$@"
