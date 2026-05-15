@@ -31,7 +31,7 @@ add_or_replace_cronjob() {
 }
 
 setup_keepass_backup_cron() {
-  local script_path="$HOME/.local/scripts/file-backups"
+  local script_path="$HOME/.local/scripts/file-backup"
   local db_path_default="$HOME/Compendium/Keepass/BeedDB.kdbx"
   local db_path="${1:-$db_path_default}"
   local max_backups="${2:-24}"
