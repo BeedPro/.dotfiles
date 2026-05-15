@@ -32,9 +32,7 @@ if [ "$dbname" = "$filename" ]; then
   exit 1
 fi
 
-parent_dir="$(dirname -- "$input_path")"
-base_dir="$(dirname -- "$parent_dir")"
-backup_dir="${base_dir}/Backups/${dbname}"
+backup_dir="$HOME/.local/state/KeePass/${dbname}"
 timestamp="$(date +%Y%m%d%H%M%S)"
 target_path="${backup_dir}/${timestamp}.kdbx"
 
