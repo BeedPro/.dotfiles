@@ -1,9 +1,109 @@
 #!/usr/bin/env python3
+import argparse
 import json
+import re
 import shutil
 import subprocess
 from pathlib import Path
 from typing import Dict, Tuple
+
+
+def _config_roots() -> list[Path]:
+    candidates = [Path.home() / ".config", Path.home() / ".dotfiles/.config"]
+    return [p for p in candidates if p.exists()]
+
+
+def _collect_theme_variants(config_root: Path) -> dict[Path, dict[str, list[tuple[str, Path]]]]:
+    variants: dict[Path, dict[str, list[tuple[str, Path]]]] = {}
+
+    for colors_dir in config_root.rglob("colors"):
+        if not colors_dir.is_dir():
+            continue
+
+        files = [p for p in colors_dir.iterdir() if p.is_file()]
+        if not files:
+            continue
+
+        parent = colors_dir.parent
+        by_theme: dict[str, dict[str, list[Path]]] = {}
+
+        for file in files:
+            match = re.match(r"^(?P<theme>.+)-(?P<mode>dark|light)(?P<ext>\..+)$", file.name)
+            if not match:
+                continue
+            theme = match.group("theme")
+            mode = match.group("mode")
+            by_theme.setdefault(theme, {}).setdefault(mode, []).append(file)
+
+        for theme, modes in by_theme.items():
+            if "dark" not in modes or "light" not in modes:
+                continue
+            variants.setdefault(parent, {}).setdefault(theme, [])
+            variants[parent][theme].extend(("dark", p) for p in modes["dark"])
+            variants[parent][theme].extend(("light", p) for p in modes["light"])
+
+    return variants
+
+
+def list_themes() -> None:
+    variants: dict[Path, dict[str, list[tuple[str, Path]]]] = {}
+    for root in _config_roots():
+        variants.update(_collect_theme_variants(root))
+
+    themes = sorted({theme for per_dir in variants.values() for theme in per_dir})
+    if not themes:
+        print("No themes found")
+        return
+
+    print("Available themes:")
+    for theme in themes:
+        print(theme)
+
+
+def apply_theme(theme: str) -> None:
+    variants: dict[Path, dict[str, list[tuple[str, Path]]]] = {}
+    for root in _config_roots():
+        variants.update(_collect_theme_variants(root))
+
+    changed = 0
+    missing_targets: list[str] = []
+
+    for parent, per_theme in variants.items():
+        themed_files = per_theme.get(theme)
+        if not themed_files:
+            continue
+
+        sibling_files = [p for p in parent.iterdir() if p.is_file()]
+
+        for mode, src in themed_files:
+            same_ext = [p for p in sibling_files if p.suffix == src.suffix and mode in p.name.lower()]
+            if len(same_ext) == 1:
+                target = same_ext[0]
+            else:
+                target = parent / f"{mode}{src.suffix}"
+                if not target.exists():
+                    fallback = parent / ("Dark" + src.suffix if mode == "dark" else "Light" + src.suffix)
+                    if fallback.exists():
+                        target = fallback
+
+            if not target.exists():
+                missing_targets.append(str(parent))
+                continue
+
+            shutil.copyfile(src, target)
+            changed += 1
+            print(f"{src} -> {target}")
+
+    if changed == 0:
+        raise ValueError(f"Theme not found or no files updated: {theme}")
+
+    if missing_targets:
+        uniq = sorted(set(missing_targets))
+        print("Skipped directories without a matching dark/light target file:")
+        for d in uniq:
+            print(d)
+
+    print(f"Applied theme '{theme}' to {changed} file(s)")
 
 
 def toggle_config(
@@ -308,6 +408,17 @@ def rebuild_bat_cache() -> None:
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--theme", help="Theme name, or 'ls' to list themes")
+    args = parser.parse_args()
+
+    if args.theme:
+        if args.theme == "ls":
+            list_themes()
+        else:
+            apply_theme(args.theme)
+        return
+
     mode = toggle_bashrc()
     toggle_nvim()
     toggle_vim()
