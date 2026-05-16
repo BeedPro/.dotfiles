@@ -115,7 +115,7 @@
        (doom-modeline-spc)
        (propertize
         (pcase current-input-method
-          ("arabic" "Arabic")
+          ("arabic" "ARA")
           (_ current-input-method-title))
         'face (doom-modeline-face))
        (doom-modeline-spc))))
