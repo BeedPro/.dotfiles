@@ -193,14 +193,16 @@ def toggle_vim() -> None:
 def toggle_emacs() -> None:
     emacs_config: Path = Path.home() / ".config/emacs/init.el"
 
+    light_theme: str = "(load-theme 'modus-operandi t)"
+
     light_to_dark: dict[str, str] = {
-        "(load-theme 'doom-tomorrow-day t)": "(load-theme 'doom-tomorrow-night t)",
+        light_theme : "(load-theme 'modus-vivendi t)",
     }
 
     old, new = toggle_config(
         path=emacs_config,
         light_to_dark=light_to_dark,
-        detect_light="(load-theme 'doom-tomorrow-day t)",
+        detect_light=light_theme,
     )
 
     print(f"~/.config/emacs/init.el: {old} => {new}")
