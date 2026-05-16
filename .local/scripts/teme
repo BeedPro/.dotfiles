@@ -250,8 +250,8 @@ def toggle_opencode(mode: str) -> None:
         raise FileNotFoundError(f"{opencode_config} not found")
 
     theme_by_mode = {
-        "dark": "kanso-zen",
-        "light": "kanso-pearl",
+        "dark": "dark",
+        "light": "light",
     }
 
     theme = theme_by_mode.get(mode)
