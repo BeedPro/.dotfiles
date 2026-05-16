@@ -1,8 +1,8 @@
 export FZF_DEFAULT_OPTS=" \
---color=bg:#090E13,bg+:#393B44,spinner:#b6927b,hl:#c4746e \
---color=fg:#C5C9C7,header:#8ba4b0,info:#8ea4a2,pointer:#a292a3 \
---color=marker:#8a9a7b,fg+:#C5C9C7,prompt:#8ba4b0,hl+:#e46876 \
---color=selected-bg:#393B44 \
---color=border:#A4A7A4,label:#C5C9C7"
+--color=bg:#000000,bg+:#2f3849,spinner:#c0965b,hl:#ff5f59 \
+--color=fg:#ffffff,header:#2fafff,info:#00d3d0,pointer:#feacd0 \
+--color=marker:#44bc44,fg+:#ffffff,prompt:#2fafff,hl+:#ff5f5f \
+--color=selected-bg:#2f3849 \
+--color=border:#646464,label:#ffffff"
 
 tmux set-environment -g FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS" 2>/dev/null
