@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Configuration
-SRC_DIR="$HOME/.local/src/AdnanHodzic"
+SRC_DIR="$HOME/Projects/AdnanHodzic"
 REPO_DIR="$SRC_DIR/auto-cpufreq"
 REPO_URL="https://github.com/AdnanHodzic/auto-cpufreq.git"
 

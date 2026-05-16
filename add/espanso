@@ -11,8 +11,8 @@ echo "Installed espanso (x11)"
 
 sudo apt update && sudo apt install build-essential git wl-clipboard libxkbcommon-dev libdbus-1-dev libssl-dev "libwxgtk3.*-dev"
 
-mkdir -p $HOME/.local/src/espanso
-cd $HOME/.local/src/espanso
+mkdir -p $HOME/Projects/espanso
+cd $HOME/Projects/espanso
 git clone https://github.com/espanso/espanso
 
 cd espanso
@@ -24,5 +24,5 @@ cargo build --release --no-default-features --features wayland,modulo,vendored-t
 sudo mv target/release/espanso /usr/local/bin/espanso
 echo "Installed espanso (wayland)"
 
-rm -rf $HOME/.local/src/espanso
+rm -rf $HOME/Projects/espanso
 echo "Cleaned up epsanso source code"

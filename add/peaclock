@@ -3,7 +3,7 @@ set -euo pipefail
 
 
 # Initialise
-PROJECT_DIR=$HOME/.local/src/octobanana
+PROJECT_DIR=$HOME/Projects/octobanana
 PROJECT=$PROJECT_DIR/peaclock
 mkdir -p $PROJECT_DIR
 cd $PROJECT_DIR

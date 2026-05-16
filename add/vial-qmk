@@ -2,7 +2,7 @@
 
 # README:
 # This script installs dependencies and sets up a local clone of Vial QMK at:
-#   $HOME/.local/src/vial-kb/vial-qmk
+#   $HOME/Projects/vial-kb/vial-qmk
 #
 # What it does:
 # 1) Installs ARM/QMK-related packages with apt
@@ -12,7 +12,7 @@
 # 5) Registers the repo with QMK CLI
 #
 # Build examples:
-#   cd $HOME/.local/src/vial-kb/vial-qmk
+#   cd $HOME/Projects/vial-kb/vial-qmk
 #   make keychron/v4/iso:vial
 #   make crkbd/rev4:vial
 #
@@ -36,7 +36,7 @@
 
 set -euo pipefail
 
-SRC_PATH="$HOME/.local/src/vial-kb/vial-qmk"
+SRC_PATH="$HOME/Projects/vial-kb/vial-qmk"
 
 printf "[vial-qmk] For setup notes (including Vial udev), read this script header: %s\n\n" "$0"
 
