@@ -27,6 +27,8 @@
 (global-visual-line-mode 1)
 (global-auto-revert-mode 1)
 
+(load-theme 'modus-vivendi t)
+
 ;; Package management
 (require 'package)
 
@@ -66,15 +68,20 @@
   (setq dired-listing-switches "-alh --group-directories-first")
   (setenv "LC_COLLATE" "C"))
 
+(use-package modus-themes
+  :ensure t
+  :demand t
+  :config
+  (setq modus-themes-bold-constructs t
+        modus-themes-italic-constructs nil))
+
 (use-package doom-themes
   :defer nil
   :init
   (set-face-attribute 'line-number nil :slant 'normal)
   (set-face-attribute 'line-number-current-line nil :slant 'normal)
   :custom
-  (doom-themes-enable-italic nil)
-  :config
-  (load-theme 'doom-tomorrow-night t))
+  (doom-themes-enable-italic nil))
 
 (use-package doom-modeline
   :defer nil
