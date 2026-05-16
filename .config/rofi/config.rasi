@@ -84,7 +84,7 @@ element-icon {
     text-color:       inherit;
 }
 window {
-    font: "monospace 12";
+    font: "GohuFont 14 Nerd Font Mono 14";
     padding:          5;
     background-color: @background;
     border:           1;

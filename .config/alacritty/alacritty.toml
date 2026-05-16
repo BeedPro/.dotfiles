@@ -3,12 +3,12 @@ general.import = [
 ]
 
 [font]
-size = 12.0
+size = 14.0
 
-normal      = { family = "DejaVuSansM Nerd Font Mono", style = "Regular" }
-bold        = { family = "DejaVuSansM Nerd Font Mono", style = "Bold" }
-italic      = { family = "DejaVuSansM Nerd Font Mono", style = "Italic" }
-bold_italic = { family = "DejaVuSansM Nerd Font Mono", style = "Bold Italic" }
+normal      = { family = "GohuFont 14 Nerd Font Mono", style = "Regular" }
+bold        = { family = "GohuFont 14 Nerd Font Mono", style = "Bold" }
+italic      = { family = "GohuFont 14 Nerd Font Mono", style = "Italic" }
+bold_italic = { family = "GohuFont 14 Nerd Font Mono", style = "Bold Italic" }
 
 offset = { x = 0, y = 0 }
 glyph_offset = { x = 0, y = 0 }
