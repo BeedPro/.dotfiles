@@ -26,6 +26,7 @@ CORE_UTILS=(
   rofi
   qalc
   alacritty
+  gucharmap
 )
 
 SYSTEM=(
