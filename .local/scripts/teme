@@ -266,43 +266,6 @@ def toggle_opencode(mode: str) -> None:
     print(f"~/.config/opencode/tui.json: {old_theme} => {theme}")
 
 
-def set_gh_dash_theme(mode: str) -> None:
-    gh_dash_config: Path = Path.home() / ".config/gh-dash/config.yml"
-
-    if not gh_dash_config.exists():
-        raise FileNotFoundError(f"{gh_dash_config} not found")
-
-    anchor_by_mode = {
-        "dark": "*Dark",
-        "light": "*Light",
-    }
-
-    anchor = anchor_by_mode.get(mode)
-    if anchor is None:
-        raise ValueError(f"Unsupported mode: {mode}")
-
-    text = gh_dash_config.read_text()
-    lines = text.splitlines()
-
-    updated = False
-    for i, line in enumerate(lines):
-        stripped = line.strip()
-        if stripped in {
-            "colors: *Dark",
-            "colors: *Light",
-        }:
-            indent = line[: len(line) - len(line.lstrip())]
-            lines[i] = f"{indent}colors: {anchor}"
-            updated = True
-            break
-
-    if not updated:
-        raise RuntimeError("Could not find gh-dash theme colors anchor line")
-
-    gh_dash_config.write_text("\n".join(lines) + "\n")
-    print(f"~/.config/gh-dash/config.yml: {mode} ({anchor})")
-
-
 def set_wallpaper(mode: str) -> None:
     wallpaper_dir = Path.home() / ".config/wallpaper"
 
@@ -351,7 +314,6 @@ def main():
     toggle_zathura()
     toggle_rofi()
     toggle_opencode(mode)
-    set_gh_dash_theme(mode)
 
     set_wallpaper(mode)
     set_color_scheme()
