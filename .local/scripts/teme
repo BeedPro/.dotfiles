@@ -302,6 +302,11 @@ def set_color_scheme() -> None:
     subprocess.run(["nwg-look"], check=True)
 
 
+def rebuild_bat_cache() -> None:
+    subprocess.run(["bat", "cache", "--build"], check=True)
+    print("bat cache rebuilt")
+
+
 def main():
     mode = toggle_bashrc()
     toggle_nvim()
@@ -317,6 +322,7 @@ def main():
 
     set_wallpaper(mode)
     set_color_scheme()
+    rebuild_bat_cache()
 
 
 if __name__ == "__main__":
