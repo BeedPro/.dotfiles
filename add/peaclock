@@ -23,6 +23,6 @@ cd $PROJECT
 ./RUNME.sh install
 
 # Clean up
-# rm -rf $PROJECT_DIR
-# echo "Removed peaclock source files"
-# echo "Installed peaclock"
+rm -rf $PROJECT_DIR
+echo "Removed peaclock source files"
+echo "Installed peaclock"
