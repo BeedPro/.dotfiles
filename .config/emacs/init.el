@@ -29,7 +29,9 @@
 
 (load-theme 'modus-vivendi t)
 
-(set-frame-font "GohuFont 14 Nerd Font Mono 14" nil t)
+(set-face-attribute 'default nil
+                    :family "GohuFont 14 Nerd Font Mono"
+                    :height 140)
 
 ;; Package management
 (require 'package)
