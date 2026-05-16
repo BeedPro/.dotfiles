@@ -11,6 +11,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'machakann/vim-highlightedyank'
+Plug 'c9rgreen/vim-colors-modus'
 call plug#end()
 
 let g:highlightedyank_highlight_duration = 200
@@ -112,5 +113,4 @@ else
   set t_Co=256
 endif
 
-silent! colorscheme slate
-" silent! colorscheme zellner
+silent! colorscheme modus
