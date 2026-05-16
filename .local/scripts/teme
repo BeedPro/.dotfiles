@@ -12,6 +12,26 @@ def _config_roots() -> list[Path]:
     return [p for p in candidates if p.exists()]
 
 
+FONT_PRESETS: dict[str, dict[str, str]] = {
+    "Gohu": {
+        "alacritty": "GohuFont 14 Nerd Font Mono",
+        "i3": "GohuFont 14 Nerd Font Mono 14",
+        "mpv": "GohuFont 14 Nerd Font Mono",
+        "zathura": "GohuFont uni14 Nerd Font Mono 14",
+        "emacs": "GohuFont 14 Nerd Font Mono",
+        "rofi": "GohuFont 14 Nerd Font Mono 14",
+    },
+    "DejaVu": {
+        "alacritty": "DejaVuSansM Nerd Font Mono",
+        "i3": "DejaVuSansM Nerd Font Mono 16",
+        "mpv": "DejaVuSansM Nerd Font Mono",
+        "zathura": "DejaVuSansM Nerd Font Mono 16",
+        "emacs": "DejaVuSansM Nerd Font Mono",
+        "rofi": "DejaVuSansM Nerd Font Mono 16",
+    },
+}
+
+
 def _collect_all_theme_variants() -> dict[Path, dict[str, list[tuple[str, Path]]]]:
     variants: dict[Path, dict[str, list[tuple[str, Path]]]] = {}
     for root in _config_roots():
@@ -62,6 +82,84 @@ def list_themes() -> None:
     print("Available themes:")
     for theme in themes:
         print(theme)
+
+
+def list_font_presets() -> None:
+    print("Available font presets:")
+    for preset in sorted(FONT_PRESETS):
+        print(preset)
+
+
+def _update_file_with_regex(path: Path, pattern: str, replacement: str) -> bool:
+    if not path.exists():
+        raise FileNotFoundError(f"{path} not found")
+
+    text = path.read_text()
+    updated, count = re.subn(pattern, replacement, text, flags=re.MULTILINE)
+    if count == 0:
+        return False
+
+    path.write_text(updated)
+    return True
+
+
+def set_fonts(preset: str) -> None:
+    fonts = FONT_PRESETS.get(preset)
+    if fonts is None:
+        available = ", ".join(sorted(FONT_PRESETS))
+        raise ValueError(f"Unknown font preset '{preset}'. Available: {available}")
+
+    updates: list[tuple[Path, str, str]] = [
+        (
+            Path.home() / ".config/alacritty/alacritty.toml",
+            r'^(\s*(?:normal|bold|italic|bold_italic)\s*=\s*\{\s*family\s*=\s*")[^"]+("\s*,\s*style\s*=\s*"[^"]+"\s*\})$',
+            rf'\1{fonts["alacritty"]}\2',
+        ),
+        (
+            Path.home() / ".config/i3/config",
+            r'^font\s+pango:.+$',
+            f'font pango:{fonts["i3"]}',
+        ),
+        (
+            Path.home() / ".config/mpv/mpv.conf",
+            r'^(osd-font=")[^"]+(")$',
+            rf'\1{fonts["mpv"]}\2',
+        ),
+        (
+            Path.home() / ".config/mpv/mpv.conf",
+            r'^(sub-font=")[^"]+(")$',
+            rf'\1{fonts["mpv"]}\2',
+        ),
+        (
+            Path.home() / ".config/zathura/zathurarc",
+            r'^(set\s+font\s+")[^"]+(")$',
+            rf'\1{fonts["zathura"]}\2',
+        ),
+        (
+            Path.home() / ".config/emacs/init.el",
+            r'^(\s*:family\s+")[^"]+(")$',
+            rf'\1{fonts["emacs"]}\2',
+        ),
+        (
+            Path.home() / ".config/rofi/config.rasi",
+            r'^(\s*font:\s*")[^"]+(")\s*;$',
+            rf'\1{fonts["rofi"]}\2;',
+        ),
+    ]
+
+    touched = 0
+    for path, pattern, replacement in updates:
+        changed = _update_file_with_regex(path, pattern, replacement)
+        if changed:
+            touched += 1
+            print(f"Updated {path}")
+        else:
+            print(f"No match in {path}")
+
+    if touched == 0:
+        raise RuntimeError("No font settings were updated")
+
+    print(f"Applied font preset '{preset}'")
 
 
 def apply_theme(theme: str) -> None:
@@ -386,6 +484,7 @@ def rebuild_bat_cache() -> None:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--theme", help="Theme name, or 'ls' to list themes")
+    parser.add_argument("-f", "--fonts", help="Font preset name, or 'ls' to list presets")
     args = parser.parse_args()
 
     if args.theme:
@@ -393,6 +492,13 @@ def main():
             list_themes()
         else:
             apply_theme(args.theme)
+        return
+
+    if args.fonts:
+        if args.fonts == "ls":
+            list_font_presets()
+        else:
+            set_fonts(args.fonts)
         return
 
     mode = toggle_bashrc()
