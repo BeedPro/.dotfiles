@@ -15,19 +15,27 @@ def _config_roots() -> list[Path]:
 FONT_PRESETS: dict[str, dict[str, str]] = {
     "Gohu": {
         "alacritty": "GohuFont 14 Nerd Font Mono",
-        "i3": "GohuFont 14 Nerd Font Mono 14",
         "mpv": "GohuFont 14 Nerd Font Mono",
-        "zathura": "GohuFont uni14 Nerd Font Mono 14",
         "emacs": "GohuFont 14 Nerd Font Mono",
+        "i3": "GohuFont 14 Nerd Font Mono 14",
+        "zathura": "GohuFont uni14 Nerd Font Mono 14",
         "rofi": "GohuFont 14 Nerd Font Mono 14",
     },
     "DejaVu": {
         "alacritty": "DejaVuSansM Nerd Font Mono",
-        "i3": "DejaVuSansM Nerd Font Mono 16",
         "mpv": "DejaVuSansM Nerd Font Mono",
-        "zathura": "DejaVuSansM Nerd Font Mono 16",
         "emacs": "DejaVuSansM Nerd Font Mono",
+        "i3": "DejaVuSansM Nerd Font Mono 16",
+        "zathura": "DejaVuSansM Nerd Font Mono 16",
         "rofi": "DejaVuSansM Nerd Font Mono 16",
+    },
+    "JetBrainsMono": {
+        "alacritty": "JetBrainsMono Nerd Font Mono",
+        "mpv": "JetBrainsMono Nerd Font Mono",
+        "emacs": "JetBrainsMono Nerd Font Mono",
+        "i3": "JetBrainsMono Nerd Font Mono 12",
+        "zathura": "JetBrainsMono Nerd Font Mono 12",
+        "rofi": "JetBrainsMono Nerd Font Mono 12",
     },
 }
 
