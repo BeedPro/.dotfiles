@@ -1,4 +1,5 @@
 set selection-clipboard clipboard
+set font "GohuFont uni14 Nerd Font Mono 14"
 
 # Theme: Auto-script switcher
 
