@@ -62,6 +62,14 @@
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; Input method display
+(defun beed/arabic-input-method-title ()
+  (when (string= current-input-method "arabic")
+    (setq current-input-method-title "ARA")))
+
+(add-hook 'input-method-activate-hook #'beed/arabic-input-method-title)
+(add-hook 'isearch-mode-hook #'beed/arabic-input-method-title)
+
 ;; Custom file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
@@ -113,11 +121,8 @@
     (when current-input-method
       (concat
        (doom-modeline-spc)
-       (propertize
-        (pcase current-input-method
-          ("arabic" "ARA")
-          (_ current-input-method-title))
-        'face (doom-modeline-face))
+       (propertize current-input-method-title
+                   'face (doom-modeline-face))
        (doom-modeline-spc))))
 
   (doom-modeline-mode 1))
