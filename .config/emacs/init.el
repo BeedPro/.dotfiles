@@ -10,6 +10,7 @@
       vc-follow-symlinks t
       ad-redefinition-action 'accept
       global-auto-revert-non-file-buffers t
+      default-input-method "arabic"
       native-comp-async-report-warnings-errors nil)
 
 ;; Global modes
@@ -55,6 +56,7 @@
 ;; Editing defaults
 (setq-default indent-tabs-mode nil
               tab-width 2
+              bidi-paragraph-direction nil
               display-line-numbers-type 'relative)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
