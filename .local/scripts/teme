@@ -12,27 +12,39 @@ def _config_roots() -> list[Path]:
     return [p for p in candidates if p.exists()]
 
 
-FONT_PRESETS: dict[str, dict[str, str]] = {
+FONT_PRESETS: dict[str, dict[str, str | int | float]] = {
     "Gohu": {
         "alacritty": "GohuFont 14 Nerd Font Mono",
+        "alacritty_size": 14.0,
         "mpv": "GohuFont 14 Nerd Font Mono",
+        "mpv_osd_size": 21,
+        "mpv_sub_size": 35,
         "emacs": "GohuFont 14 Nerd Font Mono",
+        "emacs_height": 140,
         "i3": "GohuFont 14 Nerd Font Mono 14",
         "zathura": "GohuFont uni14 Nerd Font Mono 14",
         "rofi": "GohuFont 14 Nerd Font Mono 14",
     },
     "DejaVu": {
         "alacritty": "DejaVuSansM Nerd Font Mono",
+        "alacritty_size": 12.0,
         "mpv": "DejaVuSansM Nerd Font Mono",
+        "mpv_osd_size": 20,
+        "mpv_sub_size": 32,
         "emacs": "DejaVuSansM Nerd Font Mono",
-        "i3": "DejaVuSansM Nerd Font Mono 16",
-        "zathura": "DejaVuSansM Nerd Font Mono 16",
-        "rofi": "DejaVuSansM Nerd Font Mono 16",
+        "emacs_height": 120,
+        "i3": "DejaVuSansM Nerd Font Mono 12",
+        "zathura": "DejaVuSansM Nerd Font Mono 12",
+        "rofi": "DejaVuSansM Nerd Font Mono 12",
     },
     "JetBrainsMono": {
         "alacritty": "JetBrainsMono Nerd Font Mono",
+        "alacritty_size": 12.0,
         "mpv": "JetBrainsMono Nerd Font Mono",
+        "mpv_osd_size": 20,
+        "mpv_sub_size": 32,
         "emacs": "JetBrainsMono Nerd Font Mono",
+        "emacs_height": 120,
         "i3": "JetBrainsMono Nerd Font Mono 12",
         "zathura": "JetBrainsMono Nerd Font Mono 12",
         "rofi": "JetBrainsMono Nerd Font Mono 12",
@@ -121,7 +133,12 @@ def set_fonts(preset: str) -> None:
         (
             Path.home() / ".config/alacritty/alacritty.toml",
             r'^(\s*(?:normal|bold|italic|bold_italic)\s*=\s*\{\s*family\s*=\s*")[^"]+("\s*,\s*style\s*=\s*"[^"]+"\s*\})$',
-            rf'\1{fonts["alacritty"]}\2',
+            r'\g<1>' + str(fonts["alacritty"]) + r'\g<2>',
+        ),
+        (
+            Path.home() / ".config/alacritty/alacritty.toml",
+            r'^(\s*size\s*=\s*).+$',
+            r'\g<1>' + str(fonts["alacritty_size"]),
         ),
         (
             Path.home() / ".config/i3/config",
@@ -131,27 +148,42 @@ def set_fonts(preset: str) -> None:
         (
             Path.home() / ".config/mpv/mpv.conf",
             r'^(osd-font=")[^"]+(")$',
-            rf'\1{fonts["mpv"]}\2',
+            r'\g<1>' + str(fonts["mpv"]) + r'\g<2>',
+        ),
+        (
+            Path.home() / ".config/mpv/mpv.conf",
+            r'^(osd-font-size=).+$',
+            r'\g<1>' + str(fonts["mpv_osd_size"]),
         ),
         (
             Path.home() / ".config/mpv/mpv.conf",
             r'^(sub-font=")[^"]+(")$',
-            rf'\1{fonts["mpv"]}\2',
+            r'\g<1>' + str(fonts["mpv"]) + r'\g<2>',
+        ),
+        (
+            Path.home() / ".config/mpv/mpv.conf",
+            r'^(sub-font-size=).+$',
+            r'\g<1>' + str(fonts["mpv_sub_size"]),
         ),
         (
             Path.home() / ".config/zathura/zathurarc",
             r'^(set\s+font\s+")[^"]+(")$',
-            rf'\1{fonts["zathura"]}\2',
+            r'\g<1>' + str(fonts["zathura"]) + r'\g<2>',
         ),
         (
             Path.home() / ".config/emacs/init.el",
             r'^(\s*:family\s+")[^"]+(")$',
-            rf'\1{fonts["emacs"]}\2',
+            r'\g<1>' + str(fonts["emacs"]) + r'\g<2>',
+        ),
+        (
+            Path.home() / ".config/emacs/init.el",
+            r'^(\s*:height\s+)\d+(\)?)$',
+            r'\g<1>' + str(fonts["emacs_height"]) + r'\g<2>',
         ),
         (
             Path.home() / ".config/rofi/config.rasi",
             r'^(\s*font:\s*")[^"]+(")\s*;$',
-            rf'\1{fonts["rofi"]}\2;',
+            r'\g<1>' + str(fonts["rofi"]) + r'\g<2>;',
         ),
     ]
 
