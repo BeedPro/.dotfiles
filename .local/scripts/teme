@@ -47,7 +47,7 @@ def toggle_bashrc() -> str:
 
     light_to_dark: dict[str, str] = {
         "fzf/light.sh": "fzf/dark.sh",
-        "gruvbox-light": "gruvbox-dark",
+        "--theme=Light": "--theme=Dark",
     }
 
     old, new = toggle_config(
