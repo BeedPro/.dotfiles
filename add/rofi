@@ -1,0 +1,52 @@
+#!/bin/bash
+set -euo pipefail
+
+PROJECT_DIR=$HOME/Projects/davatorium
+PROJECT=$PROJECT_DIR/rofi
+mkdir -p $PROJECT_DIR
+cd $PROJECT_DIR
+
+sudo apt-get update
+sudo apt-get install -y \
+    build-essential \
+    meson \
+    ninja-build \
+    pkg-config \
+    flex \
+    bison \
+    check \
+    libglib2.0-dev \
+    libglib2.0-dev-bin \
+    libpango1.0-dev \
+    libcairo2-dev \
+    libgdk-pixbuf-2.0-dev \
+    libstartup-notification0-dev \
+    libxkbcommon-dev \
+    libxkbcommon-x11-dev \
+    libxcb1-dev \
+    libxcb-xkb-dev \
+    libxcb-randr0-dev \
+    libxcb-xinerama0-dev \
+    libxcb-util-dev \
+    libxcb-ewmh-dev \
+    libxcb-icccm4-dev \
+    libxcb-cursor-dev \
+    libwayland-dev \
+    pandoc \
+    doxygen \
+    graphviz \
+    wayland-protocols
+
+sudo apt-get install -y libxcb-imdkit-dev
+sudo apt-get build-dep -y rofi
+
+git clone --depth 1 -b 2.0.0 https://github.com/davatorium/rofi $PROJECT
+cd $PROJECT
+
+meson setup build
+ninja -C build
+sudo ninja -C build install
+
+rm -rf $PROJECT_DIR
+echo "Removed rofi source files"
+echo "Installed rofi"

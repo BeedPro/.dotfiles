@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+
+sudo rm -f /usr/local/bin/rofi
+sudo rm -f /usr/local/bin/rofi-theme-selector
+sudo rm -f /usr/local/bin/rofi-sensible-terminal
+
+sudo rm -rf /usr/local/share/rofi
+sudo rm -f /usr/local/share/applications/rofi.desktop
+
+sudo rm -f /usr/local/share/man/man1/rofi.1
+sudo rm -f /usr/local/share/man/man5/rofi-theme.5
+sudo rm -f /usr/local/share/man/man5/rofi-theme-selector.5
+
+rm -rf "$HOME/Projects/davatorium"
+
+echo "Removed rofi installed from source"
