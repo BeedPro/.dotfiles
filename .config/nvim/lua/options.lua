@@ -57,23 +57,3 @@ g.loaded_node_provider = 0
 g.loaded_python3_provider = 0
 g.loaded_perl_provider = 0
 g.loaded_ruby_provider = 0
-
-if vim.g.neovide then
-  o.guifont = "DejaVuSansM Nerd Font Mono:h16"
-
-  g.neovide_cursor_animation_length = 0
-  g.neovide_cursor_short_animation_length = 0
-  g.neovide_cursor_trail_size = 0
-  g.neovide_cursor_animate_in_insert_mode = false
-  g.neovide_cursor_animate_command_line = false
-  g.neovide_cursor_smooth_blink = false
-  g.neovide_cursor_vfx_mode = ""
-
-  g.neovide_scroll_animation_length = 0
-  g.neovide_scroll_animation_far_lines = 0
-  g.neovide_position_animation_length = 0
-
-  g.neovide_floating_shadow = false
-  g.neovide_floating_blur_amount_x = 0
-  g.neovide_floating_blur_amount_y = 0
-end
