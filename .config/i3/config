@@ -174,11 +174,11 @@ bar {
     focused_statusline $text
     focused_separator  $base
 
-    # target           border bg        text
-    focused_workspace  $base  $accent   $base
-    active_workspace   $base  $surface2 $text
-    inactive_workspace $base  $base     $text
-    urgent_workspace   $base  $alert    $base
+    # target           border    bg        text
+    focused_workspace  $accent   $accent   $base
+    active_workspace   $surface2 $surface2 $text
+    inactive_workspace $surface2 $surface2 $text
+    urgent_workspace   $alert    $alert    $base
   }
   mode dock
   modifier none
