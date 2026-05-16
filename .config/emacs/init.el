@@ -109,6 +109,17 @@
         doom-modeline-unicode-fallback nil
         doom-modeline-unicode-number nil)
   :config
+  (doom-modeline-def-segment input-method
+    (when current-input-method
+      (concat
+       (doom-modeline-spc)
+       (propertize
+        (pcase current-input-method
+          ("arabic" "Arabic")
+          (_ current-input-method-title))
+        'face (doom-modeline-face))
+       (doom-modeline-spc))))
+
   (doom-modeline-mode 1))
 
 (use-package magit
