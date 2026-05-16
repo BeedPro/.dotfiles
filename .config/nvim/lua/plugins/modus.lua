@@ -1,5 +1,5 @@
-return { 
-  "miikanissi/modus-themes.nvim", 
+return {
+  "miikanissi/modus-themes.nvim",
   priority = 1000,
-  lazy = false
+  lazy = false,
 }

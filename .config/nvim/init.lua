@@ -9,4 +9,4 @@ vim.schedule(function()
   require "mappings"
 end)
 
-vim.cmd.colorscheme "kanso"
+vim.cmd.colorscheme "modus"

@@ -3,30 +3,30 @@
 <plist version="1.0">
 <dict>
   <key>name</key>
-  <string>Light</string>
+  <string>Modus Light</string>
   <key>settings</key>
   <array>
     <dict>
       <key>settings</key>
       <dict>
         <key>background</key>
-        <string>#f2f1ef</string>
+        <string>#ffffff</string>
         <key>foreground</key>
-        <string>#545464</string>
+        <string>#000000</string>
         <key>caret</key>
-        <string>#545464</string>
+        <string>#000000</string>
         <key>selection</key>
-        <string>#c9cbd1</string>
+        <string>#dae5ec</string>
         <key>selectionForeground</key>
-        <string>#14171d</string>
+        <string>#000000</string>
         <key>lineHighlight</key>
-        <string>#e8e7e4</string>
+        <string>#dae5ec</string>
         <key>invisibles</key>
-        <string>#8a8980</string>
+        <string>#595959</string>
         <key>gutterForeground</key>
-        <string>#8a8980</string>
+        <string>#595959</string>
         <key>gutter</key>
-        <string>#f2f1ef</string>
+        <string>#ffffff</string>
       </dict>
     </dict>
 
@@ -38,7 +38,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#597b75</string>
+        <string>#005077</string>
       </dict>
     </dict>
 
@@ -50,7 +50,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#6f894e</string>
+        <string>#00663f</string>
       </dict>
     </dict>
 
@@ -62,7 +62,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#e98a00</string>
+        <string>#884900</string>
       </dict>
     </dict>
 
@@ -74,7 +74,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#c84053</string>
+        <string>#a0132f</string>
       </dict>
     </dict>
 
@@ -86,7 +86,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#4d699b</string>
+        <string>#003497</string>
       </dict>
     </dict>
 
@@ -98,7 +98,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#77713f</string>
+        <string>#56692d</string>
       </dict>
     </dict>
 
@@ -110,7 +110,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#b35b79</string>
+        <string>#7c318f</string>
       </dict>
     </dict>
 
@@ -122,7 +122,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#545464</string>
+        <string>#000000</string>
       </dict>
     </dict>
 
@@ -134,7 +134,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#d7474b</string>
+        <string>#a60000</string>
       </dict>
     </dict>
 
@@ -146,7 +146,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#6693bf</string>
+        <string>#0031a9</string>
       </dict>
     </dict>
 
@@ -158,9 +158,9 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#f2f1ef</string>
+        <string>#ffffff</string>
         <key>background</key>
-        <string>#e82424</string>
+        <string>#d00000</string>
       </dict>
     </dict>
   </array>
