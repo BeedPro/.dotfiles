@@ -9,11 +9,14 @@ vim.pack.add {
   "https://github.com/ibhagwan/fzf-lua",
   "https://github.com/nvim-mini/mini.nvim",
   "https://github.com/mohseenrm/marko.nvim",
+  "https://github.com/miikanissi/modus-themes.nvim",
 }
 
 vim.cmd.packadd "nvim.undotree"
 require("vim._core.ui2").enable {}
 
+---- Plugins.theme
+vim.cmd.colorscheme "modus"
 
 ---- Plugins.nvim-lint
 require("lint").linters_by_ft = {
