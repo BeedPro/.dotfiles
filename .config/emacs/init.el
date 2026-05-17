@@ -185,8 +185,11 @@
   :ensure nil
   :hook (typst-ts-mode . eglot-ensure)
   :config
+  (defvar beed/mason-bin-dir
+    (expand-file-name "~/.local/share/nvim/mason/bin/")
+    "Path to Neovim Mason bin directory.")
   (add-to-list 'eglot-server-programs
-               '(typst-ts-mode . ("tinymist"))))
+               `(typst-ts-mode . (,(concat beed/mason-bin-dir "tinymist")))))
 
 (use-package corfu
   :init
