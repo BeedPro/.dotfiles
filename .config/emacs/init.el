@@ -211,3 +211,15 @@
                  '(typst "https://github.com/uben0/tree-sitter-typst"))))
 
 ;; https://github.com/svaante/dape
+
+(use-package dashboard
+  :defer nil
+  :config
+  (setq initial-buffer-choice 'dashboard-open
+        dashboard-startup-banner 'logo-braille
+        dashboard-center-content t
+        dashboard-vertically-center-content t
+        dashboard-items '((recents   . 5)
+                          (bookmarks . 5)
+                          (projects  . 5)))
+  (dashboard-setup-startup-hook))
