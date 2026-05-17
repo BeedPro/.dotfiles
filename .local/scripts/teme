@@ -6,12 +6,6 @@ import shutil
 import subprocess
 from pathlib import Path
 
-
-def _config_roots() -> list[Path]:
-    candidates = [Path.home() / ".config", Path.home() / ".dotfiles/.config"]
-    return [p for p in candidates if p.exists()]
-
-
 FONT_PRESETS: dict[str, dict[str, str | int | float]] = {
     "Gohu": {
         "alacritty": "GohuFont 14 Nerd Font Mono",
@@ -51,6 +45,9 @@ FONT_PRESETS: dict[str, dict[str, str | int | float]] = {
     },
 }
 
+def _config_roots() -> list[Path]:
+    candidates = [Path.home() / ".config", Path.home() / ".dotfiles/.config"]
+    return [p for p in candidates if p.exists()]
 
 def _theme_match(file: Path) -> re.Match[str] | None:
     pattern = r"^(?P<theme>.+)-(?P<mode>dark|light)(?P<ext>\..+)$"
