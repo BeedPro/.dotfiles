@@ -52,6 +52,33 @@ FONT_PRESETS: dict[str, dict[str, str | int | float]] = {
 }
 
 
+def _theme_match(file: Path) -> re.Match[str] | None:
+    pattern = r"^(?P<theme>.+)-(?P<mode>dark|light)(?P<ext>\..+)$"
+    return re.match(pattern, file.name)
+
+
+def _add_theme_file(by_theme: dict[str, dict[str, list[Path]]], file: Path) -> None:
+    match = _theme_match(file)
+    if not match:
+        return
+    theme = match.group("theme")
+    mode = match.group("mode")
+    by_theme.setdefault(theme, {}).setdefault(mode, []).append(file)
+
+
+def _append_theme_pair(
+    variants: dict[Path, dict[str, list[tuple[str, Path]]]],
+    parent: Path,
+    theme: str,
+    modes: dict[str, list[Path]],
+) -> None:
+    if "dark" not in modes or "light" not in modes:
+        return
+    variants.setdefault(parent, {}).setdefault(theme, [])
+    variants[parent][theme].extend(("dark", p) for p in modes["dark"])
+    variants[parent][theme].extend(("light", p) for p in modes["light"])
+
+
 def _collect_all_theme_variants() -> dict[Path, dict[str, list[tuple[str, Path]]]]:
     variants: dict[Path, dict[str, list[tuple[str, Path]]]] = {}
     for root in _config_roots():
@@ -59,191 +86,229 @@ def _collect_all_theme_variants() -> dict[Path, dict[str, list[tuple[str, Path]]
     return variants
 
 
-def _collect_theme_variants(config_root: Path) -> dict[Path, dict[str, list[tuple[str, Path]]]]:
+def _collect_theme_variants(
+    config_root: Path,
+) -> dict[Path, dict[str, list[tuple[str, Path]]]]:
     variants: dict[Path, dict[str, list[tuple[str, Path]]]] = {}
-
     for colors_dir in config_root.rglob("colors"):
-        if not colors_dir.is_dir():
-            continue
-
-        files = [p for p in colors_dir.iterdir() if p.is_file()]
-        if not files:
-            continue
-
-        parent = colors_dir.parent
-        by_theme: dict[str, dict[str, list[Path]]] = {}
-
-        for file in files:
-            match = re.match(r"^(?P<theme>.+)-(?P<mode>dark|light)(?P<ext>\..+)$", file.name)
-            if not match:
-                continue
-            theme = match.group("theme")
-            mode = match.group("mode")
-            by_theme.setdefault(theme, {}).setdefault(mode, []).append(file)
-
-        for theme, modes in by_theme.items():
-            if "dark" not in modes or "light" not in modes:
-                continue
-            variants.setdefault(parent, {}).setdefault(theme, [])
-            variants[parent][theme].extend(("dark", p) for p in modes["dark"])
-            variants[parent][theme].extend(("light", p) for p in modes["light"])
-
+        _merge_colors_dir(variants, colors_dir)
     return variants
 
 
-def list_themes() -> None:
-    variants = _collect_all_theme_variants()
+def _merge_colors_dir(
+    variants: dict[Path, dict[str, list[tuple[str, Path]]]],
+    colors_dir: Path,
+) -> None:
+    if not colors_dir.is_dir():
+        return
+    files = [p for p in colors_dir.iterdir() if p.is_file()]
+    if not files:
+        return
+    by_theme: dict[str, dict[str, list[Path]]] = {}
+    for file in files:
+        _add_theme_file(by_theme, file)
+    for theme, modes in by_theme.items():
+        _append_theme_pair(variants, colors_dir.parent, theme, modes)
 
-    themes = sorted({theme for per_dir in variants.values() for theme in per_dir})
+
+def _theme_names(variants: dict[Path, dict[str, list[tuple[str, Path]]]]) -> list[str]:
+    return sorted({theme for per_dir in variants.values() for theme in per_dir})
+
+
+def _print_lines(header: str, lines: list[str]) -> None:
+    print(header)
+    for line in lines:
+        print(line)
+
+
+def list_themes() -> None:
+    themes = _theme_names(_collect_all_theme_variants())
     if not themes:
         print("No themes found")
         return
-
-    print("Available themes:")
-    for theme in themes:
-        print(theme)
+    _print_lines("Available themes:", themes)
 
 
 def list_font_presets() -> None:
-    print("Available font presets:")
-    for preset in sorted(FONT_PRESETS):
-        print(preset)
+    _print_lines("Available font presets:", sorted(FONT_PRESETS))
 
 
 def _update_file_with_regex(path: Path, pattern: str, replacement: str) -> bool:
     if not path.exists():
         raise FileNotFoundError(f"{path} not found")
-
     text = path.read_text()
     updated, count = re.subn(pattern, replacement, text, flags=re.MULTILINE)
     if count == 0:
         return False
-
     path.write_text(updated)
     return True
 
 
-def set_fonts(preset: str) -> None:
+def _require_font_preset(preset: str) -> dict[str, str | int | float]:
     fonts = FONT_PRESETS.get(preset)
-    if fonts is None:
-        available = ", ".join(sorted(FONT_PRESETS))
-        raise ValueError(f"Unknown font preset '{preset}'. Available: {available}")
+    if fonts:
+        return fonts
+    available = ", ".join(sorted(FONT_PRESETS))
+    raise ValueError(f"Unknown font preset '{preset}'. Available: {available}")
 
-    updates: list[tuple[Path, str, str]] = [
+
+def _font_updates(fonts: dict[str, str | int | float]) -> list[tuple[Path, str, str]]:
+    return [
         (
             Path.home() / ".config/alacritty/alacritty.toml",
             r'^(\s*(?:normal|bold|italic|bold_italic)\s*=\s*\{\s*family\s*=\s*")[^"]+("\s*,\s*style\s*=\s*"[^"]+"\s*\})$',
-            r'\g<1>' + str(fonts["alacritty"]) + r'\g<2>',
+            r"\g<1>" + str(fonts["alacritty"]) + r"\g<2>",
         ),
         (
             Path.home() / ".config/alacritty/alacritty.toml",
-            r'^(\s*size\s*=\s*).+$',
-            r'\g<1>' + str(fonts["alacritty_size"]),
+            r"^(\s*size\s*=\s*).+$",
+            r"\g<1>" + str(fonts["alacritty_size"]),
         ),
         (
             Path.home() / ".config/i3/config",
-            r'^font\s+pango:.+$',
-            f'font pango:{fonts["i3"]}',
+            r"^font\s+pango:.+$",
+            f"font pango:{fonts['i3']}",
         ),
         (
             Path.home() / ".config/mpv/mpv.conf",
             r'^(osd-font=")[^"]+(")$',
-            r'\g<1>' + str(fonts["mpv"]) + r'\g<2>',
+            r"\g<1>" + str(fonts["mpv"]) + r"\g<2>",
         ),
         (
             Path.home() / ".config/mpv/mpv.conf",
-            r'^(osd-font-size=).+$',
-            r'\g<1>' + str(fonts["mpv_osd_size"]),
+            r"^(osd-font-size=).+$",
+            r"\g<1>" + str(fonts["mpv_osd_size"]),
         ),
         (
             Path.home() / ".config/mpv/mpv.conf",
             r'^(sub-font=")[^"]+(")$',
-            r'\g<1>' + str(fonts["mpv"]) + r'\g<2>',
+            r"\g<1>" + str(fonts["mpv"]) + r"\g<2>",
         ),
         (
             Path.home() / ".config/mpv/mpv.conf",
-            r'^(sub-font-size=).+$',
-            r'\g<1>' + str(fonts["mpv_sub_size"]),
+            r"^(sub-font-size=).+$",
+            r"\g<1>" + str(fonts["mpv_sub_size"]),
         ),
         (
             Path.home() / ".config/zathura/zathurarc",
             r'^(set\s+font\s+")[^"]+(")$',
-            r'\g<1>' + str(fonts["zathura"]) + r'\g<2>',
+            r"\g<1>" + str(fonts["zathura"]) + r"\g<2>",
         ),
         (
             Path.home() / ".config/emacs/init.el",
             r'^(\s*:family\s+")[^"]+(")$',
-            r'\g<1>' + str(fonts["emacs"]) + r'\g<2>',
+            r"\g<1>" + str(fonts["emacs"]) + r"\g<2>",
         ),
         (
             Path.home() / ".config/emacs/init.el",
-            r'^(\s*:height\s+)\d+(\)?)$',
-            r'\g<1>' + str(fonts["emacs_height"]) + r'\g<2>',
+            r"^(\s*:height\s+)\d+(\)?)$",
+            r"\g<1>" + str(fonts["emacs_height"]) + r"\g<2>",
         ),
         (
             Path.home() / ".config/rofi/config.rasi",
             r'^(\s*font:\s*")[^"]+(")\s*;$',
-            r'\g<1>' + str(fonts["rofi"]) + r'\g<2>;',
+            r"\g<1>" + str(fonts["rofi"]) + r"\g<2>;",
         ),
     ]
 
-    touched = 0
-    for path, pattern, replacement in updates:
-        changed = _update_file_with_regex(path, pattern, replacement)
-        if changed:
-            touched += 1
-            print(f"Updated {path}")
-        else:
-            print(f"No match in {path}")
 
+def _apply_font_update(path: Path, pattern: str, replacement: str) -> bool:
+    changed = _update_file_with_regex(path, pattern, replacement)
+    print(f"Updated {path}" if changed else f"No match in {path}")
+    return changed
+
+
+def set_fonts(preset: str) -> None:
+    touched = 0
+    for path, pattern, replacement in _font_updates(_require_font_preset(preset)):
+        touched += int(_apply_font_update(path, pattern, replacement))
     if touched == 0:
         raise RuntimeError("No font settings were updated")
-
     print(f"Applied font preset '{preset}'")
 
 
-def apply_theme(theme: str) -> None:
-    variants = _collect_all_theme_variants()
+def _theme_target(parent: Path, siblings: list[Path], src: Path, mode: str) -> Path:
+    matches = [p for p in siblings if p.suffix == src.suffix and mode in p.name.lower()]
+    if len(matches) == 1:
+        return matches[0]
+    target = parent / f"{mode}{src.suffix}"
+    if target.exists():
+        return target
+    return parent / ("Dark" + src.suffix if mode == "dark" else "Light" + src.suffix)
 
+
+def _apply_theme_files(
+    parent: Path, themed_files: list[tuple[str, Path]], missing_targets: list[str]
+) -> int:
+    siblings = [p for p in parent.iterdir() if p.is_file()]
+    changed = 0
+    for mode, src in themed_files:
+        changed += int(_copy_theme_file(parent, siblings, mode, src, missing_targets))
+    return changed
+
+
+def _copy_theme_file(
+    parent: Path,
+    siblings: list[Path],
+    mode: str,
+    src: Path,
+    missing_targets: list[str],
+) -> bool:
+    target = _theme_target(parent, siblings, src, mode)
+    if not target.exists():
+        missing_targets.append(str(parent))
+        return False
+    shutil.copyfile(src, target)
+    print(f"{src} -> {target}")
+    return True
+
+
+def _report_missing_targets(missing_targets: list[str]) -> None:
+    if not missing_targets:
+        return
+    print("Skipped directories without a matching dark/light target file:")
+    for directory in sorted(set(missing_targets)):
+        print(directory)
+
+
+def apply_theme(theme: str) -> None:
     changed = 0
     missing_targets: list[str] = []
-
-    for parent, per_theme in variants.items():
-        themed_files = per_theme.get(theme)
-        if not themed_files:
-            continue
-
-        sibling_files = [p for p in parent.iterdir() if p.is_file()]
-
-        for mode, src in themed_files:
-            same_ext = [p for p in sibling_files if p.suffix == src.suffix and mode in p.name.lower()]
-            if len(same_ext) == 1:
-                target = same_ext[0]
-            else:
-                target = parent / f"{mode}{src.suffix}"
-                if not target.exists():
-                    fallback = parent / ("Dark" + src.suffix if mode == "dark" else "Light" + src.suffix)
-                    if fallback.exists():
-                        target = fallback
-
-            if not target.exists():
-                missing_targets.append(str(parent))
-                continue
-
-            shutil.copyfile(src, target)
-            changed += 1
-            print(f"{src} -> {target}")
-
+    for parent, per_theme in _collect_all_theme_variants().items():
+        changed += _apply_theme_for_parent(parent, per_theme, theme, missing_targets)
     if changed == 0:
         raise ValueError(f"Theme not found or no files updated: {theme}")
-
-    if missing_targets:
-        uniq = sorted(set(missing_targets))
-        print("Skipped directories without a matching dark/light target file:")
-        for d in uniq:
-            print(d)
-
+    _report_missing_targets(missing_targets)
     print(f"Applied theme '{theme}' to {changed} file(s)")
+
+
+def _apply_theme_for_parent(
+    parent: Path,
+    per_theme: dict[str, list[tuple[str, Path]]],
+    theme: str,
+    missing_targets: list[str],
+) -> int:
+    themed_files = per_theme.get(theme)
+    if not themed_files:
+        return 0
+    return _apply_theme_files(parent, themed_files, missing_targets)
+
+
+def _toggle_mapping(
+    text: str,
+    light_to_dark: dict[str, str],
+    detect_light: str,
+) -> tuple[dict[str, str], str, str]:
+    if detect_light in text:
+        return light_to_dark, "light", "dark"
+    return {v: k for k, v in light_to_dark.items()}, "dark", "light"
+
+
+def _replace_all(text: str, mapping: dict[str, str]) -> str:
+    updated = text
+    for src, dst in mapping.items():
+        updated = updated.replace(src, dst)
+    return updated
 
 
 def toggle_config(
@@ -251,34 +316,11 @@ def toggle_config(
     light_to_dark: dict[str, str],
     detect_light: str,
 ) -> tuple[str, str]:
-    """Toggle the theme mode in the config at the path given
-
-    Args:
-        path: path to config file
-        light_to_dark: mapping from light to dark
-        detect_light: detecting if we are in light mode
-    Returns:
-        (old_mode, new_mode)
-
-    Raises:
-        FileNotFoundError: If the config file does not exist
-    """
     if not path.exists():
         raise FileNotFoundError(f"{path} not found")
-
     text = path.read_text()
-
-    if detect_light in text:
-        mapping = light_to_dark
-        old_mode, new_mode = "light", "dark"
-    else:
-        mapping = {v: k for k, v in light_to_dark.items()}
-        old_mode, new_mode = "dark", "light"
-
-    for src, dst in mapping.items():
-        text = text.replace(src, dst)
-
-    path.write_text(text)
+    mapping, old_mode, new_mode = _toggle_mapping(text, light_to_dark, detect_light)
+    path.write_text(_replace_all(text, mapping))
     return old_mode, new_mode
 
 
@@ -289,12 +331,21 @@ def run_text_toggle(
     detect_light: str,
 ) -> str:
     old, new = toggle_config(
-        path=path,
-        light_to_dark=light_to_dark,
-        detect_light=detect_light,
+        path=path, light_to_dark=light_to_dark, detect_light=detect_light
     )
     print(f"{label}: {old} => {new}")
     return new
+
+
+def _mode_source(
+    current: str,
+    detect_light: str,
+    light_path: Path,
+    dark_path: Path,
+) -> tuple[Path, str, str]:
+    if detect_light in current:
+        return dark_path, "light", "dark"
+    return light_path, "dark", "light"
 
 
 def toggle_whole_file(
@@ -309,19 +360,12 @@ def toggle_whole_file(
         raise FileNotFoundError(f"{target_path} not found")
     if not light_path.exists() or not dark_path.exists():
         raise FileNotFoundError(f"Theme files missing for {label}")
-
-    current = target_path.read_text()
-    if detect_light in current:
-        src = dark_path
-        old, new = "light", "dark"
-    else:
-        src = light_path
-        old, new = "dark", "light"
-
+    src, old, new = _mode_source(
+        target_path.read_text(), detect_light, light_path, dark_path
+    )
     shutil.copyfile(src, target_path)
     if restart_command:
         subprocess.run(restart_command, check=False)
-
     print(f"{label}: {old} => {new}")
     return new
 
@@ -337,24 +381,20 @@ def toggle_marker_section(
         raise FileNotFoundError(f"{config_path} not found")
     if not light_path.exists() or not dark_path.exists():
         raise FileNotFoundError(f"Theme files missing for {label}")
-
     text = config_path.read_text()
     if marker not in text:
         raise RuntimeError(f"Theme marker not found in {label}")
-
-    head, current_theme = text.split(marker, 1)
-
-    if "# Light" in current_theme:
-        theme_file = dark_path
-        old, new = "light", "dark"
-    else:
-        theme_file = light_path
-        old, new = "dark", "light"
-
-    new_theme = theme_file.read_text().rstrip()
-    new_config = head.rstrip() + "\n\n" + marker + "\n\n" + new_theme + "\n"
+    head, current = text.split(marker, 1)
+    theme_file, old, new = _mode_source(current, "# Light", light_path, dark_path)
+    new_config = (
+        head.rstrip()
+        + "\n\n"
+        + marker
+        + "\n\n"
+        + theme_file.read_text().rstrip()
+        + "\n"
+    )
     config_path.write_text(new_config)
-
     print(f"{label}: {old} => {new}")
     return new
 
@@ -363,10 +403,7 @@ def toggle_bashrc() -> str:
     return run_text_toggle(
         label="~/.bashrc",
         path=Path.home() / ".bashrc",
-        light_to_dark={
-            "fzf/light.sh": "fzf/dark.sh",
-            "--theme=Light": "--theme=Dark",
-        },
+        light_to_dark={"fzf/light.sh": "fzf/dark.sh", "--theme=Light": "--theme=Dark"},
         detect_light="fzf/light.sh",
     )
 
@@ -458,58 +495,34 @@ def toggle_rofi() -> None:
 
 
 def toggle_opencode(mode: str) -> None:
-    opencode_config: Path = Path.home() / ".config/opencode/tui.json"
-
+    opencode_config = Path.home() / ".config/opencode/tui.json"
     if not opencode_config.exists():
         raise FileNotFoundError(f"{opencode_config} not found")
-
-    theme_by_mode = {
-        "dark": "dark",
-        "light": "light",
-    }
-
-    theme = theme_by_mode.get(mode)
+    theme = {"dark": "dark", "light": "light"}.get(mode)
     if theme is None:
         raise ValueError(f"Unsupported mode: {mode}")
-
     config = json.loads(opencode_config.read_text())
     old_theme = config.get("theme", "<unset>")
     config["theme"] = theme
     opencode_config.write_text(json.dumps(config, indent=2) + "\n")
-
     print(f"~/.config/opencode/tui.json: {old_theme} => {theme}")
 
 
 def set_wallpaper(mode: str) -> None:
     wallpaper_dir = Path.home() / ".config/wallpaper"
-
-    wallpapers = {
+    wallpaper = {
         "light": wallpaper_dir / "light.jpg",
         "dark": wallpaper_dir / "dark.jpg",
-    }
-
-    wallpaper = wallpapers.get(mode)
+    }.get(mode)
     if not wallpaper or not wallpaper.exists():
         raise FileNotFoundError(f"Wallpaper not found for mode: {mode}")
-
-    current = wallpaper_dir / "current.jpg"
-    current_solid = wallpaper_dir / "colors" / "current.jpg"
-    shutil.copyfile(wallpaper, current)
-    shutil.copyfile(wallpaper, current_solid)
-
-    screenlayout_script = Path.home() / ".screenlayout/set-screens.sh"
-
-    if not screenlayout_script.exists():
-        raise FileNotFoundError(
-            f"Screen layout script not found: {screenlayout_script}"
-        )
-
-    subprocess.run(
-        [str(screenlayout_script)],
-        check=True,
-    )
-
-    print(f"Wallpaper set: {mode} → {current}")
+    shutil.copyfile(wallpaper, wallpaper_dir / "current.jpg")
+    shutil.copyfile(wallpaper, wallpaper_dir / "colors" / "current.jpg")
+    script = Path.home() / ".screenlayout/set-screens.sh"
+    if not script.exists():
+        raise FileNotFoundError(f"Screen layout script not found: {script}")
+    subprocess.run([str(script)], check=True)
+    print(f"Wallpaper set: {mode} -> {wallpaper_dir / 'current.jpg'}")
 
 
 def set_color_scheme() -> None:
@@ -521,28 +534,40 @@ def rebuild_bat_cache() -> None:
     print("bat cache rebuilt")
 
 
-def main():
+def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--theme", help="Theme name, or 'ls' to list themes")
-    parser.add_argument("-f", "--fonts", help="Font preset name, or 'ls' to list presets")
-    args = parser.parse_args()
+    parser.add_argument(
+        "-f", "--fonts", help="Font preset name, or 'ls' to list presets"
+    )
+    return parser.parse_args()
 
+
+def _run_theme_command(theme: str) -> None:
+    if theme == "ls":
+        list_themes()
+    if theme != "ls":
+        apply_theme(theme)
+
+
+def _run_font_command(fonts: str) -> None:
+    if fonts == "ls":
+        list_font_presets()
+    if fonts != "ls":
+        set_fonts(fonts)
+
+
+def _handle_cli_actions(args: argparse.Namespace) -> bool:
+    if not args.theme and not args.fonts:
+        return False
     if args.theme:
-        if args.theme == "ls":
-            list_themes()
-        else:
-            apply_theme(args.theme)
-        return
-
+        _run_theme_command(args.theme)
     if args.fonts:
-        if args.fonts == "ls":
-            list_font_presets()
-        else:
-            set_fonts(args.fonts)
-        return
+        _run_font_command(args.fonts)
+    return True
 
-    mode = toggle_bashrc()
 
+def _run_full_toggle(mode: str) -> None:
     toggle_nvim()
     toggle_vim()
     toggle_emacs()
@@ -556,6 +581,14 @@ def main():
     set_wallpaper(mode)
     set_color_scheme()
     rebuild_bat_cache()
+
+
+def main() -> None:
+    args = _parse_args()
+    if _handle_cli_actions(args):
+        return
+    mode = toggle_bashrc()
+    _run_full_toggle(mode)
 
 
 if __name__ == "__main__":
