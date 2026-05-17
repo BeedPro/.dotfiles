@@ -2,6 +2,7 @@
 
 ;; Startup Defaults
 (setq inhibit-startup-message t
+      initial-scratch-message nil
       auto-save-default nil
       make-backup-files nil
       ring-bell-function 'ignore
