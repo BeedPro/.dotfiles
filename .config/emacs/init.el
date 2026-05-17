@@ -126,14 +126,13 @@
         doom-modeline-unicode-fallback nil
         doom-modeline-unicode-number nil)
   :config
-  (when (fboundp 'doom-modeline-def-segment)
-    (doom-modeline-def-segment input-method
-      (when current-input-method
-        (concat
-         (doom-modeline-spc)
-         (propertize current-input-method-title
-                     'face (doom-modeline-face))
-         (doom-modeline-spc)))))
+  (doom-modeline-def-segment input-method
+    (when current-input-method
+      (concat
+       (doom-modeline-spc)
+       (propertize current-input-method-title
+                   'face (doom-modeline-face))
+       (doom-modeline-spc))))
 
   (doom-modeline-mode 1))
 
