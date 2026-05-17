@@ -140,3 +140,17 @@
   :bind ("C-x g" . magit-status)
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+(use-package eglot
+  :ensure nil)
+
+(use-package typst-ts-mode
+  :mode ("\\.typ\\'" . typst-ts-mode)
+  :hook (typst-ts-mode . eglot-ensure)
+  :after eglot
+  :config
+  (with-eval-after-load 'treesit
+    (add-to-list 'treesit-language-source-alist
+                 '(typst "https://github.com/uben0/tree-sitter-typst")))
+  (add-to-list 'eglot-server-programs
+               '(typst-ts-mode . ("tinymist"))))
