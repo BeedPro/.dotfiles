@@ -10,6 +10,7 @@
       vc-follow-symlinks t
       ad-redefinition-action 'accept
       global-auto-revert-non-file-buffers t
+      bookmark-save-flag 1
       default-input-method "arabic"
       native-comp-async-report-warnings-errors nil)
 
