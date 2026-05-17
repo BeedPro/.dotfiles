@@ -159,6 +159,7 @@
   (diff-hl-flydiff-mode 1))
 
 (use-package yasnippet
+  :defer nil
   :config
   (yas-global-mode 1))
 
