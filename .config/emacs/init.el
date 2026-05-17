@@ -165,6 +165,9 @@
 
 (use-package apheleia
   :config
+  (setf (alist-get 'prettypst apheleia-formatters)
+        `(,(concat beed/mason-bin-dir "prettypst") filepath))
+  (setf (alist-get 'typst-ts-mode apheleia-mode-alist) '(prettypst))
   (apheleia-global-mode 1))
 
 (use-package vertico
