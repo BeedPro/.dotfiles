@@ -170,7 +170,6 @@
         `(,(concat beed/mason-bin-dir "prettypst") filepath))
   (setf (alist-get 'typst-ts-mode apheleia-mode-alist) '(prettypst)))
 
-
 (use-package vertico
   :init
   (vertico-mode 1))
@@ -201,6 +200,7 @@
   (global-corfu-mode))
 
 (use-package cape
+  :bind ("C-c p" . cape-prefix-map)
   :init
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
