@@ -164,11 +164,12 @@
   (yas-global-mode 1))
 
 (use-package apheleia
+  :bind (("C-c C-f" . apheleia-format-buffer))
   :config
   (setf (alist-get 'prettypst apheleia-formatters)
         `(,(concat beed/mason-bin-dir "prettypst") filepath))
-  (setf (alist-get 'typst-ts-mode apheleia-mode-alist) '(prettypst))
-  (apheleia-global-mode 1))
+  (setf (alist-get 'typst-ts-mode apheleia-mode-alist) '(prettypst)))
+
 
 (use-package vertico
   :init
