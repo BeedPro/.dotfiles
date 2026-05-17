@@ -27,7 +27,7 @@ set $chat_ws 7
 set $no_private ^(?!.*Private Browsing)
 
 for_window [class="^$browser$" title="$no_private.*WhatsApp.*"] move --no-auto-back-and-forth to workspace number $chat_ws
-for_window [class="^$browser$" title="$no_private.*Discord.*Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [class="^$browser$" title="$no_private.*Discord.*"] move --no-auto-back-and-forth to workspace number $chat_ws
 for_window [class="^$browser$" title="$no_private.*Element.*"] move --no-auto-back-and-forth to workspace number $chat_ws
 for_window [class="^$browser$" title="$no_private.*Google Messages.*"] move --no-auto-back-and-forth to workspace number $chat_ws
 
