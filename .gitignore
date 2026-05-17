@@ -121,10 +121,6 @@ __pycache__/
 Session.vim
 *.spl
 
-.config/emacs/custom.el
-.config/emacs/eln-cache
-.config/emacs/elpa
-.config/emacs/history
-.config/emacs/transient
-.config/emacs/projects
-.config/emacs/auto-save-list
+.config/emacs
+!.config/emacs/init.el
+!.config/emacs/early-init.el
