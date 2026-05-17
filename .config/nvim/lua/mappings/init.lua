@@ -12,17 +12,21 @@ map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "[D]iagnostic [S]how 
 map("n", "<leader>da", vim.diagnostic.setqflist, { desc = "[D]iagnostic [A]ll (quickfix)" })
 map("n", "<leader>ta", function()
   if vim.wo.arabic then
+    vim.cmd "set spell"
     vim.cmd "set noarab"
     return
   end
 
+  vim.cmd "set nospell"
   vim.cmd "set arab"
 end, { desc = "[T]oggle [A]rabic" })
 
 map("i", "<C-^>", function()
   if vim.wo.arabic then
+    vim.cmd "set spell"
     return vim.api.nvim_replace_termcodes("<C-o>:set noarab<CR>", true, false, true)
   end
 
+  vim.cmd "set nospell"
   return vim.api.nvim_replace_termcodes("<C-o>:set arab<CR>", true, false, true)
 end, { expr = true, desc = "Toggle arabic" })
