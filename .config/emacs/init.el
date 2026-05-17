@@ -60,6 +60,7 @@
               display-line-numbers-type 'relative)
 
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
+(add-hook 'text-mode-hook #'display-line-numbers-mode)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Input method display
