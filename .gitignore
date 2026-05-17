@@ -127,3 +127,4 @@ Session.vim
 .config/emacs/history
 .config/emacs/transient
 .config/emacs/projects
+.config/emacs/auto-save-list
