@@ -325,15 +325,13 @@ def toggle_config(
 
 
 def run_text_toggle(
-    label: str,
     path: Path,
     light_to_dark: dict[str, str],
-    detect_light: str,
 ) -> str:
     old, new = toggle_config(
-        path=path, light_to_dark=light_to_dark, detect_light=detect_light
+        path=path, light_to_dark=light_to_dark, detect_light=next(iter(light_to_dark))
     )
-    print(f"{label}: {old} => {new}")
+    print(f"{path}: {old} => {new}")
     return new
 
 
@@ -371,7 +369,6 @@ def toggle_whole_file(
 
 
 def toggle_marker_section(
-    label: str,
     config_path: Path,
     light_path: Path,
     dark_path: Path,
@@ -380,10 +377,10 @@ def toggle_marker_section(
     if not config_path.exists():
         raise FileNotFoundError(f"{config_path} not found")
     if not light_path.exists() or not dark_path.exists():
-        raise FileNotFoundError(f"Theme files missing for {label}")
+        raise FileNotFoundError(f"Theme files missing for {config_path}")
     text = config_path.read_text()
     if marker not in text:
-        raise RuntimeError(f"Theme marker not found in {label}")
+        raise RuntimeError(f"Theme marker not found in {config_path}")
     head, current = text.split(marker, 1)
     theme_file, old, new = _mode_source(current, "# Light", light_path, dark_path)
     new_config = (
@@ -395,44 +392,37 @@ def toggle_marker_section(
         + "\n"
     )
     config_path.write_text(new_config)
-    print(f"{label}: {old} => {new}")
+    print(f"{config_path}: {old} => {new}")
     return new
 
 
 def toggle_bashrc() -> str:
     return run_text_toggle(
-        label="~/.bashrc",
         path=Path.home() / ".bashrc",
         light_to_dark={"fzf/light.sh": "fzf/dark.sh", "--theme=Light": "--theme=Dark"},
-        detect_light="fzf/light.sh",
     )
 
 
 def toggle_nvim() -> None:
     run_text_toggle(
-        label="~/.config/nvim/lua/options.lua",
         path=Path.home() / ".config/nvim/lua/options.lua",
         light_to_dark={'o.background = "light"': 'o.background = "dark"'},
-        detect_light='o.background = "light"',
     )
 
 
 def toggle_vim() -> None:
     run_text_toggle(
-        label="~/.vimrc",
         path=Path.home() / ".vimrc",
         light_to_dark={"set background=light": "set background=dark"},
-        detect_light="set background=light",
     )
 
 
 def toggle_emacs() -> None:
-    light_theme = "(load-theme 'modus-operandi t)"
     run_text_toggle(
-        label="~/.config/emacs/init.el",
         path=Path.home() / ".config/emacs/init.el",
-        light_to_dark={light_theme: "(load-theme 'modus-vivendi t)"},
-        detect_light=light_theme,
+        light_to_dark={
+            "(load-theme 'modus-operandi t)": "(load-theme 'modus-vivendi t)"
+        },
     )
 
 
@@ -444,29 +434,34 @@ def restart_emacs_daemon() -> None:
 
 def toggle_alacritty() -> None:
     run_text_toggle(
-        label="~/.config/alacritty/alacritty.toml",
         path=Path.home() / ".config/alacritty/alacritty.toml",
         light_to_dark={"light.toml": "dark.toml"},
-        detect_light="light.toml",
     )
 
 
 def toggle_dunst() -> None:
     dunst_dir = Path.home() / ".config/dunst"
-    toggle_whole_file(
-        label="~/.config/dunst/dunstrc",
-        target_path=dunst_dir / "dunstrc",
-        light_path=dunst_dir / "themes/light.conf",
-        dark_path=dunst_dir / "themes/dark.conf",
-        detect_light="theme: light",
-        restart_command=["killall", "dunst"],
+    target_path=dunst_dir / "dunstrc"
+    light_path=dunst_dir / "themes/light.conf"
+    dark_path=dunst_dir / "themes/dark.conf"
+    detect_light="theme: light"
+    restart_command=["killall", "dunst"]
+    if not target_path.exists():
+        raise FileNotFoundError(f"{target_path} not found")
+    if not light_path.exists() or not dark_path.exists():
+        raise FileNotFoundError(f"Theme files missing for {dunst_dir}")
+    src, old, new = _mode_source(
+        target_path.read_text(), detect_light, light_path, dark_path
     )
+    shutil.copyfile(src, target_path)
+    if restart_command:
+        subprocess.run(restart_command, check=False)
+    print(f"{dunst_dir}: {old} => {new}")
 
 
 def toggle_i3() -> None:
     i3_dir = Path.home() / ".config/i3"
     toggle_marker_section(
-        label="~/.config/i3/config",
         config_path=i3_dir / "config",
         light_path=i3_dir / "light.conf",
         dark_path=i3_dir / "dark.conf",
@@ -477,7 +472,6 @@ def toggle_i3() -> None:
 def toggle_zathura() -> None:
     zathura_dir = Path.home() / ".config/zathura"
     toggle_marker_section(
-        label="~/.config/zathura/zathurarc",
         config_path=zathura_dir / "zathurarc",
         light_path=zathura_dir / "light.zathurarc",
         dark_path=zathura_dir / "dark.zathurarc",
@@ -487,10 +481,8 @@ def toggle_zathura() -> None:
 
 def toggle_rofi() -> None:
     run_text_toggle(
-        label="~/.config/rofi/config.rasi",
         path=Path.home() / ".config/rofi/config.rasi",
         light_to_dark={'@import "light"': '@import "dark"'},
-        detect_light='@import "light"',
     )
 
 
@@ -525,7 +517,7 @@ def set_wallpaper(mode: str) -> None:
     print(f"Wallpaper set: {mode} -> {wallpaper_dir / 'current.jpg'}")
 
 
-def set_color_scheme() -> None:
+def open_nwg_look() -> None:
     subprocess.run(["nwg-look"], check=True)
 
 
@@ -579,7 +571,7 @@ def _run_full_toggle(mode: str) -> None:
     toggle_rofi()
     toggle_opencode(mode)
     set_wallpaper(mode)
-    set_color_scheme()
+    open_nwg_look()
     rebuild_bat_cache()
 
 
