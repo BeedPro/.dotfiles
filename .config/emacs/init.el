@@ -262,21 +262,22 @@
         '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|"
                     "DONE(d)" "CANCELLED(c)")))
 
+  (defconst beed/journal-capture-file
+    (expand-file-name "~/Compendium/Journal/capture.org"))
+
   (defun beed/org-journal-capture-target ()
-    (let ((date (format-time-string "%Y%m%d")))
-      (set-buffer (org-capture-target-buffer
-                   (expand-file-name "~/Compendium/Journal/capture.org")))
-      (org-with-wide-buffer
-       (goto-char (point-min))
-       (if (re-search-forward (format "^\\* %s$" (regexp-quote date)) nil t)
-           (beginning-of-line)
+    "Capture under today's heading in `beed/journal-capture-file'."
+    (set-buffer (org-capture-target-buffer beed/journal-capture-file))
+    (org-with-wide-buffer
+     (goto-char (point-min))
+     (let ((heading (format "* %s" (format-time-string "%Y%m%d"))))
+       (unless (re-search-forward (format "^%s$" (regexp-quote heading)) nil t)
          (goto-char (point-min))
-         (insert (format "* %s\n" date))))
-      (unless (bolp)
-        (insert "\n"))))
+         (insert heading "\n"))
+       (beginning-of-line))))
 
   (setq org-capture-templates
-        `(("t" "Task" entry
+        '(("t" "Task" entry
            (function beed/org-journal-capture-target)
            "** TODO %<%H%M%S>: %?\n"
            :prepend t)
