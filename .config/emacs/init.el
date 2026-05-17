@@ -188,6 +188,16 @@
   (add-to-list 'eglot-server-programs
                '(typst-ts-mode . ("tinymist"))))
 
+(use-package corfu
+  :init
+  (global-corfu-mode))
+
+(use-package cape
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-keyword))
+
 (use-package typst-ts-mode
   :mode "\\.typ\\'"
   :init
