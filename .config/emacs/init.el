@@ -262,14 +262,29 @@
         '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|"
                     "DONE(d)" "CANCELLED(c)")))
 
+  (defun beed/org-journal-capture-target ()
+    (let ((date (format-time-string "%Y%m%d")))
+      (set-buffer (org-capture-target-buffer
+                   (expand-file-name "~/Compendium/Journal/capture.org")))
+      (org-with-wide-buffer
+       (goto-char (point-min))
+       (if (re-search-forward (format "^\\* %s$" (regexp-quote date)) nil t)
+           (beginning-of-line)
+         (goto-char (point-min))
+         (insert (format "* %s\n" date))))
+      (unless (bolp)
+        (insert "\n"))))
+
   (setq org-capture-templates
         `(("t" "Task" entry
-           (file ,(expand-file-name "refile.org" org-directory))
-           "* TODO %?\n  Created: %U\n")
+           (function beed/org-journal-capture-target)
+           "** TODO %<%H%M%S>: %?\n"
+           :prepend t)
 
           ("n" "Note" entry
-           (file ,(expand-file-name "refile.org" org-directory))
-           "* %?\nEntered on %U\n")))
+           (function beed/org-journal-capture-target)
+           "** %<%H%M%S>: %?\n"
+           :prepend t)))
 
   (setq org-refile-targets '((org-agenda-files :maxlevel . 2))
         org-refile-use-outline-path 'file
