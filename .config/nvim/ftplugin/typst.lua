@@ -6,6 +6,19 @@ opt_local.spell = true
 opt_local.spelllang = "en_gb"
 opt_local.colorcolumn = "80"
 
+local function opened_with_flag(flag)
+  for _, arg in ipairs(vim.v.argv) do
+    if arg == flag then
+      return true
+    end
+  end
+  return false
+end
+
+if opened_with_flag "-A" then
+  opt_local.spell = false
+end
+
 local function in_slipbox_tree()
   local slipbox = "Slipbox"
   local buf_path = vim.api.nvim_buf_get_name(0)
