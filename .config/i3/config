@@ -38,8 +38,8 @@ for_window [class=$browser title=".*Outlook.*"] move --no-auto-back-and-forth to
 
 assign [class="KeePassXC"] number 9
 
-default_border pixel 1
-default_floating_border pixel 1
+default_border normal 1
+default_floating_border normal 1
 hide_edge_borders smart_no_gaps
 
 for_window [title="^floating$"] floating enable
@@ -160,7 +160,7 @@ set $warning     #fec43f
 
 # class                  border      bg         text     indicator    child_border
 client.focused           $accent     $accent    $base    $indicator   $accent
-client.focused_inactive  $surface2   $accent    $base    $surface2    $surface2
+client.focused_inactive  $surface2   $base      $text    $surface2    $surface2
 client.unfocused         $surface2   $base      $text    $surface2    $surface2
 client.urgent            $warning    $warning   $base    $overlay0    $warning
 client.placeholder       $overlay0   $accent    $base    $overlay0    $overlay0
