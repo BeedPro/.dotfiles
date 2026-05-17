@@ -173,3 +173,35 @@
 (use-package marginalia
   :init
   (marginalia-mode 1))
+
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
+(use-package eglot
+  :ensure nil
+  :hook (typst-ts-mode . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs
+               '(typst-ts-mode . ("tinymist"))))
+
+(use-package typst-ts-mode
+  :mode "\\.typ\\'"
+  :init
+  (defvar treesit-language-source-alist nil)
+  (add-to-list 'treesit-language-source-alist
+               '(typst "https://github.com/uben0/tree-sitter-typst"))
+  (defun beed/ensure-typst-treesit ()
+    (when (and (fboundp 'treesit-language-available-p)
+               (fboundp 'treesit-install-language-grammar)
+               (not (treesit-language-available-p 'typst)))
+      (condition-case err
+          (treesit-install-language-grammar 'typst)
+        (error
+         (message "Failed to install typst tree-sitter grammar: %s"
+                  (error-message-string err))))))
+  (add-hook 'emacs-startup-hook #'beed/ensure-typst-treesit)
+  :hook (typst-ts-mode . beed/ensure-typst-treesit))
