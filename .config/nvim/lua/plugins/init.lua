@@ -31,6 +31,7 @@ require("lazy").setup({
   require "plugins.fzf-lua",
   require "plugins.lazydev",
   require "plugins.mini",
+  require "plugins.orgmode",
 }, lazy_config)
 
 require "plugins.undotree"
