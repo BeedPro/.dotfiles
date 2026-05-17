@@ -346,28 +346,6 @@ def _mode_source(
     return light_path, "dark", "light"
 
 
-def toggle_whole_file(
-    label: str,
-    target_path: Path,
-    light_path: Path,
-    dark_path: Path,
-    detect_light: str,
-    restart_command: list[str] | None = None,
-) -> str:
-    if not target_path.exists():
-        raise FileNotFoundError(f"{target_path} not found")
-    if not light_path.exists() or not dark_path.exists():
-        raise FileNotFoundError(f"Theme files missing for {label}")
-    src, old, new = _mode_source(
-        target_path.read_text(), detect_light, light_path, dark_path
-    )
-    shutil.copyfile(src, target_path)
-    if restart_command:
-        subprocess.run(restart_command, check=False)
-    print(f"{label}: {old} => {new}")
-    return new
-
-
 def toggle_marker_section(
     config_path: Path,
     light_path: Path,
