@@ -34,13 +34,6 @@
                     :family "GohuFont 14 Nerd Font Mono"
                     :height 140)
 
-;; Ensure Cargo-installed tools are visible to Emacs.
-(let ((cargo-bin (expand-file-name "~/.cargo/bin")))
-  (unless (member cargo-bin exec-path)
-    (add-to-list 'exec-path cargo-bin))
-  (unless (string-match-p (regexp-quote cargo-bin) (or (getenv "PATH") ""))
-    (setenv "PATH" (concat cargo-bin path-separator (getenv "PATH")))))
-
 ;; Package management
 (require 'package)
 
