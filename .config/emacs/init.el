@@ -199,19 +199,8 @@
   (add-to-list 'completion-at-point-functions #'cape-keyword))
 
 (use-package typst-ts-mode
-  :mode "\\.typ\\'"
+  :mode ("\\.typ\\'" . typst-ts-mode)
   :init
-  (defvar treesit-language-source-alist nil)
-  (add-to-list 'treesit-language-source-alist
-               '(typst "https://github.com/uben0/tree-sitter-typst"))
-  (defun beed/ensure-typst-treesit ()
-    (when (and (fboundp 'treesit-language-available-p)
-               (fboundp 'treesit-install-language-grammar)
-               (not (treesit-language-available-p 'typst)))
-      (condition-case err
-          (treesit-install-language-grammar 'typst)
-        (error
-         (message "Failed to install typst tree-sitter grammar: %s"
-                  (error-message-string err))))))
-  (add-hook 'emacs-startup-hook #'beed/ensure-typst-treesit)
-  :hook (typst-ts-mode . beed/ensure-typst-treesit))
+  (with-eval-after-load 'treesit
+    (add-to-list 'treesit-language-source-alist
+                 '(typst "https://github.com/uben0/tree-sitter-typst"))))
