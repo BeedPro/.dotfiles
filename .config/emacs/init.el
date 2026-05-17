@@ -157,3 +157,19 @@
   (unless (display-graphic-p)
     (diff-hl-margin-mode 1))
   (diff-hl-flydiff-mode 1))
+
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
+
+(use-package apheleia
+  :config
+  (apheleia-global-mode 1))
+
+(use-package vertico
+  :init
+  (vertico-mode 1))
+
+(use-package marginalia
+  :init
+  (marginalia-mode 1))
