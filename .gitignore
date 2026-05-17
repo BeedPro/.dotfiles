@@ -124,3 +124,4 @@ Session.vim
 .config/emacs
 !.config/emacs/init.el
 !.config/emacs/early-init.el
+!.config/emacs/snippets
