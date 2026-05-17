@@ -228,7 +228,6 @@ def main() -> None:
 
     while True:
         value = curses_input(CONFIG.prompt, initial_value, error_message).strip()
-        error_message = ""
 
         if value == CONFIG.exit_signal:
             return
