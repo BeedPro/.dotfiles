@@ -59,8 +59,16 @@
               bidi-paragraph-direction nil
               display-line-numbers-type 'relative)
 
-(add-hook 'prog-mode-hook #'display-line-numbers-mode)
-(add-hook 'text-mode-hook #'display-line-numbers-mode)
+(global-display-line-numbers-mode 1)
+
+(dolist (mode '(shell-mode-hook
+                eshell-mode-hook
+                term-mode-hook
+                vterm-mode-hook
+                treemacs-mode-hook
+                minibuffer-setup-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Input method display
