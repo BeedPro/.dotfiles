@@ -167,7 +167,7 @@
   :bind (("C-c C-f" . apheleia-format-buffer))
   :config
   (setf (alist-get 'prettypst apheleia-formatters)
-        `(,(concat beed/mason-bin-dir "prettypst") filepath))
+        '("~/.cargo/bin/prettypst" filepath))
   (setf (alist-get 'typst-ts-mode apheleia-mode-alist) '(prettypst)))
 
 (use-package vertico
@@ -189,11 +189,8 @@
   :ensure nil
   :hook (typst-ts-mode . eglot-ensure)
   :config
-  (defvar beed/mason-bin-dir
-    (expand-file-name "~/.local/share/nvim/mason/bin/")
-    "Path to Neovim Mason bin directory.")
   (add-to-list 'eglot-server-programs
-               `(typst-ts-mode . (,(concat beed/mason-bin-dir "tinymist")))))
+               '(typst-ts-mode . ("~/.cargo/bin/tinymist"))))
 
 (use-package corfu
   :init
