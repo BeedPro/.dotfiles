@@ -223,3 +223,55 @@
                           (bookmarks . 5)
                           (projects  . 5)))
   (dashboard-setup-startup-hook))
+
+(use-package org
+  :ensure nil
+  :mode ("\\.org\\'" . org-mode)
+  :bind
+  (("C-c a" . org-agenda)
+   ("C-c c" . org-capture)
+   ("C-c l" . org-store-link))
+  :config
+  (setq org-directory
+        (file-truename
+         (expand-file-name "~/Compendium/Journal/")))
+
+  (setq org-agenda-files
+        (mapcar (lambda (file)
+                  (expand-file-name file org-directory))
+                '("refile.org")))
+
+  (setq org-default-notes-file
+        (expand-file-name "refile.org" org-directory))
+
+  (setq org-ellipsis "..."
+        org-startup-folded 'content
+        org-startup-indented t
+        org-hide-leading-stars t
+        org-adapt-indentation nil
+        org-return-follows-link t
+        org-log-done 'time
+        org-log-into-drawer t
+        org-use-speed-commands t
+        org-src-fontify-natively t
+        org-src-tab-acts-natively t
+        org-edit-src-content-indentation 0)
+
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|"
+                    "DONE(d)" "CANCELLED(c)")))
+
+  (setq org-capture-templates
+        `(("t" "Task" entry
+           (file ,(expand-file-name "refile.org" org-directory))
+           "* TODO %?\n  Created: %U\n")
+
+          ("n" "Note" entry
+           (file ,(expand-file-name "refile.org" org-directory))
+           "* %?\nEntered on %U\n")))
+
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 2))
+        org-refile-use-outline-path 'file
+        org-outline-path-complete-in-steps nil
+        org-agenda-window-setup 'current-window
+        org-agenda-start-with-log-mode t))
