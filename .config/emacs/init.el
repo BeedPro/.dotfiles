@@ -240,10 +240,10 @@
   (setq org-agenda-files
         (mapcar (lambda (file)
                   (expand-file-name file org-directory))
-                '("refile.org")))
+                '("capture.org" "compass.org")))
 
   (setq org-default-notes-file
-        (expand-file-name "refile.org" org-directory))
+        (expand-file-name "capture.org" org-directory))
 
   (setq org-ellipsis "..."
         org-startup-folded 'content
