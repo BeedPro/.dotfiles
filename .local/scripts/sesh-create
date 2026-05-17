@@ -67,10 +67,22 @@ def insert_char(buf: list[str], pos: int, ch: int) -> int:
     return pos
 
 
-def render_line(stdscr, prompt: str, buf: list[str], pos: int) -> None:
+def render_line(
+    stdscr,
+    prompt: str,
+    buf: list[str],
+    pos: int,
+    error_message: str = "",
+) -> None:
     stdscr.move(0, 0)
     stdscr.clrtoeol()
     stdscr.addstr(0, 0, f"{prompt}{''.join(buf)}")
+
+    stdscr.move(1, 0)
+    stdscr.clrtoeol()
+    if error_message:
+        stdscr.addstr(1, 0, error_message)
+
     stdscr.move(0, len(prompt) + pos)
     stdscr.refresh()
 
@@ -101,7 +113,12 @@ def handle_key(
     return buf, insert_char(buf, pos, ch), False
 
 
-def curses_loop(stdscr, prompt: str) -> str:
+def curses_loop(
+    stdscr,
+    prompt: str,
+    initial_value: str = "",
+    error_message: str = "",
+) -> str:
     curses.set_escdelay(25)
     curses.curs_set(1)
     curses.start_color()
@@ -110,16 +127,16 @@ def curses_loop(stdscr, prompt: str) -> str:
     stdscr.keypad(True)
     stdscr.bkgd(" ", curses.A_NORMAL)
 
-    buf: list[str] = []
-    pos = 0
-    render_line(stdscr, prompt, buf, pos)
+    buf: list[str] = list(initial_value)
+    pos = len(buf)
+    render_line(stdscr, prompt, buf, pos, error_message)
 
     while True:
         ch = stdscr.getch()
 
         buf, pos, done = handle_key(ch, buf, pos)
 
-        render_line(stdscr, prompt, buf, pos)
+        render_line(stdscr, prompt, buf, pos, error_message)
 
         if done:
             if is_esc(ch):
@@ -127,8 +144,12 @@ def curses_loop(stdscr, prompt: str) -> str:
             return "".join(buf)
 
 
-def curses_input(prompt: str) -> str:
-    return curses.wrapper(curses_loop, prompt)
+def curses_input(
+    prompt: str,
+    initial_value: str = "",
+    error_message: str = "",
+) -> str:
+    return curses.wrapper(curses_loop, prompt, initial_value, error_message)
 
 
 def run(cmd: list[str], check: bool = True) -> CompletedProcess[bytes]:
@@ -185,44 +206,71 @@ def tmp_target_dir(value: str) -> Path | None:
     return Path("/tmp") / relative
 
 
+def is_share_path(value: str) -> bool:
+    return value.startswith("share/")
+
+
+def share_target_dir(value: str) -> Path | None:
+    relative = value[len("share/") :].strip("/")
+    if not relative:
+        return None
+    return Path.home() / ".local" / "share" / relative
+
+
 def normalize_session_name(value: str) -> str:
     return value.replace(".", "_")
 
 
 def main() -> None:
     ensure_src_dir(CONFIG.src_dir)
-    value = curses_input(CONFIG.prompt).strip()
+    initial_value = ""
+    error_message = ""
 
-    if value == CONFIG.exit_signal:
-        return
+    while True:
+        value = curses_input(CONFIG.prompt, initial_value, error_message).strip()
+        error_message = ""
 
-    if not value:
-        return
-
-    if is_tmp_path(value):
-        tmp_dir = tmp_target_dir(value)
-        if tmp_dir is None:
+        if value == CONFIG.exit_signal:
             return
 
-        tmp_dir.mkdir(parents=True, exist_ok=True)
-        ensure_session(normalize_session_name(value), tmp_dir)
+        if not value:
+            return
+
+        if is_tmp_path(value):
+            tmp_dir = tmp_target_dir(value)
+            if tmp_dir is None:
+                return
+
+            tmp_dir.mkdir(parents=True, exist_ok=True)
+            ensure_session(normalize_session_name(value), tmp_dir)
+            return
+
+        if is_share_path(value):
+            share_dir = share_target_dir(value)
+            if share_dir is None or not share_dir.is_dir():
+                initial_value = value
+                error_message = "Path not found in ~/.local/share; fix and retry."
+                continue
+
+            ensure_session(normalize_session_name(value), share_dir)
+            return
+
+        if is_git_url(value):
+            clean = clean_repo_path(value)
+            repo_dir = CONFIG.src_dir / clean
+
+            if not (repo_dir / ".git").is_dir():
+                repo_dir.parent.mkdir(parents=True, exist_ok=True)
+                run(["git", "clone", value, str(repo_dir)])
+
+            ensure_session(normalize_session_name(clean), repo_dir)
+            return
+
+        session_name = normalize_session_name(value)
+        cwd = Path.cwd()
+
+        ensure_session(session_name, cwd)
         return
-
-    if is_git_url(value):
-        clean = clean_repo_path(value)
-        repo_dir = CONFIG.src_dir / clean
-
-        if not (repo_dir / ".git").is_dir():
-            repo_dir.parent.mkdir(parents=True, exist_ok=True)
-            run(["git", "clone", value, str(repo_dir)])
-
-        ensure_session(normalize_session_name(clean), repo_dir)
-        return
-
-    session_name = normalize_session_name(value)
-    cwd = Path.cwd()
-
-    ensure_session(session_name, cwd)
 
 
 if __name__ == "__main__":
