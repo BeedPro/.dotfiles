@@ -8,18 +8,19 @@ return {
     completion = {
       menu = {
         auto_show = function(ctx)
-          if vim.fn.getcmdtype() ~= ":" then
-            return false
-          end
-
+          local cmdtype = vim.fn.getcmdtype()
           local line = (ctx and ctx.line) or vim.fn.getcmdline()
+          local first_space = string.find(line, " ")
+          local has_visual_range = string.find(line, "^'<,'>") ~= nil
+          local cmd = first_space and string.sub(line, 1, first_space - 1) or line
 
-          if string.find(line, "^'<,'>") then
+          if cmdtype ~= ":" then
             return false
           end
 
-          local first_space = string.find(line, " ")
-          local cmd = first_space and string.sub(line, 1, first_space - 1) or line
+          if has_visual_range then
+            return false
+          end
 
           if cmd == "cdo" then
             return false
