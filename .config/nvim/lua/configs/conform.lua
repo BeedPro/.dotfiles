@@ -22,7 +22,10 @@ local options = {
     ["_"] = { "trim_whitespace" },
   },
 
-  format_on_save = nil,
+  format_on_save = {
+    lsp_format = "never",
+    formatters = { "trim_whitespace" },
+  },
 }
 
 return options
