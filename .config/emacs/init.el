@@ -193,9 +193,11 @@
   (setf (alist-get 'prettypst apheleia-formatters)
         '("prettypst" filepath))
   (setf (alist-get 'tex-fmt apheleia-formatters)
-        '("tex-fmt" filepath))
+        '("tex-fmt" "--stdin" "--tabsize" "2"))
+  (setf (alist-get 'expand-2spaces apheleia-formatters)
+        '("expand" "-t" "2"))
   (setf (alist-get 'typst-ts-mode apheleia-mode-alist) '(prettypst))
-  (setf (alist-get 'latex-mode apheleia-mode-alist) '(tex-fmt)))
+  (setf (alist-get 'LaTeX-mode apheleia-mode-alist) '(tex-fmt expand-2spaces)))
 
 (use-package vertico
   :init
@@ -275,8 +277,8 @@
   :mode ("\\.tex\\'" . LaTeX-mode)
   :hook
    ((LaTeX-mode . flyspell-mode)
-    (LaTeX-mode . LaTeX-math-mode)
-    (LaTeX-mode . turn-on-reftex))
+     (LaTeX-mode . LaTeX-math-mode)
+     (LaTeX-mode . turn-on-reftex))
   :custom
   (TeX-auto-save t)
   (TeX-parse-self t)
