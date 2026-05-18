@@ -6,3 +6,6 @@ sudo apt install -y texlive-full latexmk biber
 
 cargo install --git https://github.com/latex-lsp/texlab --locked --tag v5.25.1
 cargo install --git "https://github.com/wgunderwood/tex-fmt"
+
+sudo ln -sf $HOME/.cargo/bin/tex-fmt /usr/local/bin/text-fmt
+sudo ln -sf $HOME/.cargo/bin/texlab /usr/local/bin/texlab
