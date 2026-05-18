@@ -15,6 +15,15 @@ return {
           local line = (ctx and ctx.line) or vim.fn.getcmdline()
           local first_space = string.find(line, " ")
           local cmd = first_space and string.sub(line, 1, first_space - 1) or line
+
+          if cmd == "cdo" then
+            return false
+          end
+
+          if first_space then
+            return true
+          end
+
           return vim.fn.strchars(cmd) >= 4
         end,
       },
