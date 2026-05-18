@@ -11,6 +11,7 @@ require "autocmds.lsp"
 require "autocmds.luasnip"
 require "autocmds.nvim-lint"
 require "autocmds.mini"
+require "autocmds.listchars"
 
 autocmd("TextYankPost", {
   group = augroup("HighlightYank", { clear = true }),
