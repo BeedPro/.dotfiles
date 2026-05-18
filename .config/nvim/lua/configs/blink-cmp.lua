@@ -1,7 +1,13 @@
 return {
   snippets = { preset = "luasnip" },
   cmdline = {
-    completion = { menu = { auto_show = true } },
+    completion = {
+      menu = {
+        auto_show = function(ctx)
+          return vim.fn.getcmdtype() == ":"
+        end,
+      },
+    },
   },
   appearance = {
     nerd_font_variant = "mono",
