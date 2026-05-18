@@ -13,6 +13,11 @@ return {
           end
 
           local line = (ctx and ctx.line) or vim.fn.getcmdline()
+
+          if string.find(line, "^'<,'>") then
+            return false
+          end
+
           local first_space = string.find(line, " ")
           local cmd = first_space and string.sub(line, 1, first_space - 1) or line
 
