@@ -76,15 +76,6 @@ require("orgmode").setup {
       properties = { empty_lines = { before = 0, after = 0 } },
     },
   },
-  mappings = {
-    global = {
-      org_agenda = { "<Leader>oa" },
-      org_capture = { "<Leader>oc" },
-    },
-    org = {
-      org_store_link = { "<Leader>ol" },
-    },
-  },
 }
 
 vim.lsp.enable "org"
