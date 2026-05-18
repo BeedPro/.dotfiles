@@ -57,7 +57,7 @@
 
 ;; Editing defaults
 (setq-default indent-tabs-mode nil
-              tab-width 2
+              tab-width 4
               bidi-paragraph-direction nil
               display-line-numbers-type 'relative)
 
@@ -79,8 +79,8 @@
   :custom
   (whitespace-style '(face trailing tabs tab-mark nbsp nbsp-mark))
   (whitespace-display-mappings
-   '((tab-mark 9 [?> 9] [?> 9])
-     (nbsp-mark 160 [?+ ] [?+ ])))
+   '((tab-mark 9 [?> ?\s ?\s ?\s] [?> ?\s ?\s ?\s])
+     (nbsp-mark 160 [?+] [?+])))
   :config
   (global-whitespace-mode 1))
 
