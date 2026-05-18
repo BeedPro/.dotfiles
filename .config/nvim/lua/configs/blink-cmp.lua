@@ -1,6 +1,9 @@
 return {
   snippets = { preset = "luasnip" },
   cmdline = {
+    keymap = {
+      ["<CR>"] = { "accept_and_enter", "fallback" },
+    },
     completion = {
       menu = {
         auto_show = function(ctx)
