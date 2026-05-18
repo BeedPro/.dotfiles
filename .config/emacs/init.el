@@ -177,7 +177,7 @@
   (yas-global-mode 1))
 
 (use-package apheleia
-  :bind (("C-c C-f" . apheleia-format-buffer))
+  :bind (("C-c f" . apheleia-format-buffer))
   :config
   (setf (alist-get 'prettypst apheleia-formatters)
         '("prettypst" filepath))
@@ -263,11 +263,9 @@
   :ensure auctex
   :mode ("\\.tex\\'" . LaTeX-mode)
   :hook
-  ((LaTeX-mode . flyspell-mode)
-   (LaTeX-mode . LaTeX-math-mode)
-   (LaTeX-mode . turn-on-reftex)
-   (LaTeX-mode . (lambda ()
-                   (local-set-key (kbd "C-c C-f") #'apheleia-format-buffer))))
+   ((LaTeX-mode . flyspell-mode)
+    (LaTeX-mode . LaTeX-math-mode)
+    (LaTeX-mode . turn-on-reftex))
   :custom
   (TeX-auto-save t)
   (TeX-parse-self t)
