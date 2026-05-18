@@ -3,10 +3,34 @@ local sep = package.config:sub(1, 1)
 local capture_file = org_dir .. sep .. "capture.org"
 local compass_file = org_dir .. sep .. "compass.org"
 
+local function face_from_hl(hl, opts)
+  opts = opts or {}
+  local ok, def = pcall(vim.api.nvim_get_hl, 0, { name = hl, link = true })
+  if not ok or not def or not def.fg then
+    return opts.fallback or ":weight bold"
+  end
+
+  local parts = { string.format(":foreground #%06x", def.fg) }
+  if opts.bold then
+    table.insert(parts, ":weight bold")
+  end
+  if opts.italic then
+    table.insert(parts, ":slant italic")
+  end
+  return table.concat(parts, " ")
+end
+
 require("orgmode").setup {
   org_agenda_files = { capture_file, compass_file },
   org_default_notes_file = capture_file,
   org_todo_keywords = { "TODO(t)", "NEXT(n)", "WAITING(w)", "|", "DONE(d)", "CANCELLED(c)" },
+  org_todo_keyword_faces = {
+    TODO = face_from_hl("DiagnosticError", { bold = true }),
+    NEXT = face_from_hl("DiagnosticInfo", { bold = true }),
+    WAITING = face_from_hl("DiagnosticWarn", { bold = true }),
+    DONE = face_from_hl("DiagnosticOk", { bold = true, fallback = face_from_hl("DiffAdd", { bold = true }) }),
+    CANCELLED = face_from_hl("Comment", { italic = true }),
+  },
   org_ellipsis = "...",
   org_startup_folded = "content",
   org_startup_indented = true,
