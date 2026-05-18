@@ -193,7 +193,7 @@
   (setf (alist-get 'prettypst apheleia-formatters)
         '("prettypst" "--use-std-in" "--use-std-out"))
   (setf (alist-get 'tex-fmt apheleia-formatters)
-        '("tex-fmt" "--stdin" "--tabsize" "2"))
+        '("tex-fmt" "--stdin" "--tabsize" "4"))
   (setf (alist-get 'expand-4spaces apheleia-formatters)
         '("expand" "-t" "4"))
   (setf (alist-get 'typst-ts-mode apheleia-mode-alist) '(prettypst))
