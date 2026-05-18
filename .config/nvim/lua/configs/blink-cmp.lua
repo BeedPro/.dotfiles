@@ -2,7 +2,7 @@ return {
   snippets = { preset = "luasnip" },
   cmdline = {
     keymap = {
-      ["<C-x>"] = { "show" },
+      ["<C-d>"] = { "show" },
     },
   },
   appearance = {
