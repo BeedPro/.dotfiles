@@ -193,11 +193,11 @@
   (setf (alist-get 'prettypst apheleia-formatters)
         '("prettypst" "--use-std-in" "--use-std-out"))
   (setf (alist-get 'tex-fmt apheleia-formatters)
-        '("tex-fmt" "--stdin" "--tabsize" "4"))
-  (setf (alist-get 'expand-4spaces apheleia-formatters)
-        '("expand" "-t" "4"))
+        '("tex-fmt" "--stdin" "--tabsize" (number-to-string tab-width)))
+  (setf (alist-get 'expand-tab-width apheleia-formatters)
+        '("expand" "-t" (number-to-string tab-width)))
   (setf (alist-get 'typst-ts-mode apheleia-mode-alist) '(prettypst))
-  (setf (alist-get 'LaTeX-mode apheleia-mode-alist) '(tex-fmt expand-4spaces)))
+  (setf (alist-get 'LaTeX-mode apheleia-mode-alist) '(tex-fmt expand-tab-width)))
 
 (use-package vertico
   :init
