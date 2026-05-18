@@ -2,7 +2,7 @@ return {
   snippets = { preset = "luasnip" },
   cmdline = {
     keymap = {
-      ["<Tab>"] = { "show", "accept" },
+      ["<Tab>"] = { "show" },
     },
     completion = {
       menu = {
