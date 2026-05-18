@@ -1,39 +1,5 @@
 return {
   snippets = { preset = "luasnip" },
-  cmdline = {
-    keymap = {
-      ["<Tab>"] = { "show" },
-    },
-    completion = {
-      menu = {
-        auto_show = function(ctx)
-          local cmdtype = vim.fn.getcmdtype()
-          local line = (ctx and ctx.line) or vim.fn.getcmdline()
-          local first_space = string.find(line, " ")
-          local has_visual_range = string.find(line, "^'<,'>") ~= nil
-          local cmd = first_space and string.sub(line, 1, first_space - 1) or line
-
-          if cmdtype ~= ":" then
-            return false
-          end
-
-          if has_visual_range then
-            return false
-          end
-
-          if cmd == "cdo" then
-            return false
-          end
-
-          if first_space then
-            return true
-          end
-
-          return vim.fn.strchars(cmd) >= 4
-        end,
-      },
-    },
-  },
   appearance = {
     nerd_font_variant = "mono",
     kind_icons = {
@@ -103,16 +69,7 @@ return {
       window = { border = "single" },
     },
     menu = {
-      auto_show = function(ctx)
-        local line = (ctx and ctx.line) or vim.api.nvim_get_current_line()
-        local col = (ctx and ctx.cursor and ctx.cursor[2]) or vim.api.nvim_win_get_cursor(0)[2]
-        local before_cursor = string.sub(line, 1, col)
-        local token = before_cursor:match("[^%s]+$") or ""
-
-        return token:match("^~?/?[%w%._%-/]+/$") ~= nil
-          or token:match("^%./") ~= nil
-          or token:match("^%.%./") ~= nil
-      end,
+      auto_show = false,
     },
   },
   signature = { enabled = false },
