@@ -1,6 +1,8 @@
 return {
   snippets = { preset = "luasnip" },
-  cmdline = { enabled = true },
+  cmdline = {
+    completion = { menu = { auto_show = true } },
+  },
   appearance = {
     nerd_font_variant = "mono",
     kind_icons = {
