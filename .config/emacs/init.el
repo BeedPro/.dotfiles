@@ -279,12 +279,12 @@
   (setq org-capture-templates
         '(("t" "Task" entry
            (function beed/org-journal-capture-target)
-           "** TODO %<%H%M%S>: %?\n"
+           "** TODO %<%H%M%S> - %?\n"
            :prepend t)
 
           ("n" "Note" entry
            (function beed/org-journal-capture-target)
-           "** %<%H%M%S>: %?\n"
+           "** %<%H%M%S> - %?\n"
            :prepend t)))
 
   (setq org-refile-targets '((org-agenda-files :maxlevel . 2))
