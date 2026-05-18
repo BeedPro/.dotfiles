@@ -19,9 +19,9 @@ o.completeopt = "menu,popup,noselect"
 o.expandtab = true
 o.autoindent = true
 o.smartindent = true
-o.shiftwidth = 2
-o.tabstop = 2
-o.softtabstop = 2
+o.shiftwidth = 4
+o.tabstop = 4
+o.softtabstop = 4
 
 o.ignorecase = true
 o.smartcase = true
