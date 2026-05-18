@@ -9,7 +9,7 @@ return {
   ui = {
     backdrop = 100,
     icons = {
-      package_pending = "[...] ",
+      package_pending = "[.] ",
       package_installed = "[+] ",
       package_uninstalled = "[ ] ",
     },
