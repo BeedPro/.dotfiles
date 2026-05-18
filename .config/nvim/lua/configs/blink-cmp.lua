@@ -103,7 +103,16 @@ return {
       window = { border = "single" },
     },
     menu = {
-      auto_show = false,
+      auto_show = function(ctx)
+        local line = (ctx and ctx.line) or vim.api.nvim_get_current_line()
+        local col = (ctx and ctx.cursor and ctx.cursor[2]) or vim.api.nvim_win_get_cursor(0)[2]
+        local before_cursor = string.sub(line, 1, col)
+        local token = before_cursor:match("[^%s]+$") or ""
+
+        return token:match("^~?/?[%w%._%-/]+/$") ~= nil
+          or token:match("^%./") ~= nil
+          or token:match("^%.%./") ~= nil
+      end,
     },
   },
   signature = { enabled = false },
