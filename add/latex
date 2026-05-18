@@ -3,3 +3,6 @@ set -euo pipefail
 
 sudo apt update
 sudo apt install -y texlive-full latexmk biber
+
+cargo install --git https://github.com/latex-lsp/texlab --locked --tag v5.25.1
+cargo install --git "https://github.com/wgunderwood/tex-fmt"
