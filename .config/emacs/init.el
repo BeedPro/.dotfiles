@@ -73,17 +73,6 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(use-package whitespace
-  :ensure nil
-  :defer nil
-  :custom
-  (whitespace-style '(face trailing tabs tab-mark nbsp nbsp-mark))
-  (whitespace-display-mappings
-   '((tab-mark 9 [?> ?\s ?\s ?\s] [?> ?\s ?\s ?\s])
-     (nbsp-mark 160 [?+] [?+])))
-  :config
-  (global-whitespace-mode 1))
-
 ;; Input method display
 (defun beed/arabic-input-method-title ()
   (when (string= current-input-method "arabic")
@@ -115,6 +104,17 @@
   :config
   (setq dired-listing-switches "-alh --group-directories-first")
   (setenv "LC_COLLATE" "C"))
+
+(use-package whitespace
+  :ensure nil
+  :defer nil
+  :custom
+  (whitespace-style '(face trailing tabs tab-mark nbsp nbsp-mark))
+  (whitespace-display-mappings
+   '((tab-mark 9 [?> ?\s ?\s ?\s] [?> ?\s ?\s ?\s])
+     (nbsp-mark 160 [?+] [?+])))
+  :config
+  (global-whitespace-mode 1))
 
 (use-package modus-themes
   :ensure t
