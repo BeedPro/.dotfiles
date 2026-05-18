@@ -87,6 +87,18 @@
   (load custom-file t))
 
 ;; Packages
+(use-package dashboard
+  :defer nil
+  :config
+  (setq initial-buffer-choice 'dashboard-open
+        dashboard-startup-banner 'logo-braille
+        dashboard-center-content t
+        dashboard-vertically-center-content t
+        dashboard-items '((recents   . 5)
+                          (bookmarks . 5)
+                          (projects  . 5)))
+  (dashboard-setup-startup-hook))
+
 (use-package dired
   :ensure nil
   :config
@@ -193,6 +205,8 @@
   (add-to-list 'eglot-server-programs
                '(typst-ts-mode . ("tinymist"))))
 
+;; https://github.com/svaante/dape
+
 (use-package corfu
   :init
   (global-corfu-mode))
@@ -211,19 +225,47 @@
     (add-to-list 'treesit-language-source-alist
                  '(typst "https://github.com/uben0/tree-sitter-typst"))))
 
-;; https://github.com/svaante/dape
-
-(use-package dashboard
-  :defer nil
+(use-package tex
+  :ensure auctex
+  :mode ("\\.tex\\'" . LaTeX-mode)
+  :hook
+  ((LaTeX-mode . flyspell-mode)
+   (LaTeX-mode . LaTeX-math-mode)
+   (LaTeX-mode . turn-on-reftex))
+  :custom
+  (TeX-auto-save t)
+  (TeX-parse-self t)
+  (TeX-save-query nil)
+  (TeX-PDF-mode t)
+  (TeX-source-correlate-mode t)
+  (TeX-source-correlate-start-server t)
   :config
-  (setq initial-buffer-choice 'dashboard-open
-        dashboard-startup-banner 'logo-braille
-        dashboard-center-content t
-        dashboard-vertically-center-content t
-        dashboard-items '((recents   . 5)
-                          (bookmarks . 5)
-                          (projects  . 5)))
-  (dashboard-setup-startup-hook))
+  (add-to-list 'TeX-command-list
+               '("LatexMk"
+                 "latexmk -pdf -interaction=nonstopmode -synctex=1 %s"
+                 TeX-run-TeX nil t
+                 :help "Run LatexMk"))
+  (setq TeX-command-default "LatexMk"))
+
+(use-package reftex
+  :ensure nil
+  :hook (LaTeX-mode . reftex-mode)
+  :custom
+  (reftex-plug-into-AUCTeX t))
+
+(use-package markdown-mode
+  :mode
+  (("README\\.md\\'" . gfm-mode)
+   ("\\.md\\'"       . markdown-mode)
+   ("\\.markdown\\'" . markdown-mode))
+  :custom
+  (markdown-command "pandoc")
+  (markdown-fontify-code-blocks-natively t)
+  (markdown-enable-wiki-links t)
+  (markdown-italic-underscore t)
+  :hook
+  ((markdown-mode . flyspell-mode)
+   (gfm-mode      . flyspell-mode)))
 
 (use-package org
   :ensure nil
