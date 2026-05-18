@@ -73,6 +73,17 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+(use-package whitespace
+  :ensure nil
+  :defer nil
+  :custom
+  (whitespace-style '(face trailing tabs tab-mark nbsp nbsp-mark))
+  (whitespace-display-mappings
+   '((tab-mark 9 [?> 9] [?> 9])
+     (nbsp-mark 160 [?+ ] [?+ ])))
+  :config
+  (global-whitespace-mode 1))
+
 ;; Input method display
 (defun beed/arabic-input-method-title ()
   (when (string= current-input-method "arabic")
