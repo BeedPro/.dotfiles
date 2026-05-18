@@ -12,6 +12,7 @@ require "autocmds.luasnip"
 require "autocmds.nvim-lint"
 require "autocmds.mini"
 require "autocmds.listchars"
+require "autocmds.arabic"
 
 autocmd("TextYankPost", {
   group = augroup("HighlightYank", { clear = true }),
