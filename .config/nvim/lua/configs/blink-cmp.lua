@@ -2,6 +2,7 @@ return {
   snippets = { preset = "luasnip" },
   cmdline = {
     keymap = {
+      ["<Tab>"] = { "show", "accept" },
       ["<CR>"] = { "accept_and_enter", "fallback" },
     },
     completion = {
@@ -49,7 +50,7 @@ return {
       cmdline = {
         min_keyword_length = function(ctx)
           if ctx.mode == "cmdline" and string.find(ctx.line, " ") == nil then
-            return 3
+            return 4
           end
           return 0
         end,
