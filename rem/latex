@@ -1,7 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+if command -v texlab >/dev/null 2>&1; then
+  cargo uninstall texlab || true
+fi
+
+if command -v tex-fmt >/dev/null 2>&1; then
+  cargo uninstall tex-fmt || true
+fi
+
+sudo rm -f /usr/local/bin/texlab
+sudo rm -f /usr/local/bin/text-fmt
+
 sudo apt purge -y texlive-full latexmk biber || true
 sudo apt autoremove -y
 
-echo "Removed LaTeX packages from add/latex"
+echo "Removed LaTeX toolchain from add/latex"
