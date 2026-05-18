@@ -152,6 +152,9 @@ vim.o.clipboard = ""
 vim.o.cursorline = true
 vim.o.cursorlineopt = "both"
 vim.o.completeopt = "menu,popup,noselect"
+vim.opt.wildmenu = true
+vim.opt.wildmode = "noselect:longest:full"
+vim.opt.wildoptions = "pum"
 
 vim.o.expandtab = true
 vim.o.autoindent = true
