@@ -191,7 +191,7 @@
   :bind (("C-c f" . apheleia-format-buffer))
   :config
   (setf (alist-get 'prettypst apheleia-formatters)
-        '("prettypst" filepath))
+        '("prettypst" "--use-std-in" "--use-std-out"))
   (setf (alist-get 'tex-fmt apheleia-formatters)
         '("tex-fmt" "--stdin" "--tabsize" "2"))
   (setf (alist-get 'expand-2spaces apheleia-formatters)
