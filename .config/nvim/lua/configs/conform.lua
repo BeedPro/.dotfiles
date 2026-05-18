@@ -3,6 +3,7 @@ local options = {
     python = { "ruff_format", "ruff_organize_imports" },
     djangohtml = { "djlint" },
     htmldjango = { "djlint" },
+    tex = { "tex-fmt" },
     c = { "clang-format" },
     cpp = { "clang-format" },
     haskell = { "fourmolu" },

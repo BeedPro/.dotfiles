@@ -34,6 +34,7 @@ local servers = {
   "tailwindcss",
   "svelte",
   "gdscript",
+  "texlab",
 }
 
 vim.lsp.enable(servers)
