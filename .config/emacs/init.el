@@ -181,7 +181,10 @@
   :config
   (setf (alist-get 'prettypst apheleia-formatters)
         '("prettypst" filepath))
-  (setf (alist-get 'typst-ts-mode apheleia-mode-alist) '(prettypst)))
+  (setf (alist-get 'tex-fmt apheleia-formatters)
+        '("tex-fmt" filepath))
+  (setf (alist-get 'typst-ts-mode apheleia-mode-alist) '(prettypst))
+  (setf (alist-get 'latex-mode apheleia-mode-alist) '(tex-fmt)))
 
 (use-package vertico
   :init
@@ -200,10 +203,13 @@
 
 (use-package eglot
   :ensure nil
-  :hook (typst-ts-mode . eglot-ensure)
+  :hook ((typst-ts-mode . eglot-ensure)
+         (LaTeX-mode . eglot-ensure))
   :config
   (add-to-list 'eglot-server-programs
-               '(typst-ts-mode . ("tinymist"))))
+               '(typst-ts-mode . ("tinymist")))
+  (add-to-list 'eglot-server-programs
+               '(LaTeX-mode . ("texlab"))))
 
 ;; https://github.com/svaante/dape
 
@@ -231,7 +237,9 @@
   :hook
   ((LaTeX-mode . flyspell-mode)
    (LaTeX-mode . LaTeX-math-mode)
-   (LaTeX-mode . turn-on-reftex))
+   (LaTeX-mode . turn-on-reftex)
+   (LaTeX-mode . (lambda ()
+                   (local-set-key (kbd "C-c C-f") #'apheleia-format-buffer))))
   :custom
   (TeX-auto-save t)
   (TeX-parse-self t)
