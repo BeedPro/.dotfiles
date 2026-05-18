@@ -8,7 +8,14 @@ return {
     completion = {
       menu = {
         auto_show = function(ctx)
-          return vim.fn.getcmdtype() == ":"
+          if vim.fn.getcmdtype() ~= ":" then
+            return false
+          end
+
+          local line = (ctx and ctx.line) or vim.fn.getcmdline()
+          local first_space = string.find(line, " ")
+          local cmd = first_space and string.sub(line, 1, first_space - 1) or line
+          return vim.fn.strchars(cmd) >= 4
         end,
       },
     },
@@ -47,14 +54,6 @@ return {
   sources = {
     default = { "lsp", "snippets", "buffer", "path" },
     providers = {
-      cmdline = {
-        min_keyword_length = function(ctx)
-          if ctx.mode == "cmdline" and string.find(ctx.line, " ") == nil then
-            return 4
-          end
-          return 0
-        end,
-      },
       spell = {
         name = "Spell",
         module = "blink-cmp-spell",
