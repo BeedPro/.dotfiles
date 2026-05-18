@@ -1,5 +1,10 @@
 return {
   snippets = { preset = "luasnip" },
+  cmdline = {
+    keymap = {
+      ["<Tab>"] = { "show" },
+    },
+  },
   appearance = {
     nerd_font_variant = "mono",
     kind_icons = {
