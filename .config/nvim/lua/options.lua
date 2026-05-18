@@ -4,6 +4,12 @@ local g = vim.g
 
 o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.add")
 
+o.list = true
+opt.listchars = {
+  tab = '> ',
+  trail = '-',
+  nbsp = '+',
+}
 o.background = "dark"
 o.winborder = "single"
 o.laststatus = 3
