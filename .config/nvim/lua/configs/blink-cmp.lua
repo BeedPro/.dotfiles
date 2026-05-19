@@ -2,7 +2,14 @@ return {
   snippets = { preset = "luasnip" },
   cmdline = {
     keymap = {
-      ["<C-d>"] = { "show" },
+      ["<Tab>"] = { "show", "select_next" },
+    },
+    completion = {
+      list = {
+        selection = {
+          preselect = false,
+        },
+      },
     },
   },
   appearance = {
@@ -72,6 +79,11 @@ return {
       auto_show = true,
       auto_show_delay_ms = 200,
       window = { border = "single" },
+    },
+    list = {
+      selection = {
+        preselect = false,
+      },
     },
     menu = {
       auto_show = false,
