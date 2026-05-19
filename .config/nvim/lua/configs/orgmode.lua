@@ -41,6 +41,12 @@ require("orgmode").setup {
   org_log_into_drawer = "LOGBOOK",
   org_edit_src_content_indentation = 0,
   win_split_mode = "tabnew",
+  mappings = {
+    capture = {
+      org_capture_refile = "<C-w>",
+      org_capture_kill = "<C-k>",
+    },
+  },
   org_capture_templates = {
     t = {
       description = "Task",
