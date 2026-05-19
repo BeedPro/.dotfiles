@@ -255,6 +255,8 @@
 ;; https://github.com/svaante/dape
 
 (use-package corfu
+  :custom
+  (corfu-preselect 'prompt)
   :init
   (global-corfu-mode))
 
