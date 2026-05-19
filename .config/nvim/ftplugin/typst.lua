@@ -20,13 +20,12 @@ if opened_with_flag "-A" then
 end
 
 local function in_slipbox_tree()
-  local slipbox = "Slipbox"
   local buf_path = vim.api.nvim_buf_get_name(0)
   local buf_dir = fn.fnamemodify(buf_path, ":p:h")
-  local parent = fn.fnamemodify(buf_dir, ":t")
-  local grandparent = fn.fnamemodify(buf_dir, ":h:t")
+  local slipbox_root = fn.fnamemodify(fn.expand "~/Compendium/Slipbox", ":p")
+  local sep = package.config:sub(1, 1)
 
-  return parent == slipbox or grandparent == slipbox
+  return buf_dir == slipbox_root or vim.startswith(buf_dir, slipbox_root .. sep)
 end
 
 local function notify_no_matches()
