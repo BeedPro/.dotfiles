@@ -58,6 +58,7 @@
 ;; Editing defaults
 (setq-default indent-tabs-mode nil
               tab-width 4
+              fill-column 80
               bidi-paragraph-direction nil
               display-line-numbers-type 'relative)
 
