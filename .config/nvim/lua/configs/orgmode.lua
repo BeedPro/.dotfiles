@@ -2,7 +2,6 @@ local org_dir = vim.fs.normalize(vim.fn.expand "~/Compendium/Journal")
 local sep = package.config:sub(1, 1)
 local capture_file = org_dir .. sep .. "capture.org"
 local compass_file = org_dir .. sep .. "compass.org"
-local archive_file = org_dir .. sep .. "archive.org"
 
 local function face_from_hl(hl, opts)
   opts = opts or {}
@@ -22,7 +21,7 @@ local function face_from_hl(hl, opts)
 end
 
 require("orgmode").setup {
-  org_agenda_files = { capture_file, compass_file, archive_file },
+  org_agenda_files = { capture_file, compass_file },
   org_default_notes_file = capture_file,
   org_todo_keywords = { "TODO(t)", "NEXT(n)", "WAITING(w)", "|", "DONE(d)", "CANCELLED(c)" },
   org_todo_keyword_faces = {

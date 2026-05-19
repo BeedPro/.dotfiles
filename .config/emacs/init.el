@@ -331,7 +331,7 @@
   (setq org-agenda-files
         (mapcar (lambda (file)
                   (expand-file-name file org-directory))
-                '("capture.org" "compass.org" "archive.org")))
+                '("capture.org" "compass.org")))
 
   (setq org-default-notes-file
         (expand-file-name "capture.org" org-directory))
