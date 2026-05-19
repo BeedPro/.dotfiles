@@ -40,7 +40,7 @@ require("orgmode").setup {
   org_log_done = "time",
   org_log_into_drawer = "LOGBOOK",
   org_edit_src_content_indentation = 0,
-  win_split_mode = "edit",
+  win_split_mode = "tabnew",
   org_capture_templates = {
     t = {
       description = "Task",
