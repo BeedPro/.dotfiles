@@ -5,6 +5,9 @@ return {
       ["<Tab>"] = { "show", "select_next" },
     },
     completion = {
+      menu = {
+        auto_show = false,
+      },
       list = {
         selection = {
           preselect = false,
@@ -66,8 +69,8 @@ return {
     ["<C-n>"] = { "select_next", "fallback" },
     ["<C-p>"] = { "select_prev", "fallback" },
 
-    ["<Up>"] = { "scroll_documentation_up", "fallback" },
-    ["<Down>"] = { "scroll_documentation_down", "fallback" },
+    ["<C-f>"] = { "scroll_documentation_up", "fallback" },
+    ["<C-b>"] = { "scroll_documentation_down", "fallback" },
 
     ["<C-j>"] = { "snippet_forward", "fallback" },
     ["<C-k>"] = { "snippet_backward", "fallback" },
