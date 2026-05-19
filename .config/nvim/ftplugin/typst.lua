@@ -19,13 +19,9 @@ if opened_with_flag "-A" then
   opt_local.spell = false
 end
 
-local function in_slipbox_tree()
-  local buf_path = vim.api.nvim_buf_get_name(0)
-  local buf_dir = fn.fnamemodify(buf_path, ":p:h")
-  local slipbox_root = fn.fnamemodify(fn.expand "~/Compendium/Slipbox", ":p")
-  local sep = package.config:sub(1, 1)
-
-  return buf_dir == slipbox_root or vim.startswith(buf_dir, slipbox_root .. sep)
+local function in_slipbox()
+  local buf_path = fn.resolve(vim.api.nvim_buf_get_name(0))
+  return buf_path:find(fn.resolve(fn.expand "~/Compendium/Slipbox"), 1, true) ~= nil
 end
 
 local function notify_no_matches()
@@ -83,7 +79,7 @@ local function search_slipbox_titles()
   search_with_vimgrep(pattern)
 end
 
-if in_slipbox_tree() then
+if in_slipbox() then
   map("n", "<leader>fn", search_slipbox_titles, {
     buffer = true,
     desc = "[F]ind Slipbox [N]otes by Title",
