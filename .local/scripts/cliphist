@@ -1,0 +1,188 @@
+#!/usr/bin/env python3
+
+import argparse
+import ctypes
+import ctypes.util
+import subprocess
+import sys
+from pathlib import Path
+
+
+HIST_DIR = Path.home() / ".cache" / "cliphist"
+if "XDG_CACHE_HOME" in __import__("os").environ:
+    HIST_DIR = Path(__import__("os").environ["XDG_CACHE_HOME"]) / "cliphist"
+
+HIST_FILE = HIST_DIR / "history"
+MAX_ENTRIES = int(__import__("os").environ.get("CLIPHIST_MAX_ENTRIES", "200"))
+
+
+def ensure_history() -> None:
+    HIST_DIR.mkdir(parents=True, exist_ok=True)
+    HIST_FILE.touch(exist_ok=True)
+
+
+def read_entries() -> list[str]:
+    ensure_history()
+    raw = HIST_FILE.read_text(encoding="utf-8")
+    return [e for e in raw.split("\n\n") if e.strip()]
+
+
+def write_entries(entries: list[str]) -> None:
+    ensure_history()
+    data = "\n\n".join(entries)
+    if data:
+        data += "\n"
+    HIST_FILE.write_text(data, encoding="utf-8")
+
+
+def add_entry(text: str) -> None:
+    text = text.strip("\x00")
+    if not text.strip():
+        return
+
+    entries = read_entries()
+    seen = {text}
+    deduped = [e for e in entries if e not in seen]
+    deduped.append(text)
+    if len(deduped) > MAX_ENTRIES:
+        deduped = deduped[-MAX_ENTRIES:]
+    write_entries(deduped)
+
+
+def get_clipboard_text() -> str:
+    proc = subprocess.run(
+        ["xclip", "-selection", "clipboard", "-out"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        text=True,
+        check=False,
+    )
+    return proc.stdout
+
+
+def list_entries() -> None:
+    for entry in reversed(read_entries()):
+        print(" ".join(entry.splitlines()))
+
+
+def pick_entry() -> int:
+    entries = list(reversed(read_entries()))
+    if not entries:
+        return 0
+
+    options = [" ".join(e.splitlines()) for e in entries]
+    proc = subprocess.run(
+        ["rofi", "-dmenu", "-i", "-p", "Clipboard"],
+        input="\n".join(options),
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    selected = proc.stdout.rstrip("\n")
+    if not selected:
+        return 0
+
+    subprocess.run(
+        ["xclip", "-selection", "clipboard"],
+        input=selected,
+        text=True,
+        check=False,
+    )
+    subprocess.run(["notify-send", "cliphist", "Copied selection to clipboard"], check=False)
+    return 0
+
+
+def watch_event_driven() -> int:
+    x11_path = ctypes.util.find_library("X11")
+    xfixes_path = ctypes.util.find_library("Xfixes")
+    if not x11_path or not xfixes_path:
+        print("Missing X11/Xfixes libraries", file=sys.stderr)
+        return 1
+
+    x11 = ctypes.CDLL(x11_path)
+    xfixes = ctypes.CDLL(xfixes_path)
+
+    class XEvent(ctypes.Structure):
+        _fields_ = [("pad", ctypes.c_long * 24)]
+
+    x11.XOpenDisplay.argtypes = [ctypes.c_char_p]
+    x11.XOpenDisplay.restype = ctypes.c_void_p
+    x11.XDefaultRootWindow.argtypes = [ctypes.c_void_p]
+    x11.XDefaultRootWindow.restype = ctypes.c_ulong
+    x11.XInternAtom.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int]
+    x11.XInternAtom.restype = ctypes.c_ulong
+    x11.XNextEvent.argtypes = [ctypes.c_void_p, ctypes.POINTER(XEvent)]
+    x11.XNextEvent.restype = ctypes.c_int
+    x11.XCloseDisplay.argtypes = [ctypes.c_void_p]
+    x11.XCloseDisplay.restype = ctypes.c_int
+
+    xfixes.XFixesQueryExtension.argtypes = [
+        ctypes.c_void_p,
+        ctypes.POINTER(ctypes.c_int),
+        ctypes.POINTER(ctypes.c_int),
+    ]
+    xfixes.XFixesQueryExtension.restype = ctypes.c_int
+    xfixes.XFixesSelectSelectionInput.argtypes = [
+        ctypes.c_void_p,
+        ctypes.c_ulong,
+        ctypes.c_ulong,
+        ctypes.c_ulong,
+    ]
+    xfixes.XFixesSelectSelectionInput.restype = None
+
+    display = x11.XOpenDisplay(None)
+    if not display:
+        print("Cannot open X display", file=sys.stderr)
+        return 1
+
+    event_base = ctypes.c_int()
+    error_base = ctypes.c_int()
+    ok = xfixes.XFixesQueryExtension(display, ctypes.byref(event_base), ctypes.byref(error_base))
+    if not ok:
+        x11.XCloseDisplay(display)
+        print("XFixes extension not available", file=sys.stderr)
+        return 1
+
+    root = x11.XDefaultRootWindow(display)
+    clipboard_atom = x11.XInternAtom(display, b"CLIPBOARD", 0)
+    xfixes.XFixesSelectSelectionInput(display, root, clipboard_atom, (1 << 0) | (1 << 1) | (1 << 2))
+
+    last = get_clipboard_text()
+    if last.strip():
+        add_entry(last)
+
+    event = XEvent()
+    try:
+        while True:
+            x11.XNextEvent(display, ctypes.byref(event))
+            current = get_clipboard_text()
+            if current and current != last:
+                add_entry(current)
+                last = current
+    finally:
+        x11.XCloseDisplay(display)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Simple X11 clipboard history")
+    sub = parser.add_subparsers(dest="cmd")
+    sub.add_parser("watch")
+    sub.add_parser("list")
+    sub.add_parser("pick")
+
+    args = parser.parse_args()
+    if args.cmd == "watch":
+        return watch_event_driven()
+    if args.cmd == "list":
+        list_entries()
+        return 0
+    if args.cmd == "pick":
+        return pick_entry()
+
+    parser.print_help()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
