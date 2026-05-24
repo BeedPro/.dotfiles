@@ -37,6 +37,7 @@ for_window [class=$browser title=".*Gmail.*"] move --no-auto-back-and-forth to w
 for_window [class=$browser title=".*Outlook.*"] move --no-auto-back-and-forth to workspace number $email_ws
 
 assign [class="KeePassXC"] number 9
+assign [class="protonvpn-app"] number 9
 
 default_border pixel 1
 default_floating_border pixel 1
