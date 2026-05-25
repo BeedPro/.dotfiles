@@ -701,7 +701,35 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "-f", "--fonts", help="Font preset name, or 'ls' to list presets"
     )
+    parser.add_argument(
+        "--confirm",
+        action="store_true",
+        help="Ask for confirmation in rofi before running",
+    )
     return parser.parse_args()
+
+
+def _confirm_with_rofi(prompt: str) -> bool:
+    result = subprocess.run(
+        ["rofi", "-dmenu", "-i", "-p", prompt],
+        input="no\nyes\n",
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return False
+    return result.stdout.strip().lower() == "yes"
+
+
+def _confirm_prompt(args: argparse.Namespace) -> str:
+    if args.theme and args.fonts:
+        return f"Run theme '{args.theme}' and fonts '{args.fonts}'?"
+    if args.theme:
+        return f"Run theme '{args.theme}'?"
+    if args.fonts:
+        return f"Run fonts '{args.fonts}'?"
+    return "Run full theme toggle?"
 
 
 def _run_theme_command(theme: str) -> None:
@@ -746,6 +774,9 @@ def _run_full_toggle(mode: str) -> None:
 
 def main() -> None:
     args = _parse_args()
+    if args.confirm and not _confirm_with_rofi(_confirm_prompt(args)):
+        print("Cancelled")
+        return
     if _handle_cli_actions(args):
         return
     mode = toggle_bashrc()
