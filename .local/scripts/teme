@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 import argparse
 import json
+import os
 import re
 import shutil
 import subprocess
+import time
+from dataclasses import asdict, dataclass
 from pathlib import Path
 
 FONT_PRESETS: dict[str, dict[str, str | int | float]] = {
@@ -44,6 +47,195 @@ FONT_PRESETS: dict[str, dict[str, str | int | float]] = {
         "rofi": "JetBrainsMono Nerd Font Mono 12",
     },
 }
+
+GTK_START = time.monotonic()
+
+
+@dataclass
+class GtkPreferences:
+    gtk_theme: str
+    icon_theme: str
+    font_name: str
+    cursor_theme: str
+    cursor_size: int
+    toolbar_style: str
+    toolbar_icons_size: str
+    font_hinting: str
+    font_antialiasing: str
+    font_rgba_order: str
+    text_scaling_factor: float
+    color_scheme: str
+    event_sounds: bool
+    input_feedback_sounds: bool
+
+
+def gtk_log(message: str) -> None:
+    elapsed = int(time.monotonic() - GTK_START)
+    print(f"INFO[{elapsed:04d}] {message}")
+
+
+def run_gsettings(args: list[str]) -> str:
+    result = subprocess.run(["gsettings", *args], capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or "gsettings failed")
+    return result.stdout.strip()
+
+
+def parse_gsettings_value(raw: str) -> str:
+    if raw.startswith("'") and raw.endswith("'"):
+        return raw[1:-1]
+    return raw
+
+
+def load_gtk_preferences() -> GtkPreferences:
+    keys = [
+        "gtk-theme", "icon-theme", "font-name", "cursor-theme", "cursor-size",
+        "toolbar-style", "toolbar-icons-size", "font-hinting", "font-antialiasing",
+        "font-rgba-order", "text-scaling-factor",
+    ]
+    interface = {k: parse_gsettings_value(run_gsettings(["get", "org.gnome.desktop.interface", k])) for k in keys}
+    sounds = {k: parse_gsettings_value(run_gsettings(["get", "org.gnome.desktop.sound", k])) for k in ["event-sounds", "input-feedback-sounds"]}
+    return GtkPreferences(
+        gtk_theme=interface["gtk-theme"], icon_theme=interface["icon-theme"], font_name=interface["font-name"],
+        cursor_theme=interface["cursor-theme"], cursor_size=int(float(interface["cursor-size"])),
+        toolbar_style=interface["toolbar-style"], toolbar_icons_size=interface["toolbar-icons-size"],
+        font_hinting=interface["font-hinting"], font_antialiasing=interface["font-antialiasing"],
+        font_rgba_order=interface["font-rgba-order"], text_scaling_factor=float(interface["text-scaling-factor"]),
+        color_scheme="default", event_sounds=sounds["event-sounds"] == "true", input_feedback_sounds=sounds["input-feedback-sounds"] == "true",
+    )
+
+
+def gtk_profile(mode: str) -> tuple[str, str, str]:
+    if mode == "dark":
+        return "Yaru-blue-dark", "Papirus-Dark", "prefer-dark"
+    if mode == "light":
+        return "Yaru-blue", "Papirus-Light", "prefer-light"
+    raise ValueError(f"Unsupported mode: {mode}")
+
+
+def apply_gtk_profile(mode: str) -> GtkPreferences:
+    gtk_theme, icon_theme, color_scheme = gtk_profile(mode)
+    prefs = load_gtk_preferences()
+    prefs.gtk_theme = gtk_theme
+    prefs.icon_theme = icon_theme
+    prefs.color_scheme = color_scheme
+    return prefs
+
+
+def gvariant_str(value: str) -> str:
+    return "'" + value.replace("'", "\\'") + "'"
+
+
+def gvariant_bool(value: bool) -> str:
+    return "true" if value else "false"
+
+
+def apply_gsettings_gtk(prefs: GtkPreferences) -> None:
+    gtk_log(">>> Applying gsettings")
+    interface = [
+        ("gtk-theme", gvariant_str(prefs.gtk_theme)), ("icon-theme", gvariant_str(prefs.icon_theme)),
+        ("cursor-theme", gvariant_str(prefs.cursor_theme)), ("cursor-size", str(prefs.cursor_size)),
+        ("font-name", gvariant_str(prefs.font_name)), ("font-hinting", gvariant_str(prefs.font_hinting)),
+        ("font-antialiasing", gvariant_str(prefs.font_antialiasing)), ("font-rgba-order", gvariant_str(prefs.font_rgba_order)),
+        ("text-scaling-factor", str(prefs.text_scaling_factor)), ("toolbar-style", gvariant_str(prefs.toolbar_style)),
+        ("toolbar-icons-size", gvariant_str(prefs.toolbar_icons_size)), ("color-scheme", gvariant_str(prefs.color_scheme)),
+    ]
+    gtk_log(">> org.gnome.desktop.interface")
+    for key, value in interface:
+        run_gsettings(["set", "org.gnome.desktop.interface", key, value])
+    for key, value in [("event-sounds", gvariant_bool(prefs.event_sounds)), ("input-feedback-sounds", gvariant_bool(prefs.input_feedback_sounds))]:
+        run_gsettings(["set", "org.gnome.desktop.sound", key, value])
+
+
+def gtk_bool_to_int(value: bool) -> int:
+    return 1 if value else 0
+
+
+def gtk_toolbar_style(style: str) -> str:
+    return {"both-horiz": "GTK_TOOLBAR_BOTH_HORIZ", "both": "GTK_TOOLBAR_BOTH", "icons": "GTK_TOOLBAR_ICONS", "text": "GTK_TOOLBAR_TEXT"}.get(style, "GTK_TOOLBAR_ICONS")
+
+
+def gtk_toolbar_icon_size(size: str) -> str:
+    return {"small": "GTK_ICON_SIZE_SMALL_TOOLBAR", "large": "GTK_ICON_SIZE_LARGE_TOOLBAR"}.get(size, "GTK_ICON_SIZE_LARGE_TOOLBAR")
+
+
+def xft_antialias(value: str) -> int:
+    return 0 if value == "none" else 1
+
+
+def xft_hinting(value: str) -> int:
+    return 0 if value in {"none", ""} else 1
+
+
+def xft_hintstyle(value: str) -> str:
+    if value == "none":
+        return "hintnone"
+    return f"hint{value}"
+
+
+def write_gtk_file(path: Path, lines: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n")
+    gtk_log(f">>> Exporting {path}")
+
+
+def export_gtk_files(prefs: GtkPreferences) -> None:
+    write_gtk_file(Path.home() / ".config/gtk-3.0/settings.ini", ["[Settings]", f"gtk-theme-name={prefs.gtk_theme}", f"gtk-icon-theme-name={prefs.icon_theme}", f"gtk-font-name={prefs.font_name}", f"gtk-cursor-theme-name={prefs.cursor_theme}", f"gtk-cursor-theme-size={prefs.cursor_size}", f"gtk-toolbar-style={gtk_toolbar_style(prefs.toolbar_style)}", f"gtk-toolbar-icon-size={gtk_toolbar_icon_size(prefs.toolbar_icons_size)}", "gtk-button-images=0", "gtk-menu-images=0", f"gtk-enable-event-sounds={gtk_bool_to_int(prefs.event_sounds)}", f"gtk-enable-input-feedback-sounds={gtk_bool_to_int(prefs.input_feedback_sounds)}", f"gtk-xft-antialias={xft_antialias(prefs.font_antialiasing)}", f"gtk-xft-hinting={xft_hinting(prefs.font_hinting)}", f"gtk-xft-hintstyle={xft_hintstyle(prefs.font_hinting)}", f"gtk-xft-rgba={prefs.font_rgba_order}", f"gtk-application-prefer-dark-theme={1 if prefs.color_scheme == 'prefer-dark' else 0}"])
+    write_gtk_file(Path.home() / ".gtkrc-2.0", ["# DO NOT EDIT! This file will be overwritten by teme.", "# Any customization should be done in ~/.gtkrc-2.0.mine instead.", "", f'include "{Path.home()}/.gtkrc-2.0.mine"', f'gtk-theme-name="{prefs.gtk_theme}"', f'gtk-icon-theme-name="{prefs.icon_theme}"', f'gtk-font-name="{prefs.font_name}"', f'gtk-cursor-theme-name="{prefs.cursor_theme}"', f"gtk-cursor-theme-size={prefs.cursor_size}", f"gtk-toolbar-style={gtk_toolbar_style(prefs.toolbar_style)}", f"gtk-toolbar-icon-size={gtk_toolbar_icon_size(prefs.toolbar_icons_size)}", "gtk-button-images=0", "gtk-menu-images=0", f"gtk-enable-event-sounds={gtk_bool_to_int(prefs.event_sounds)}", f"gtk-enable-input-feedback-sounds={gtk_bool_to_int(prefs.input_feedback_sounds)}", f"gtk-xft-antialias={xft_antialias(prefs.font_antialiasing)}", f"gtk-xft-hinting={xft_hinting(prefs.font_hinting)}", f'gtk-xft-hintstyle="{xft_hintstyle(prefs.font_hinting)}"', f'gtk-xft-rgba="{prefs.font_rgba_order}"'])
+    write_gtk_file(Path.home() / ".icons/default/index.theme", ["# This file is written by teme. Do not edit.", "[Icon Theme]", "Name=Default", "Comment=Default Cursor Theme", f"Inherits={prefs.cursor_theme}"])
+    write_gtk_file(Path.home() / ".config/xsettingsd/xsettingsd.conf", [f'Net/ThemeName "{prefs.gtk_theme}"', f'Net/IconThemeName "{prefs.icon_theme}"', f'Gtk/CursorThemeName "{prefs.cursor_theme}"', f"Net/EnableEventSounds {gtk_bool_to_int(prefs.event_sounds)}", f"EnableInputFeedbackSounds {gtk_bool_to_int(prefs.input_feedback_sounds)}", f"Xft/Antialias {xft_antialias(prefs.font_antialiasing)}", f"Xft/Hinting {xft_hinting(prefs.font_hinting)}", f'Xft/HintStyle "{xft_hintstyle(prefs.font_hinting)}"', f'Xft/RGBA "{prefs.font_rgba_order}"'])
+    write_gtk_file(Path.home() / ".config/gtk-4.0/settings.ini", ["[Settings]", f"gtk-theme-name={prefs.gtk_theme}", f"gtk-icon-theme-name={prefs.icon_theme}", f"gtk-font-name={prefs.font_name}", f"gtk-application-prefer-dark-theme={1 if prefs.color_scheme == 'prefer-dark' else 0}"])
+
+
+def symlink_gtk4_css(prefs: GtkPreferences) -> None:
+    source = Path("/usr/share/themes") / prefs.gtk_theme / "gtk-4.0"
+    target = Path.home() / ".config/gtk-4.0"
+    target.mkdir(parents=True, exist_ok=True)
+    for file_name in ["gtk.css", "gtk-dark.css"]:
+        dst = target / file_name
+        src = source / file_name
+        if dst.exists() or dst.is_symlink():
+            dst.unlink()
+        if src.exists():
+            dst.symlink_to(src)
+    gtk_log(f">>> Symlinking files in {target}")
+
+
+def backup_gtk_prefs(prefs: GtkPreferences) -> None:
+    backup_dir = Path.home() / ".local/share/nwg-look"
+    backup_dir.mkdir(parents=True, exist_ok=True)
+    (backup_dir / "gsettings.json").write_text(json.dumps(asdict(prefs), indent=2) + "\n")
+    gtk_log(f">>> Backing up gsettings to {backup_dir}")
+
+
+def log_gtk_prefs(prefs: GtkPreferences) -> None:
+    gtk_log(f"lang: {os.environ.get('LANG', 'en_US')}")
+    gtk_log(f"gtk-theme: {prefs.gtk_theme}")
+    gtk_log(f"icon-theme: {prefs.icon_theme}")
+    gtk_log(f"font-name: {prefs.font_name}")
+    gtk_log(f"cursor-theme: {prefs.cursor_theme}")
+    gtk_log(f"cursor-size: {prefs.cursor_size}")
+    gtk_log(f"toolbar-style: {prefs.toolbar_style}")
+    gtk_log(f"toolbar-icons-size: {prefs.toolbar_icons_size}")
+    gtk_log(f"font-hinting: {prefs.font_hinting}")
+    gtk_log(f"font-antialiasing: {prefs.font_antialiasing}")
+    gtk_log(f"font-rgba-order: {prefs.font_rgba_order}")
+    gtk_log(f"text-scaling-factor: {prefs.text_scaling_factor:g}")
+    gtk_log(f"color-scheme: {prefs.color_scheme}")
+    gtk_log(f"event-sounds: {str(prefs.event_sounds).lower()}")
+    gtk_log(f"input-feedback-sounds: {str(prefs.input_feedback_sounds).lower()}")
+
+
+def toggle_gtk(mode: str) -> None:
+    gtk_log(">>> Loading preferences")
+    gtk_log(">>> Reading gsettings")
+    prefs = apply_gtk_profile(mode)
+    log_gtk_prefs(prefs)
+    gtk_log(">>> Parsing original ~/.config/gtk-3.0/settings.ini")
+    apply_gsettings_gtk(prefs)
+    backup_gtk_prefs(prefs)
+    export_gtk_files(prefs)
+    symlink_gtk4_css(prefs)
 
 def _config_roots() -> list[Path]:
     candidates = [Path.home() / ".config", Path.home() / ".dotfiles/.config"]
@@ -492,13 +684,15 @@ def set_wallpaper(mode: str) -> None:
     print(f"Wallpaper set: {mode} -> {wallpaper_dir / 'current.jpg'}")
 
 
-def open_nwg_look() -> None:
-    subprocess.run(["nwg-look"], check=True)
-
-
 def rebuild_bat_cache() -> None:
     subprocess.run(["bat", "cache", "--build"], check=True)
     print("bat cache rebuilt")
+
+
+def reset_terminal_sessions() -> None:
+    subprocess.run(["killall", "alacritty"], check=False)
+    subprocess.run(["tmux", "kill-server"], check=False)
+    print("Reset terminal sessions: killed alacritty and tmux server")
 
 
 def _parse_args() -> argparse.Namespace:
@@ -546,7 +740,7 @@ def _run_full_toggle(mode: str) -> None:
     toggle_rofi()
     toggle_opencode(mode)
     set_wallpaper(mode)
-    open_nwg_look()
+    toggle_gtk(mode)
     rebuild_bat_cache()
 
 
@@ -556,6 +750,7 @@ def main() -> None:
         return
     mode = toggle_bashrc()
     _run_full_toggle(mode)
+    reset_terminal_sessions()
 
 
 if __name__ == "__main__":
