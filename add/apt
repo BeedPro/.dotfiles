@@ -52,7 +52,6 @@ X11_TOOLS=(
   feh
   xss-lock
   dunst
-  nwg-look
   maim
   x11-xkb-utils
   xclip
