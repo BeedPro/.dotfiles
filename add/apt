@@ -10,6 +10,7 @@ sudo extrepo enable debian_backports
 
 CORE_UTILS=(
   bash-completion
+  libglib2.0-bin
   tmux
   vim
   git
