@@ -25,6 +25,7 @@ CORE_UTILS=(
   pipx
   rofi
   qalc
+  qalculate-gtk
   alacritty
   gucharmap
 )
