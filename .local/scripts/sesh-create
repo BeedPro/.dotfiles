@@ -206,9 +206,31 @@ def ensure_bare_clone(bare_url: str, bare_dir: Path) -> None:
     run(["git", "clone", "--bare", bare_url, str(bare_dir)])
 
 
-def ensure_main_worktree(bare_dir: Path, main_worktree: Path) -> None:
-    if main_worktree.is_dir():
-        return
+def default_branch_name(bare_dir: Path) -> str:
+    result = subprocess.run(
+        ["git", f"--git-dir={bare_dir}", "symbolic-ref", "refs/remotes/origin/HEAD"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return "main"
+
+    ref = result.stdout.strip()
+    prefix = "refs/remotes/origin/"
+    if ref.startswith(prefix):
+        branch = ref[len(prefix) :]
+        if branch:
+            return branch
+    return "main"
+
+
+def ensure_default_branch_worktree(bare_dir: Path, repo_root: Path) -> Path:
+    branch = default_branch_name(bare_dir)
+    worktree_dir = repo_root / branch
+
+    if worktree_dir.is_dir():
+        return worktree_dir
 
     try:
         run(
@@ -217,8 +239,8 @@ def ensure_main_worktree(bare_dir: Path, main_worktree: Path) -> None:
                 f"--git-dir={bare_dir}",
                 "worktree",
                 "add",
-                str(main_worktree),
-                "main",
+                str(worktree_dir),
+                branch,
             ]
         )
     except subprocess.CalledProcessError:
@@ -228,12 +250,14 @@ def ensure_main_worktree(bare_dir: Path, main_worktree: Path) -> None:
                 f"--git-dir={bare_dir}",
                 "worktree",
                 "add",
-                str(main_worktree),
+                str(worktree_dir),
                 "-b",
-                "main",
-                "origin/main",
+                branch,
+                f"origin/{branch}",
             ]
         )
+
+    return worktree_dir
 
 
 def handle_bare_git_input(value: str) -> bool:
@@ -243,12 +267,11 @@ def handle_bare_git_input(value: str) -> bool:
 
     clean = clean_repo_path(bare_url)
     repo_root = CONFIG.src_dir / clean
-    bare_dir = repo_root / ".bare"
-    main_worktree = repo_root / "main"
+    bare_dir = repo_root / ".git"
 
     ensure_bare_clone(bare_url, bare_dir)
-    ensure_main_worktree(bare_dir, main_worktree)
-    ensure_session(normalize_session_name(clean), main_worktree)
+    ensure_default_branch_worktree(bare_dir, repo_root)
+    ensure_session(normalize_session_name(clean), repo_root)
     return True
 
 
