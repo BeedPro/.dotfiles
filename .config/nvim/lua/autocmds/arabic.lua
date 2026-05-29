@@ -21,7 +21,7 @@ map("n", "<leader>ta", function()
     vim.cmd "set nospell"
   end
   vim.cmd "set arab"
-end, { desc = "[T]oggle [A]rabic" })
+end, { desc = "Toggle Arabic" })
 
 map("i", "<C-^>", function()
   if vim.wo.arabic then
@@ -35,4 +35,4 @@ map("i", "<C-^>", function()
     vim.cmd "set nospell"
   end
   return vim.api.nvim_replace_termcodes("<C-o>:set arab<CR>", true, false, true)
-end, { expr = true, desc = "Toggle arabic" })
+end, { expr = true, desc = "Toggle Arabic" })

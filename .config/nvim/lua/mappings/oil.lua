@@ -10,7 +10,7 @@ map("n", "<leader>.", function()
   else
     require("oil").open()
   end
-end, { desc = "[O]il Toggle" })
+end, { desc = "Toggle file explorer" })
 
 autocmd("FileType", {
   group = oil_group,

@@ -82,6 +82,6 @@ end
 if in_slipbox() then
   map("n", "<leader>fn", search_slipbox_titles, {
     buffer = true,
-    desc = "[F]ind Slipbox [N]otes by Title",
+    desc = "Find slipbox notes by title",
   })
 end
