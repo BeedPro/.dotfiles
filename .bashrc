@@ -33,9 +33,6 @@ source $HOME/.config/fzf/dark.sh
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH="$HOME/.go"
 
-alias ts="$HOME/.local/scripts/sesh-create"
-alias tsi="$HOME/.local/scripts/sesh-launcher"
-
 alias nini="NVIM_APPNAME=nini nvim"
 
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
