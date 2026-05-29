@@ -42,3 +42,4 @@ add
 rem
 vial-qmk
 .mozilla
+.config/systemd/user/mpd-mpris.service

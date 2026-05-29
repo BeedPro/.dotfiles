@@ -36,6 +36,7 @@ CONFIG = LauncherConfig(
         "tmp": Path("/tmp"),
         "local/scripts": Path("~/.local/scripts"),
         "local/share": Path("~/.local/share"),
+        "local/bin": Path("~/.local/bin"),
     },
     directory_sources=(
         DirectorySource(base_dir=Path("~/Projects"), depth=2),
