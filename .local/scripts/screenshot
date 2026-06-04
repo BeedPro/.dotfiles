@@ -8,6 +8,7 @@ mkdir -p "$SCREENSHOT_DIR"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 FINALFILE="$SCREENSHOT_DIR/$TIMESTAMP.png"
 SHOW_SCREENSHOT=0
+SAVE_SCREENSHOT=1
 
 take_screenshot() {
     case "$1" in
@@ -87,22 +88,45 @@ for arg in "$@"; do
         --show)
             SHOW_SCREENSHOT=1
             ;;
+        --no-save)
+            SAVE_SCREENSHOT=0
+            ;;
         *)
-            echo "Usage: $0 [everything|screen|window|selection] [--show]" >&2
+            echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save]" >&2
             exit 1
             ;;
     esac
 done
 
 if [ -z "$MODE" ]; then
-    echo "Usage: $0 [everything|screen|window|selection] [--show]" >&2
+    echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save]" >&2
     exit 1
+fi
+
+if [ "$SAVE_SCREENSHOT" -eq 0 ]; then
+    FINALFILE="$(mktemp --suffix=.png)"
 fi
 
 take_screenshot "$MODE"
 xclip -selection clipboard -t image/png -i "$FINALFILE"
-notify-send "Screenshot taken" "$TIMESTAMP.png" -i "$FINALFILE"
+
+if [ "$SAVE_SCREENSHOT" -eq 1 ]; then
+    notify-send "Screenshot taken" "$TIMESTAMP.png" -i "$FINALFILE"
+else
+    notify-send "Screenshot copied" "Not saved to disk" -i "$FINALFILE"
+fi
 
 if [ "$SHOW_SCREENSHOT" -eq 1 ]; then
-    nsxiv -f "$FINALFILE" >/dev/null 2>&1 &
+    if [ "$SAVE_SCREENSHOT" -eq 1 ]; then
+        nsxiv -f "$FINALFILE" >/dev/null 2>&1 &
+    else
+        (
+            nsxiv -f "$FINALFILE"
+            rm -f "$FINALFILE"
+        ) >/dev/null 2>&1 &
+    fi
+fi
+
+if [ "$SAVE_SCREENSHOT" -eq 0 ] && [ "$SHOW_SCREENSHOT" -eq 0 ]; then
+    rm -f "$FINALFILE"
 fi
