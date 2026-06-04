@@ -1,17 +1,70 @@
 #!/bin/bash
 # Dependencies (X11 only):
-# maim, xclip, xdotool, notify-send
+# maim, xclip, xdotool, xrandr, notify-send
 
 SCREENSHOT_DIR="$HOME/Pictures/Screenshots"
 mkdir -p "$SCREENSHOT_DIR"
 
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 FINALFILE="$SCREENSHOT_DIR/$TIMESTAMP.png"
+SHOW_SCREENSHOT=0
 
 take_screenshot() {
     case "$1" in
-        screen)
+        everything)
             maim "$FINALFILE"
+            ;;
+        screen)
+            local mouse_x mouse_y
+            local output_info output_x output_y output_w output_h
+
+            mouse_x="$(xdotool getmouselocation --shell | awk -F= '/^X=/ { print $2 }')"
+            mouse_y="$(xdotool getmouselocation --shell | awk -F= '/^Y=/ { print $2 }')"
+
+            output_info="$({ xrandr --listactivemonitors 2>/dev/null || xrandr --query; } | awk -v mx="$mouse_x" -v my="$mouse_y" '
+                /^[[:space:]]*[0-9]+:/ {
+                    for (i = 1; i <= NF; i++) {
+                        if ($i ~ /[0-9]+\/[0-9]+x[0-9]+\/[0-9]+\+[0-9]+\+[0-9]+/) {
+                            split($i, parts, /[x+]/)
+                            split(parts[1], wparts, "/")
+                            split(parts[2], hparts, "/")
+                            x = parts[3] + 0
+                            y = parts[4] + 0
+                            w = wparts[1] + 0
+                            h = hparts[1] + 0
+
+                            if (mx >= x && mx < x + w && my >= y && my < y + h) {
+                                printf "%d %d %d %d\n", x, y, w, h
+                                exit
+                            }
+                        }
+                    }
+                }
+                / connected/ {
+                    for (i = 1; i <= NF; i++) {
+                        if ($i ~ /^[0-9]+x[0-9]+\+[0-9]+\+[0-9]+$/) {
+                            split($i, parts, /[x+]/)
+                            x = parts[3] + 0
+                            y = parts[4] + 0
+                            w = parts[1] + 0
+                            h = parts[2] + 0
+
+                            if (mx >= x && mx < x + w && my >= y && my < y + h) {
+                                printf "%d %d %d %d\n", x, y, w, h
+                                exit
+                            }
+                        }
+                    }
+                }
+            ')"
+
+            if [ -z "$output_info" ]; then
+                echo "Could not determine current monitor" >&2
+                exit 1
+            fi
+
+            read -r output_x output_y output_w output_h <<< "$output_info"
+            maim -g "${output_w}x${output_h}+${output_x}+${output_y}" "$FINALFILE"
             ;;
         window)
             maim -i "$(xdotool getactivewindow)" "$FINALFILE"
@@ -26,13 +79,30 @@ take_screenshot() {
     esac
 }
 
-if [ -n "$1" ]; then
-    MODE="$1"
-else
-    echo "Usage: $0 [screen|window|selection]"
+for arg in "$@"; do
+    case "$arg" in
+        everything|screen|window|selection)
+            MODE="$arg"
+            ;;
+        --show)
+            SHOW_SCREENSHOT=1
+            ;;
+        *)
+            echo "Usage: $0 [everything|screen|window|selection] [--show]" >&2
+            exit 1
+            ;;
+    esac
+done
+
+if [ -z "$MODE" ]; then
+    echo "Usage: $0 [everything|screen|window|selection] [--show]" >&2
     exit 1
 fi
 
 take_screenshot "$MODE"
 xclip -selection clipboard -t image/png -i "$FINALFILE"
 notify-send "Screenshot taken" "$TIMESTAMP.png" -i "$FINALFILE"
+
+if [ "$SHOW_SCREENSHOT" -eq 1 ]; then
+    nsxiv -f "$FINALFILE" >/dev/null 2>&1 &
+fi
