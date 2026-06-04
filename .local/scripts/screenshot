@@ -9,12 +9,11 @@ TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 FINALFILE="$SCREENSHOT_DIR/$TIMESTAMP.png"
 SHOW_SCREENSHOT=0
 SAVE_SCREENSHOT=1
-CURSOR_ARGS=(-u)
 
 take_screenshot() {
     case "$1" in
         everything)
-            maim "${CURSOR_ARGS[@]}" "$FINALFILE"
+            maim -u "$FINALFILE"
             ;;
         screen)
             local mouse_x mouse_y
@@ -66,13 +65,13 @@ take_screenshot() {
             fi
 
             read -r output_x output_y output_w output_h <<< "$output_info"
-            maim "${CURSOR_ARGS[@]}" -g "${output_w}x${output_h}+${output_x}+${output_y}" "$FINALFILE"
+            maim -u -g "${output_w}x${output_h}+${output_x}+${output_y}" "$FINALFILE"
             ;;
         window)
-            maim "${CURSOR_ARGS[@]}" -i "$(xdotool getactivewindow)" "$FINALFILE"
+            maim -u -i "$(xdotool getactivewindow)" "$FINALFILE"
             ;;
         selection)
-            maim "${CURSOR_ARGS[@]}" -s -b 1 -c 0.89,0.75,0.98,1.0 "$FINALFILE"
+            maim -u -s -b 1 -c 0.89,0.75,0.98,1.0 "$FINALFILE"
             ;;
         *)
             echo "Invalid mode: $1" >&2
@@ -92,18 +91,15 @@ for arg in "$@"; do
         --no-save)
             SAVE_SCREENSHOT=0
             ;;
-        --no-cursor)
-            CURSOR_ARGS=()
-            ;;
         *)
-            echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save] [--no-cursor]" >&2
+            echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save]" >&2
             exit 1
             ;;
     esac
 done
 
 if [ -z "$MODE" ]; then
-    echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save] [--no-cursor]" >&2
+    echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save]" >&2
     exit 1
 fi
 
