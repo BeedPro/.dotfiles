@@ -9,6 +9,7 @@ TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 FINALFILE="$SCREENSHOT_DIR/$TIMESTAMP.png"
 SHOW_SCREENSHOT=0
 SAVE_SCREENSHOT=1
+SEND_NOTIFICATION=1
 
 take_screenshot() {
     case "$1" in
@@ -81,6 +82,10 @@ take_screenshot() {
 }
 
 send_notification() {
+    if [ "$SEND_NOTIFICATION" -eq 0 ]; then
+        return
+    fi
+
     if [ "$SAVE_SCREENSHOT" -eq 1 ]; then
         notify-send "Screenshot taken" "$TIMESTAMP.png" -i "$FINALFILE"
     else
@@ -99,15 +104,18 @@ for arg in "$@"; do
         --no-save)
             SAVE_SCREENSHOT=0
             ;;
+        --no-notify)
+            SEND_NOTIFICATION=0
+            ;;
         *)
-            echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save]" >&2
+            echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save] [--no-notify]" >&2
             exit 1
             ;;
     esac
 done
 
 if [ -z "$MODE" ]; then
-    echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save]" >&2
+    echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save] [--no-notify]" >&2
     exit 1
 fi
 
