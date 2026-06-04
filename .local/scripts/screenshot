@@ -80,6 +80,14 @@ take_screenshot() {
     esac
 }
 
+send_notification() {
+    if [ "$SAVE_SCREENSHOT" -eq 1 ]; then
+        notify-send "Screenshot taken" "$TIMESTAMP.png" -i "$FINALFILE"
+    else
+        notify-send "Screenshot copied" "Not saved to disk" -i "$FINALFILE"
+    fi
+}
+
 for arg in "$@"; do
     case "$arg" in
         everything|screen|window|selection)
@@ -110,23 +118,19 @@ fi
 take_screenshot "$MODE"
 xclip -selection clipboard -t image/png -i "$FINALFILE"
 
-if [ "$SAVE_SCREENSHOT" -eq 1 ]; then
-    notify-send "Screenshot taken" "$TIMESTAMP.png" -i "$FINALFILE"
-else
-    notify-send "Screenshot copied" "Not saved to disk" -i "$FINALFILE"
-fi
-
 if [ "$SHOW_SCREENSHOT" -eq 1 ]; then
-    if [ "$SAVE_SCREENSHOT" -eq 1 ]; then
-        nsxiv -f "$FINALFILE" >/dev/null 2>&1 &
-    else
-        (
-            nsxiv -f "$FINALFILE"
-            rm -f "$FINALFILE"
-        ) >/dev/null 2>&1 &
-    fi
-fi
+    (
+        nsxiv -f "$FINALFILE"
+        send_notification
 
-if [ "$SAVE_SCREENSHOT" -eq 0 ] && [ "$SHOW_SCREENSHOT" -eq 0 ]; then
-    rm -f "$FINALFILE"
+        if [ "$SAVE_SCREENSHOT" -eq 0 ]; then
+            rm -f "$FINALFILE"
+        fi
+    ) >/dev/null 2>&1 &
+else
+    send_notification
+
+    if [ "$SAVE_SCREENSHOT" -eq 0 ]; then
+        rm -f "$FINALFILE"
+    fi
 fi
