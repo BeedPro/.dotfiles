@@ -2,12 +2,12 @@ vim.g.mapleader = " "
 
 -- Plugins
 vim.pack.add {
-  "https://github.com/neovim/nvim-lspconfig",
-  "https://github.com/mfussenegger/nvim-lint",
-  "https://github.com/folke/lazydev.nvim",
+  "https://github.com/miikanissi/modus-themes.nvim",
   "https://github.com/nvim-mini/mini.nvim",
   "https://github.com/mohseenrm/marko.nvim",
-  "https://github.com/miikanissi/modus-themes.nvim",
+  "https://github.com/mfussenegger/nvim-lint",
+  "https://github.com/neovim/nvim-lspconfig",
+  "https://github.com/folke/lazydev.nvim",
 }
 
 vim.cmd.packadd "nvim.undotree"
