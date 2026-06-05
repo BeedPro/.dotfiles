@@ -5,8 +5,6 @@ vim.pack.add {
   "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/mfussenegger/nvim-lint",
   "https://github.com/folke/lazydev.nvim",
-  "https://github.com/stevearc/oil.nvim",
-  "https://github.com/ibhagwan/fzf-lua",
   "https://github.com/nvim-mini/mini.nvim",
   "https://github.com/mohseenrm/marko.nvim",
   "https://github.com/miikanissi/modus-themes.nvim",
@@ -32,65 +30,82 @@ require("lazydev").setup {
   },
 }
 
----- Plugins.oil
-require("oil").setup {
-  delete_to_trash = true,
-  view_options = {
-    show_hidden = true,
-  },
-  columns = {},
-}
-
----- Plugins.fzf-lua
-require("fzf-lua").setup {
-  { "telescope", "hide" },
-  defaults = {
-    file_icons = false,
-    git_icons = false,
-    color_icons = false,
-  },
-  fzf_colors = true,
-  fzf_opts = {
-    ["--layout"] = "reverse",
-  },
-  ---@diagnostic disable-next-line: assign-type-mismatch
-  winopts = function()
-    local small = vim.o.columns < 120 or vim.o.lines < 35
-
-    return {
-      height = 0.8,
-      width = 0.9,
-      row = 0.5,
-      col = 0.5,
-      border = "single",
-      backdrop = 100,
-      preview = {
-        hidden = small,
-        layout = "flex",
-        flip_columns = 120,
-        vertical = "down:45%",
-        horizontal = "right:55%",
-        border = "single",
-      },
-    }
-  end,
-  files = {
-    cwd_prompt = false,
-  },
-  oldfiles = {
-    cwd_only = true,
-  },
-  keymaps = {
-    winopts = {
-      preview = {
-        layout = "vertical",
-        vertical = "down:60%",
-      },
-    },
-  },
-}
-
 ---- Plugins.mini
+local show_dotfiles = true
+
+local filter_show = function()
+  return true
+end
+
+local filter_hide = function(fs_entry)
+  return not vim.startswith(fs_entry.name, ".")
+end
+
+local files_in = function(cwd, hidden)
+  local command = { "rg", "--files" }
+
+  if hidden then
+    vim.list_extend(command, { "--hidden", "--glob", "!**/.git/*" })
+  end
+
+  require("mini.pick").builtin.cli(
+    { command = command },
+    {
+      source = { cwd = cwd },
+    }
+  )
+end
+
+local explorer_path = function()
+  local entry = require("mini.files").get_fs_entry()
+
+  if not entry then
+    return vim.uv.cwd()
+  end
+
+  return entry.fs_type == "directory" and entry.path or vim.fs.dirname(entry.path)
+end
+
+require("mini.files").setup {
+  content = {
+    filter = filter_show,
+    prefix = function()
+    end,
+  },
+  mappings = {
+    close = "q",
+    go_in = "l",
+    go_in_plus = "L",
+    go_out = "h",
+    go_out_plus = "H",
+    mark_goto = "'",
+    mark_set = "m",
+    reset = "<BS>",
+    reveal_cwd = "@",
+    show_help = "g?",
+    synchronize = "=",
+    trim_left = "<",
+    trim_right = ">",
+  },
+  options = {
+    use_as_default_explorer = true,
+  },
+  windows = {
+    preview = false,
+    width_focus = 35,
+    width_nofocus = 20,
+    width_preview = 55,
+  },
+}
+
+require("mini.pick").setup {
+  source = {
+    show = require("mini.pick").default_show,
+  },
+}
+
+require("mini.extra").setup()
+
 require("mini.sessions").setup {
   force = { read = false, write = true, delete = true },
 }
@@ -158,9 +173,9 @@ vim.opt.wildmode = "noselect:full,full"
 vim.o.expandtab = true
 vim.o.autoindent = true
 vim.o.smartindent = true
-vim.o.shiftwidth = 2
-vim.o.tabstop = 2
-vim.o.softtabstop = 2
+vim.o.shiftwidth = 4
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
 
 vim.o.ignorecase = true
 vim.o.smartcase = true
@@ -267,69 +282,61 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
----- Autocmds.oil
-vim.api.nvim_create_autocmd("VimEnter", {
-  group = vim.api.nvim_create_augroup("OilOpenOnStart", { clear = true }),
-  callback = function(data)
-    local is_dir = vim.fn.isdirectory(data.file) == 1
-    local no_name = data.file == "" and vim.bo[data.buf].buftype == ""
-
-    if not is_dir and not no_name then
-      return
-    end
-
-    if is_dir then
-      vim.schedule(function()
-        vim.cmd.cd(data.file)
-        vim.cmd("Oil " .. vim.fn.fnameescape(data.file))
-      end)
-    end
-  end,
-})
-
 -- Mappings
 vim.keymap.set("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "[D]iagnostic [S]how (loclist)" })
 vim.keymap.set("n", "<leader>da", vim.diagnostic.setqflist, { desc = "[D]iagnostic [A]ll (quickfix)" })
 
----- Mappings.oil
-local oil_detail = false
-
 vim.keymap.set("n", "<leader>.", function()
-  if vim.bo.filetype == "oil" then
-    require("oil").close()
-  else
-    require("oil").open()
+  if not require("mini.files").close() then
+    require("mini.files").open(vim.api.nvim_buf_get_name(0), false)
   end
-end, { desc = "[O]il Toggle" })
+end, { desc = "Toggle file explorer" })
 
-vim.api.nvim_create_autocmd("FileType", {
-  group = vim.api.nvim_create_augroup("OilMappings", { clear = true }),
-  pattern = "oil",
+vim.api.nvim_create_autocmd("User", {
+  group = vim.api.nvim_create_augroup("MiniFilesMappings", { clear = true }),
+  pattern = "MiniFilesBufferCreate",
   callback = function(args)
-    vim.keymap.set("n", "gd", function()
-      oil_detail = not oil_detail
-      if oil_detail then
-        require("oil").set_columns { "permissions", "size", "mtime" }
-      else
-        require("oil").set_columns {}
-      end
-    end, { buffer = args.buf, desc = "Toggle file detail view" })
+    local buf_id = args.data.buf_id
 
     vim.keymap.set("n", "<leader>ff", function()
-      require("fzf-lua").files {
-        cwd = require("oil").get_current_dir(),
+      files_in(explorer_path(), false)
+    end, { buffer = buf_id, desc = "Find files in the current directory" })
+
+    vim.keymap.set("n", "gd", function()
+      show_dotfiles = not show_dotfiles
+      require("mini.files").refresh {
+        content = {
+          filter = show_dotfiles and filter_show or filter_hide,
+        },
       }
-    end, { buffer = args.buf, desc = "Find files in the current directory" })
+    end, { buffer = buf_id, desc = "Toggle hidden files" })
   end,
 })
 
----- Mappings.fzf-lua
-vim.keymap.set("n", "<leader>fa", "<cmd>FzfLua files<CR>", { desc = "[F]ind [A]ll Files" })
-vim.keymap.set("n", "<leader>fr", "<cmd>FzfLua oldfiles<CR>", { desc = "[F]ind [R]ecent Files (cwd)" })
-vim.keymap.set("n", "<leader>ff", "<cmd>FzfLua files hidden=false<CR>", { desc = "[F]ind [F]iles" })
-vim.keymap.set("n", "<leader>fw", "<cmd>FzfLua live_grep<CR>", { desc = "[F]ind [W]ords" })
-vim.keymap.set("n", "<leader>fb", "<cmd>FzfLua buffers<CR>", { desc = "[F]ind [B]uffers" })
-vim.keymap.set("n", "<leader>fh", "<cmd>FzfLua helptags<CR>", { desc = "[F]ind [H]elp" })
-vim.keymap.set("n", "<leader>fk", "<cmd>FzfLua keymaps<CR>", { desc = "[F]ind [K]eymaps" })
-vim.keymap.set("n", "<leader>fm", "<cmd>FzfLua marks<CR>", { desc = "[F]ind [M]arks" })
-vim.keymap.set("n", "<leader>fz", "<cmd>FzfLua blines<CR>", { desc = "[F]ind Fu[Z]zy Buffer" })
+vim.keymap.set("n", "<leader>fa", function()
+  files_in(vim.uv.cwd(), true)
+end, { desc = "[F]ind [A]ll Files" })
+vim.keymap.set("n", "<leader>fr", function()
+  require("mini.extra").pickers.oldfiles { current_dir = true }
+end, { desc = "[F]ind [R]ecent Files (cwd)" })
+vim.keymap.set("n", "<leader>ff", function()
+  require("mini.pick").builtin.files()
+end, { desc = "[F]ind [F]iles" })
+vim.keymap.set("n", "<leader>fw", function()
+  require("mini.pick").builtin.grep_live()
+end, { desc = "[F]ind [W]ords" })
+vim.keymap.set("n", "<leader>fb", function()
+  require("mini.pick").builtin.buffers()
+end, { desc = "[F]ind [B]uffers" })
+vim.keymap.set("n", "<leader>fh", function()
+  require("mini.pick").builtin.help()
+end, { desc = "[F]ind [H]elp" })
+vim.keymap.set("n", "<leader>fk", function()
+  require("mini.extra").pickers.keymaps()
+end, { desc = "[F]ind [K]eymaps" })
+vim.keymap.set("n", "<leader>fm", function()
+  require("mini.extra").pickers.marks()
+end, { desc = "[F]ind [M]arks" })
+vim.keymap.set("n", "<leader>fz", function()
+  require("mini.extra").pickers.buf_lines { scope = "current" }
+end, { desc = "[F]ind Fu[Z]zy Buffer" })
