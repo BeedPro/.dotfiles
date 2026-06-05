@@ -224,6 +224,13 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave", "BufEnter" }, {
+  group = vim.api.nvim_create_augroup("NvimLint", { clear = true }),
+  callback = function()
+    require("lint").try_lint()
+  end,
+})
+
 -- Mappings
 vim.keymap.set("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "Show diagnostics in location list" })
 
