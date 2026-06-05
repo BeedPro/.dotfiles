@@ -15,71 +15,14 @@ vim.pack.add {
 ---- Plugins.theme
 vim.cmd.colorscheme "modus"
 
----- Plugins.mini
-local show_dotfiles = true
-
-local filter_show = function()
-  return true
-end
-
-local filter_hide = function(fs_entry)
-  return not vim.startswith(fs_entry.name, ".")
-end
-
-local files_in = function(cwd, hidden)
-  local command = { "rg", "--files" }
-
-  if hidden then
-    vim.list_extend(command, { "--hidden", "--glob", "!**/.git/*" })
-  end
-
-  require("mini.pick").builtin.cli(
-    { command = command },
-    {
-      source = { cwd = cwd },
-    }
-  )
-end
-
-local explorer_path = function()
-  local entry = require("mini.files").get_fs_entry()
-
-  if not entry then
-    return vim.uv.cwd()
-  end
-
-  return entry.fs_type == "directory" and entry.path or vim.fs.dirname(entry.path)
-end
-
 require("mini.files").setup {
   content = {
-    filter = filter_show,
     prefix = function()
     end,
   },
-  mappings = {
-    close = "q",
-    go_in = "l",
-    go_in_plus = "L",
-    go_out = "h",
-    go_out_plus = "H",
-    mark_goto = "'",
-    mark_set = "m",
-    reset = "<BS>",
-    reveal_cwd = "@",
-    show_help = "g?",
-    synchronize = "=",
-    trim_left = "<",
-    trim_right = ">",
-  },
-  options = {
-    use_as_default_explorer = true,
-  },
   windows = {
+    max_number = 1,
     preview = false,
-    width_focus = 35,
-    width_nofocus = 20,
-    width_preview = 55,
   },
 }
 
@@ -282,60 +225,44 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- Mappings
-vim.keymap.set("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "[D]iagnostic [S]how (loclist)" })
-vim.keymap.set("n", "<leader>da", vim.diagnostic.setqflist, { desc = "[D]iagnostic [A]ll (quickfix)" })
+vim.keymap.set("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "Show diagnostics in location list" })
+
+vim.keymap.set("n", "<leader>da", vim.diagnostic.setqflist, { desc = "Show all diagnostics in quickfix list" })
 
 vim.keymap.set("n", "<leader>.", function()
   if not require("mini.files").close() then
-    require("mini.files").open(vim.api.nvim_buf_get_name(0), false)
+    require("mini.files").open()
   end
 end, { desc = "Toggle file explorer" })
 
-vim.api.nvim_create_autocmd("User", {
-  group = vim.api.nvim_create_augroup("MiniFilesMappings", { clear = true }),
-  pattern = "MiniFilesBufferCreate",
-  callback = function(args)
-    local buf_id = args.data.buf_id
-
-    vim.keymap.set("n", "<leader>ff", function()
-      files_in(explorer_path(), false)
-    end, { buffer = buf_id, desc = "Find files in the current directory" })
-
-    vim.keymap.set("n", "gd", function()
-      show_dotfiles = not show_dotfiles
-      require("mini.files").refresh {
-        content = {
-          filter = show_dotfiles and filter_show or filter_hide,
-        },
-      }
-    end, { buffer = buf_id, desc = "Toggle hidden files" })
-  end,
-})
-
-vim.keymap.set("n", "<leader>fa", function()
-  files_in(vim.uv.cwd(), true)
-end, { desc = "[F]ind [A]ll Files" })
 vim.keymap.set("n", "<leader>fr", function()
-  require("mini.extra").pickers.oldfiles { current_dir = true }
-end, { desc = "[F]ind [R]ecent Files (cwd)" })
+  require("mini.extra").pickers.oldfiles()
+end, { desc = "Find recent files" })
+
 vim.keymap.set("n", "<leader>ff", function()
   require("mini.pick").builtin.files()
-end, { desc = "[F]ind [F]iles" })
+end, { desc = "Find files" })
+
 vim.keymap.set("n", "<leader>fw", function()
   require("mini.pick").builtin.grep_live()
-end, { desc = "[F]ind [W]ords" })
+end, { desc = "Search words" })
+
 vim.keymap.set("n", "<leader>fb", function()
   require("mini.pick").builtin.buffers()
-end, { desc = "[F]ind [B]uffers" })
+end, { desc = "Find buffers" })
+
 vim.keymap.set("n", "<leader>fh", function()
   require("mini.pick").builtin.help()
-end, { desc = "[F]ind [H]elp" })
+end, { desc = "Find help" })
+
 vim.keymap.set("n", "<leader>fk", function()
   require("mini.extra").pickers.keymaps()
-end, { desc = "[F]ind [K]eymaps" })
+end, { desc = "Find keymaps" })
+
 vim.keymap.set("n", "<leader>fm", function()
   require("mini.extra").pickers.marks()
-end, { desc = "[F]ind [M]arks" })
+end, { desc = "Find marks" })
+
 vim.keymap.set("n", "<leader>fz", function()
-  require("mini.extra").pickers.buf_lines { scope = "current" }
-end, { desc = "[F]ind Fu[Z]zy Buffer" })
+  require("mini.extra").pickers.buf_lines()
+end, { desc = "Search buffer lines" })
