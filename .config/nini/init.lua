@@ -1,6 +1,8 @@
 vim.g.mapleader = " "
 
 -- Plugins
+require("vim._core.ui2").enable {}
+vim.cmd.packadd "nvim.undotree"
 vim.pack.add {
   "https://github.com/miikanissi/modus-themes.nvim",
   "https://github.com/nvim-mini/mini.nvim",
@@ -10,25 +12,8 @@ vim.pack.add {
   "https://github.com/folke/lazydev.nvim",
 }
 
-vim.cmd.packadd "nvim.undotree"
-require("vim._core.ui2").enable {}
-
 ---- Plugins.theme
 vim.cmd.colorscheme "modus"
-
----- Plugins.nvim-lint
-require("lint").linters_by_ft = {
-  python = { "ruff" },
-  c = { "cpplint" },
-  cpp = { "cpplint" },
-}
-
----- Plugins.lazydev
-require("lazydev").setup {
-  library = {
-    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-  },
-}
 
 ---- Plugins.mini
 local show_dotfiles = true
@@ -123,6 +108,13 @@ require("mini.hipatterns").setup {
 ---- Plugins.marko
 require("marko").setup {}
 
+---- Plugins.nvim-lint
+require("lint").linters_by_ft = {
+  python = { "ruff" },
+  c = { "cpplint" },
+  cpp = { "cpplint" },
+}
+
 -- LSP
 local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
 
@@ -152,6 +144,13 @@ vim.lsp.enable {
   "ty",
   "clangd",
   "lua_ls",
+}
+
+---- Plugins.lazydev
+require("lazydev").setup {
+  library = {
+    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+  },
 }
 
 -- Options
