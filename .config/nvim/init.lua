@@ -1242,17 +1242,17 @@ require("luasnip.loaders.from_vscode").lazy_load {
 }
 
 require("luasnip.loaders.from_vscode").lazy_load {
-  paths = { vim.fs.joinpath(vim.fn.stdpath "config", "snippets", "vscode") },
+  paths = { vim.fs.joinpath(vim.fn.stdpath "config", "vscode") },
   fs_event_providers = { autocmd = true, libuv = true },
 }
 
 require("luasnip.loaders.from_snipmate").lazy_load {
-  paths = { vim.fs.joinpath(vim.fn.stdpath "config", "snippets", "snipmate") },
+  paths = { vim.fs.joinpath(vim.fn.stdpath "config", "snipmate") },
   fs_event_providers = { autocmd = true, libuv = true },
 }
 
 require("luasnip.loaders.from_lua").lazy_load {
-  paths = { vim.fs.joinpath(vim.fn.stdpath "config", "snippets", "luasnips") },
+  paths = { vim.fs.joinpath(vim.fn.stdpath "config", "luasnips") },
   fs_event_providers = { autocmd = true, libuv = true },
 }
 
