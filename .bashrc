@@ -28,7 +28,7 @@ export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
 export HISTTIMEFORMAT='%F %T '
 
 export MANPAGER='nvim +Man!'
-source $HOME/.config/fzf/dark.sh
+source $HOME/.config/fzf/themes/dark.sh
 
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH="$HOME/.go"

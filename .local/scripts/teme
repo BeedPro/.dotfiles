@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import argparse
+import json
+import shutil
 import subprocess
+from pathlib import Path
 
 
 def _parse_args() -> argparse.Namespace:
@@ -26,12 +29,136 @@ def _confirm_with_rofi(prompt: str) -> bool:
     return result.stdout.strip().lower() == "yes"
 
 
+def _toggle_mapping(
+    text: str,
+    light_to_dark: dict[str, str],
+    detect_light: str,
+) -> tuple[dict[str, str], str, str]:
+    if detect_light in text:
+        return light_to_dark, "light", "dark"
+    return {value: key for key, value in light_to_dark.items()}, "dark", "light"
+
+
+def _replace_all(text: str, mapping: dict[str, str]) -> str:
+    updated = text
+    for src, dst in mapping.items():
+        updated = updated.replace(src, dst)
+    return updated
+
+
+def toggle_config(
+    path: Path,
+    light_to_dark: dict[str, str],
+    detect_light: str,
+) -> tuple[str, str]:
+    text = path.read_text()
+    mapping, old_mode, new_mode = _toggle_mapping(text, light_to_dark, detect_light)
+    path.write_text(_replace_all(text, mapping))
+    print(f"{path}: {old_mode} => {new_mode}")
+    return old_mode, new_mode
+
+
+def run_text_toggle(path: Path, light_to_dark: dict[str, str]) -> str:
+    _, new_mode = toggle_config(path, light_to_dark, next(iter(light_to_dark)))
+    return new_mode
+
+
+def _mode_source(
+    current: str,
+    detect_light: str,
+    light_path: Path,
+    dark_path: Path,
+) -> tuple[Path, str, str]:
+    if detect_light in current:
+        return dark_path, "light", "dark"
+    return light_path, "dark", "light"
+
+
+def toggle_bashrc() -> str:
+    return run_text_toggle(
+        Path.home() / ".bashrc",
+        {
+            "fzf/themes/light.sh": "fzf/themes/dark.sh",
+            "--theme=Light": "--theme=Dark",
+        },
+    )
+
+
+def toggle_alacritty() -> None:
+    run_text_toggle(
+        Path.home() / ".config/alacritty/alacritty.toml",
+        {"themes/light.toml": "themes/dark.toml"},
+    )
+
+
+def toggle_dunst() -> None:
+    dunst_dir = Path.home() / ".config/dunst"
+    target_path = dunst_dir / "dunstrc"
+    light_path = dunst_dir / "themes/light.conf"
+    dark_path = dunst_dir / "themes/dark.conf"
+    src, old_mode, new_mode = _mode_source(
+        target_path.read_text(),
+        "theme: light",
+        light_path,
+        dark_path,
+    )
+    shutil.copyfile(src, target_path)
+    subprocess.run(["killall", "dunst"], check=False)
+    print(f"{target_path}: {old_mode} => {new_mode}")
+
+
+def toggle_i3() -> None:
+    run_text_toggle(
+        Path.home() / ".config/i3/config",
+        {"themes/light.conf": "themes/dark.conf"},
+    )
+
+
+def toggle_zathura() -> None:
+    run_text_toggle(
+        Path.home() / ".config/zathura/zathurarc",
+        {"themes/light.zathurarc": "themes/dark.zathurarc"},
+    )
+
+
+def toggle_rofi() -> None:
+    run_text_toggle(
+        Path.home() / ".config/rofi/config.rasi",
+        {'@import "themes/light"': '@import "themes/dark"'},
+    )
+
+
+def toggle_opencode(mode: str) -> None:
+    opencode_config = Path.home() / ".config/opencode/tui.json"
+    config = json.loads(opencode_config.read_text())
+    old_theme = config.get("theme", "<unset>")
+    config["theme"] = mode
+    opencode_config.write_text(json.dumps(config, indent=2) + "\n")
+    print(f"{opencode_config}: {old_theme} => {mode}")
+
+
+def set_wallpaper(mode: str) -> None:
+    wallpaper_dir = Path.home() / ".config/wallpaper"
+    wallpaper = wallpaper_dir / "themes" / f"{mode}.jpg"
+    shutil.copyfile(wallpaper, wallpaper_dir / "current.jpg")
+    script = Path.home() / ".screenlayout/set-screens.sh"
+    subprocess.run([str(script)], check=True)
+    print(f"{wallpaper_dir / 'current.jpg'}: {mode}")
+
+
 def main() -> None:
     args = _parse_args()
     if args.confirm and not _confirm_with_rofi("Run teme?"):
         print("Cancelled")
         return
-    print("teme no longer manages themes or fonts")
+    mode = toggle_bashrc()
+    toggle_alacritty()
+    toggle_dunst()
+    toggle_i3()
+    toggle_zathura()
+    toggle_rofi()
+    toggle_opencode(mode)
+    set_wallpaper(mode)
 
 
 if __name__ == "__main__":

@@ -4,6 +4,8 @@ set $files thunar
 
 font pango:GohuFont 14 Nerd Font Mono 14
 
+include ~/.config/i3/themes/dark.conf
+
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id ~/.local/share/autostart
 
@@ -147,39 +149,3 @@ bindsym $mod+Mod1+b bar mode toggle
 bindsym $mod+Mod1+r reload
 bindsym $mod+Mod1+Shift+r restart
 bindsym $mod+Mod1+c exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
-
-set $base        #000000
-set $text        #ffffff
-set $surface2    #303030
-set $overlay0    #989898
-
-set $accent      #2fafff
-set $indicator   #feacd0
-set $alert       #ff5f59
-set $warning     #fec43f
-
-# class                  border      bg         text     indicator    child_border
-client.focused           $accent     $accent    $base    $indicator   $accent
-client.focused_inactive  $surface2   $base      $text    $surface2    $surface2
-client.unfocused         $surface2   $base      $text    $surface2    $surface2
-client.urgent            $warning    $warning   $base    $overlay0    $warning
-client.placeholder       $overlay0   $accent    $base    $overlay0    $overlay0
-client.background        $base
-
-bar {
-  status_command i3blocks
-  colors {
-    background         $base
-    statusline         $text
-    focused_statusline $text
-    focused_separator  $base
-
-    # target           border    bg        text
-    focused_workspace  $accent   $accent   $base
-    active_workspace   $surface2 $surface2 $text
-    inactive_workspace $surface2 $surface2 $text
-    urgent_workspace   $alert    $alert    $base
-  }
-  mode dock
-  modifier none
-}
