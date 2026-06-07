@@ -128,6 +128,20 @@ def toggle_rofi() -> None:
     )
 
 
+def toggle_nvim() -> None:
+    run_text_toggle(
+        Path.home() / ".config/nvim/init.lua",
+        {'vim.o.background = "light"': 'vim.o.background = "dark"'},
+    )
+
+
+def toggle_emacs() -> None:
+    run_text_toggle(
+        Path.home() / ".config/emacs/lisp/config-modus-themes.el",
+        {"(load-theme 'modus-operandi t)": "(load-theme 'modus-vivendi t)"},
+    )
+
+
 def toggle_opencode(mode: str) -> None:
     opencode_config = Path.home() / ".config/opencode/tui.json"
     config = json.loads(opencode_config.read_text())
@@ -157,6 +171,8 @@ def main() -> None:
     toggle_i3()
     toggle_zathura()
     toggle_rofi()
+    toggle_nvim()
+    toggle_emacs()
     toggle_opencode(mode)
     set_wallpaper(mode)
 
