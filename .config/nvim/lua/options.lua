@@ -1,79 +1,76 @@
-local opt = vim.opt
-local o = vim.o
-local g = vim.g
+vim.o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.add")
 
-o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.add")
+vim.o.list = true
+vim.o.background = "dark"
+vim.o.winborder = "single"
+vim.o.laststatus = 3
+vim.o.showmode = false
+vim.o.splitkeep = "screen"
 
-o.list = true
-o.background = "dark"
-o.winborder = "single"
-o.laststatus = 3
-o.showmode = false
-o.splitkeep = "screen"
+vim.o.clipboard = ""
+vim.o.cursorline = true
+vim.o.cursorlineopt = "both"
+vim.o.completeopt = "menu,popup,noselect"
 
-o.clipboard = ""
-o.cursorline = true
-o.cursorlineopt = "both"
-o.completeopt = "menu,popup,noselect"
+vim.o.expandtab = true
+vim.o.autoindent = true
+vim.o.smartindent = true
+vim.o.shiftwidth = 4
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
 
-o.expandtab = true
-o.autoindent = true
-o.smartindent = true
-o.shiftwidth = 4
-o.tabstop = 4
-o.softtabstop = 4
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.mouse = "a"
 
-o.ignorecase = true
-o.smartcase = true
-o.mouse = "a"
+vim.o.number = true
+vim.o.relativenumber = true
+vim.o.numberwidth = 2
+vim.o.ruler = false
 
-o.number = true
-o.relativenumber = true
-o.numberwidth = 2
-o.ruler = false
-
-o.signcolumn = "yes"
-o.splitbelow = true
-o.splitright = true
-o.timeoutlen = 400
-o.undofile = true
+vim.o.signcolumn = "yes"
+vim.o.splitbelow = true
+vim.o.splitright = true
+vim.o.timeoutlen = 400
+vim.o.undofile = true
+vim.o.undodir = vim.fs.joinpath(vim.fn.stdpath "data", "undodir")
 
 vim.wo[0][0].foldmethod = "expr"
 vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-o.foldlevel = 99
-o.foldtext = "v:folddashes.substitute(getline(v:foldstart),'/\\*\\|\\*/\\|{{{\\d\\=','','g')"
+vim.o.foldlevel = 99
+vim.o.foldtext = "v:folddashes.substitute(getline(v:foldstart),'/\\*\\|\\*/\\|{{{\\d\\=','','g')"
 
-o.updatetime = 250
+vim.o.updatetime = 250
 
-opt.fillchars = { eob = " " }
-opt.guicursor = ""
-opt.shortmess:append "sI"
-opt.wrap = false
+vim.opt.fillchars = { eob = " " }
+vim.opt.guicursor = ""
+vim.opt.shortmess:append "sI"
+vim.opt.wrap = false
 
-opt.whichwrap:append "<>[]hl"
+vim.opt.whichwrap:append "<>[]hl"
 
-g.loaded_node_provider = 0
-g.loaded_python3_provider = 0
-g.loaded_perl_provider = 0
-g.loaded_ruby_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
 
 if vim.g.neovide then
   vim.env.PATH = vim.fn.stdpath "data" .. "/mason/bin" .. ":" .. vim.env.PATH
-  o.guifont = "DejaVuSansM Nerd Font Mono:h12"
+  vim.o.guifont = "DejaVuSansM Nerd Font Mono:h12"
 
-  g.neovide_cursor_animation_length = 0
-  g.neovide_cursor_short_animation_length = 0
-  g.neovide_cursor_trail_size = 0
-  g.neovide_cursor_animate_in_insert_mode = false
-  g.neovide_cursor_animate_command_line = false
-  g.neovide_cursor_smooth_blink = false
-  g.neovide_cursor_vfx_mode = ""
+  vim.g.neovide_cursor_animation_length = 0
+  vim.g.neovide_cursor_short_animation_length = 0
+  vim.g.neovide_cursor_trail_size = 0
+  vim.g.neovide_cursor_animate_in_insert_mode = false
+  vim.g.neovide_cursor_animate_command_line = false
+  vim.g.neovide_cursor_smooth_blink = false
+  vim.g.neovide_cursor_vfx_mode = ""
 
-  g.neovide_scroll_animation_length = 0
-  g.neovide_scroll_animation_far_lines = 0
-  g.neovide_position_animation_length = 0
+  vim.g.neovide_scroll_animation_length = 0
+  vim.g.neovide_scroll_animation_far_lines = 0
+  vim.g.neovide_position_animation_length = 0
 
-  g.neovide_floating_shadow = false
-  g.neovide_floating_blur_amount_x = 0
-  g.neovide_floating_blur_amount_y = 0
+  vim.g.neovide_floating_shadow = false
+  vim.g.neovide_floating_blur_amount_x = 0
+  vim.g.neovide_floating_blur_amount_y = 0
 end
