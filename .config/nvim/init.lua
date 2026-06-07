@@ -14,6 +14,70 @@ vim.pack.add {
   "https://github.com/nvim-treesitter/nvim-treesitter",
   "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/folke/lazydev.nvim",
+  "https://github.com/mason-org/mason.nvim",
+  "https://github.com/stevearc/conform.nvim",
+  "https://github.com/mfussenegger/nvim-dap",
+  "https://github.com/igorlfs/nvim-dap-view",
+  "https://github.com/NeogitOrg/neogit",
+  "https://github.com/lewis6991/gitsigns.nvim",
+  "https://github.com/sindrets/diffview.nvim",
+  "https://github.com/danymat/neogen",
+  "https://github.com/webhooked/kanso.nvim",
+  "https://github.com/stevearc/oil.nvim",
+  "https://github.com/nvim-orgmode/orgmode",
+  "https://github.com/saghen/blink.cmp",
+  "https://github.com/saghen/blink.lib",
+  "https://github.com/ribru17/blink-cmp-spell",
+  "https://github.com/L3MON4D3/LuaSnip",
+  "https://github.com/rafamadriz/friendly-snippets",
+}
+
+-- Plugins.fzf-lua
+require("fzf-lua").setup {
+  { "telescope", "hide" },
+  defaults = {
+    file_icons = false,
+    git_icons = false,
+    color_icons = false,
+  },
+  fzf_colors = true,
+  fzf_opts = {
+    ["--layout"] = "reverse",
+  },
+  ---@diagnostic disable-next-line: assign-type-mismatch
+  winopts = function()
+    local small = vim.o.columns < 120 or vim.o.lines < 35
+    return {
+      height = 0.8,
+      width = 0.9,
+      row = 0.5,
+      col = 0.5,
+      border = "single",
+      backdrop = 100,
+      preview = {
+        hidden = small,
+        layout = "flex",
+        flip_columns = 120,
+        vertical = "down:45%",
+        horizontal = "right:55%",
+        border = "single",
+      },
+    }
+  end,
+  files = {
+    cwd_prompt = false,
+  },
+  oldfiles = {
+    cwd_only = true,
+  },
+  keymaps = {
+    winopts = {
+      preview = {
+        layout = "vertical",
+        vertical = "down:60%",
+      },
+    },
+  },
 }
 
 -- Plugins.Treesitter
@@ -41,6 +105,168 @@ require("nvim-treesitter").install {
   "yaml",
   "prolog",
   "bash",
+}
+
+-- Plugins.LuaSnip
+require("luasnip").config.set_config { history = true, updateevents = "TextChanged,TextChangedI" }
+
+require("luasnip.loaders.from_vscode").lazy_load {
+  exclude = {},
+  fs_event_providers = { autocmd = true, libuv = true },
+}
+
+require("luasnip.loaders.from_vscode").lazy_load {
+  paths = { vim.fs.joinpath(vim.fn.stdpath "config", "snippets", "vscode") },
+  fs_event_providers = { autocmd = true, libuv = true },
+}
+
+require("luasnip.loaders.from_snipmate").lazy_load {
+  paths = { vim.fs.joinpath(vim.fn.stdpath "config", "snippets", "snipmate") },
+  fs_event_providers = { autocmd = true, libuv = true },
+}
+
+require("luasnip.loaders.from_lua").lazy_load {
+  paths = { vim.fs.joinpath(vim.fn.stdpath "config", "snippets", "luasnips") },
+  fs_event_providers = { autocmd = true, libuv = true },
+}
+
+-- Plugins.Blink
+vim.lsp.config("*", {
+  capabilities = {
+    textDocument = {
+      completion = {
+        completionItem = {
+          preselectSupport = true,
+          commitCharactersSupport = true,
+          resolveSupport = {
+            properties = {
+              "documentation",
+              "detail",
+              "additionalTextEdits",
+            },
+          },
+        },
+      },
+    },
+  },
+})
+
+vim.diagnostic.config {
+  underline = false,
+}
+
+vim.lsp.document_color.enable(false)
+
+require("lazydev").setup {
+  library = {
+    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+  },
+}
+
+vim.lsp.enable {
+  "ty",
+  "clangd",
+  "hls",
+  "tinymist",
+  "prolog_ls",
+  "lua_ls",
+  "biome",
+  "ts_ls",
+  "tailwindcss",
+  "svelte",
+  "gdscript",
+  "texlab",
+}
+
+require("blink.cmp").setup {
+  snippets = { preset = "luasnip" },
+  cmdline = {
+    keymap = {
+      ["<Tab>"] = { "show", "select_next" },
+    },
+    completion = {
+      menu = {
+        auto_show = false,
+      },
+      list = {
+        selection = {
+          preselect = false,
+        },
+      },
+    },
+  },
+  appearance = {
+    nerd_font_variant = "mono",
+    kind_icons = {
+      Text = "[T]",
+      Method = "[M]",
+      Function = "[F]",
+      Constructor = "[C]",
+      Field = "[Fd]",
+      Variable = "[V]",
+      Property = "[P]",
+      Class = "[Cl]",
+      Interface = "[I]",
+      Struct = "[St]",
+      Module = "[Mo]",
+      Unit = "[U]",
+      Value = "[Val]",
+      Enum = "[E]",
+      EnumMember = "[Em]",
+      Keyword = "[K]",
+      Constant = "[Co]",
+      Snippet = "[S]",
+      Color = "[Col]",
+      File = "[Fi]",
+      Reference = "[R]",
+      Folder = "[Dir]",
+      Event = "[Ev]",
+      Operator = "[Op]",
+      TypeParameter = "[Tp]",
+    },
+  },
+  fuzzy = { implementation = "prefer_rust" },
+  sources = {
+    default = { "lsp", "snippets", "buffer", "path" },
+    providers = {
+      spell = {
+        name = "Spell",
+        module = "blink-cmp-spell",
+        opts = {
+          max_entries = 20,
+          keep_all_entries = true,
+        },
+      },
+    },
+  },
+  keymap = {
+    preset = "none",
+    ["<C-e>"] = { "hide", "fallback" },
+    ["<C-y>"] = { "accept", "fallback" },
+    ["<C-n>"] = { "select_next", "fallback" },
+    ["<C-p>"] = { "select_prev", "fallback" },
+    ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+    ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+    ["<C-j>"] = { "snippet_forward", "fallback" },
+    ["<C-k>"] = { "snippet_backward", "fallback" },
+  },
+  completion = {
+    ghost_text = { enabled = false },
+    documentation = {
+      auto_show = true,
+      auto_show_delay_ms = 200,
+      window = { border = "single" },
+    },
+    list = {
+      selection = {
+        preselect = false,
+      },
+    },
+    menu = {
+      auto_show = false,
+    },
+  },
+  signature = { enabled = false },
 }
 
 -- Options
@@ -142,6 +368,39 @@ vim.api.nvim_create_autocmd("InsertLeave", {
   end,
 })
 
+vim.api.nvim_create_autocmd("InsertLeave", {
+  group = vim.api.nvim_create_augroup("LuasnipCleanup", { clear = true }),
+  callback = function()
+    if require("luasnip").session.current_nodes[vim.api.nvim_get_current_buf()]
+      and not require("luasnip").session.jump_active
+    then
+      require("luasnip").unlink_current()
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("LspAttachMappings", { clear = true }),
+  callback = function(args)
+    vim.keymap.set("n", "grr", function()
+      require("fzf-lua").lsp_references()
+    end, { buffer = args.buf, desc = "LSP: find references" })
+    vim.keymap.set("n", "gri", function()
+      require("fzf-lua").lsp_implementations()
+    end, { buffer = args.buf, desc = "LSP: find implementations" })
+    vim.keymap.set("n", "grt", function()
+      require("fzf-lua").lsp_typedefs()
+    end, { buffer = args.buf, desc = "LSP: type definitions" })
+    vim.keymap.set("n", "gO", function()
+      require("fzf-lua").lsp_document_symbols()
+    end, { buffer = args.buf, desc = "LSP: document symbols" })
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = args.buf, desc = "Go to declaration" })
+    vim.keymap.set("n", "gd", function()
+      require("fzf-lua").lsp_definitions()
+    end, { buffer = args.buf, desc = "Go to definition" })
+  end,
+})
+
 vim.api.nvim_create_autocmd("BufReadPre", {
   group = vim.api.nvim_create_augroup("BigFile", { clear = true }),
   callback = function(args)
@@ -234,6 +493,9 @@ vim.keymap.set("n", "<leader>fk", "<cmd>FzfLua keymaps<CR>", { desc = "Find keym
 vim.keymap.set("n", "<leader>fm", "<cmd>FzfLua marks<CR>", { desc = "Find marks" })
 vim.keymap.set("n", "<leader>fz", "<cmd>FzfLua blines<CR>", { desc = "Search current buffer" })
 
+vim.keymap.set("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "Show diagnostics in location list" })
+vim.keymap.set("n", "<leader>da", vim.diagnostic.setqflist, { desc = "Show all diagnostics in quickfix" })
+
 vim.keymap.set("n", "<leader>ta", function()
   if vim.wo.arabic then
     if vim.b._arabic_toggle_manages_spell == nil then
@@ -272,5 +534,13 @@ vim.keymap.set("i", "<C-^>", function()
   end
   return vim.api.nvim_replace_termcodes("<C-o>:set arab<CR>", true, false, true)
 end, { expr = true, desc = "Toggle Arabic" })
+
+vim.keymap.set("i", "<C-x><C-o>", function()
+  require("blink.cmp").show()
+end, { desc = "Show completion menu" })
+
+vim.keymap.set("i", "<C-x><C-s>", function()
+  require("blink.cmp").show { providers = { "spell" } }
+end, { desc = "Show spelling completions" })
 
 vim.cmd.colorscheme "modus"
