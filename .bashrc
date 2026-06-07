@@ -33,8 +33,6 @@ source $HOME/.config/fzf/themes/dark.sh
 export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH="$HOME/.go"
 
-alias nini="NVIM_APPNAME=nini nvim"
-
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
 
 if command -v eza >/dev/null 2>&1; then
