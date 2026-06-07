@@ -10,6 +10,7 @@ TERMINAL=alacritty
 APPS=(
   "Godot|godot"
   "Helium|helium"
+  "Eden|eden-switch"
   "Emacs-daemon|emacs --daemon"
   "wscrcpy|$HOME/.local/scripts/wscrcpy -y"
   "Chat|$HOME/.local/scripts/openapps chat"
