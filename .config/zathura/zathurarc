@@ -1,9 +1,6 @@
 set selection-clipboard clipboard
 set font "GohuFont uni14 Nerd Font Mono 14"
 
-# Theme: Auto-script switcher
-
-# Dark
 # Theme: Dark
 set notification-error-bg       "#000000"
 set notification-error-fg       "#FF5F59"
