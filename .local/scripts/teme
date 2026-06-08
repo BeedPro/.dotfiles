@@ -112,6 +112,7 @@ def toggle_i3() -> None:
         Path.home() / ".config/i3/config",
         {"themes/light.conf": "themes/dark.conf"},
     )
+    subprocess.run(["i3-msg", "reload"], check=False)
 
 
 def toggle_zathura() -> None:
