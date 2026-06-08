@@ -147,5 +147,6 @@ bindsym $mod+Shift+period move container to output right
 
 bindsym $mod+Mod1+b bar mode toggle
 bindsym $mod+Mod1+r reload
+bindsym $mod+Mod1+t exec --no-startup-id "~/.local/scripts/teme --confirm
 bindsym $mod+Mod1+Shift+r restart
 bindsym $mod+Mod1+c exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
