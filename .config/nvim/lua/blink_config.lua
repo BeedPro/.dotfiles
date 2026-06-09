@@ -4,6 +4,8 @@ vim.pack.add {
   "https://github.com/ribru17/blink-cmp-spell",
 }
 
+require("blink.cmp").build():pwait()
+
 require("blink.cmp").setup {
   snippets = { preset = "luasnip" },
   cmdline = {
