@@ -19,7 +19,6 @@ require("neogit_config")
 require("gitsigns_config")
 require("diffview_config")
 require("neogen_config")
-require("kanso_config")
 require("oil_config")
 require("orgmode_config")
 require("blink_config")
@@ -76,7 +75,6 @@ vim.o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.ad
 
 vim.o.list = true
 vim.o.background = "dark"
-vim.o.winborder = "single"
 vim.o.laststatus = 3
 vim.o.splitkeep = "screen"
 
