@@ -451,7 +451,7 @@ def toggle_nvim() -> None:
 
 def toggle_emacs() -> None:
     run_text_toggle(
-        Path.home() / ".config/emacs/lisp/config-modus-themes.el",
+        Path.home() / ".config/emacs/lisp/ui-rc.el",
         {"(load-theme 'modus-operandi t)": "(load-theme 'modus-vivendi t)"},
     )
 

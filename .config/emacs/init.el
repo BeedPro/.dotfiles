@@ -90,44 +90,21 @@
 (when (file-exists-p custom-file)
   (load custom-file t))
 
-;; UI
-(require 'config-dashboard)
-(require 'config-whitespace)
-(require 'config-modus-themes)
-(require 'config-doom-themes)
-(require 'config-doom-modeline)
+(use-package dired
+  :ensure nil
+  :config
+  (setq dired-listing-switches "-alh --group-directories-first")
+  (setenv "LC_COLLATE" "C"))
 
-;; Files
-(require 'config-dired)
+(use-package yasnippet
+  :defer nil
+  :config
+  (yas-global-mode 1))
 
-;; Editing
-(require 'config-yasnippet)
-(require 'config-apheleia)
-(require 'config-corfu)
-(require 'config-cape)
-
-;; Completion
-(require 'config-vertico)
-(require 'config-marginalia)
-(require 'config-orderless)
-(require 'config-consult)
-(require 'config-embark)
-(require 'config-embark-consult)
-
-;; Version control
-(require 'config-magit)
-(require 'config-vundo)
-(require 'config-diff-hl)
-
-;; Programming
-(require 'config-treesit-auto)
-(require 'config-typst-ts-mode)
-(require 'config-eglot)
-
-;; Writing
-(require 'config-tex)
-(require 'config-reftex)
-(require 'config-markdown-mode)
-
-;; Org
-(require 'config-org)
+(require 'ui-rc)
+(require 'formatter-rc)
+(require 'inbuffer-completion-rc)
+(require 'completion-rc)
+(require 'version-control-rc)
+(require 'lsp-treesitter-rc)
+(require 'prose-rc)
