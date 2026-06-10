@@ -36,4 +36,3 @@ set render-loading-fg           "#FFFFFF"
 
 set recolor-lightcolor          "#000000"
 set recolor-darkcolor           "#FFFFFF"
-set recolor                     "true"

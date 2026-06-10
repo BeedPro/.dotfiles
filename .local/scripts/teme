@@ -429,10 +429,21 @@ def toggle_i3() -> None:
 
 
 def toggle_zathura() -> None:
-    run_text_toggle(
-        Path.home() / ".config/zathura/zathurarc",
-        {"themes/light.zathurarc": "themes/dark.zathurarc"},
-    )
+    zathura_dir = Path.home() / ".config/zathura"
+    target_path = zathura_dir / "zathurarc"
+    light_path = zathura_dir / "themes/light.zathurarc"
+    dark_path = zathura_dir / "themes/dark.zathurarc"
+    current = target_path.read_text()
+    if "# Theme: Light" in current:
+        shared, _, _ = current.partition("# Light\n")
+        theme = dark_path.read_text()
+        old_mode, new_mode = "light", "dark"
+    else:
+        shared, _, _ = current.partition("# Dark\n")
+        theme = light_path.read_text()
+        old_mode, new_mode = "dark", "light"
+    target_path.write_text(shared + theme)
+    print(f"{target_path}: {old_mode} => {new_mode}")
 
 
 def toggle_rofi() -> None:
