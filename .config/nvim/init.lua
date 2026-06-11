@@ -2,11 +2,13 @@ vim.g.mapleader = " "
 
 require("vim._core.ui2").enable {}
 vim.cmd.packadd "nvim.undotree"
+vim.pack.add {
+  "https://github.com/mohseenrm/marko.nvim",
+}
 
 require("theme")
 require("navigation")
 require("editing")
-require("languages")
 require("quality")
 require("debugging")
 require("git")
