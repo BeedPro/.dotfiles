@@ -13,3 +13,5 @@ ls.add_snippets("org", {
     t "]]",
   }),
 })
+
+vim.b.minihipatterns_disable = true
