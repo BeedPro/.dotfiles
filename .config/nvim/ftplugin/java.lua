@@ -3,8 +3,6 @@ if not ok then
   return
 end
 
-local uv = vim.uv or vim.loop
-
 local root_dir = vim.fs.root(0, {
   "gradlew",
   "mvnw",
@@ -20,40 +18,17 @@ if not root_dir then
   return
 end
 
-local function path_exists(path)
-  return path and uv.fs_stat(path) ~= nil
-end
-
-local function executable(path)
-  return path and vim.fn.executable(path) == 1
-end
-
-local function resolve_jdk_home()
-  local javac = vim.fn.exepath "javac"
-  if javac == "" then
-    return nil
-  end
-
-  local resolved = vim.uv.fs_realpath(javac) or javac
-  return vim.fs.dirname(vim.fs.dirname(resolved))
-end
-
-local function mason_jdtls_config_dir(base)
-  if vim.fn.has "mac" == 1 then
-    return vim.fs.joinpath(base, "jdtls", "config_mac")
-  end
-  if vim.fn.has "win32" == 1 then
-    return vim.fs.joinpath(base, "jdtls", "config_win")
-  end
-  return vim.fs.joinpath(base, "jdtls", "config_linux")
-end
-
 local data_dir = vim.fn.stdpath "data"
 local mason_packages = vim.fs.joinpath(data_dir, "mason", "packages")
 local workspace_root = vim.fs.joinpath(data_dir, "jdtls")
 local workspace_name = ("%s-%s"):format(vim.fs.basename(root_dir), vim.fn.sha256(root_dir):sub(1, 8))
 local workspace_dir = vim.fs.joinpath(workspace_root, workspace_name)
-local jdk_home = resolve_jdk_home()
+local javac = vim.fn.exepath "javac"
+local jdk_home = nil
+if javac ~= "" then
+  local resolved_javac = (vim.uv or vim.loop).fs_realpath(javac) or javac
+  jdk_home = vim.fs.dirname(vim.fs.dirname(resolved_javac))
+end
 local java_bin = jdk_home and vim.fs.joinpath(jdk_home, "bin", "java") or vim.fn.exepath "java"
 
 local bundles = {}
@@ -74,7 +49,11 @@ extend_bundles(vim.fs.joinpath(mason_packages, "java-test", "extension", "server
 })
 
 local launcher = vim.fn.glob(vim.fs.joinpath(mason_packages, "jdtls", "plugins", "org.eclipse.equinox.launcher_*.jar"))
-local config_dir = mason_jdtls_config_dir(mason_packages)
+local config_dir = vim.fs.joinpath(
+  mason_packages,
+  "jdtls",
+  vim.fn.has "mac" == 1 and "config_mac" or vim.fn.has "win32" == 1 and "config_win" or "config_linux"
+)
 local lombok_jar = vim.fs.joinpath(mason_packages, "jdtls", "lombok.jar")
 
 if launcher == "" then
@@ -82,17 +61,17 @@ if launcher == "" then
   return
 end
 
-if not path_exists(config_dir) then
+if (vim.uv or vim.loop).fs_stat(config_dir) == nil then
   vim.notify(("jdtls config directory not found: %s"):format(config_dir), vim.log.levels.WARN)
   return
 end
 
-if not executable(java_bin) then
+if vim.fn.executable(java_bin) ~= 1 then
   vim.notify("Java runtime not found for jdtls. Ensure 'java' is installed and on PATH.", vim.log.levels.WARN)
   return
 end
 
-if not jdk_home or not executable(vim.fs.joinpath(jdk_home, "bin", "javac")) then
+if not jdk_home or vim.fn.executable(vim.fs.joinpath(jdk_home, "bin", "javac")) ~= 1 then
   vim.notify("Java compiler not found for jdtls. Install a full JDK and ensure 'javac' is on PATH.", vim.log.levels.WARN)
   return
 end
