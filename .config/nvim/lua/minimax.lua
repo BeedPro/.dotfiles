@@ -8,10 +8,6 @@ local function termcodes(keys)
   return vim.api.nvim_replace_termcodes(keys, true, false, true)
 end
 
-local function small_screen()
-  return vim.o.columns < 120 or vim.o.lines < 35
-end
-
 local function pick_window_config()
   local height = math.floor(vim.o.lines * 0.8)
   local width = math.floor(vim.o.columns * 0.9)
@@ -228,7 +224,7 @@ require("mini.extra").setup()
 
 local process_items = function(items, base)
   return require("mini.completion").default_process_items(items, base, {
-    filtersort = vim.opt.completeopt:get():find "fuzzy" and "fuzzy" or "prefix",
+    filtersort = vim.o.completeopt:find("fuzzy", 1, true) and "fuzzy" or "prefix",
   })
 end
 
