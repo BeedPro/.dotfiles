@@ -405,6 +405,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
-require("filebrowser").set_local_file_picker(function(cwd)
-  pick.builtin.files({}, with_cwd(cwd))
-end, "OilMiniPickLocalFiles")
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("OilMiniPickLocalFiles", { clear = true }),
+  pattern = "oil",
+  callback = function(args)
+    vim.keymap.set("n", "<leader>ff", function()
+      pick.builtin.files({}, with_cwd(require("oil").get_current_dir() or vim.fn.getcwd()))
+    end, { buffer = args.buf, desc = "Find files in the current directory" })
+  end,
+})

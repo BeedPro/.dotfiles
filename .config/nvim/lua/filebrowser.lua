@@ -2,32 +2,6 @@ vim.pack.add {
   "https://github.com/stevearc/oil.nvim",
 }
 
-local M = {}
-
-function M.toggle()
-  if vim.bo.filetype == "oil" then
-    require("oil").close()
-  else
-    require("oil").open()
-  end
-end
-
-function M.current_dir()
-  return require("oil").get_current_dir() or vim.fn.getcwd()
-end
-
-function M.set_local_file_picker(callback, augroup_name)
-  vim.api.nvim_create_autocmd("FileType", {
-    group = vim.api.nvim_create_augroup(augroup_name, { clear = true }),
-    pattern = "oil",
-    callback = function(args)
-      vim.keymap.set("n", "<leader>ff", function()
-        callback(M.current_dir())
-      end, { buffer = args.buf, desc = "Find files in the current directory" })
-    end,
-  })
-end
-
 require("oil").setup {
   delete_to_trash = true,
   view_options = {
@@ -37,7 +11,11 @@ require("oil").setup {
 }
 
 vim.keymap.set("n", "<leader>.", function()
-  M.toggle()
+  if vim.bo.filetype == "oil" then
+    require("oil").close()
+  else
+    require("oil").open()
+  end
 end, { desc = "Toggle file explorer" })
 
 vim.api.nvim_create_autocmd("VimEnter", {
@@ -69,5 +47,3 @@ vim.api.nvim_create_autocmd("FileType", {
     end, { buffer = args.buf, desc = "Toggle file detail view" })
   end,
 })
-
-return M

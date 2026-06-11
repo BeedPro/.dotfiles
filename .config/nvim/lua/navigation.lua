@@ -79,6 +79,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
-require("filebrowser").set_local_file_picker(function(cwd)
-  require("fzf-lua").files { cwd = cwd }
-end, "OilFzfLocalFiles")
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("OilFzfLocalFiles", { clear = true }),
+  pattern = "oil",
+  callback = function(args)
+    vim.keymap.set("n", "<leader>ff", function()
+      require("fzf-lua").files { cwd = require("oil").get_current_dir() or vim.fn.getcwd() }
+    end, { buffer = args.buf, desc = "Find files in the current directory" })
+  end,
+})
