@@ -1,5 +1,5 @@
 local pick = require "mini.pick"
-local extra = require("mini.extra").pickers
+local extra = require "mini.extra"
 
 pick.setup {
   source = {
@@ -31,7 +31,7 @@ vim.keymap.set("n", "<leader>fa", function()
 end, { desc = "Find all files" })
 
 vim.keymap.set("n", "<leader>fr", function()
-  extra.oldfiles { current_dir = true }
+  extra.pickers.oldfiles { current_dir = true }
 end, { desc = "Find recent files in current directory" })
 
 vim.keymap.set("n", "<leader>ff", function()
@@ -51,38 +51,38 @@ vim.keymap.set("n", "<leader>fh", function()
 end, { desc = "Find help tags" })
 
 vim.keymap.set("n", "<leader>fk", function()
-  extra.keymaps()
+  extra.pickerskeymaps()
 end, { desc = "Find keymaps" })
 
 vim.keymap.set("n", "<leader>fm", function()
-  extra.marks()
+  extra.pickersmarks()
 end, { desc = "Find marks" })
 
 vim.keymap.set("n", "<leader>fz", function()
-  extra.buf_lines { scope = "current" }
+  extra.pickersbuf_lines { scope = "current" }
 end, { desc = "Search current buffer" })
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("MiniMaxLspMappings", { clear = true }),
   callback = function(args)
     vim.keymap.set("n", "grr", function()
-      extra.lsp { scope = "references" }
+      extra.pickerslsp { scope = "references" }
     end, { buffer = args.buf, desc = "LSP: find references" })
 
     vim.keymap.set("n", "gri", function()
-      extra.lsp { scope = "implementation" }
+      extra.pickerslsp { scope = "implementation" }
     end, { buffer = args.buf, desc = "LSP: find implementations" })
 
     vim.keymap.set("n", "grt", function()
-      extra.lsp { scope = "type_definition" }
+      extra.pickerslsp { scope = "type_definition" }
     end, { buffer = args.buf, desc = "LSP: type definitions" })
 
     vim.keymap.set("n", "gO", function()
-      extra.lsp { scope = "document_symbol" }
+      extra.pickerslsp { scope = "document_symbol" }
     end, { buffer = args.buf, desc = "LSP: document symbols" })
 
     vim.keymap.set("n", "gd", function()
-      extra.lsp { scope = "definition" }
+      extra.pickerslsp { scope = "definition" }
     end, { buffer = args.buf, desc = "Go to definition" })
   end,
 })

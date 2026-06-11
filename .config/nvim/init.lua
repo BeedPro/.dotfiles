@@ -15,7 +15,7 @@ require("git")
 require("notes")
 require("filebrowser")
 require("completion")
-require("fzflua")
+-- require("fzflua")
 require("minipick")
 
 -- Options
