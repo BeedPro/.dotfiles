@@ -109,5 +109,6 @@
 (require 'inbuffer-completion-rc)
 (require 'completion-rc)
 (require 'git-rc)
-(require 'lsp-treesitter-rc)
+(require 'treesitter-rc)
+(require 'lsp-rc)
 (require 'prose-rc)

@@ -15,7 +15,7 @@ require("git")
 require("notes")
 require("filebrowser")
 require("completion")
-require("fuzzyfinder")
+require("navigation")
 
 -- Options
 vim.o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.add")
