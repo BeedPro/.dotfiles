@@ -1,8 +1,8 @@
 vim.g.mapleader = " "
 
 require("vim._core.ui2").enable {}
+vim.cmd.packadd "nvim.undotree"
 
-require("history")
 require("theme")
 require("navigation")
 require("editing")
