@@ -45,7 +45,6 @@ vim.o.mouse = "a"
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.numberwidth = 2
-vim.o.ruler = false
 
 vim.o.signcolumn = "yes"
 vim.o.splitbelow = true
