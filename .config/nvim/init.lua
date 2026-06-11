@@ -50,7 +50,6 @@ vim.o.numberwidth = 2
 vim.o.signcolumn = "yes"
 vim.o.splitbelow = true
 vim.o.splitright = true
-vim.o.timeoutlen = 400
 vim.o.undofile = true
 vim.o.undodir = vim.fs.joinpath(vim.fn.stdpath "data", "undodir")
 
