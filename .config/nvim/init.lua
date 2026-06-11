@@ -16,7 +16,7 @@ require("notes")
 require("filebrowser")
 -- require("navigation")
 -- require("completion")
-require("minimax")
+require("nini")
 
 -- Options
 vim.o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.add")
