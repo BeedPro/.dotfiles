@@ -15,8 +15,7 @@ require("git")
 require("notes")
 require("filebrowser")
 require("completion")
--- require("fzflua")
-require("minipick")
+require("fzflua")
 
 -- Options
 vim.o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.add")
