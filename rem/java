@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo apt purge -y openjdk-21-jdk
+sudo apt autoremove -y
+
+echo "Removed OpenJDK 21"
