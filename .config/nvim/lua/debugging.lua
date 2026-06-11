@@ -1,5 +1,6 @@
 vim.pack.add {
   "https://github.com/mfussenegger/nvim-dap",
+  "https://codeberg.org/mfussenegger/nvim-dap-python",
   "https://github.com/igorlfs/nvim-dap-view",
 }
 
@@ -12,50 +13,9 @@ local function python_executable(venv)
   return vim.fs.joinpath(venv, "bin", "python")
 end
 
-local function project_python_path()
-  if os.getenv "VIRTUAL_ENV" then
-    return python_executable(os.getenv "VIRTUAL_ENV")
-  end
-  if os.getenv "CONDA_PREFIX" then
-    if vim.fn.has "win32" == 1 then
-      return vim.fs.joinpath(os.getenv "CONDA_PREFIX", "python.exe")
-    end
-    return vim.fs.joinpath(os.getenv "CONDA_PREFIX", "bin", "python")
-  end
-  for _, folder in ipairs { "venv", ".venv", "env", ".env" } do
-    if (vim.uv or vim.loop).fs_stat(vim.fs.joinpath(vim.fn.getcwd(), folder)) then
-      return python_executable(vim.fs.joinpath(vim.fn.getcwd(), folder))
-    end
-  end
-  return "python3"
-end
-
 vim.fn.sign_define("DapStopped", { text = "> ", texthl = "SignColumn", linehl = "debugPC" })
 
-dap.adapters.python = function(cb, config)
-  if config.request == "attach" then
-    cb {
-      type = "server",
-      host = (config.connect or config).host or "127.0.0.1",
-      port = assert((config.connect or config).port, "`connect.port` is required for python attach"),
-      options = {
-        source_filetype = "python",
-      },
-    }
-    return
-  end
-
-  cb {
-    type = "executable",
-    command = python_executable(vim.fs.joinpath(vim.fn.stdpath "data", "mason", "packages", "debugpy", "venv")),
-    args = { "-m", "debugpy.adapter" },
-    options = {
-      source_filetype = "python",
-    },
-  }
-end
-
-dap.adapters.debugpy = dap.adapters.python
+require("dap-python").setup(python_executable(vim.fs.joinpath(vim.fn.stdpath "data", "mason", "packages", "debugpy", "venv")))
 
 dap.adapters.codelldb = {
   type = "server",
@@ -94,53 +54,6 @@ dap.adapters.godot = {
   type = "server",
   host = "127.0.0.1",
   port = 6006,
-}
-
-dap.configurations.python = {
-  {
-    type = "python",
-    request = "launch",
-    name = "Launch file",
-    program = "${file}",
-    console = "integratedTerminal",
-    pythonPath = project_python_path,
-  },
-  {
-    type = "python",
-    request = "launch",
-    name = "Launch file (args)",
-    program = "${file}",
-    args = function()
-      if require("dap.utils").splitstr and vim.fn.has "nvim-0.10" == 1 then
-        return require("dap.utils").splitstr(vim.fn.input "Arguments: ")
-      end
-      return vim.split(vim.fn.input "Arguments: ", " +")
-    end,
-    console = "integratedTerminal",
-    pythonPath = project_python_path,
-  },
-  {
-    type = "python",
-    request = "attach",
-    name = "Attach process",
-    connect = function()
-      local host = vim.fn.input "Host [127.0.0.1]: "
-      return {
-        host = host ~= "" and host or "127.0.0.1",
-        port = tonumber(vim.fn.input "Port [5678]: ") or 5678,
-      }
-    end,
-  },
-  {
-    type = "python",
-    request = "launch",
-    name = "Run doctest",
-    module = "doctest",
-    args = { "${file}" },
-    noDebug = true,
-    console = "integratedTerminal",
-    pythonPath = project_python_path,
-  },
 }
 
 dap.configurations.cpp = {
