@@ -52,7 +52,7 @@ local gen_loader = require("mini.snippets").gen_loader
 
 require("mini.snippets").setup {
   snippets = {
-    gen_loader.from_file(vim.fs.joinpath(vim.fn.stdpath "config", "vscode", "all.json")),
+    gen_loader.from_file(vim.fs.joinpath(vim.fn.stdpath "config", "snippets", "global.json")),
     gen_loader.from_lang(),
   },
   mappings = {
@@ -62,6 +62,8 @@ require("mini.snippets").setup {
     stop = "<C-e>",
   },
 }
+
+require("mini.snippets").start_lsp_server {}
 
 local pick = require "mini.pick"
 local extra = require("mini.extra").pickers

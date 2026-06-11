@@ -1,0 +1,7 @@
+{
+  "checkhealth": {
+    "prefix": "checkhealth",
+    "body": ["Yes, mini.snippets works!"],
+    "description": "Check mini.snippets snippets"
+  }
+}
