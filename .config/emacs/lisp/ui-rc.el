@@ -1,0 +1,71 @@
+;;; ui-rc.el --- UI configuration -*- lexical-binding: t; -*-
+
+(use-package dashboard
+  :defer nil
+  :config
+  (setq initial-buffer-choice 'dashboard-open
+        dashboard-startup-banner 'logo-braille
+        dashboard-center-content t
+        dashboard-vertically-center-content t
+        dashboard-items '((recents   . 5)
+                          (bookmarks . 5)
+                          (projects  . 5)))
+  (dashboard-setup-startup-hook))
+
+(use-package whitespace
+  :ensure nil
+  :defer nil
+  :custom
+  (whitespace-style '(face trailing tabs tab-mark nbsp nbsp-mark))
+  (whitespace-display-mappings
+   '((tab-mark 9 [?> ?\s ?\s ?\s] [?> ?\s ?\s ?\s])
+     (nbsp-mark 160 [?+] [?+])))
+  :config
+  (global-whitespace-mode 1))
+
+(use-package modus-themes
+  :demand t
+  :config
+  (setq modus-themes-bold-constructs t
+        modus-themes-italic-constructs nil)
+  (load-theme 'modus-vivendi t))
+
+(use-package doom-themes
+  :defer nil
+  :init
+  (set-face-attribute 'line-number nil :slant 'normal)
+  (set-face-attribute 'line-number-current-line nil :slant 'normal)
+  :custom
+  (doom-themes-enable-italic nil))
+
+(use-package doom-modeline
+  :defer nil
+  :init
+  (setq doom-modeline-icon nil
+        doom-modeline-major-mode-icon nil
+        doom-modeline-major-mode-color-icon nil
+        doom-modeline-buffer-state-icon nil
+        doom-modeline-buffer-modification-icon nil
+        doom-modeline-lsp-icon nil
+        doom-modeline-time-icon nil
+        doom-modeline-time-live-icon nil
+        doom-modeline-time-analogue-clock nil
+        doom-modeline-vcs-icon nil
+        doom-modeline-check-icon nil
+        doom-modeline-persp-icon nil
+        doom-modeline-modal-icon nil
+        doom-modeline-modal-modern-icon nil
+        doom-modeline-unicode-fallback nil
+        doom-modeline-unicode-number nil)
+  :config
+  (doom-modeline-def-segment input-method
+    (when current-input-method
+      (concat
+       (doom-modeline-spc)
+       (propertize current-input-method-title
+                   'face (doom-modeline-face))
+       (doom-modeline-spc))))
+  (doom-modeline-mode 1))
+
+(provide 'ui-rc)
+;;; ui-rc.el ends here

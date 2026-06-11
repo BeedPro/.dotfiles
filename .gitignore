@@ -121,8 +121,10 @@ __pycache__/
 Session.vim
 *.spl
 
-.config/emacs
+.config/emacs/*
 !.config/emacs/init.el
 !.config/emacs/early-init.el
-!.config/emacs/snippets
-!.config/emacs/lisp
+!.config/emacs/snippets/
+!.config/emacs/snippets/**
+!.config/emacs/lisp/
+!.config/emacs/lisp/**
