@@ -98,6 +98,9 @@
 
 (use-package yasnippet
   :defer nil
+  :init
+  (setq yas-snippet-dirs
+        (list (expand-file-name "snippets" beed/emacs-config-directory)))
   :config
   (yas-global-mode 1))
 

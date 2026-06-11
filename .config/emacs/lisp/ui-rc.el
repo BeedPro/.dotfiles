@@ -27,16 +27,10 @@
   :demand t
   :config
   (setq modus-themes-bold-constructs t
-        modus-themes-italic-constructs nil)
-  (load-theme 'modus-vivendi t))
-
-(use-package doom-themes
-  :defer nil
-  :init
+         modus-themes-italic-constructs nil)
   (set-face-attribute 'line-number nil :slant 'normal)
   (set-face-attribute 'line-number-current-line nil :slant 'normal)
-  :custom
-  (doom-themes-enable-italic nil))
+  (load-theme 'modus-vivendi t))
 
 (use-package doom-modeline
   :defer nil
@@ -54,17 +48,10 @@
         doom-modeline-check-icon nil
         doom-modeline-persp-icon nil
         doom-modeline-modal-icon nil
-        doom-modeline-modal-modern-icon nil
-        doom-modeline-unicode-fallback nil
-        doom-modeline-unicode-number nil)
+         doom-modeline-modal-modern-icon nil
+         doom-modeline-unicode-fallback nil
+         doom-modeline-unicode-number nil)
   :config
-  (doom-modeline-def-segment input-method
-    (when current-input-method
-      (concat
-       (doom-modeline-spc)
-       (propertize current-input-method-title
-                   'face (doom-modeline-face))
-       (doom-modeline-spc))))
   (doom-modeline-mode 1))
 
 (provide 'ui-rc)

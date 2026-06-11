@@ -1,6 +1,7 @@
 ;;; lsp-treesitter-rc.el --- LSP and tree-sitter configuration -*- lexical-binding: t; -*-
 
 (use-package treesit-auto
+  :demand t
   :custom
   (treesit-auto-install 'prompt)
   :config
