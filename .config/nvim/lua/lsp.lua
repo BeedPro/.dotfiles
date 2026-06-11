@@ -2,6 +2,7 @@ vim.pack.add {
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/neovim/nvim-lspconfig",
+  "https://codeberg.org/mfussenegger/nvim-jdtls",
 }
 
 require("lazydev").setup {
@@ -73,6 +74,7 @@ vim.api.nvim_create_user_command("MasonInstallAll", function()
     for _, name in ipairs {
       "ty",
       "clangd",
+      "jdtls",
       "haskell-language-server",
       "lua-language-server",
       "biome",
@@ -84,6 +86,8 @@ vim.api.nvim_create_user_command("MasonInstallAll", function()
       "haskell-debug-adapter",
       "js-debug-adapter",
       "firefox-debug-adapter",
+      "java-debug-adapter",
+      "java-test",
       "ruff",
       "djlint",
       "cpplint",

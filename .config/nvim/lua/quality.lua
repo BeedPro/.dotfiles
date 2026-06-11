@@ -12,6 +12,7 @@ require("conform").setup {
     c = { "clang-format" },
     cpp = { "clang-format" },
     haskell = { "fourmolu" },
+    java = { "clang-format" },
     typst = { "prettypst" },
     prolog = { "prolog" },
     lua = { "stylua" },

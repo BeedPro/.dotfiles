@@ -2,75 +2,17 @@ vim.g.mapleader = " "
 
 require("vim._core.ui2").enable {}
 
-vim.cmd.packadd "nvim.undotree"
-vim.cmd.packadd "nvim.difftool"
-require("modus_config")
-require("fzf_lua_config")
-require("mini_config")
-require("marko_config")
-require("nvim_lint_config")
-require("treesitter_config")
-require("lazydev_config")
-require("mason_config")
-require("conform_config")
-require("dap_config")
-require("dap_view_config")
-require("neogit_config")
-require("gitsigns_config")
-require("diffview_config")
-require("neogen_config")
-require("kanso_config")
-require("oil_config")
-require("orgmode_config")
-require("blink_config")
-require("luasnip_config")
-
--- LSP
-vim.pack.add {
-  "https://codeberg.org/mfussenegger/nvim-jdtls",
-  "https://github.com/neovim/nvim-lspconfig",
-}
-
-vim.lsp.config("*", {
-  capabilities = {
-    textDocument = {
-      completion = {
-        completionItem = {
-          preselectSupport = true,
-          commitCharactersSupport = true,
-          resolveSupport = {
-            properties = {
-              "documentation",
-              "detail",
-              "additionalTextEdits",
-            },
-          },
-        },
-      },
-    },
-  },
-})
-
-vim.diagnostic.config {
-  underline = false,
-}
-
-vim.lsp.document_color.enable(false)
-
-vim.lsp.enable {
-  "ty",
-  "clangd",
-  "hls",
-  "tinymist",
-  "prolog_ls",
-  "lua_ls",
-  "biome",
-  "ts_ls",
-  "tailwindcss",
-  "svelte",
-  "gdscript",
-  "texlab",
-}
+require("history")
+require("theme")
+require("navigation")
+require("editing")
+require("languages")
+require("quality")
+require("debugging")
+require("git")
+require("notes")
+require("completion")
+require("lsp")
 
 -- Options
 vim.o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.add")
