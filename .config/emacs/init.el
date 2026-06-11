@@ -105,6 +105,6 @@
 (require 'formatter-rc)
 (require 'inbuffer-completion-rc)
 (require 'completion-rc)
-(require 'version-control-rc)
+(require 'git-rc)
 (require 'lsp-treesitter-rc)
 (require 'prose-rc)
