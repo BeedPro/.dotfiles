@@ -6,6 +6,7 @@ vim.pack.add {
   "https://github.com/rafamadriz/friendly-snippets",
 }
 
+---@diagnostic disable-next-line: undefined-field
 require("blink.cmp").build():pwait()
 
 require("luasnip").config.set_config { history = true, updateevents = "TextChanged,TextChangedI" }
