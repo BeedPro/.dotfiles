@@ -40,6 +40,7 @@ require("orgmode").setup {
   org_log_done = "time",
   org_log_into_drawer = "LOGBOOK",
   org_edit_src_content_indentation = 0,
+  ---@diagnostic disable-next-line: assign-type-mismatch
   win_split_mode = "tabnew",
   mappings = {
     capture = {
@@ -52,6 +53,7 @@ require("orgmode").setup {
       description = "Task",
       template = "** TODO %<%H%M%S> - %?",
       target = vim.fs.normalize(vim.fn.expand "~/Compendium/Journal") .. package.config:sub(1, 1) .. "capture.org",
+      ---@diagnostic disable-next-line: missing-fields
       datetree = {
         reversed = true,
         tree_type = "custom",
@@ -69,6 +71,7 @@ require("orgmode").setup {
       description = "Note",
       template = "** %<%H%M%S> - %?",
       target = vim.fs.normalize(vim.fn.expand "~/Compendium/Journal") .. package.config:sub(1, 1) .. "capture.org",
+      ---@diagnostic disable-next-line: missing-fields
       datetree = {
         reversed = true,
         tree_type = "custom",

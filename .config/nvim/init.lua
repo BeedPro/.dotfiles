@@ -7,12 +7,13 @@ vim.pack.add {
 }
 
 require("theme")
-require("editing")
-require("lsp")
+require("minirc")
+require("treesitter-rc")
+require("lsprc")
 require("quality")
 require("debugging")
 require("git")
-require("notes")
+require("journal")
 require("filebrowser")
 require("completion")
 require("navigation")
