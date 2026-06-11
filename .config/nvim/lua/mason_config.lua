@@ -24,6 +24,7 @@ vim.api.nvim_create_user_command("MasonInstallAll", function()
     for _, name in ipairs {
       "ty",
       "clangd",
+      "jdtls",
       "haskell-language-server",
       "lua-language-server",
       "biome",
@@ -35,6 +36,8 @@ vim.api.nvim_create_user_command("MasonInstallAll", function()
       "haskell-debug-adapter",
       "js-debug-adapter",
       "firefox-debug-adapter",
+      "java-debug-adapter",
+      "java-test",
       "ruff",
       "djlint",
       "cpplint",

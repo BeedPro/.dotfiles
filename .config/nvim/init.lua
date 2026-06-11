@@ -27,6 +27,7 @@ require("luasnip_config")
 
 -- LSP
 vim.pack.add {
+  "https://codeberg.org/mfussenegger/nvim-jdtls",
   "https://github.com/neovim/nvim-lspconfig",
 }
 
