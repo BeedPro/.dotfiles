@@ -1,4 +1,4 @@
-;;; git-rc.el --- Version control configuration -*- lexical-binding: t; -*-
+;;; git-rc.el --- Git configuration -*- lexical-binding: t; -*-
 
 (use-package magit
   :bind ("C-x g" . magit-status)
@@ -21,5 +21,5 @@
     (diff-hl-margin-mode 1))
   (diff-hl-flydiff-mode 1))
 
-(provide 'version-control-rc)
+(provide 'git-rc)
 ;;; git-rc.el ends here
