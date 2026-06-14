@@ -3,6 +3,7 @@
 import json
 import os
 import subprocess
+import sys
 from datetime import datetime, timedelta
 from urllib.request import Request, urlopen
 
@@ -11,6 +12,7 @@ PRAYER_SCRIPT = os.path.expanduser("~/.local/scripts/prayer-times")
 HIJRI_CACHE = "/tmp/hijri-date.json"
 
 API_URL = "https://api.aladhan.com/v1/gToH"
+ARABIC_DIGITS = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
 
 
 def gregorian_str(dt):
@@ -95,7 +97,17 @@ def fetch_hijri(gregorian_date):
     return data["data"]["hijri"]
 
 
+def format_hijri_date(hijri, arabic=False):
+    if arabic:
+        formatted = f"{int(hijri['day']):02d}.{int(hijri['month']['number']):02d}.{hijri['year']}"
+        return formatted.translate(ARABIC_DIGITS)
+
+    return f"{hijri['year']}.{int(hijri['month']['number']):02d}.{int(hijri['day']):02d}"
+
+
 def main():
+    arabic_output = any(arg in {"--arabic", "-a"} for arg in sys.argv[1:])
+
     try:
         effective_date = effective_gregorian_date()
         cache_key = gregorian_str(effective_date)
@@ -118,9 +130,7 @@ def main():
                 print(":: --")
                 return
 
-    print(
-        f":: {hijri['year']}.{int(hijri['month']['number']):02d}.{int(hijri['day']):02d}"
-    )
+    print(f":: {format_hijri_date(hijri, arabic=arabic_output)}")
 
 
 if __name__ == "__main__":
