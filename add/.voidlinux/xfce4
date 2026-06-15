@@ -18,15 +18,13 @@ sudo xbps-install -S \
 
 # Desktop packages
 sudo xbps-install -S \
-  dbus \
   dbus-x11 \
-  elogind \
   xorg \
   xfce4 \
   xfce4-plugins \
   xfce4-screenshooter \
   lightdm \
-  lightdm-gtk3-greeter
+  lightdm-gtk-greeter
 
 # Applications, themes, fonts, and helpers
 sudo xbps-install -S \
