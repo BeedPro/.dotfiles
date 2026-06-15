@@ -80,7 +80,7 @@ luac.out
 *.def
 *.exp
 
-# Shared objects (inc. Windows DLLs)
+# Shared objects, including Windows DLLs
 *.dll
 *.so
 *.so.*
@@ -121,6 +121,7 @@ __pycache__/
 Session.vim
 *.spl
 
+# Emacs: ignore generated/config cache files, but keep main config and custom code.
 .config/emacs/*
 !.config/emacs/init.el
 !.config/emacs/early-init.el
@@ -129,7 +130,10 @@ Session.vim
 !.config/emacs/lisp/
 !.config/emacs/lisp/**
 
+# PipeWire: keep config tracked.
+# This is needed because *.d above would otherwise ignore pipewire.conf.d.
 !.config/
 !.config/pipewire/
+!.config/pipewire/pipewire.conf.d
 !.config/pipewire/pipewire.conf.d/
 !.config/pipewire/pipewire.conf.d/**
