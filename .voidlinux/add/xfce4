@@ -57,15 +57,6 @@ sudo xbps-install -S \
   libspa-bluetooth \
   blueman
 
-# Use dotfiles-managed autostart entries
-mkdir -p "$HOME/.config"
-ln -sfn "$HOME/.dotfiles/.config/autostart" "$HOME/.config/autostart"
-
-# PipeWire user configuration
-mkdir -p "$HOME/.config/pipewire/pipewire.conf.d"
-ln -sfn /usr/share/examples/wireplumber/10-wireplumber.conf "$HOME/.config/pipewire/pipewire.conf.d/10-wireplumber.conf"
-ln -sfn /usr/share/examples/pipewire/20-pipewire-pulse.conf "$HOME/.config/pipewire/pipewire.conf.d/20-pipewire-pulse.conf"
-
 # ALSA compatibility for PipeWire
 sudo mkdir -p /etc/alsa/conf.d
 sudo ln -sfn /usr/share/alsa/alsa.conf.d/50-pipewire.conf /etc/alsa/conf.d/50-pipewire.conf
