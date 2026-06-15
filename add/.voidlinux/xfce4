@@ -8,13 +8,39 @@ sudo xbps-install -S dbus elogind xorg xfce4 xfce4-plugins xfce4-screenshooter l
 sudo xbps-install -S firefox
 sudo xbps-install -S yaru papirus-icon-theme
 sudo xbps-install -S NetworkManager
-sudo xbps-install -S pipewire wireplumber alsa-pipewire pavucontrol
+sudo xbps-install -S pipewire pipewire-devel wireplumber alsa-pipewire pavucontrol
 sudo xbps-install -S polkit xfce-polkit
 
 sudo ln -s /etc/sv/dbus /var/service
 sudo ln -s /etc/sv/elogind /var/service
 sudo ln -s /etc/sv/NetworkManager /var/service
 sudo ln -s /etc/sv/lightdm /var/service
+
+mkdir -p "$HOME/.config/autostart"
+
+cat > "$HOME/.config/autostart/pipewire.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=PipeWire
+Exec=pipewire
+OnlyShowIn=XFCE;
+EOF
+
+cat > "$HOME/.config/autostart/pipewire-pulse.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=PipeWire Pulse
+Exec=pipewire-pulse
+OnlyShowIn=XFCE;
+EOF
+
+cat > "$HOME/.config/autostart/wireplumber.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=WirePlumber
+Exec=wireplumber
+OnlyShowIn=XFCE;
+EOF
 
 sudo -v
 
