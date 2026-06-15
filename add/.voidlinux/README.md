@@ -1,3 +1,5 @@
+For partitioning and disk setup during a fresh install, see [`INSTALL.md`](./INSTALL.md).
+
 Remember to update `xbps` and the system packages first:
 
 ```bash
