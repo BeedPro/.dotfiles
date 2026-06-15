@@ -23,8 +23,9 @@ sudo ln -s /etc/sv/udisks2 /var/service
 sudo xbps-install -S polkit xfce-polkit
 sudo ln -s /etc/sv/polkitd /var/service
 
-# User autostart directory
-mkdir -p "$HOME/.config/autostart"
+# Use dotfiles-managed autostart entries
+mkdir -p "$HOME/.config"
+ln -sfn "$HOME/.dotfiles/.config/autostart" "$HOME/.config/autostart"
 
 # NetworkManager and tray applet
 sudo xbps-install -S NetworkManager network-manager-applet
@@ -43,32 +44,6 @@ ln -s /usr/share/examples/pipewire/20-pipewire-pulse.conf "$HOME/.config/pipewir
 sudo mkdir -p /etc/alsa/conf.d
 sudo ln -s /usr/share/alsa/alsa.conf.d/50-pipewire.conf /etc/alsa/conf.d/
 sudo ln -s /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf /etc/alsa/conf.d/
-
-# PipeWire autostart entries
-cat > "$HOME/.config/autostart/pipewire.desktop" <<'EOF'
-[Desktop Entry]
-Type=Application
-Name=PipeWire
-Exec=pipewire
-OnlyShowIn=XFCE;
-EOF
-
-cat > "$HOME/.config/autostart/pipewire-pulse.desktop" <<'EOF'
-[Desktop Entry]
-Type=Application
-Name=PipeWire Pulse
-Exec=pipewire-pulse
-OnlyShowIn=XFCE;
-EOF
-
-cat > "$HOME/.config/autostart/wireplumber.desktop" <<'EOF'
-[Desktop Entry]
-Type=Application
-Name=WirePlumber
-Exec=wireplumber
-OnlyShowIn=XFCE;
-EOF
-
 
 # Bluetooth support
 sudo xbps-install -S bluez libspa-bluetooth blueman
