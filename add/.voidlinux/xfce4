@@ -3,24 +3,37 @@
 set -euo pipefail
 
 sudo xbps-install -Syu
+sudo xbps-install -S void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree linux-firmware
 
-sudo xbps-install -S dbus elogind xorg xfce4 xfce4-plugins xfce4-screenshooter lightdm lightdm-gtk3-greeter
+sudo xbps-install -S dbus dbus-x11 elogind xorg xfce4 xfce4-plugins xfce4-screenshooter lightdm lightdm-gtk3-greeter
 sudo ln -s /etc/sv/dbus /var/service
 sudo ln -s /etc/sv/elogind /var/service
 sudo ln -s /etc/sv/lightdm /var/service
 
-sudo xbps-install -S firefox brightnessctl
+sudo xbps-install -S firefox
 sudo xbps-install -S yaru papirus-icon-theme
-
-sudo xbps-install -S NetworkManager
-sudo ln -s /etc/sv/NetworkManager /var/service
+sudo xbps-install -S dejavu-fonts-ttf noto-fonts-ttf noto-fonts-emoji nerd-fonts font-iosevka gohufont
+sudo xbps-install -S brightnessctl gvfs udisk2
+sudo ln -s /etc/sv/udisks2 /var/service
 
 sudo xbps-install -S polkit xfce-polkit
+sudo ln -s /etc/sv/polkitd /var/service
 
+mkdir -p "$HOME/.config/autostart"
 
-mkdir -p "$HOME/.config/pipewire/pipewire.conf.d"
+sudo xbps-install -S NetworkManager network-manager-applet
+sudo ln -s /etc/sv/NetworkManager /var/service
+cat > "$HOME/.config/autostart/nm-applet.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=NetworkManager Applet
+Exec=nm-applet
+OnlyShowIn=XFCE;
+EOF
 
 sudo xbps-install -S pipewire wireplumber alsa-pipewire alsa-plugins-pipewire pamixer pavucontrol
+
+mkdir -p "$HOME/.config/pipewire/pipewire.conf.d"
 
 ln -s /usr/share/examples/wireplumber/10-wireplumber.conf "$HOME/.config/pipewire/pipewire.conf.d/"
 ln -s /usr/share/examples/pipewire/20-pipewire-pulse.conf "$HOME/.config/pipewire/pipewire.conf.d/"
@@ -28,8 +41,6 @@ ln -s /usr/share/examples/pipewire/20-pipewire-pulse.conf "$HOME/.config/pipewir
 sudo mkdir -p /etc/alsa/conf.d
 sudo ln -s /usr/share/alsa/alsa.conf.d/50-pipewire.conf /etc/alsa/conf.d/
 sudo ln -s /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf /etc/alsa/conf.d/
-
-mkdir -p "$HOME/.config/autostart"
 
 cat > "$HOME/.config/autostart/pipewire.desktop" <<'EOF'
 [Desktop Entry]
@@ -55,11 +66,15 @@ Exec=wireplumber
 OnlyShowIn=XFCE;
 EOF
 
+
 sudo xbps-install -S bluez libspa-bluetooth blueman
 sudo ln -s /etc/sv/bluetoothd /var/service
 
 sudo -v
+sudo true
 
 sudo passwd -l root
+
+sudo usermod -aG wheel,audio,video,input,storage,network,bluetooth "$USER"
 
 sudo reboot
