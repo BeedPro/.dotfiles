@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 sudo xbps-install -Syu
 sudo xbps-install -S dbus elogind xorg xfce4 xfce4-plugins xfce4-screenshooter lightdm lightdm-gtk3-greeter
 sudo xbps-install -S firefox

@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+sudo xbps-install -Syu
+sudo xbps-install -S github-cli xclip
+
+gh config set telemetry disabled
+
+KEY="$HOME/.ssh/github"
+
+mkdir -p "$HOME/.ssh"
+chmod 700 "$HOME/.ssh"
+
+if [ ! -f "$KEY" ]; then
+  ssh-keygen -t ed25519 -a 100 -f "$KEY" -C "github"
+fi
+
+eval "$(ssh-agent -s)" >/dev/null
+ssh-add "$KEY"
+
+cat >> "$HOME/.ssh/config" <<EOF
+
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/github
+  IdentitiesOnly yes
+EOF
+
+chmod 600 "$HOME/.ssh/config"
+
+xclip -selection clipboard < "$KEY.pub"
+
+echo "Public key copied to clipboard."
+echo "Add it here: GitHub -> Settings -> SSH and GPG keys -> New SSH key"
+echo
+cat "$KEY.pub"
+echo
+echo "After adding it, test with:"
+echo "ssh -T git@github.com"
