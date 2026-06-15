@@ -11,4 +11,6 @@ sudo ln	-s /etc/sv/dbus /var/service
 sudo ln	-s /etc/sv/elogind /var/service
 sudo ln	-s /etc/sv/lightdm /var/service
 
+sudo passwd -l root
+
 sudo reboot
