@@ -16,7 +16,7 @@ sudo ln -s /etc/sv/lightdm /var/service
 sudo xbps-install -S firefox
 sudo xbps-install -S yaru papirus-icon-theme
 sudo xbps-install -S dejavu-fonts-ttf noto-fonts-ttf noto-fonts-emoji nerd-fonts font-iosevka gohufont
-sudo xbps-install -S brightnessctl gvfs udisk2
+sudo xbps-install -S brightnessctl gvfs udisks2
 sudo ln -s /etc/sv/udisks2 /var/service
 
 # PolicyKit for desktop permissions
