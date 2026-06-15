@@ -24,3 +24,9 @@ Contributors can switch the remote to SSH later, after installing and configurin
 ```bash
 git remote set-url origin git@github.com:BeedPro/.dotfiles.git
 ```
+
+You can install xfce4 without cloning by doing:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/BeedPro/.dotfiles/main/add/.voidlinux/xfce4)
+```
