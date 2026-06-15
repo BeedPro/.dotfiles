@@ -5,25 +5,29 @@ set -euo pipefail
 sudo xbps-install -Syu
 
 sudo xbps-install -S dbus elogind xorg xfce4 xfce4-plugins xfce4-screenshooter lightdm lightdm-gtk3-greeter
-sudo xbps-install -S firefox
-sudo xbps-install -S yaru papirus-icon-theme
-sudo xbps-install -S NetworkManager
-sudo xbps-install -S pipewire wireplumber alsa-pipewire alsa-plugins-pipewire pamixer pavucontrol
-sudo xbps-install -S polkit xfce-polkit
-
 sudo ln -s /etc/sv/dbus /var/service
 sudo ln -s /etc/sv/elogind /var/service
-sudo ln -s /etc/sv/NetworkManager /var/service
 sudo ln -s /etc/sv/lightdm /var/service
+
+sudo xbps-install -S firefox brightnessctl
+sudo xbps-install -S yaru papirus-icon-theme
+
+sudo xbps-install -S NetworkManager
+sudo ln -s /etc/sv/NetworkManager /var/service
+
+sudo xbps-install -S polkit xfce-polkit
+
 
 mkdir -p "$HOME/.config/pipewire/pipewire.conf.d"
 
-ln -sf /usr/share/examples/wireplumber/10-wireplumber.conf "$HOME/.config/pipewire/pipewire.conf.d/"
-ln -sf /usr/share/examples/pipewire/20-pipewire-pulse.conf "$HOME/.config/pipewire/pipewire.conf.d/"
+sudo xbps-install -S pipewire wireplumber alsa-pipewire alsa-plugins-pipewire pamixer pavucontrol
+
+ln -s /usr/share/examples/wireplumber/10-wireplumber.conf "$HOME/.config/pipewire/pipewire.conf.d/"
+ln -s /usr/share/examples/pipewire/20-pipewire-pulse.conf "$HOME/.config/pipewire/pipewire.conf.d/"
 
 sudo mkdir -p /etc/alsa/conf.d
-sudo ln -sf /usr/share/alsa/alsa.conf.d/50-pipewire.conf /etc/alsa/conf.d/
-sudo ln -sf /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf /etc/alsa/conf.d/
+sudo ln -s /usr/share/alsa/alsa.conf.d/50-pipewire.conf /etc/alsa/conf.d/
+sudo ln -s /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf /etc/alsa/conf.d/
 
 mkdir -p "$HOME/.config/autostart"
 
@@ -50,6 +54,9 @@ Name=WirePlumber
 Exec=wireplumber
 OnlyShowIn=XFCE;
 EOF
+
+sudo xbps-install -S bluez libspa-bluetooth blueman
+sudo ln -s /etc/sv/bluetoothd /var/service
 
 sudo -v
 
