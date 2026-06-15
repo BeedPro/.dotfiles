@@ -10,7 +10,7 @@ sudo xbps-install -Syu
 Then install the minimal dependencies:
 
 ```bash
-sudo xbps-install -S git neovim curl
+sudo xbps-install -S git neovim curl stow
 ```
 
 Now clone the repository over HTTPS:

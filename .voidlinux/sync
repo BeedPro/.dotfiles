@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 
+git pull
+rm -rf $HOME/.dotfiles
+cp -r $HOME/Projects/BeedPro/.dotfiles/.voidlinux $HOME/.dotfiles
+cd $HOME/.dotfiles
+stow .
 
+echo "This is a temporary script to sync the temporary directory: `.voidlinux`" 
+echo "`.voidlinux` should replace `.dotfiles` once I port over to Void Linux" 
