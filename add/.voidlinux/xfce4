@@ -8,7 +8,7 @@ sudo xbps-install -S dbus elogind xorg xfce4 xfce4-plugins xfce4-screenshooter l
 sudo xbps-install -S firefox
 sudo xbps-install -S yaru papirus-icon-theme
 sudo xbps-install -S NetworkManager
-sudo xbps-install -S pipewire wireplumber pipewire-pulse pavucontrol
+sudo xbps-install -S pipewire wireplumber alsa-pipewire pavucontrol
 sudo xbps-install -S polkit xfce-polkit
 
 sudo ln -s /etc/sv/dbus /var/service
