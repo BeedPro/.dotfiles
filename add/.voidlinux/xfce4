@@ -2,62 +2,90 @@
 
 set -euo pipefail
 
+# Lock root account
+sudo -v
+sudo true
+sudo passwd -l root
+
+# Add user to common desktop groups
+sudo usermod -aG wheel,audio,video,input,storage,network,bluetooth "$USER"
+
 # System update and repositories
 sudo xbps-install -Syu
-sudo xbps-install -S void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree linux-firmware
 
-# Core XFCE desktop setup
-sudo xbps-install -S dbus dbus-x11 elogind xorg xfce4 xfce4-plugins xfce4-screenshooter lightdm lightdm-gtk3-greeter
-sudo ln -s /etc/sv/dbus /var/service
-sudo ln -s /etc/sv/elogind /var/service
-sudo ln -s /etc/sv/lightdm /var/service
+sudo xbps-install -S \
+  void-repo-nonfree \
+  void-repo-multilib \
+  void-repo-multilib-nonfree \
+  linux-firmware
 
-# Base applications, themes, fonts, and storage helpers
-sudo xbps-install -S firefox
-sudo xbps-install -S yaru papirus-icon-theme
-sudo xbps-install -S dejavu-fonts-ttf noto-fonts-ttf noto-fonts-emoji nerd-fonts font-iosevka gohufont
-sudo xbps-install -S brightnessctl gvfs udisks2
-sudo ln -s /etc/sv/udisks2 /var/service
+# Desktop packages
+sudo xbps-install -S \
+  dbus \
+  dbus-x11 \
+  elogind \
+  xorg \
+  xfce4 \
+  xfce4-plugins \
+  xfce4-screenshooter \
+  lightdm \
+  lightdm-gtk3-greeter
 
-# PolicyKit for desktop permissions
-sudo xbps-install -S polkit xfce-polkit
-sudo ln -s /etc/sv/polkitd /var/service
+# Applications, themes, fonts, and helpers
+sudo xbps-install -S \
+  firefox \
+  yaru \
+  papirus-icon-theme \
+  dejavu-fonts-ttf \
+  noto-fonts-ttf \
+  noto-fonts-emoji \
+  nerd-fonts \
+  font-iosevka \
+  gohufont \
+  brightnessctl \
+  gvfs \
+  udisks2
+
+# Desktop permissions and networking
+sudo xbps-install -S \
+  polkit \
+  xfce-polkit \
+  NetworkManager \
+  network-manager-applet
+
+# Audio and Bluetooth
+sudo xbps-install -S \
+  pipewire \
+  wireplumber \
+  alsa-pipewire \
+  pamixer \
+  pavucontrol \
+  bluez \
+  libspa-bluetooth \
+  blueman
 
 # Use dotfiles-managed autostart entries
 mkdir -p "$HOME/.config"
 ln -sfn "$HOME/.dotfiles/.config/autostart" "$HOME/.config/autostart"
 
-# NetworkManager and tray applet
-sudo xbps-install -S NetworkManager network-manager-applet
-sudo ln -s /etc/sv/NetworkManager /var/service
-
-# PipeWire audio stack
-sudo xbps-install -S pipewire wireplumber alsa-pipewire pamixer pavucontrol
-
 # PipeWire user configuration
 mkdir -p "$HOME/.config/pipewire/pipewire.conf.d"
-
-ln -s /usr/share/examples/wireplumber/10-wireplumber.conf "$HOME/.config/pipewire/pipewire.conf.d/"
-ln -s /usr/share/examples/pipewire/20-pipewire-pulse.conf "$HOME/.config/pipewire/pipewire.conf.d/"
+ln -sfn /usr/share/examples/wireplumber/10-wireplumber.conf "$HOME/.config/pipewire/pipewire.conf.d/10-wireplumber.conf"
+ln -sfn /usr/share/examples/pipewire/20-pipewire-pulse.conf "$HOME/.config/pipewire/pipewire.conf.d/20-pipewire-pulse.conf"
 
 # ALSA compatibility for PipeWire
 sudo mkdir -p /etc/alsa/conf.d
-sudo ln -s /usr/share/alsa/alsa.conf.d/50-pipewire.conf /etc/alsa/conf.d/
-sudo ln -s /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf /etc/alsa/conf.d/
+sudo ln -sfn /usr/share/alsa/alsa.conf.d/50-pipewire.conf /etc/alsa/conf.d/50-pipewire.conf
+sudo ln -sfn /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf /etc/alsa/conf.d/99-pipewire-default.conf
 
-# Bluetooth support
-sudo xbps-install -S bluez libspa-bluetooth blueman
-sudo ln -s /etc/sv/bluetoothd /var/service
-
-# Refresh sudo credentials
-sudo -v
-sudo true
-
-# Lock root account
-sudo passwd -l root
-
-# Add user to common desktop groups
-sudo usermod -aG wheel,audio,video,input,storage,network,bluetooth "$USER"
+# Start services after packages and config links are in place
+sudo ln -sfn /etc/sv/dbus /var/service/dbus
+sudo ln -sfn /etc/sv/elogind /var/service/elogind
+sudo ln -sfn /etc/sv/lightdm /var/service/lightdm
+sudo ln -sfn /etc/sv/udisks2 /var/service/udisks2
+sudo ln -sfn /etc/sv/polkitd /var/service/polkitd
+sudo ln -sfn /etc/sv/NetworkManager /var/service/NetworkManager
+sudo ln -sfn /etc/sv/bluetoothd /var/service/bluetoothd
 
 # Reboot to apply everything
 sudo reboot
