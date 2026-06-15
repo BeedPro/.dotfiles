@@ -7,9 +7,6 @@ sudo -v
 sudo true
 sudo passwd -l root
 
-# Add user to common desktop groups
-sudo usermod -aG wheel,audio,video,input,storage,network,bluetooth "$USER"
-
 # System update and repositories
 sudo xbps-install -Syu
 
@@ -86,6 +83,9 @@ sudo ln -sfn /etc/sv/udisks2 /var/service/udisks2
 sudo ln -sfn /etc/sv/polkitd /var/service/polkitd
 sudo ln -sfn /etc/sv/NetworkManager /var/service/NetworkManager
 sudo ln -sfn /etc/sv/bluetoothd /var/service/bluetoothd
+
+# Add user to common desktop groups
+sudo usermod -aG wheel,audio,video,input,storage,network,bluetooth "$USER"
 
 # Reboot to apply everything
 sudo reboot
