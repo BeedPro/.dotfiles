@@ -10,14 +10,14 @@ sudo passwd -l root
 # System update and repositories
 sudo xbps-install -Syu
 
-sudo xbps-install -S \
+sudo xbps-install -Sy \
   void-repo-nonfree \
   void-repo-multilib \
   void-repo-multilib-nonfree \
   linux-firmware
 
 # Desktop packages
-sudo xbps-install -S \
+sudo xbps-install -Sy \
   dbus-x11 \
   xorg \
   xfce4 \
@@ -27,7 +27,7 @@ sudo xbps-install -S \
   lightdm-gtk-greeter
 
 # Applications, themes, fonts, and helpers
-sudo xbps-install -S \
+sudo xbps-install -Sy \
   firefox \
   yaru \
   papirus-icon-theme \
@@ -42,12 +42,12 @@ sudo xbps-install -S \
   udisks2
 
 # Desktop permissions and networking
-sudo xbps-install -S \
+sudo xbps-install -Sy \
   NetworkManager \
   network-manager-applet
 
 # Audio and Bluetooth
-sudo xbps-install -S \
+sudo xbps-install -Sy \
   pipewire \
   wireplumber \
   alsa-pipewire \
