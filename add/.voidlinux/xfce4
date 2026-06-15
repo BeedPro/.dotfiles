@@ -45,8 +45,6 @@ sudo xbps-install -S \
 
 # Desktop permissions and networking
 sudo xbps-install -S \
-  polkit \
-  xfce-polkit \
   NetworkManager \
   network-manager-applet
 
