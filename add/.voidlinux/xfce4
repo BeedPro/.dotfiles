@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+sudo xbps-install -Syu
+sudo xpbs-install -S dbus elogind xorg xfce4 xfce4-plugins xfce4-screenshooter lightdm lightdm-gtk3-greeter
+
+sudo ln	-s /etc/sv/dbus /var/service
+sudo ln	-s /etc/sv/elogind /var/service
+sudo ln	-s /etc/sv/lightdm /var/service
+
+sudo reboot

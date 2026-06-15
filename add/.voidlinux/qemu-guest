@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+sudo xbps-install -S spice-vdagent
+sudo ln -s /etc/sv/spice-vdagentd /var/service
+sudo reboot
