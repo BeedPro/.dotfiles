@@ -3,8 +3,7 @@ For partitioning and disk setup during a fresh install, see [`INSTALL.md`](./INS
 Remember to update `xbps` and the system packages first:
 
 ```bash
-sudo xbps-install -Syu
-sudo xbps-install -u xbps
+sudo xbps-install -Syu xbps
 sudo xbps-install -Syu
 ````
 
