@@ -2,7 +2,7 @@
 
 These steps cover using `cfdisk` to create the partitions before installing Void Linux.
 
-### 1. Identify the target disk
+### Identify the target disk
 
 List disks first so you do not partition the wrong device:
 
@@ -18,7 +18,7 @@ Typical disk names:
 
 Replace the disk name below with the correct one for your system.
 
-### 2. Open `cfdisk`
+### Open `cfdisk`
 
 For example, on an NVMe disk:
 
@@ -28,7 +28,7 @@ cfdisk /dev/nvme0n1
 
 If prompted, choose `gpt` unless you specifically need legacy BIOS with `dos`.
 
-### 3. Create the partitions
+### Create the partitions
 
 Recommended layout for a UEFI system:
 
@@ -59,7 +59,7 @@ Example result on `/dev/nvme0n1`:
 - `/dev/nvme0n1p2` -> swap
 - `/dev/nvme0n1p3` -> root
 
-### 4. Format the partitions
+### Format the partitions
 
 ```bash
 mkfs.vfat -F 32 /dev/nvme0n1p1
@@ -70,7 +70,7 @@ mkfs.ext4 /dev/nvme0n1p3
 
 For SATA or Virtio disks, the names would look like `/dev/sda1` or `/dev/vda1` instead.
 
-### 5. Mount the target system
+### Mount the target system
 
 ```bash
 mount /dev/nvme0n1p3 /mnt
