@@ -29,13 +29,6 @@ mkdir -p "$HOME/.config/autostart"
 # NetworkManager and tray applet
 sudo xbps-install -S NetworkManager network-manager-applet
 sudo ln -s /etc/sv/NetworkManager /var/service
-cat > "$HOME/.config/autostart/nm-applet.desktop" <<'EOF'
-[Desktop Entry]
-Type=Application
-Name=NetworkManager Applet
-Exec=nm-applet
-OnlyShowIn=XFCE;
-EOF
 
 # PipeWire audio stack
 sudo xbps-install -S pipewire wireplumber alsa-pipewire alsa-plugins-pipewire pamixer pavucontrol
