@@ -22,7 +22,6 @@ _darcs
 ^/TODO.*
 ^/LICENSE.*
 ^/COPYING
-.local/share/fonts
 
 # Python cache and tooling artifacts
 __pycache__
