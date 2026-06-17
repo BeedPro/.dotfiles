@@ -29,7 +29,6 @@ sudo xbps-install -Sy \
 # Applications, themes, fonts, and helpers
 sudo xbps-install -Sy \
   firefox \
-  flatpak \
   yaru \
   papirus-icon-theme \
   dejavu-fonts-ttf \
@@ -74,8 +73,6 @@ sudo ln -sfn /etc/sv/bluetoothd /var/service/bluetoothd
 
 # Add user to common desktop groups
 sudo usermod -aG wheel,audio,video,input,storage,network,bluetooth "$USER"
-
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 # Reboot to apply everything
 sudo reboot
