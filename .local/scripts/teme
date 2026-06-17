@@ -482,6 +482,36 @@ def toggle_opencode(mode: str) -> None:
     print(f"{opencode_config}: {old_theme} => {mode}")
 
 
+def close_calibre() -> None:
+    closed = False
+    for process_name in ["calibre", "calibre-gui", "ebook-viewer"]:
+        result = subprocess.run(["killall", process_name], check=False)
+        if result.returncode == 0:
+            closed = True
+    if closed:
+        print("Closed running Calibre processes")
+
+
+def toggle_calibre(mode: str) -> None:
+    close_calibre()
+    calibre_dir = Path.home() / ".config/calibre"
+
+    gui_config = calibre_dir / "gui.json"
+    gui = json.loads(gui_config.read_text())
+    old_palette = gui.get("color_palette", "<unset>")
+    gui["color_palette"] = mode
+    gui_config.write_text(json.dumps(gui, indent=2) + "\n")
+    print(f"{gui_config}: {old_palette} => {mode}")
+
+    viewer_config = calibre_dir / "viewer-webengine.json"
+    viewer = json.loads(viewer_config.read_text())
+    session_data = viewer.setdefault("session_data", {})
+    old_scheme = session_data.get("current_color_scheme", "<unset>")
+    session_data["current_color_scheme"] = mode
+    viewer_config.write_text(json.dumps(viewer, indent=2) + "\n")
+    print(f"{viewer_config}: {old_scheme} => {mode}")
+
+
 def set_wallpaper(mode: str) -> None:
     wallpaper_dir = Path.home() / ".config/wallpaper"
     wallpaper = wallpaper_dir / "themes" / f"{mode}.jpg"
@@ -512,6 +542,7 @@ def main() -> None:
     toggle_emacs()
     restart_emacs_daemon()
     toggle_opencode(mode)
+    toggle_calibre(mode)
     set_wallpaper(mode)
     toggle_gtk(mode)
     reset_terminal_sessions()
