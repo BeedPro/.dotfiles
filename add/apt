@@ -64,6 +64,7 @@ MEDIA=(
   mpv
   nsxiv
   zathura
+  zathura-djvu
   xournalpp
   libavcodec-extra
   farbfeld
