@@ -39,16 +39,8 @@
   :hook ((markdown-mode . flyspell-mode)
          (gfm-mode . flyspell-mode)))
 
-(defconst beed/journal-directory
-  (let ((preferred (expand-file-name "~/Compendium/Journal/")))
-    (if (file-directory-p preferred)
-        preferred
-      (let ((fallback (expand-file-name "org/" user-emacs-directory)))
-        (make-directory fallback t)
-        fallback))))
-
 (defconst beed/journal-capture-file
-  (expand-file-name "capture.org" beed/journal-directory))
+  (expand-file-name "~/Compendium/Journal/capture.org"))
 
 (defun beed/org-journal-capture-target ()
   "Capture under today's heading in `beed/journal-capture-file'."
@@ -68,7 +60,9 @@
          ("C-c c" . org-capture)
          ("C-c l" . org-store-link))
   :config
-  (setq org-directory (file-truename beed/journal-directory))
+  (setq org-directory
+        (file-truename
+         (expand-file-name "~/Compendium/Journal/")))
 
   (setq org-agenda-files
         (mapcar (lambda (file)

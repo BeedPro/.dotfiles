@@ -1,16 +1,14 @@
 ;;; treesitter-rc.el --- Tree-sitter configuration -*- lexical-binding: t; -*-
 
 (use-package treesit-auto
-  :if (fboundp 'treesit-available-p)
+  :demand t
   :custom
   (treesit-auto-install 'prompt)
   :config
-  (when (treesit-available-p)
-    (treesit-auto-add-to-auto-mode-alist 'all)
-    (global-treesit-auto-mode)))
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
 
 (use-package typst-ts-mode
-  :if (fboundp 'treesit-available-p)
   :mode ("\\.typ\\'" . typst-ts-mode)
   :init
   (with-eval-after-load 'treesit
