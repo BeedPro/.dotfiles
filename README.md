@@ -1,69 +1,47 @@
-# Dotfiles
+For partitioning and disk setup during a fresh install, see [`INSTALL.md`](./INSTALL.md).
 
-Beed's Linux setup for a keyboard-driven workflow on Debian.
-
-I install Debian with [Xfce](https://www.xfce.org/), then run
-[i3wm](https://i3wm.org/) for day-to-day use.
-
-## Install
-
-This repo uses [GNU Stow](https://www.gnu.org/software/stow/) to symlink files
-into `$HOME`.
+Remember to update `xbps` and the system packages first:
 
 ```bash
-git clone git@codeberg.org:Beed/.dotfiles.git --depth 1 "$HOME/.dotfiles"
-cd "$HOME/.dotfiles"
-stow .
-```
+sudo xbps-install -Syu xbps
+sudo xbps-install -Syu
+````
 
-## Debian APT sources for non-free packages
-
-Some scripts need Debian packages outside `main`:
-
-- `add/nvidia` installs `nvidia-driver`.
-- `add/steam` installs `steam-installer` and enables `i386` architecture.
-
-Before running those scripts, make sure your Debian repositories include:
-
-- `contrib`
-- `non-free`
-- `non-free-firmware`
-
-If you use `.sources` files, each Debian source stanza should include:
-
-```text
-Components: main contrib non-free non-free-firmware
-```
-
-Example `debian.sources` entries:
-
-```text
-# Modernized from /etc/apt/sources.list
-Types: deb deb-src
-URIs: http://deb.debian.org/debian/
-Suites: trixie
-Components: main contrib non-free non-free-firmware
-Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
-
-# Modernized from /etc/apt/sources.list
-Types: deb deb-src
-URIs: http://security.debian.org/debian-security/
-Suites: trixie-security
-Components: main contrib non-free non-free-firmware
-Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
-
-# Modernized from /etc/apt/sources.list
-Types: deb deb-src
-URIs: http://deb.debian.org/debian/
-Suites: trixie-updates
-Components: main contrib non-free non-free-firmware
-Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
-```
-
-After changing sources, run:
+Then install the minimal dependencies:
 
 ```bash
-sudo apt update
+sudo xbps-install -S git neovim curl stow
 ```
 
-Also add `non-free` and `contrib` to `/etc/extrepo/config.yaml` when you install `extrepo`.
+Now clone the repository over HTTPS:
+
+```bash
+git clone https://github.com/BeedPro/.dotfiles.git
+```
+
+After that, use the grouped installers in `.voidlinux/add/` as needed:
+
+- `base`: CLI essentials and editors.
+- `desktop`: X11/i3 desktop apps and utilities.
+- `media`: MPD, MPV, Zathura, and related media tools.
+- `dev`: developer tooling packaged by Void.
+- `docs`: LaTeX and Typst tooling packaged by Void.
+- `fonts`: font packages replacing the old `getnf` flow.
+- `gaming`: Steam and Lutris, with required Void repos enabled.
+- `hardware`: HPLIP plus Polychromatic/OpenRazer.
+- `networking`: Syncthing and WireGuard tools.
+- `virt`: QEMU/libvirt setup.
+- `docker`: Docker plus Docker Compose.
+- `nvidia`: NVIDIA driver stack from Void repos.
+- `flatpak`: Flatpak plus the Flathub remote.
+- `flathub`: Flathub applications.
+
+Standalone helpers are also available for `betterfox`, `crontab`, `github`, `mpd-mpris`, `qemu-kvm.guest`, `vial-qmk`, `wallpapers`, and `xfce4`.
+
+Some old Debian `add/` scripts were intentionally not ported because Void does not provide them in its repositories. Those currently include `auto-cpufreq`, `bun`, `deno`, `espanso`, `getnf`, `ghcup`, `helium`, `heroic`, `nix`, `opencode-ai`, and `protonvpn`.
+
+Contributors can switch the remote to SSH later, after installing and configuring XFCE and SSH authentications:
+
+```bash
+git remote set-url origin git@github.com:BeedPro/.dotfiles.git
+```
