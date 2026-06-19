@@ -82,18 +82,14 @@ fi
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # https://unix.stackexchange.com/questions/767621/i-cant-get-bash-history-to-update-instantly-in-all-terminals
-PROMPT='
-PS1_VENV=${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }
+PROMPT_COMMAND='history -a; history -c; history -r'
+PS1_VENV='${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }'
+
 if declare -F __git_ps1 >/dev/null; then
-  PS1_CMD1=$(__git_ps1 "\n[%s]")
+  PS1='\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]\[\e[95m\]$(__git_ps1 "\n[%s]")\[\e[0m\]\n\[\e[93m\]'"$PS1_VENV"'\[\e[0m\]> '
 else
-  PS1_CMD1=
+  PS1='\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]\n\[\e[93m\]'"$PS1_VENV"'\[\e[0m\]> '
 fi
-'
-
-PS1='\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]\[\e[95m\]${PS1_CMD1}\[\e[0m\]\n\[\e[93m\]${PS1_VENV}\[\e[0m\]> '
-
-PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
