@@ -30,7 +30,6 @@
 
 (use-package embark-consult
   :after (embark consult)
-  :demand t
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 
 (provide 'completion-rc)
