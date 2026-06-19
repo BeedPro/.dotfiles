@@ -35,9 +35,12 @@
 (global-visual-line-mode 1)
 (global-auto-revert-mode 1)
 
-(set-face-attribute 'default nil
-                    :family "GohuFont 14 Nerd Font Mono"
-                    :height 140)
+(when (display-graphic-p)
+  (let ((font-spec (font-spec :family "GohuFont 14 Nerd Font Mono")))
+    (when (find-font font-spec)
+      (set-face-attribute 'default nil
+                          :family "GohuFont 14 Nerd Font Mono"
+                          :height 140))))
 
 ;; Package management
 (require 'package)
