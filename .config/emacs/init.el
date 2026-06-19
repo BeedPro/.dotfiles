@@ -50,9 +50,11 @@
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
-  (user-error "use-package is not installed. Run M-x package-install RET use-package RET"))
+  ;; Bootstrap use-package on first run so a clean machine can start.
+  (unless package-archive-contents
+    (package-refresh-contents))
+  (package-install 'use-package))
 
-;; Run M-x package-refresh-contents manually when needed.
 (require 'use-package)
 
 (setq use-package-always-ensure t
