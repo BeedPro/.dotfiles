@@ -4,6 +4,9 @@ set -euo pipefail
 # ~/.var/app/org.mozilla.firefox/config/mozilla/firefox
 # ~/.mozilla/firefox/
 
+sudo xbps-install -Syu
+sudo xbps-install -S firefox
+
 link_profile() {
   local profile_dir="$1"
 
