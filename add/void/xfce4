@@ -19,6 +19,7 @@ sudo xbps-install -Sy \
 # Desktop packages
 sudo xbps-install -Sy \
   dbus-x11 \
+  psmisc \
   xorg \
   xfce4 \
   xfce4-plugins \

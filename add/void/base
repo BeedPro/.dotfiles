@@ -4,7 +4,6 @@ set -euo pipefail
 
 PACKAGES=(
   bash-completion
-  psmisc
   glib
   tmux
   vim
