@@ -6,3 +6,5 @@ __pycache__/
 .config/emacs/custom.el
 .config/emacs/eln-cache/
 .config/emacs/elpa
+.config/emacs/history
+.config/emacs/recentf
