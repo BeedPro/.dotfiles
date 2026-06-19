@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-install -Syu
+
+sudo xbps-install -S \
+    yaru \
+    papirus-icon-theme \
+    nerd-fonts \
+    noto-fonts-ttf \
+    noto-fonts-emoji
