@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-install -Syu
+
+sudo xbps-install -S  nvidia nvidia-libs-32bit
+
+sudo reboot
