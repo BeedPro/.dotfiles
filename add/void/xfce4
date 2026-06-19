@@ -18,6 +18,7 @@ sudo xbps-install -Sy \
 
 # Desktop packages
 sudo xbps-install -Sy \
+  firefox \
   dbus-x11 \
   psmisc \
   cronie \
