@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-install -Syu
+
+sudo xbps-install -S fzf rustup tree-sitter-cli
+
+echo ""
+echo "Make sure to run the rustup-init to install rust toolkit"
