@@ -20,6 +20,7 @@ sudo xbps-install -Sy \
 sudo xbps-install -Sy \
   dbus-x11 \
   psmisc \
+  cronie \
   xorg \
   xfce4 \
   xfce4-plugins \
