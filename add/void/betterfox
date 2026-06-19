@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ~/.var/app/org.mozilla.firefox/config/mozilla/firefox
-# ~/.mozilla/firefox/
-
-sudo xbps-install -Syu
-sudo xbps-install -S firefox
-
 link_profile() {
   local profile_dir="$1"
 
@@ -30,8 +24,7 @@ if [[ $# -eq 1 ]]; then
 fi
 
 profile_roots=(
-  "$HOME/.mozilla/firefox"
-  "$HOME/.var/app/org.mozilla.firefox/config/mozilla/firefox"
+  "$HOME/.config/mozilla/firefox"
 )
 
 for profile_root in "${profile_roots[@]}"; do
