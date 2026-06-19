@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+sudo xbps-install -Syu
+sudo xbps-install -Sy \
+  hplip \
+  polychromatic \
+  openrazer-meta
+
+printf '%s\n' \
+  'Installed printer and Razer hardware tooling.' \
+  '' \
+  'Reboot if polychromatic or OpenRazer does not detect devices immediately.'

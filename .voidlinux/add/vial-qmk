@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+# README:
+# This script installs dependencies and sets up a local clone of Vial QMK at:
+#   $HOME/Projects/vial-kb/vial-qmk
+#
+# What it does:
+# 1) Installs ARM/QMK-related packages from Void repositories
+# 2) Clones (or updates) the vial-qmk repository
+# 3) Syncs git submodules
+# 4) Registers the repo with QMK CLI
+#
+# Build examples:
+#   cd $HOME/Projects/vial-kb/vial-qmk
+#   make keychron/v4/iso:vial
+#   make crkbd/rev4:vial
+#
+# Flash examples:
+#   make keychron/v4/iso:vial:flash
+#   make crkbd/rev4:vial:flash
+#
+# Corne (crkbd) rev4 firmware notes:
+#   https://github.com/foostan/crkbd/blob/main/docs/firmware/rev4/firmware_en.md
+#   https://github.com/vial-kb/vial-qmk/tree/vial/keyboards/crkbd
+
+set -euo pipefail
+
+SRC_PATH="$HOME/Projects/vial-kb/vial-qmk"
+
+printf '[vial-qmk] Installing build dependencies...\n'
+sudo xbps-install -Syu
+sudo xbps-install -Sy \
+  cross-arm-none-eabi \
+  dfu-util \
+  dfu-programmer \
+  qmk
+
+printf '[vial-qmk] Preparing source directory: %s\n' "$SRC_PATH"
+mkdir -p "$(dirname "$SRC_PATH")"
+
+if [ -d "$SRC_PATH/.git" ]; then
+  printf '[vial-qmk] Repo exists, pulling latest changes...\n'
+  git -C "$SRC_PATH" pull --ff-only
+else
+  printf '[vial-qmk] Cloning Vial QMK...\n'
+  git clone https://github.com/vial-kb/vial-qmk "$SRC_PATH"
+fi
+
+printf '[vial-qmk] Syncing git submodules...\n'
+make -C "$SRC_PATH" git-submodule
+
+printf '[vial-qmk] Registering firmware path with QMK CLI...\n'
+qmk setup -H "$SRC_PATH" -y
+
+printf '\n[vial-qmk] Setup complete.\n'

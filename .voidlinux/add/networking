@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+PACKAGES=(
+  syncthing
+  wireguard-tools
+)
+
+sudo xbps-install -Syu
+sudo xbps-install -Sy "${PACKAGES[@]}"
+
+printf '%s\n' \
+  'Installed Syncthing and WireGuard tools.' \
+  '' \
+  'Syncthing:' \
+  '- Start it manually with: syncthing' \
+  '' \
+  'WireGuard client setup:' \
+  '1. Put your VPN config at /etc/wireguard/wg0.conf' \
+  '2. Connect with: sudo wg-quick up wg0' \
+  '3. Check status with: sudo wg' \
+  '4. Disconnect with: sudo wg-quick down wg0'

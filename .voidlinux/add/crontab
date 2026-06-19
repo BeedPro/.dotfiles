@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+add_or_replace_cronjob() {
+  local tag="$1"
+  local schedule="$2"
+  local command="$3"
+  local remove_pattern="${4:-}"
+  local cron_line="${schedule} ${command} ${tag}"
+  local tmp_file
+
+  tmp_file="$(mktemp)"
+
+  if crontab -l >"$tmp_file" 2>/dev/null; then
+    :
+  else
+    : >"$tmp_file"
+  fi
+
+  grep -vF "$tag" "$tmp_file" >"${tmp_file}.next" || true
+  if [ -n "$remove_pattern" ]; then
+    grep -vF "$remove_pattern" "${tmp_file}.next" >"${tmp_file}.clean" || true
+    mv "${tmp_file}.clean" "${tmp_file}.next"
+  fi
+  mv "${tmp_file}.next" "$tmp_file"
+  printf '%s\n' "$cron_line" >>"$tmp_file"
+  crontab "$tmp_file"
+  rm -f "$tmp_file"
+
+  printf 'Installed cron entry:\n%s\n' "$cron_line"
+}
+
+setup_keepass_backup_cron() {
+  local script_path="$HOME/.local/scripts/file-backup"
+  local db_path_default="$HOME/Compendium/Keepass/BeedDB.kdbx"
+  local db_path="${1:-$db_path_default}"
+  local max_backups="${2:-24}"
+  local schedule="${3:-0 * * * *}"
+  local tag="# keepass-backup-hourly"
+
+  if ! [[ "$max_backups" =~ ^[1-9][0-9]*$ ]]; then
+    printf 'max_backups must be a positive integer, got: %s\n' "$max_backups" >&2
+    exit 1
+  fi
+
+  if [ ! -x "$script_path" ]; then
+    printf 'Backup script is missing or not executable: %s\n' "$script_path" >&2
+    exit 1
+  fi
+
+  add_or_replace_cronjob "$tag" "$schedule" "$script_path \"$db_path\" $max_backups" "$script_path $db_path"
+}
+
+setup_keepass_backup_cron "$@"

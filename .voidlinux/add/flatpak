@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+sudo xbps-install -Syu
+sudo xbps-install -Sy flatpak
+
+flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+echo 'Flatpak installed and Flathub added.'

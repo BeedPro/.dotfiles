@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+sudo xbps-install -Syu
+sudo xbps-install -Sy \
+  void-repo-nonfree \
+  void-repo-multilib \
+  void-repo-multilib-nonfree
+
+sudo xbps-install -Syu
+sudo xbps-install -Sy \
+  steam \
+  lutris
+
+printf '%s\n' \
+  'Installed gaming packages from Void repositories.' \
+  '' \
+  'Skipped tools not found in Void repos:' \
+  '- Heroic Games Launcher' \
+  '- ProtonVPN'

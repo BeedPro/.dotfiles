@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if ! grep -Eq '(vmx|svm)' /proc/cpuinfo; then
+  echo 'CPU virtualization extensions not detected (vmx/svm).' >&2
+  exit 1
+fi
+
+sudo xbps-install -Syu
+sudo xbps-install -Sy \
+  qemu \
+  qemu-img \
+  libvirt \
+  virt-manager \
+  bridge-utils
+
+sudo ln -sfn /etc/sv/libvirtd /var/service/libvirtd
+
+for group in libvirt kvm; do
+  sudo usermod -aG "$group" "$USER"
+done
+
+sudo virsh net-autostart default
+sudo virsh net-start default || true
+
+printf '%s\n' \
+  'QEMU/libvirt configured.' \
+  'Log out and back in for new group memberships to apply.'

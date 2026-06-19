@@ -24,21 +24,7 @@ sudo xbps-install -Sy \
   xfce4-plugins \
   xfce4-screenshooter \
   lightdm \
-  lightdm-gtk-greeter
-
-# Applications, themes, fonts, and helpers
-sudo xbps-install -Sy \
-  firefox \
-  cornie \
-  yaru \
-  papirus-icon-theme \
-  dejavu-fonts-ttf \
-  noto-fonts-ttf \
-  noto-fonts-emoji \
-  nerd-fonts \
-  font-iosevka \
-  gohufont \
-  brightnessctl \
+  lightdm-gtk-greeter \
   gvfs \
   udisks2
 

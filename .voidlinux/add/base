@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+PACKAGES=(
+  bash-completion
+  glib
+  tmux
+  vim
+  neovim
+  git
+  curl
+  stow
+  eza
+  bat
+  fd
+  ripgrep
+  dust
+  git-lfs
+  python3-virtualenv
+  python3-pipx
+  fzf
+)
+
+sudo xbps-install -Syu
+sudo xbps-install -Sy "${PACKAGES[@]}"

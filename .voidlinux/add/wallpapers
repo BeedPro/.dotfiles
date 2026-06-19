@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+target_dir="$HOME/Pictures/Wallpapers"
+
+mkdir -p "$HOME/Pictures"
+
+if [[ -d "$target_dir/.git" ]]; then
+  git -C "$target_dir" pull --ff-only
+else
+  git clone https://github.com/dharmx/walls "$target_dir"
+fi

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+PACKAGES=(
+  github-cli
+  go
+  openjdk21
+  rustup
+  uv
+  volta
+  tree-sitter-cli
+  swi-prolog
+)
+
+sudo xbps-install -Syu
+sudo xbps-install -Sy "${PACKAGES[@]}"
+
+printf '%s\n' \
+  'Installed development tooling from Void repositories.' \
+  '' \
+  'Notes:' \
+  '- rustup is installed, but no Rust toolchain is selected yet.' \
+  '  Run: rustup default stable' \
+  '- swi-prolog is installed, but the optional lsp_server pack was skipped' \
+  '  because it is not provided by Void repositories.'
