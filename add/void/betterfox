@@ -4,17 +4,38 @@ set -euo pipefail
 # ~/.var/app/org.mozilla.firefox/config/mozilla/firefox
 # ~/.mozilla/firefox/
 
-if [[ $# -ne 1 ]]; then
-  echo "Usage: $0 <firefox-profile-dir>" >&2
+link_profile() {
+  local profile_dir="$1"
+
+  if [[ ! -d "$profile_dir" ]]; then
+    echo "Firefox profile directory not found: $profile_dir" >&2
+    exit 1
+  fi
+
+  ln -sfn "$HOME/.dotfiles/.mozilla/firefox/user.js" "$profile_dir/user.js"
+  ln -sfn "$HOME/.dotfiles/.mozilla/firefox/chrome" "$profile_dir/chrome"
+}
+
+if [[ $# -gt 1 ]]; then
+  echo "Usage: $0 [firefox-profile-dir]" >&2
   exit 1
 fi
 
-profile_dir="$1"
-
-if [[ ! -d "$profile_dir" ]]; then
-  echo "Firefox profile directory not found: $profile_dir" >&2
-  exit 1
+if [[ $# -eq 1 ]]; then
+  link_profile "$1"
+  exit 0
 fi
 
-ln -sfn "$HOME/.dotfiles/.mozilla/firefox/user.js" "$profile_dir/user.js"
-ln -sfn "$HOME/.dotfiles/.mozilla/firefox/chrome" "$profile_dir/chrome"
+profile_roots=(
+  "$HOME/.mozilla/firefox"
+  "$HOME/.var/app/org.mozilla.firefox/config/mozilla/firefox"
+)
+
+for profile_root in "${profile_roots[@]}"; do
+  [[ -d "$profile_root" ]] || continue
+
+  for profile_dir in "$profile_root"/*; do
+    [[ -d "$profile_dir" ]] || continue
+    link_profile "$profile_dir"
+  done
+done
