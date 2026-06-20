@@ -3,7 +3,7 @@ set -euo pipefail
 
 sudo xbps-install -Syu
 
-sudo xbps-install -S \
+sudo xbps-install -Sy \
     fzf \
     tmux \
     ncurses-term \
@@ -13,6 +13,23 @@ sudo xbps-install -S \
     neovim \
     emacs \
     emacs-gtk3
+
+sudo xbps-install -Sy \
+    binutils \
+    curl \
+    gcc \
+    gmp-devel \
+    glibc-devel \
+    libffi-devel \
+    make \
+    ncurses-devel \
+    ncurses-libtinfo-libs \
+    perl \
+    pkg-config \
+    tar \
+    xz
+
+curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
 volta install node
 rustup-init --no-modify-path
