@@ -51,6 +51,10 @@ sudo mkdir -p /etc/alsa/conf.d
 sudo ln -sfn /usr/share/alsa/alsa.conf.d/50-pipewire.conf /etc/alsa/conf.d/50-pipewire.conf
 sudo ln -sfn /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf /etc/alsa/conf.d/99-pipewire-default.conf
 
+cd ~/.dotfiles
+ln -sfn ../.dotfiles/.config/autostart ~/.config/autostart
+ln -sfn ../.dotfiles/.config/pipewire ~/.config/pipewire
+
 # Start services after packages and config links are in place
 sudo ln -sfn /etc/sv/dbus /var/service/dbus
 sudo ln -sfn /etc/sv/elogind /var/service/elogind
