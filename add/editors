@@ -8,6 +8,7 @@ sudo xbps-install -S \
     tmux \
     ncurses-term \
     rustup \
+    volta \
     tree-sitter-cli \
     neovim \
     emacs \
