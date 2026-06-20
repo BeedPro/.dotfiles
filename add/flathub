@@ -3,6 +3,6 @@
 set -euo pipefail
 
 sudo xbps-install -Syu
-sudo xbps-install -S borg
+sudo xbps-install -Sy borg
 
 flatpak install -y flathub com.borgbase.Vorta

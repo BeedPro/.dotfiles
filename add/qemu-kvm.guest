@@ -2,6 +2,6 @@
 
 set -euo pipefail
 
-sudo xbps-install -S spice-vdagent
+sudo xbps-install -Sy spice-vdagent
 sudo ln -s /etc/sv/spice-vdagentd /var/service
 sudo reboot

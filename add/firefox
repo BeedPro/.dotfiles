@@ -3,7 +3,7 @@ set -euo pipefail
 shopt -s nullglob
 
 sudo xbps-install -Syu
-sudo xbps-install -S firefox
+sudo xbps-install -Sy firefox
 
 for profile_dir in "$HOME/.config/mozilla/firefox"/*/; do
   ln -sfn "$HOME/.dotfiles/.mozilla/firefox/user.js" "$profile_dir/user.js"
