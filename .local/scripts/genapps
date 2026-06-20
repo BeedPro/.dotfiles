@@ -18,8 +18,7 @@ APPS=(
   "Bookmarks|$HOME/.local/scripts/bookmarks"
   "Libresprite|libresprite"
   "Vial|vial"
-  'Google Calendar|firefox --new-window "https://calendar.google.com"'
-  'GitHub|firefox --new-window "https://github.com"'
+  "nwg-look|nwg-look"
 )
 
 for entry in "${APPS[@]}"; do
@@ -38,7 +37,6 @@ Type=Application
 Terminal=false
 EOF
 
-  chmod +x "$DESKTOP_FILE"
   echo "Created $DESKTOP_FILE"
 done
 

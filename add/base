@@ -3,7 +3,14 @@ set -euo pipefail
 
 sudo xbps-install -Syu
 
-sudo xbps-install -S syncthing speech-dispatcher
+sudo xbps-install -S \
+    syncthing \
+    speech-dispatcher \
+    flatpak
+
+flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+echo 'Flatpak installed and Flathub added.'
 
 echo ""
 echo "Make sure to run the add/betterfox script after opening up firefox for the first time"
