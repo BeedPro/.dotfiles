@@ -34,8 +34,10 @@ xclip -selection clipboard < "$KEY.pub"
 
 echo "Public key copied to clipboard."
 echo "Add it here: GitHub -> Settings -> SSH and GPG keys -> New SSH key"
-echo
+echo ""
 cat "$KEY.pub"
-echo
-echo "After adding it, test with:"
-echo "ssh -T git@github.com"
+echo ""
+read -r -p "After adding the key to GitHub, press Enter to test SSH..."
+
+ssh -T git@github.com || true
+git remote set-url origin git@github.com:BeedPro/.dotfiles.git
