@@ -5,14 +5,17 @@ sudo xbps-install -Syu
 
 sudo xbps-install -S \
     unzip \
+    speech-dispatcher \
+    brightnessctl \
+    stow \
+    curl \
+    flatpak
+
+sudo xbps-install -S \
     syncthing \
     timeshift \
     keepassxc \
-    speech-dispatcher \
-    rofi \
-    brightnessctl \
-    firefox \
-    flatpak
+    rofi
 
 flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
