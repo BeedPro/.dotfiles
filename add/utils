@@ -16,7 +16,7 @@ sudo xbps-install -Sy \
     eza \
     bat \
     git-lfs \
-    pipx \
+    python3-pipx \
     curl \
     fzf \
     tmux \
