@@ -14,6 +14,5 @@ sudo xbps-install -S \
     emacs \
     emacs-gtk3
 
-echo ""
-echo "Make sure to run the 'rustup-init' to install rust toolkit"
-echo "Make sure to run the 'volta install node' to install nodejs"
+volta install node
+rustup-init --no-modify-path
