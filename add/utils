@@ -6,6 +6,7 @@ sudo xbps-install -Syu
 sudo xbps-install -S \
     unzip \
     speech-dispatcher \
+    bash-completion \
     brightnessctl \
     stow \
     curl \

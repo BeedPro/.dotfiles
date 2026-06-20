@@ -65,19 +65,18 @@ alias folders='sudo du -h --max-depth=1 . 2>/dev/null'
 alias foldersort='sudo bash -c '\''find . -maxdepth 1 -type d -print0 2>/dev/null | xargs -0 du -sk | sort -rn'\'''
 alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
 
-eval "$(fzf --bash)"
-
-if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
+command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)"
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # https://unix.stackexchange.com/questions/767621/i-cant-get-bash-history-to-update-instantly-in-all-terminals
 PROMPT_COMMAND='history -a; history -c; history -r'
 PS1='\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]\n\[\e[93m\]${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }\[\e[0m\]> '
+
+[[ $PS1 &&
+  ! ${BASH_COMPLETION_VERSINFO:-} &&
+  -f /usr/share/bash-completion/bash_completion ]] &&
+    . /usr/share/bash-completion/bash_completion
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
