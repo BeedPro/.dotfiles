@@ -21,4 +21,8 @@ sudo xbps-install -S \
 
 flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
+git clone --depth=1 https://github.com/void-linux/void-packages.git ~/.local/pkgs
+cd ~/.local/pkgs
+~/.local/pkgs/xbps-src binary-bootstrap
+
 sudo reboot
