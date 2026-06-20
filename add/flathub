@@ -2,19 +2,7 @@
 
 set -euo pipefail
 
-if ! command -v flatpak >/dev/null 2>&1; then
-  echo 'flatpak is required. Install it first with .voidlinux/add/flatpak' >&2
-  exit 1
-fi
-
-flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+sudo xbps-install -Syu
+sudo xbps-install -S borg
 
 flatpak install -y flathub com.borgbase.Vorta
-flatpak install -y flathub org.keepassxc.KeePassXC
-flatpak install -y flathub com.github.tchx84.Flatseal
-flatpak install -y flathub org.prismlauncher.PrismLauncher
-flatpak install -y flathub org.libreoffice.LibreOffice
-flatpak install -y flathub io.mrarm.mcpelauncher
-flatpak install -y flathub com.obsproject.Studio
-flatpak install -y flathub com.github.Matoking.protontricks
-flatpak install -y flathub org.vinegarhq.Sober

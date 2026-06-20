@@ -5,6 +5,7 @@ sudo xbps-install -Syu
 
 sudo xbps-install -S \
     fzf \
+    tmux \
     rustup \
     tree-sitter-cli \
     neovim \
