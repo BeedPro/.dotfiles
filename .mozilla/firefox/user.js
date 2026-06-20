@@ -1,22 +1,3 @@
-//
-/* You may copy+paste this file and use it as it is.
- *
- * If you make changes to your about:config while the program is running, the
- * changes will be overwritten by the user.js when the application restarts.
- *
- * To make lasting changes to preferences, you will have to edit the user.js.
- */
-
-/****************************************************************************
- * Betterfox                                                                *
- * "Ad meliora"                                                             *
- * version: 146                                                             *
- * url: https://github.com/yokoffing/Betterfox                              *
- ****************************************************************************/
-
-/****************************************************************************
- * SECTION: FASTFOX                                                         *
- ****************************************************************************/
 /** GENERAL ***/
 user_pref("gfx.content.skia-font-cache-size", 32);
 
@@ -222,21 +203,37 @@ user_pref("browser.menu.showViewImageInfo", true);
 user_pref("findbar.highlightAll", true);
 user_pref("layout.word_select.eat_space_to_next_word", false);
 
-/****************************************************************************
- * START: MY OVERRIDES                                                      *
- ****************************************************************************/
-// visit https://github.com/yokoffing/Betterfox/wiki/Common-Overrides
-// visit https://github.com/yokoffing/Betterfox/wiki/Optional-Hardening
-// Enter your personal overrides below this line:
+/** FIREFOX ACCOUNT ***/
 user_pref("identity.fxaccounts.enabled", false);
+
+/** SIDEBAR ***/
 user_pref("sidebar.revamp.round-content-area", false);
 
-/****************************************************************************
- * SECTION: SMOOTHFOX                                                       *
- ****************************************************************************/
-// visit https://github.com/yokoffing/Betterfox/blob/main/Smoothfox.js
-// Enter your scrolling overrides below this line:
+/** SEARCH SETTINGS ***/
+user_pref("browser.urlbar.showSearchTerms.enabled", true);
+user_pref("browser.search.separatePrivateDefault", false);
+user_pref("browser.search.separatePrivateDefault.ui.enabled", true);
 
-/****************************************************************************
- * END: BETTERFOX                                                           *
- ****************************************************************************/
+/** SEARCH ENGINE SUGGESTIONS ***/
+user_pref("browser.search.suggest.enabled", false);
+user_pref("browser.urlbar.suggest.searches", false);
+user_pref("browser.urlbar.showSearchSuggestionsFirst", false);
+user_pref("browser.search.suggest.enabled.private", false);
+user_pref("browser.urlbar.trending.featureGate", false);
+
+/** ADDRESS BAR SUGGESTIONS ***/
+user_pref("browser.urlbar.suggest.history", false);
+user_pref("browser.urlbar.suggest.bookmark", false);
+user_pref("browser.urlbar.suggest.openpage", false);
+user_pref("browser.urlbar.suggest.topsites", false);
+user_pref("browser.urlbar.suggest.recentsearches", false);
+user_pref("browser.urlbar.suggest.engines", false);
+user_pref("browser.urlbar.suggest.quickactions", false);
+
+/** FIREFOX SUGGEST ***/
+user_pref("browser.urlbar.quicksuggest.enabled", false);
+user_pref("browser.urlbar.suggest.quicksuggest.all", false);
+user_pref("browser.urlbar.suggest.quicksuggest.sponsored", false);
+
+/** SEARCH ENGINE SHORTCUTS ***/
+user_pref("browser.search.hiddenOneOffs", "Google,Bing,Perplexity");
