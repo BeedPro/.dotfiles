@@ -6,6 +6,7 @@ sudo xbps-install -Syu
 sudo xbps-install -S \
     syncthing \
     timeshift \
+    keepassxc \
     speech-dispatcher \
     flatpak
 
