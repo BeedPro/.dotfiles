@@ -9,6 +9,8 @@ sudo xbps-install -S \
     brightnessctl \
     stow \
     curl \
+    fzf \
+    tmux \
     flatpak
 
 sudo xbps-install -S \
