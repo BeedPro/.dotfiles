@@ -24,6 +24,7 @@ sudo xbps-install -Sy \
 
 sudo xbps-install -Sy \
     qalculate-gtk \
+    scrcpy \
     gucharmap \
     syncthing \
     timeshift \

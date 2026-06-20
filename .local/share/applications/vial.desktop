@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Vial
 Exec=vial
+Icon=vial
 Type=Application
 Terminal=false

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Libresprite
 Exec=libresprite
+Icon=libresprite
 Type=Application
 Terminal=false

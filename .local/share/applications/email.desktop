@@ -2,4 +2,5 @@
 Name=Email
 Exec=/home/beed/.local/scripts/openapps email
 Type=Application
+Icon=email
 Terminal=false

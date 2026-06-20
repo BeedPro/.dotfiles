@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Eden
 Exec=eden-switch
+Icon=eden
 Type=Application
 Terminal=false

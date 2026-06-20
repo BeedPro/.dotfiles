@@ -2,4 +2,5 @@
 Name=Chat
 Exec=/home/beed/.local/scripts/openapps chat
 Type=Application
+Icon=internet-chat
 Terminal=false
