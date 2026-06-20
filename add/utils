@@ -9,12 +9,22 @@ sudo xbps-install -Sy \
     bash-completion \
     brightnessctl \
     stow \
+    fd \
+    ripgrep \
+    dust \
+    eza \
+    bat \
+    git-lfs \
+    pipx \
     curl \
     fzf \
     tmux \
+    qalculate \
     flatpak
 
 sudo xbps-install -Sy \
+    qalculate-gtk \
+    gucharmap \
     syncthing \
     timeshift \
     keepassxc \
