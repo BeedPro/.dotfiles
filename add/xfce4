@@ -19,6 +19,7 @@ sudo xbps-install -Sy \
 # Desktop packages
 sudo xbps-install -Sy \
   firefox \
+  rofi \
   brightnessctl \
   dbus-x11 \
   psmisc \
