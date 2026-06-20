@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=wscrcpy
+Exec=/home/beed/.local/scripts/wscrcpy -y
+Type=Application
+Terminal=false

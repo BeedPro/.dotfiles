@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Helium
+Exec=helium
+Type=Application
+Icon=helium
+Terminal=false

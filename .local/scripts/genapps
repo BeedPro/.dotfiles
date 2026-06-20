@@ -11,7 +11,7 @@ APPS=(
   "Godot|godot"
   "Helium|helium"
   "Eden|eden-switch"
-  "Emacs-daemon|emacs --daemon"
+  "Emacs (daemon)|emacs --daemon"
   "wscrcpy|$HOME/.local/scripts/wscrcpy -y"
   "Chat|$HOME/.local/scripts/openapps chat"
   "Email|$HOME/.local/scripts/openapps email"

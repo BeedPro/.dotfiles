@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Email
+Exec=/home/beed/.local/scripts/openapps email
+Type=Application
+Terminal=false

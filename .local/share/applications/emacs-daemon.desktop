@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Emacs (Daemon)
+Exec=emacs --daemon
+Icon=emacs
+Type=Application
+Terminal=false

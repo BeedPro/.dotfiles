@@ -9,3 +9,4 @@ __pycache__/
 .config/emacs/history
 .config/emacs/recentf
 .config/emacs/auto-save-list/
+.local/share/applications/mimeinfo.cache
