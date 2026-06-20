@@ -11,40 +11,40 @@ sudo passwd -l root
 sudo xbps-install -Syu
 
 sudo xbps-install -Sy \
-  void-repo-nonfree \
-  void-repo-multilib \
-  void-repo-multilib-nonfree \
-  linux-firmware
+    void-repo-nonfree \
+    void-repo-multilib \
+    void-repo-multilib-nonfree \
+    linux-firmware
 
 # XFCE4 packages
 sudo xbps-install -Sy \
-  dbus-x11 \
-  psmisc \
-  cronie \
-  xorg \
-  xfce4 \
-  xfce4-plugins \
-  xfce4-screenshooter \
-  lightdm \
-  lightdm-gtk-greeter \
-  gvfs \
-  udisks2
+    firefox \
+    dbus-x11 \
+    psmisc \
+    cronie \
+    xorg \
+    xfce4 \
+    xfce4-plugins \
+    xfce4-screenshooter \
+    lightdm \
+    lightdm-gtk-greeter \
+    gvfs \
+    udisks2
 
 # Desktop permissions and networking
 sudo xbps-install -Sy \
-  NetworkManager \
-  network-manager-applet
+    NetworkManager \
+    network-manager-applet
 
 # Audio and Bluetooth
 sudo xbps-install -Sy \
-  pipewire \
-  wireplumber \
-  alsa-pipewire \
-  pamixer \
-  pavucontrol \
-  bluez \
-  libspa-bluetooth \
-  blueman
+    pipewire \
+    wireplumber \
+    alsa-pipewire \
+    pamixer \
+    bluez \
+    libspa-bluetooth \
+    blueman
 
 # ALSA compatibility for PipeWire
 sudo mkdir -p /etc/alsa/conf.d
