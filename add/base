@@ -9,6 +9,9 @@ sudo xbps-install -S \
     timeshift \
     keepassxc \
     speech-dispatcher \
+    rofi \
+    brightnessctl \
+    firefox \
     flatpak
 
 flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo

@@ -16,11 +16,8 @@ sudo xbps-install -Sy \
   void-repo-multilib-nonfree \
   linux-firmware
 
-# Desktop packages
+# XFCE4 packages
 sudo xbps-install -Sy \
-  firefox \
-  rofi \
-  brightnessctl \
   dbus-x11 \
   psmisc \
   cronie \
