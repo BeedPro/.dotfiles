@@ -6,3 +6,4 @@ Xcursor.size: 24
 EOF
 
 feh --no-fehbg --bg-scale $HOME/.config/wallpaper/current.jpg
+setxkbmap gb
