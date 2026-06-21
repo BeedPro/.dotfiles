@@ -23,5 +23,7 @@ sudo xbps-install -Sy \
     acpi \
     lm_sensors \
     xsettingsd \
+    arandr \
+    xss-lock \
     gsettings-desktop-schemas \
     xdotool

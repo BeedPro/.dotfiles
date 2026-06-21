@@ -5,13 +5,11 @@ dunst &
 mpd
 /usr/libexec/xfce-polkit &
 
-flatpak run org.keepassxc.KeePassXC &
+keepassxc &
 flatpak run com.borgbase.Vorta &
 
 xss-lock --transfer-sleep-lock -- slock --nofork &
 picom -b
 espanso-x11 start --unmanaged
-$HOME/.screenlayout/set-screens.sh
+$HOME/.screenlayout/screens.sh
 xset dpms 0 0 0 && xset s noblank  && xset s off
-dwmblocks &
-cp $HOME/.config/wallpaper/current.jpg /tmp/wallpaper.jpg
