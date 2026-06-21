@@ -41,6 +41,8 @@ sudo xbps-install -Sy \
     zathura \
     nsxiv \
     calibre \
+    mpv \
+    mpd \
     rofi
 
 bat cache --build
