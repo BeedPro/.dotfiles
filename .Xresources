@@ -1,0 +1,7 @@
+! nsxiv dark mode
+Nsxiv.window.background: #000000
+Nsxiv.window.foreground: #eeeeee
+Nsxiv.bar.background:    #000000
+Nsxiv.bar.foreground:    #eeeeee
+Nsxiv.mark.foreground:   #ff5f59
+
