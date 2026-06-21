@@ -26,5 +26,5 @@ sudo xbps-install -Sy \
     arandr \
     slock \
     xss-lock \
-    gsettings-desktop-schemas \
+    xdg-desktop-portal-gtk \
     xdotool

@@ -15,4 +15,5 @@ pgrep -x keepassxc >/dev/null || keepassxc &
 pgrep -x xss-lock >/dev/null || xss-lock --transfer-sleep-lock -- slock &
 pgrep -x picom >/dev/null || picom -b
 pgrep -x espanso >/dev/null || espanso-x11 start --unmanaged &
+pgrep -x emacs >/dev/null || emacs --daemon &
 pgrep -x syncthing >/dev/null || gtk-launch syncthing-start &
