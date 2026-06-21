@@ -541,7 +541,9 @@ def main() -> None:
     toggle_nvim()
     toggle_emacs()
     restart_emacs_daemon()
+    # TODO: install opencode
     # toggle_opencode(mode)
+    # FIXME: install calibre and fix issues
     # toggle_calibre(mode)
     set_wallpaper(mode)
     toggle_gtk(mode)
