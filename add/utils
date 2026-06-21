@@ -30,6 +30,9 @@ sudo xbps-install -Sy \
     syncthing \
     timeshift \
     keepassxc \
+    zathura \
+    nsxiv \
+    calibre \
     rofi
 
 bat cache --build
