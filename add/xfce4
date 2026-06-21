@@ -29,6 +29,8 @@ sudo xbps-install -Sy \
     lightdm \
     lightdm-gtk-greeter \
     gvfs \
+    ntfs-3g \
+    exfatprogs \
     udisks2
 
 # Desktop permissions and networking
