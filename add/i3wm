@@ -24,7 +24,6 @@ sudo xbps-install -Sy \
     lm_sensors \
     xsettingsd \
     arandr \
-    slock \
     xss-lock \
     xdg-desktop-portal-gtk \
     xdotool
