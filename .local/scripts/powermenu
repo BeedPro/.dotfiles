@@ -1,4 +1,5 @@
 #!/bin/bash
+
 choice=$(echo -e "lock\nlogout\nsuspend\nhibernate\nreboot\npoweroff" | rofi -dmenu)
 
 if [[ -f /tmp/power-lock ]]; then
@@ -9,7 +10,7 @@ fi
 if [ "$choice" == "logout" ]; then
   pkill i3
 elif [ "$choice" == "lock" ]; then
-  "$LOCKER"
+  i3lock -c "#000000"
 elif [ -n "$choice" ]; then
-  systemctl "${choice,,}"
+  loginctl "$choice"
 fi
