@@ -9,6 +9,7 @@ sudo xbps-install -Sy \
     ncurses-term \
     rustup \
     volta \
+    openjdk25 \
     tree-sitter-cli \
     neovim \
     emacs \
