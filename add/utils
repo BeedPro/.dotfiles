@@ -4,6 +4,7 @@ set -euo pipefail
 sudo xbps-install -Syu
 
 sudo xbps-install -Sy \
+    xtools \
     unzip \
     speech-dispatcher \
     ncurses-term \
