@@ -6,7 +6,6 @@ font pango:GohuFont 14 Nerd Font Mono 14
 
 include ~/.config/i3/themes/dark.conf
 
-exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id ~/.local/share/autostart
 
 workspace 1 output DP-4 eDP-1

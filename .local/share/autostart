@@ -1,15 +1,18 @@
 #!/bin/sh
-nm-applet &
-gtk-launch syncthing-start &
-dunst &
-mpd
-/usr/libexec/xfce-polkit &
 
-keepassxc &
-flatpak run com.borgbase.Vorta &
+dbus-update-activation-environment DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP 2>/dev/null
+[ -x "$HOME/.screenlayout/screens.sh" ] && "$HOME/.screenlayout/screens.sh"
 
-xss-lock --transfer-sleep-lock -- slock --nofork &
-picom -b
-espanso-x11 start --unmanaged
-$HOME/.screenlayout/screens.sh
-xset dpms 0 0 0 && xset s noblank  && xset s off
+dex --autostart --environment i3
+
+pgrep -x nm-applet >/dev/null || nm-applet &
+pgrep -x pipewire >/dev/null || pipewire &
+pgrep -x dunst >/dev/null || dunst &
+pgrep -x mpd >/dev/null || mpd &
+
+pgrep -x xfce-polkit >/dev/null || /usr/libexec/xfce-polkit &
+pgrep -x keepassxc >/dev/null || keepassxc &
+pgrep -x xss-lock >/dev/null || xss-lock --transfer-sleep-lock -- slock &
+pgrep -x picom >/dev/null || picom -b
+pgrep -x espanso >/dev/null || espanso-x11 start --unmanaged &
+pgrep -x syncthing >/dev/null || gtk-launch syncthing-start &
