@@ -28,3 +28,5 @@ Once GitHub has been set up and the repository origin has been updated to use
 SSH, please change into the dotfiles directory with `cd ~/.dotfiles` and run
 `stow .` to apply the dotfile symlinks. And run `add/utils` to setup the system
 for general use.
+
+For monitors please setup an xorg monitor config.

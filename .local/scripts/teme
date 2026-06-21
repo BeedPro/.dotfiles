@@ -516,7 +516,7 @@ def set_wallpaper(mode: str) -> None:
     wallpaper_dir = Path.home() / ".config/wallpaper"
     wallpaper = wallpaper_dir / "themes" / f"{mode}.jpg"
     shutil.copyfile(wallpaper, wallpaper_dir / "current.jpg")
-    script = Path.home() / ".screenlayout/set-screens.sh"
+    script = Path.home() / ".screenlayout/screens.sh"
     subprocess.run([str(script)], check=True)
     print(f"{wallpaper_dir / 'current.jpg'}: {mode}")
 
@@ -541,8 +541,8 @@ def main() -> None:
     toggle_nvim()
     toggle_emacs()
     restart_emacs_daemon()
-    toggle_opencode(mode)
-    toggle_calibre(mode)
+    # toggle_opencode(mode)
+    # toggle_calibre(mode)
     set_wallpaper(mode)
     toggle_gtk(mode)
     reset_terminal_sessions()
