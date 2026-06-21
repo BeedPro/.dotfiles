@@ -23,6 +23,8 @@ sudo xbps-install -Sy \
     qalculate \
     flatpak
 
+# TODO: Add espanso
+
 sudo xbps-install -Sy \
     qalculate-gtk \
     scrcpy \
