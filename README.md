@@ -31,8 +31,17 @@ for general use.
 
 For monitors please setup an xorg monitor config.
 
-For laptop for suspends please disable `acpid` service and have xfce4-power-manager suspend for lid close:
+For laptop for suspends please disable `acpid` service and have `xfce4-power-manager` suspend for lid close on both plugged in and out:
 
 ```bash
 sudo rm /var/service/acpid
+```
+
+and make sure we have this in `/etc/elogind/logind.conf`:
+
+```
+[Login]
+HandleLidSwitch=suspend
+HandleLidSwitchExternalPower=suspend
+HandleLidSwitchDocked=ignore
 ```
