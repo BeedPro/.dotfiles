@@ -30,3 +30,9 @@ SSH, please change into the dotfiles directory with `cd ~/.dotfiles` and run
 for general use.
 
 For monitors please setup an xorg monitor config.
+
+For laptop for suspends please disable `acpid` service:
+
+```bash
+sudo rm /var/service/acpid
+```
