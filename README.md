@@ -31,7 +31,7 @@ for general use.
 
 For monitors please setup an xorg monitor config.
 
-For laptop for suspends please disable `acpid` service:
+For laptop for suspends please disable `acpid` service and have xfce4-power-manager suspend for lid close:
 
 ```bash
 sudo rm /var/service/acpid
