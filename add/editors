@@ -29,6 +29,8 @@ sudo xbps-install -Sy \
     perl \
     zlib-devel \
     pkg-config \
+    base-devel \
+    libsecret-devel \
     tar \
     xz
 

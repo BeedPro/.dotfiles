@@ -4,6 +4,8 @@ set -euo pipefail
 sudo xbps-install -Syu
 
 sudo xbps-install -Sy \
+    wireguard-tools \
+    openresolv \
     xtools \
     unzip \
     speech-dispatcher \
