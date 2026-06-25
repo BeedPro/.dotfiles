@@ -36,7 +36,7 @@
 (global-auto-revert-mode 1)
 
 (set-face-attribute 'default nil
-                    :family "GohuFont 14 Nerd Font Mono"
+                    :family "Iosevka Nerd Font Propo"
                     :height 140)
 
 ;; Package management
