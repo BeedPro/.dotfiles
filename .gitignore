@@ -11,3 +11,4 @@ __pycache__/
 .config/emacs/auto-save-list/
 .local/share/applications/mimeinfo.cache
 .screenlayout/screens.sh
+.config/opencode/opencode.jsonc
