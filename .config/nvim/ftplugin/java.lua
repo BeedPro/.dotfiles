@@ -141,6 +141,8 @@ local config = {
 }
 
 jdtls.start_or_attach(config)
+jdtls.setup_dap { hotcodereplace = "auto" }
+require("jdtls.dap").setup_dap_main_class_configs()
 
 local map = function(mode, lhs, rhs, desc)
   vim.keymap.set(mode, lhs, rhs, { buffer = true, desc = desc })
