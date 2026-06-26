@@ -5,6 +5,7 @@ sudo xbps-install -Syu
 
 sudo xbps-install -Sy \
     wireguard-tools \
+    xdg-utils \
     openresolv \
     xtools \
     unzip \
