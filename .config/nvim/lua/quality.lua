@@ -12,7 +12,6 @@ require("conform").setup {
     c = { "clang-format" },
     cpp = { "clang-format" },
     haskell = { "fourmolu" },
-    java = { "clang-format" },
     typst = { "prettypst" },
     prolog = { "prolog" },
     lua = { "stylua" },
@@ -52,7 +51,7 @@ require("lint").linters_by_ft = {
 }
 
 vim.keymap.set({ "n", "x" }, "<leader>cf", function()
-  require("conform").format { lsp_fallback = true, async = true }
+  require("conform").format { lsp_format = "first", async = true }
 end, { desc = "Format code" })
 
 vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave", "BufEnter" }, {

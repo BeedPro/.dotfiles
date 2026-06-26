@@ -130,7 +130,11 @@ local config = {
         enabled = true,
       },
       format = {
-        enabled = false,
+        enabled = true,
+        settings = {
+          url = vim.fn.expand "~/.config/java/eclipse-formatter.xml",
+          profile = "Neovim",
+        },
       },
     },
   },
