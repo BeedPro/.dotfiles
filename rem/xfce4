@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo rm -f \
+    /var/service/dbus \
+    /var/service/elogind \
+    /var/service/lightdm \
+    /var/service/udisks2 \
+    /var/service/polkitd \
+    /var/service/cronie \
+    /var/service/NetworkManager \
+    /var/service/bluetoothd
+
+for link in "$HOME/.config/autostart" "$HOME/.config/pipewire"; do
+    if [[ -L "$link" ]]; then
+        rm -f "$link"
+    fi
+done
+
+sudo rm -f \
+    /etc/alsa/conf.d/50-pipewire.conf \
+    /etc/alsa/conf.d/99-pipewire-default.conf
+
+sudo xbps-remove -Ry \
+    void-repo-nonfree \
+    void-repo-multilib \
+    void-repo-multilib-nonfree \
+    linux-firmware \
+    firefox \
+    dbus-x11 \
+    psmisc \
+    cronie \
+    xorg \
+    xfce4 \
+    xfce4-plugins \
+    xfce4-screenshooter \
+    lightdm \
+    lightdm-gtk-greeter \
+    gvfs \
+    ntfs-3g \
+    exfatprogs \
+    udisks2 \
+    NetworkManager \
+    network-manager-applet \
+    pipewire \
+    wireplumber \
+    alsa-pipewire \
+    pamixer \
+    bluez \
+    libspa-bluetooth \
+    blueman
+
+sudo reboot

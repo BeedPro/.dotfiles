@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo rm -f /var/service/spice-vdagentd
+sudo xbps-remove -Ry spice-vdagent
+
+sudo reboot

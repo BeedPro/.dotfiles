@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+shopt -s nullglob
+
+for profile_dir in "$HOME/.config/mozilla/firefox"/*/; do
+    if [[ "$(readlink "$profile_dir/user.js" 2>/dev/null || true)" == "$HOME/.dotfiles/.mozilla/firefox/user.js" ]]; then
+        rm -f "$profile_dir/user.js"
+    fi
+
+    if [[ "$(readlink "$profile_dir/chrome" 2>/dev/null || true)" == "$HOME/.dotfiles/.mozilla/firefox/chrome" ]]; then
+        rm -f "$profile_dir/chrome"
+    fi
+done
+
+sudo xbps-remove -Ry firefox

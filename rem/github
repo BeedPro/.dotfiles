@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-remove -Ry github-cli xclip
+
+KEY="$HOME/.ssh/github"
+rm -f "$KEY" "$KEY.pub"
+
+if [[ -f "$HOME/.ssh/config" ]]; then
+    tmp="$(mktemp)"
+    perl -0pe 's/\nHost github\.com\n  HostName github\.com\n  User git\n  IdentityFile ~\/\.ssh\/github\n  IdentitiesOnly yes\n//g' "$HOME/.ssh/config" > "$tmp"
+    mv "$tmp" "$HOME/.ssh/config"
+    chmod 600 "$HOME/.ssh/config"
+fi
+
+git remote set-url origin https://github.com/BeedPro/.dotfiles.git

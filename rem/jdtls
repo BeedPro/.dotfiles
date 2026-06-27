@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mason_root="${MASON:-${XDG_DATA_HOME:-$HOME/.local/share}/nvim/mason}"
+
+rm -f "$mason_root/bin/jdtls"
+rm -rf "$mason_root/share/jdtls" "$mason_root/packages/jdtls"

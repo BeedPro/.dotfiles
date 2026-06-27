@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-remove -Ry \
+    nwg-look \
+    yaru \
+    papirus-icon-theme \
+    nerd-fonts \
+    noto-fonts-ttf \
+    noto-fonts-emoji
