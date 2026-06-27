@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-sudo xbps-remove -Ry linux-firmware-amd mesa-dri mesa-vulkan-radeon
+sudo xbps-remove -Ry \
+  linux-firmware-amd \
+  mesa-dri \
+  mesa-vulkan-radeon \
+  libdrm-32bit \
+  mesa-dri-32bit \
+  mesa-vulkan-radeon-32bit
 
 sudo reboot
