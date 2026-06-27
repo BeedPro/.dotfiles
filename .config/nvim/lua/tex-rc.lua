@@ -1,5 +1,5 @@
-local lsp = require "lsprc"
-local quality = require "quality"
+local lsp = require "lsp-rc"
+local quality = require "quality-rc"
 
 lsp.enable { "texlab" }
 

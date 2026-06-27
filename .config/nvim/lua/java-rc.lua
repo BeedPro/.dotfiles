@@ -1,5 +1,5 @@
-local lsp = require "lsprc"
-local mason = require "masonrc"
+local lsp = require "lsp-rc"
+local mason = require "mason-rc"
 local treesitter = require "treesitter-rc"
 
 vim.pack.add {

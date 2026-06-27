@@ -1,8 +1,8 @@
-local lsp = require "lsprc"
-local mason = require "masonrc"
-local quality = require "quality"
+local lsp = require "lsp-rc"
+local mason = require "mason-rc"
+local quality = require "quality-rc"
 local treesitter = require "treesitter-rc"
-local dap = require "debugging"
+local dap = require "debugging-rc"
 
 lsp.enable { "hls" }
 mason.add {

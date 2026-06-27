@@ -1,4 +1,4 @@
-local quality = require "quality"
+local quality = require "quality-rc"
 local treesitter = require "treesitter-rc"
 
 treesitter.add {
