@@ -107,10 +107,10 @@
   (yas-global-mode 1))
 
 (require 'ui-rc)
-(require 'formatter-rc)
 (require 'inbuffer-completion-rc)
 (require 'completion-rc)
 (require 'git-rc)
 (require 'treesitter-rc)
+(require 'formatter-rc)
 (require 'lsp-rc)
 (require 'prose-rc)
