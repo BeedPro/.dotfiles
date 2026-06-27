@@ -10,6 +10,7 @@ sudo xbps-remove -Ry \
     wireguard-tools \
     xdg-utils \
     openresolv \
+    fuse-sshfs \
     xtools \
     unzip \
     speech-dispatcher \
