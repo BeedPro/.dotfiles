@@ -1,5 +1,9 @@
 ;;; ui-rc.el --- UI configuration -*- lexical-binding: t; -*-
 
+(set-face-attribute 'default nil
+                    :family "Iosevka Nerd Font Propo"
+                    :height 140)
+
 (use-package dashboard
   :defer nil
   :config
