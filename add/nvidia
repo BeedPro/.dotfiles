@@ -3,6 +3,15 @@ set -euo pipefail
 
 sudo xbps-install -Syu
 
-sudo xbps-install -Sy nvidia-libs-32bit
+sudo xbps-install -Sy \
+  linux-firmware-nvidia \
+  nvidia \
+  nvidia-libs-32bit \
+  libdrm-32bit \
+  libgcc-32bit \
+  libstdc++-32bit \
+  libglvnd-32bit \
+  vulkan-loader \
+  vulkan-loader-32bit
 
 sudo reboot

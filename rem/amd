@@ -5,8 +5,13 @@ sudo xbps-remove -Ry \
   linux-firmware-amd \
   mesa-dri \
   mesa-vulkan-radeon \
+  vulkan-loader \
+  libgcc-32bit \
+  libstdc++-32bit \
   libdrm-32bit \
+  libglvnd-32bit \
   mesa-dri-32bit \
-  mesa-vulkan-radeon-32bit
+  mesa-vulkan-radeon-32bit \
+  vulkan-loader-32bit
 
 sudo reboot
