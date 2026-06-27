@@ -6,4 +6,5 @@ sudo xbps-install -Syu
 sudo xbps-install -Sy \
     PrismLauncher \
     libdrm-32bit \
+    lutris \
     steam
