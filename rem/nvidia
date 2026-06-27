@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-remove -Ry nvidia-libs-32bit
+
+sudo reboot

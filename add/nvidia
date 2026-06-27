@@ -3,6 +3,6 @@ set -euo pipefail
 
 sudo xbps-install -Syu
 
-sudo xbps-install -Sy linux-firmware-amd mesa-dri mesa-vulkan-radeon
+sudo xbps-install -Sy nvidia-libs-32bit
 
 sudo reboot

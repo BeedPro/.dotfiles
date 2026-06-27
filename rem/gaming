@@ -3,4 +3,5 @@ set -euo pipefail
 
 sudo xbps-remove -Ry \
     PrismLauncher \
+    libdrm-32bit \
     steam
