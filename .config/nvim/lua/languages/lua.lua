@@ -1,9 +1,10 @@
 local lsp = require "lsprc"
+local mason = require "masonrc"
 local quality = require "quality"
 local treesitter = require "treesitter-rc"
 
 lsp.enable { "lua_ls" }
-lsp.mason {
+mason.add {
   "lua-language-server",
   "stylua",
 }

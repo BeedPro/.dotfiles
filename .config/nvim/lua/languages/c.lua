@@ -1,10 +1,11 @@
 local lsp = require "lsprc"
+local mason = require "masonrc"
 local quality = require "quality"
 local treesitter = require "treesitter-rc"
 local dap = require "debugging"
 
 lsp.enable { "clangd" }
-lsp.mason {
+mason.add {
   "clangd",
   "codelldb",
   "cpplint",

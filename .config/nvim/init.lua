@@ -14,6 +14,7 @@ require("journal")
 require("filebrowser")
 require("completion")
 require("navigation")
+require("masonrc")
 
 -- Default languages
 require("languages.lua")
@@ -23,7 +24,7 @@ require("languages.markdown")
 require("languages.yaml")
 require("languages.shell")
 
--- Optional languages
+-- Additional languages
 require("languages.python")
 require("languages.web")
 require("languages.c")

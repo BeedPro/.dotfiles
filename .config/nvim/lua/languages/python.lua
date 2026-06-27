@@ -1,10 +1,11 @@
 local lsp = require "lsprc"
+local mason = require "masonrc"
 local quality = require "quality"
 local treesitter = require "treesitter-rc"
 require "debugging"
 
 lsp.enable { "ty" }
-lsp.mason {
+mason.add {
   "ty",
   "debugpy",
   "ruff",

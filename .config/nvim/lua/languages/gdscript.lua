@@ -1,10 +1,11 @@
 local lsp = require "lsprc"
+local mason = require "masonrc"
 local quality = require "quality"
 local treesitter = require "treesitter-rc"
 local dap = require "debugging"
 
 lsp.enable { "gdscript" }
-lsp.mason { "gdtoolkit" }
+mason.add { "gdtoolkit" }
 
 treesitter.add { "gdscript" }
 

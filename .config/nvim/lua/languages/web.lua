@@ -1,4 +1,5 @@
 local lsp = require "lsprc"
+local mason = require "masonrc"
 local quality = require "quality"
 local treesitter = require "treesitter-rc"
 local dap = require "debugging"
@@ -10,7 +11,7 @@ lsp.enable {
   "svelte",
 }
 
-lsp.mason {
+mason.add {
   "biome",
   "typescript-language-server",
   "tailwindcss-language-server",
