@@ -3,52 +3,39 @@ vim.pack.add {
   "https://github.com/mfussenegger/nvim-lint",
 }
 
-require("conform").setup {
-  formatters_by_ft = {
-    python = { "ruff_format", "ruff_organize_imports" },
-    djangohtml = { "djlint" },
-    htmldjango = { "djlint" },
-    tex = { "tex-fmt" },
-    c = { "clang-format" },
-    cpp = { "clang-format" },
-    haskell = { "fourmolu" },
-    typst = { "prettypst" },
-    prolog = { "prolog" },
-    lua = { "stylua" },
-    typescript = { "biome" },
-    typescriptreact = { "biome" },
-    javascript = { "biome" },
-    javascriptreact = { "biome" },
-    json = { "biome" },
-    html = { "biome" },
-    css = { "biome" },
-    svelte = { "biome" },
-    gdscript = { "gdformat" },
-    markdown = { "prettierd" },
-    ["_"] = { "trim_whitespace" },
-  },
-  format_on_save = {
-    lsp_format = "never",
-    formatters = { "trim_whitespace" },
-  },
+local M = {}
+local formatters_by_ft = {
+  ["_"] = { "trim_whitespace" },
 }
+local linters_by_ft = {}
 
-require("lint").linters_by_ft = {
-  python = { "ruff" },
-  htmldjango = { "djlint" },
-  c = { "cpplint" },
-  cpp = { "cpplint" },
-  haskell = { "hlint" },
-  typescript = { "biomejs" },
-  typescriptreact = { "biomejs" },
-  javascript = { "biomejs" },
-  javascriptreact = { "biomejs" },
-  json = { "biomejs" },
-  html = { "biomejs" },
-  css = { "biomejs" },
-  svelte = { "biomejs" },
-  gdscript = { "gdlint" },
-}
+local function configure()
+  require("conform").setup {
+    formatters_by_ft = formatters_by_ft,
+    format_on_save = {
+      lsp_format = "never",
+      formatters = { "trim_whitespace" },
+    },
+  }
+
+  require("lint").linters_by_ft = linters_by_ft
+end
+
+function M.formatters(items)
+  for ft, formatters in pairs(items) do
+    formatters_by_ft[ft] = formatters
+  end
+  configure()
+end
+
+function M.linters(items)
+  for ft, linters in pairs(items) do
+    linters_by_ft[ft] = linters
+  end
+  configure()
+end
+
+configure()
 
 vim.keymap.set({ "n", "x" }, "<leader>cf", function()
   require("conform").format { lsp_format = "first", async = true }
@@ -60,3 +47,5 @@ vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave", "Buf
     require("lint").try_lint()
   end,
 })
+
+return M

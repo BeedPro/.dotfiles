@@ -2,8 +2,10 @@ vim.pack.add {
   "https://github.com/folke/lazydev.nvim",
   "https://github.com/mason-org/mason.nvim",
   "https://github.com/neovim/nvim-lspconfig",
-  "https://codeberg.org/mfussenegger/nvim-jdtls",
 }
+
+local M = {}
+local mason_packages = {}
 
 require("lazydev").setup {
   library = {
@@ -54,50 +56,21 @@ vim.diagnostic.config {
 
 vim.lsp.document_color.enable(false)
 
-vim.lsp.enable {
-  "ty",
-  "clangd",
-  "hls",
-  "tinymist",
-  "prolog_ls",
-  "lua_ls",
-  "biome",
-  "ts_ls",
-  "tailwindcss",
-  "svelte",
-  "gdscript",
-  "texlab",
-}
+function M.enable(servers)
+  vim.lsp.enable(servers)
+end
+
+function M.mason(packages)
+  vim.list_extend(mason_packages, packages)
+end
+
+function M.pack_add(packages)
+  vim.pack.add(packages)
+end
 
 vim.api.nvim_create_user_command("MasonInstallAll", function()
   require("mason-registry").refresh(function()
-    for _, name in ipairs {
-      "ty",
-      "clangd",
-      "jdtls",
-      "haskell-language-server",
-      "lua-language-server",
-      "biome",
-      "typescript-language-server",
-      "tailwindcss-language-server",
-      "svelte-language-server",
-      "debugpy",
-      "codelldb",
-      "haskell-debug-adapter",
-      "js-debug-adapter",
-      "firefox-debug-adapter",
-      "java-debug-adapter",
-      "java-test",
-      "ruff",
-      "djlint",
-      "cpplint",
-      "clang-format",
-      "fourmolu",
-      "hlint",
-      "stylua",
-      "prettierd",
-      "gdtoolkit",
-    } do
+    for _, name in ipairs(mason_packages) do
       if pcall(require("mason-registry").get_package, name)
         and not select(2, pcall(require("mason-registry").get_package, name)):is_installed()
       then
@@ -107,5 +80,7 @@ vim.api.nvim_create_user_command("MasonInstallAll", function()
   end)
   vim.cmd "Mason"
 end, {
-  desc = "Install predefined Mason packages",
+  desc = "Install enabled Mason packages",
 })
+
+return M

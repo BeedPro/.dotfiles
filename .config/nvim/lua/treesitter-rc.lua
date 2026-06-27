@@ -2,35 +2,13 @@ vim.pack.add {
   "https://github.com/nvim-treesitter/nvim-treesitter",
 }
 
-local parsers = {
-  "c",
-  "cpp",
-  "css",
-  "gdscript",
-  "groovy",
-  "haskell",
-  "htmldjango",
-  "html",
-  "java",
-  "javascript",
-  "json",
-  "lua",
-  "python",
-  "markdown",
-  "markdown_inline",
-  "query",
-  "svelte",
-  "tsx",
-  "typescript",
-  "typst",
-  "vim",
-  "vimdoc",
-  "yaml",
-  "prolog",
-  "bash",
-}
+local M = {}
+local parsers = {}
 
-require("nvim-treesitter").install(parsers)
+function M.add(items)
+  vim.list_extend(parsers, items)
+  require("nvim-treesitter").install(items)
+end
 
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("TreesitterFileTypeStart", { clear = true }),
@@ -42,5 +20,7 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_user_command("TSInstallAll", function()
   require("nvim-treesitter").install(parsers)
 end, {
-  desc = "Install predefined Treesitter parsers",
+  desc = "Install enabled Treesitter parsers",
 })
+
+return M

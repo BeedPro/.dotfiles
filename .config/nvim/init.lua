@@ -9,15 +9,31 @@ vim.pack.add {
 
 require("theme")
 require("minirc")
-require("treesitter-rc")
-require("lsprc")
-require("quality")
-require("debugging")
 require("git")
 require("journal")
 require("filebrowser")
 require("completion")
 require("navigation")
+
+-- Default languages
+require("languages.lua")
+require("languages.vim")
+require("languages.treesitterquery")
+require("languages.markdown")
+require("languages.yaml")
+require("languages.shell")
+
+-- Optional languages
+require("languages.python")
+require("languages.web")
+require("languages.c")
+require("languages.java")
+require("languages.haskell")
+require("languages.typst")
+require("languages.tex")
+require("languages.prolog")
+require("languages.gdscript")
+require("languages.groovy")
 
 -- Options
 vim.o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.add")
