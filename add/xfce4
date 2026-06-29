@@ -61,7 +61,6 @@ ln -sfn ../.dotfiles/.config/pipewire ~/.config/pipewire
 sudo ln -sfn /etc/sv/dbus /var/service/dbus
 sudo ln -sfn /etc/sv/elogind /var/service/elogind
 sudo ln -sfn /etc/sv/lightdm /var/service/lightdm
-sudo ln -sfn /etc/sv/udisks2 /var/service/udisks2
 sudo ln -sfn /etc/sv/polkitd /var/service/polkitd
 sudo ln -sfn /etc/sv/cronie /var/service/cronie
 sudo ln -sfn /etc/sv/NetworkManager /var/service/NetworkManager
