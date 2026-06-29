@@ -14,5 +14,5 @@ pgrep -x keepassxc >/dev/null || keepassxc &
 pgrep -x xss-lock >/dev/null || xss-lock --transfer-sleep-lock -- i3lock --nofork --pass-volume-keys --pass-media-keys -c "#000000" &
 pgrep -x picom >/dev/null || picom -b
 pgrep -x espanso >/dev/null || espanso-x11 start --unmanaged
-pgrep -x emacs >/dev/null || emacs --daemon &
+pgrep -u "$USER" -f "emacs --daemon=default" >/dev/null || emacs --daemon=default &
 pgrep -x syncthing >/dev/null || gtk-launch syncthing-start &
