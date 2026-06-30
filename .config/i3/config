@@ -2,7 +2,7 @@ set $mod Mod4
 set $browser firefox
 set $files thunar
 
-font pango:Iosevka Nerd Font Mono 14
+font pango:IosevkaTerm Nerd Font Mono 14
 
 include ~/.config/i3/themes/dark.conf
 
