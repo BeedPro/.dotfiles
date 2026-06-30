@@ -1,5 +1,5 @@
 set selection-clipboard clipboard
-set font "GohuFont uni14 Nerd Font Mono 14"
+set font "Iosevka Nerd Font Mono 16"
 set recolor "true"
 
 # Dark
