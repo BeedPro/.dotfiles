@@ -2,7 +2,7 @@
 
 (set-face-attribute 'default nil
                     :family "Iosevka Nerd Font Propo"
-                    :height 140)
+                    :height 160)
 
 (use-package dashboard
   :defer nil
