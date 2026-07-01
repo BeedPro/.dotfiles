@@ -18,7 +18,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 if [[ 1 -eq $__ETC_PROFILE_NIX_SOURCED ]] && ! type -p nix-shell > /dev/null; then unset __ETC_PROFILE_NIX_SOURCED && source /etc/profile.d/nix.sh; fi
 
-set -o vi
+set -o emacs
 
 shopt -s histappend
 export HISTSIZE=500000
