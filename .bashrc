@@ -23,14 +23,10 @@ set -o emacs
 edit-command-line-in-editor() {
   local tmpfile
   tmpfile="$(mktemp)"
-
   printf '%s\n' "$READLINE_LINE" > "$tmpfile"
-
   "${EDITOR:-vi}" "$tmpfile" </dev/tty >/dev/tty 2>&1
-
   READLINE_LINE="$(cat "$tmpfile")"
   READLINE_POINT="${#READLINE_LINE}"
-
   rm -f "$tmpfile"
 }
 
