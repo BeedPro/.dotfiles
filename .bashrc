@@ -11,8 +11,8 @@ export PATH="$HOME/.local/bin:$PATH"
 
 export SDKMAN_DIR="$HOME/.sdkman"
 
+[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 [ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env"
-[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 [ -f "$HOME/.deno/env" ] && source "$HOME/.deno/env"
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
@@ -42,8 +42,15 @@ export HISTTIMEFORMAT='%F %T '
 export MANPAGER='nvim +Man!'
 source $HOME/.config/fzf/themes/dark.sh
 
-export JAVA_HOME="$(dirname "$(dirname "$(readlink -f /usr/bin/java)")")"
 export GOPATH="$HOME/.go"
+[ -d "$SDKMAN_DIR/candidates/java/current" ] \
+  && export JAVA_HOME="$SDKMAN_DIR/candidates/java/current" \
+  || export JAVA_HOME="/usr/lib/jvm/default"
+
+[ -d "$SDKMAN_DIR/candidates/maven/current" ] \
+  && export MAVEN_HOME="$SDKMAN_DIR/candidates/maven/current" \
+  || export MAVEN_HOME="/usr/share/maven"
+
 
 alias peaclock='peaclock --config-dir ~/.config/peaclock'
 
