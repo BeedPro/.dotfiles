@@ -8,14 +8,15 @@ local formatters_by_ft = {
   ["_"] = { "trim_whitespace" },
 }
 local linters_by_ft = {}
+local format_enabled = true
 
 local function configure()
   require("conform").setup {
     formatters_by_ft = formatters_by_ft,
-    format_on_save = {
+    format_on_save = format_enabled and {
       lsp_format = "never",
       formatters = { "trim_whitespace" },
-    },
+    } or nil,
   }
 
   require("lint").linters_by_ft = linters_by_ft
@@ -40,6 +41,16 @@ configure()
 vim.keymap.set({ "n", "x" }, "<leader>cf", function()
   require("conform").format { lsp_format = "first", async = true }
 end, { desc = "Format code" })
+
+vim.api.nvim_create_user_command("FormatDisable", function()
+  format_enabled = false
+  configure()
+end, { desc = "Disable format on save" })
+
+vim.api.nvim_create_user_command("FormatEnable", function()
+  format_enabled = true
+  configure()
+end, { desc = "Enable format on save" })
 
 vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave", "BufEnter" }, {
   group = vim.api.nvim_create_augroup("NvimLint", { clear = true }),
