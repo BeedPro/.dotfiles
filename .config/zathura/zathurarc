@@ -1,5 +1,5 @@
 set selection-clipboard clipboard
-set font "IosevkaTerm Nerd Font Mono 16"
+set font "FiraCode Nerd Font Mono 16"
 set recolor "true"
 
 # Dark
