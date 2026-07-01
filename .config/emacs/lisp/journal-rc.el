@@ -6,13 +6,21 @@
 (defun beed/org-journal-capture-target ()
   "Capture under today's heading in `beed/journal-capture-file'."
   (set-buffer (org-capture-target-buffer beed/journal-capture-file))
-  (org-with-wide-buffer
-   (goto-char (point-min))
-   (let ((heading (format "* %s" (format-time-string "%Y%m%d"))))
-     (unless (re-search-forward (format "^%s$" (regexp-quote heading)) nil t)
-       (goto-char (point-min))
-       (insert heading "\n"))
-     (beginning-of-line))))
+  (widen)
+  (let ((heading (format "* %s" (format-time-string "%Y%m%d"))))
+    (goto-char (point-max))
+    (if (re-search-backward (format "^%s$" (regexp-quote heading)) nil t)
+        (progn
+          (beginning-of-line)
+          (org-end-of-subtree t t)
+          (unless (bolp)
+            (insert "\n")))
+      (goto-char (point-max))
+      (unless (bolp)
+        (insert "\n"))
+      (insert heading "\n"))
+    (org-capture-put :exact-position (point) :insert-here t)
+    (point)))
 
 (use-package org
   :ensure nil
@@ -33,12 +41,10 @@
   (setq org-capture-templates
         '(("t" "Task" entry
            (function beed/org-journal-capture-target)
-           "** TODO %<%H%M%S> - %?\n"
-           :prepend t)
+           "** TODO %<%H%M%S> - %?")
           ("n" "Note" entry
            (function beed/org-journal-capture-target)
-           "** %<%H%M%S> - %?\n"
-           :prepend t)))
+           "** %<%H%M%S> - %?")))
 
   (setq org-refile-targets '((org-agenda-files :maxlevel . 2))
         org-refile-use-outline-path 'file
