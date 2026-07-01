@@ -4,6 +4,16 @@ vim.pack.add {
 
 local journal_dir = vim.fs.normalize(vim.fn.expand "~/Compendium/Journal")
 local capture_file = journal_dir .. package.config:sub(1, 1) .. "capture.org"
+local journal_datetree = {
+  tree_type = "custom",
+  tree = {
+    {
+      format = "%Y%m%d",
+      pattern = "^(%d%d%d%d)(%d%d)(%d%d)$",
+      order = { 1, 2, 3 },
+    },
+  },
+}
 
 local function face_from_hl(hl, opts)
   opts = opts or {}
@@ -57,34 +67,14 @@ require("orgmode").setup {
       template = "** TODO %<%H%M%S> - %?",
       target = capture_file,
       ---@diagnostic disable-next-line: missing-fields
-      datetree = {
-        tree_type = "custom",
-        tree = {
-          {
-            format = "%Y%m%d",
-            pattern = "^(%d%d%d%d)(%d%d)(%d%d)$",
-            order = { 1, 2, 3 },
-          },
-        },
-      },
-      properties = { empty_lines = { before = 0, after = 0 } },
+      datetree = journal_datetree,
     },
     n = {
       description = "Note",
       template = "** %<%H%M%S> - %?",
       target = capture_file,
       ---@diagnostic disable-next-line: missing-fields
-      datetree = {
-        tree_type = "custom",
-        tree = {
-          {
-            format = "%Y%m%d",
-            pattern = "^(%d%d%d%d)(%d%d)(%d%d)$",
-            order = { 1, 2, 3 },
-          },
-        },
-      },
-      properties = { empty_lines = { before = 0, after = 0 } },
+      datetree = journal_datetree,
     },
   },
 }

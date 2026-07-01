@@ -10,16 +10,12 @@
   (let ((heading (format "* %s" (format-time-string "%Y%m%d"))))
     (goto-char (point-max))
     (if (re-search-backward (format "^%s$" (regexp-quote heading)) nil t)
-        (progn
-          (beginning-of-line)
-          (org-end-of-subtree t t)
-          (unless (bolp)
-            (insert "\n")))
+        (beginning-of-line)
       (goto-char (point-max))
       (unless (bolp)
         (insert "\n"))
-      (insert heading "\n"))
-    (org-capture-put :exact-position (point) :insert-here t)
+      (insert heading "\n")
+      (forward-line -1))
     (point)))
 
 (use-package org
