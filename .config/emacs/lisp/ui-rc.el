@@ -11,18 +11,6 @@
                     :family "NotoSansM Nerd Font"
                     :height 120)
 
-(use-package dashboard
-  :defer nil
-  :config
-  (setq initial-buffer-choice 'dashboard-open
-        dashboard-startup-banner 'logo-braille
-        dashboard-center-content t
-        dashboard-vertically-center-content t
-        dashboard-items '((recents   . 5)
-                          (bookmarks . 5)
-                          (projects  . 5)))
-  (dashboard-setup-startup-hook))
-
 (use-package whitespace
   :ensure nil
   :defer nil
