@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-install -Syu
+
+sudo xbps-install -Sy \
+  tlp \
+  powertop \
+  acpi \
+  brightnessctl
+
+sudo ln -sfn /etc/sv/tlp /var/service/
+
+sudo reboot
