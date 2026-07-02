@@ -6,11 +6,9 @@
          ("\\.markdown\\'" . markdown-mode))
   :custom
   (markdown-command "pandoc")
-  (markdown-fontify-code-blocks-natively t)
+  (markdown-fontify-code-blocks-natively nil)
   (markdown-enable-wiki-links t)
-  (markdown-italic-underscore t)
-  :hook ((markdown-mode . flyspell-mode)
-         (gfm-mode . flyspell-mode)))
+  (markdown-italic-underscore t))
 
 (provide 'markdown-rc)
 ;;; markdown-rc.el ends here
