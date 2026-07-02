@@ -47,6 +47,7 @@ sudo xbps-install -Sy \
     calibre \
     mpv \
     mpd \
+    mpc \
     rofi
 
 bat cache --build
