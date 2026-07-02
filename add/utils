@@ -50,6 +50,9 @@ sudo xbps-install -Sy \
     mpc \
     rofi
 
+mkdir -p ~/.local/share/mpd/playlists
+mkdir -p ~/.local/state/mpd
+
 bat cache --build
 flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
