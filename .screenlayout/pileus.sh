@@ -1,9 +1,14 @@
 #!/bin/bash
 
+feh --no-fehbg --bg-scale $HOME/.config/wallpaper/current.jpg
+
 xrdb -merge <<EOF
 Xft.dpi: 96
 Xcursor.size: 24
 EOF
 
-feh --no-fehbg --bg-scale $HOME/.config/wallpaper/current.jpg
-setxkbmap gb
+xset s off
+xset -dpms
+xset s noblank
+
+# setxkbmap gb
