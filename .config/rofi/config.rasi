@@ -84,7 +84,7 @@ element-icon {
     text-color:       inherit;
 }
 window {
-    font: "FiraCode Nerd Font Mono 12";
+    font: "NotoSansM Nerd Font Mono 12";
     padding:          5;
     background-color: @background;
     border:           1;
