@@ -1,15 +1,15 @@
 * {
   rosewater: #d09dc0;
-  flamingo:  #ff5f5f;
-  pink:      #ff66ff;
+  flamingo:  #ff6b55;
+  pink:      #b6a0ff;
   mauve:     #feacd0;
   red:       #ff5f59;
   maroon:    #cf7fa7;
-  peach:     #efef00;
+  peach:     #fec43f;
   yellow:    #d0bc00;
   green:     #44bc44;
-  teal:      #00eff0;
-  sky:       #00eff0;
+  teal:      #6ae4b9;
+  sky:       #6ae4b9;
   sapphire:  #2fafff;
   blue:      #00bcff;
   lavender:  #9099d9;
@@ -23,7 +23,7 @@
 
   surface2:  #303030;
   surface1:  #1e1e1e;
-  surface0:  #0f0f0f;
+  surface0:  #1e1e1e;
   base:      #000000;
   mantle:    #1e1e1e;
   crust:     #000000;
