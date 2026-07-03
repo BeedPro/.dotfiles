@@ -30,7 +30,7 @@ edit-command-line-in-editor() {
   rm -f "$tmpfile"
 }
 
-bind -x '"\C-x\C-v": edit-command-line-in-editor'
+bind -x '"\C-x\C-z": edit-command-line-in-editor'
 
 shopt -s histappend
 export HISTSIZE=500000
