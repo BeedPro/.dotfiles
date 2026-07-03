@@ -49,13 +49,6 @@
 
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
-;; Avoid accidentally using the shell shortcut reserved in .bashrc.
-(defun beed/do-not-use-c-x-c-z ()
-  (interactive)
-  (message "Do not use C-x C-z; this keybinding is used in .bashrc."))
-
-(global-set-key (kbd "C-x C-z") #'beed/do-not-use-c-x-c-z)
-
 ;; Input method display
 (defun beed/arabic-input-method-title ()
   (when (string= current-input-method "arabic")

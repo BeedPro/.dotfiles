@@ -20,18 +20,6 @@ if [[ 1 -eq $__ETC_PROFILE_NIX_SOURCED ]] && ! type -p nix-shell > /dev/null; th
 
 set -o emacs
 
-edit-command-line-in-editor() {
-  local tmpfile
-  tmpfile="$(mktemp)"
-  printf '%s\n' "$READLINE_LINE" > "$tmpfile"
-  "${EDITOR:-vi}" "$tmpfile" </dev/tty >/dev/tty 2>&1
-  READLINE_LINE="$(cat "$tmpfile")"
-  READLINE_POINT="${#READLINE_LINE}"
-  rm -f "$tmpfile"
-}
-
-bind -x '"\C-x\C-z": edit-command-line-in-editor'
-
 shopt -s histappend
 export HISTSIZE=500000
 export HISTFILESIZE=500000
