@@ -1,6 +1,6 @@
 # Theme Palette Reference
 
-Use this file as the source of truth when creating themes from the Modus palettes.
+Use the Alacritty themes as the source of truth for terminal colors, and this file as the source of truth when creating other themes from the Modus palettes.
 
 ## LLM Contract
 
@@ -13,6 +13,7 @@ Use this file as the source of truth when creating themes from the Modus palette
 - Use `NONE` only where the target format supports transparent or unset colors.
 
 Source palette: `miikanissi/modus-themes.nvim`, `lua/modus-themes/colors.lua`.
+Terminal source: `.config/alacritty/themes/dark.toml` and `.config/alacritty/themes/light.toml`.
 
 ## Light: modus_operandi
 
@@ -150,18 +151,18 @@ terminal:
   black: "#000000"
   black_bright: "#595959"
   red: "#a60000"
-  red_bright: "#972500"
+  red_bright: "#d00000"
   green: "#006800"
-  green_bright: "#00663f"
+  green_bright: "#008900"
   yellow: "#6f5500"
-  yellow_bright: "#884900"
+  yellow_bright: "#808000"
   blue: "#0031a9"
-  blue_bright: "#3548cf"
+  blue_bright: "#0000ff"
   magenta: "#721045"
-  magenta_bright: "#8f0075"
+  magenta_bright: "#dd22dd"
   cyan: "#005e8b"
-  cyan_bright: "#005f5f"
-  white: "#a6a6a6"
+  cyan_bright: "#008899"
+  white: "#bfbfbf"
   white_bright: "#ffffff"
 ```
 
@@ -301,18 +302,18 @@ terminal:
   black: "#000000"
   black_bright: "#595959"
   red: "#ff5f59"
-  red_bright: "#ff6b55"
+  red_bright: "#ff5f5f"
   green: "#44bc44"
-  green_bright: "#00c06f"
+  green_bright: "#44df44"
   yellow: "#d0bc00"
-  yellow_bright: "#fec43f"
+  yellow_bright: "#efef00"
   blue: "#2fafff"
-  blue_bright: "#79a8ff"
+  blue_bright: "#338fff"
   magenta: "#feacd0"
-  magenta_bright: "#f78fe7"
+  magenta_bright: "#ff66ff"
   cyan: "#00d3d0"
-  cyan_bright: "#6ae4b9"
-  white: "#a6a6a6"
+  cyan_bright: "#00eff0"
+  white: "#989898"
   white_bright: "#ffffff"
 ```
 

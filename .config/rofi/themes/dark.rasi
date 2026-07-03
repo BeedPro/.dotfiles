@@ -1,15 +1,15 @@
 * {
   rosewater: #d09dc0;
-  flamingo:  #ff6b55;
-  pink:      #f78fe7;
+  flamingo:  #ff5f5f;
+  pink:      #ff66ff;
   mauve:     #feacd0;
   red:       #ff5f59;
   maroon:    #cf7fa7;
-  peach:     #fec43f;
+  peach:     #efef00;
   yellow:    #d0bc00;
   green:     #44bc44;
-  teal:      #6ae4b9;
-  sky:       #6ae4b9;
+  teal:      #00eff0;
+  sky:       #00eff0;
   sapphire:  #2fafff;
   blue:      #00bcff;
   lavender:  #9099d9;
