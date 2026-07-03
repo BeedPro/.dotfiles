@@ -1,30 +1,30 @@
 * {
-  rosewater: #d09dc0;
+  rosewater: #ff9580;
   flamingo:  #ff6b55;
-  pink:      #b6a0ff;
+  pink:      #f78fe7;
   mauve:     #feacd0;
   red:       #ff5f59;
-  maroon:    #cf7fa7;
+  maroon:    #ff9580;
   peach:     #fec43f;
   yellow:    #d0bc00;
   green:     #44bc44;
-  teal:      #6ae4b9;
+  teal:      #00d3d0;
   sky:       #6ae4b9;
   sapphire:  #2fafff;
-  blue:      #00bcff;
-  lavender:  #9099d9;
+  blue:      #79a8ff;
+  lavender:  #79a8ff;
 
   text:      #ffffff;
-  subtext1:  #c6daff;
-  subtext0:  #989898;
-  overlay2:  #989898;
-  overlay1:  #2f3849;
-  overlay0:  #989898;
+  subtext1:  #a6a6a6;
+  subtext0:  #595959;
+  overlay2:  #a6a6a6;
+  overlay1:  #595959;
+  overlay0:  #595959;
 
-  surface2:  #303030;
-  surface1:  #1e1e1e;
-  surface0:  #1e1e1e;
+  surface2:  #595959;
+  surface1:  #000000;
+  surface0:  #000000;
   base:      #000000;
-  mantle:    #1e1e1e;
+  mantle:    #000000;
   crust:     #000000;
 }

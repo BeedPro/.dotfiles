@@ -1,38 +1,36 @@
 # Dark
 # Theme: Dark
-set notification-error-bg       "#000000"
-set notification-error-fg       "#FF5F59"
-set notification-warning-bg     "#000000"
-set notification-warning-fg     "#D0BC00"
-set notification-bg             "#000000"
-set notification-fg             "#FFFFFF"
-
-set completion-bg               "#000000"
-set completion-fg               "#FFFFFF"
-set completion-group-bg         "#1E1E1E"
-set completion-group-fg         "#C6DAFF"
-set completion-highlight-bg     "#2F447F"
-set completion-highlight-fg     "#FFFFFF"
-
-set index-bg                    "#1E1E1E"
-set index-fg                    "#989898"
-set index-active-bg             "#303030"
-set index-active-fg             "#FFFFFF"
-
-set inputbar-bg                 "#1E1E1E"
-set inputbar-fg                 "#FFFFFF"
-
-set statusbar-bg                "#505050"
-set statusbar-fg                "#FFFFFF"
-
-set highlight-color             "#7A6100"
-set highlight-active-color      "#9D1F1F"
-
-set default-bg                  "#000000"
-set default-fg                  "#FFFFFF"
-set render-loading              "true"
-set render-loading-bg           "#000000"
-set render-loading-fg           "#FFFFFF"
-
-set recolor-lightcolor          "#000000"
-set recolor-darkcolor           "#FFFFFF"
+# Modus Vivendi
+set notification-error-bg "#9d1f1f"
+set notification-error-fg "#ffffff"
+set notification-warning-bg "#7a6100"
+set notification-warning-fg "#ffffff"
+set notification-bg "#000000"
+set notification-fg "#ffffff"
+set completion-bg "#000000"
+set completion-fg "#989898"
+set completion-group-bg "#000000"
+set completion-group-fg "#989898"
+set completion-highlight-bg "#44bc44"
+set completion-highlight-fg "#000000"
+set index-bg "#000000"
+set index-fg "#ffffff"
+set index-active-bg "#2fafff"
+set index-active-fg "#000000"
+set inputbar-bg "#000000"
+set inputbar-fg "#ffffff"
+set statusbar-bg "#404040"
+set statusbar-fg "#f0f0f0"
+set highlight-color "#d0bc00"
+set highlight-active-color "#44bc44"
+set default-bg "#000000"
+set default-fg "#ffffff"
+set render-loading true
+set render-loading-fg "#000000"
+set render-loading-bg "#ffffff"
+#
+# Recolor mode settings
+# <C-r> to switch modes
+#
+set recolor-lightcolor "#000000"
+set recolor-darkcolor "#ffffff"
