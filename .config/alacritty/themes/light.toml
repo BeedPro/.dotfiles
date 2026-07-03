@@ -1,3 +1,6 @@
+# Colors (modus-operandi)
+# Soruce https://protesilaos.com/emacs/modus-themes
+
 [colors.primary]
 background = "#ffffff"
 foreground = "#000000"
@@ -14,14 +17,14 @@ yellow  = "#6f5500"
 blue    = "#0031a9"
 magenta = "#721045"
 cyan    = "#005e8b"
-white   = "#a6a6a6"
+white   = "#bfbfbf"
 
 [colors.bright]
 black   = "#595959"
-red     = "#972500"
-green   = "#00663f"
-yellow  = "#884900"
-blue    = "#3548cf"
-magenta = "#531ab6"
-cyan    = "#005f5f"
+red     = "#d00000"
+green   = "#008900"
+yellow  = "#808000"
+blue    = "#0000ff"
+magenta = "#dd22dd"
+cyan    = "#008899"
 white   = "#ffffff"
