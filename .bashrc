@@ -2,14 +2,17 @@
 
 export EDITOR=nvim
 
+export BUN_INSTALL="$HOME/.bun"
+export SDKMAN_DIR="$HOME/.sdkman"
+
 export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
 export PATH="$HOME/.volta/bin:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
 export PATH="$HOME/.cache/scalacli/local-repo/bin/scala-cli:$PATH"
 export PATH="$HOME/.local/share/coursier/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-
-export SDKMAN_DIR="$HOME/.sdkman"
+export PATH=$HOME/.opencode/bin:$PATH
+export PATH="$BUN_INSTALL/bin:$PATH"
 
 [ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 [ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env"
@@ -76,7 +79,6 @@ command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)"
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-# https://unix.stackexchange.com/questions/767621/i-cant-get-bash-history-to-update-instantly-in-all-terminals
 PROMPT_COMMAND='history -a; history -c; history -r'
 PS1='\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]\n\[\e[93m\]${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }\[\e[0m\]> '
 
@@ -85,9 +87,3 @@ PS1='\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]\n\[\e[93m\]${VIRTUAL_ENV:+($
   -f /usr/share/bash-completion/bash_completion ]] &&
     . /usr/share/bash-completion/bash_completion
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# opencode
-export PATH=$HOME/.opencode/bin:$PATH
