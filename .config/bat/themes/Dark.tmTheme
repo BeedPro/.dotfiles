@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
   <key>name</key>
-  <string>Modus Dark</string>
+  <string>Modus Vivendi</string>
   <key>settings</key>
   <array>
     <dict>
@@ -16,11 +16,11 @@
         <key>caret</key>
         <string>#ffffff</string>
         <key>selection</key>
-        <string>#2f3849</string>
+        <string>#595959</string>
         <key>selectionForeground</key>
         <string>#ffffff</string>
         <key>lineHighlight</key>
-        <string>#1a1a1a</string>
+        <string>#595959</string>
         <key>invisibles</key>
         <string>#989898</string>
         <key>gutterForeground</key>
@@ -38,7 +38,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#9ac8e0</string>
+        <string>#00d3d0</string>
       </dict>
     </dict>
 
@@ -50,7 +50,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#00c06f</string>
+        <string>#44bc44</string>
       </dict>
     </dict>
 
@@ -62,7 +62,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#fec43f</string>
+        <string>#d0bc00</string>
       </dict>
     </dict>
 
@@ -74,7 +74,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#ff7f86</string>
+        <string>#ff5f59</string>
       </dict>
     </dict>
 
@@ -86,7 +86,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#00bcff</string>
+        <string>#2fafff</string>
       </dict>
     </dict>
 
@@ -98,7 +98,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#9cbd6f</string>
+        <string>#44df44</string>
       </dict>
     </dict>
 
@@ -110,7 +110,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#caa6df</string>
+        <string>#feacd0</string>
       </dict>
     </dict>
 
@@ -134,7 +134,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#ff5f59</string>
+        <string>#ff5f5f</string>
       </dict>
     </dict>
 
@@ -146,7 +146,7 @@
       <key>settings</key>
       <dict>
         <key>foreground</key>
-        <string>#2fafff</string>
+        <string>#338fff</string>
       </dict>
     </dict>
 
