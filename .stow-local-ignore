@@ -21,7 +21,6 @@ _darcs
 ^/README.*
 ^/INSTALL.*
 ^/TODO.*
-^/THEME\.md$
 ^/LICENSE.*
 ^/COPYING
 
