@@ -6,3 +6,5 @@ sudo xbps-install -Syu
 sudo xbps-install -Sy borg
 
 flatpak install -y flathub com.borgbase.Vorta
+flatpak install flathub org.prismlauncher.PrismLauncher
+flatpak install flathub com.github.tchx84.Flatseal
