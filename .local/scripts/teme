@@ -560,8 +560,7 @@ def main() -> None:
     toggle_nvim()
     toggle_emacs()
     restart_emacs_daemon()
-    # TODO: install opencode
-    # toggle_opencode(mode)
+    toggle_opencode(mode)
     toggle_calibre(mode)
     set_wallpaper(mode)
     toggle_gtk(mode)

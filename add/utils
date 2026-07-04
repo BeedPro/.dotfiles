@@ -37,6 +37,7 @@ sudo ln -sf /opt/Espanso-X11.AppImage /usr/local/bin/espanso-x11
 
 sudo xbps-install -Sy \
     qalculate-gtk \
+    xournalpp \
     scrcpy \
     gucharmap \
     syncthing \
