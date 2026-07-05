@@ -154,7 +154,7 @@ def fzf_select(
         "fzf",
         "--prompt",
         "> ",
-        "--height=100%" if full_screen else "--height=35%",
+        "--height=100%" if full_screen else "--height=40%",
         "--exit-0",
     ]
     if bottom:

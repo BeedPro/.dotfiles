@@ -1,6 +1,8 @@
 ;;; completion-rc.el --- Completion configuration -*- lexical-binding: t; -*-
 
 (use-package vertico
+  :custom
+  (vertico-count 12)
   :init
   (vertico-mode 1))
 
