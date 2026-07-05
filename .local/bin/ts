@@ -5,8 +5,11 @@ from __future__ import annotations
 import curses
 import os
 import re
+import select
 import subprocess
 import sys
+import termios
+import tty
 from dataclasses import dataclass
 from pathlib import Path
 from subprocess import CompletedProcess
@@ -153,6 +156,113 @@ def curses_input(
     error_message: str = "",
 ) -> str:
     return curses.wrapper(curses_loop, prompt, initial_value, error_message)
+
+
+def line_input(
+    prompt: str,
+    initial_value: str = "",
+    error_message: str = "",
+) -> str:
+    if error_message:
+        print(error_message)
+
+    buf: list[str] = list(initial_value)
+    pos = len(buf)
+    stdin_fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(stdin_fd)
+
+    def redraw() -> None:
+        sys.stdout.write(f"\r\x1b[K{prompt}{''.join(buf)}")
+        sys.stdout.write(f"\r\x1b[{len(prompt) + pos}C")
+        sys.stdout.flush()
+
+    def read_char() -> str:
+        return os.read(stdin_fd, 1).decode(errors="ignore")
+
+    def read_next(timeout: float = 0.5) -> str | None:
+        ready, _, _ = select.select([stdin_fd], [], [], timeout)
+        if not ready:
+            return None
+        return read_char()
+
+    def read_escape_sequence() -> str | None:
+        first = read_next()
+        if first is None:
+            return None
+
+        seq = first
+        while len(seq) < 4:
+            char = read_next(0.02)
+            if char is None:
+                break
+            seq += char
+        return seq
+
+    try:
+        tty.setraw(stdin_fd)
+        redraw()
+
+        while True:
+            ch = read_char()
+
+            if ch in ("\r", "\n"):
+                sys.stdout.write("\r\n")
+                sys.stdout.flush()
+                return "".join(buf)
+
+            if ch == "\x03":
+                sys.stdout.write("\r\n")
+                sys.stdout.flush()
+                return CONFIG.exit_signal
+
+            if ch == "\x04" and not buf:
+                sys.stdout.write("\r\n")
+                sys.stdout.flush()
+                return CONFIG.exit_signal
+
+            if ch == "\x1b":
+                seq = read_escape_sequence()
+                if seq is None:
+                    sys.stdout.write("\r\n")
+                    sys.stdout.flush()
+                    return CONFIG.exit_signal
+
+                if seq in ("[D", "OD"):
+                    pos = move_left(pos)
+                elif seq in ("[C", "OC"):
+                    pos = move_right(pos, len(buf))
+                elif seq in ("[H", "OH"):
+                    pos = 0
+                elif seq in ("[F", "OF"):
+                    pos = len(buf)
+                elif seq == "[3~":
+                    pos = delete(buf, pos)
+
+                redraw()
+                continue
+
+            if ch in ("\x7f", "\b"):
+                pos = backspace(buf, pos)
+            elif ch == "\x01":
+                pos = 0
+            elif ch == "\x05":
+                pos = len(buf)
+            else:
+                pos = insert_char(buf, pos, ord(ch))
+
+            redraw()
+    finally:
+        termios.tcsetattr(stdin_fd, termios.TCSADRAIN, old_settings)
+
+
+def prompt_input(
+    prompt: str,
+    initial_value: str = "",
+    error_message: str = "",
+) -> str:
+    if "--full-screen" in sys.argv[1:]:
+        return curses_input(prompt, initial_value, error_message)
+    return line_input(prompt, initial_value, error_message)
 
 
 def run(cmd: list[str], check: bool = True) -> CompletedProcess[bytes]:
@@ -316,7 +426,7 @@ def handle_share_path(value: str) -> str | None:
             ensure_session(normalize_session_name(current_value), share_dir)
             return None
 
-        current_value = curses_input(
+        current_value = prompt_input(
             CONFIG.prompt,
             current_value,
             "Path not found in ~/.local/share; fix and retry.",
@@ -338,7 +448,7 @@ def normalize_session_name(value: str) -> str:
 
 def main() -> None:
     ensure_src_dir(CONFIG.src_dir)
-    value = curses_input(CONFIG.prompt).strip()
+    value = prompt_input(CONFIG.prompt).strip()
 
     if value == CONFIG.exit_signal:
         return
