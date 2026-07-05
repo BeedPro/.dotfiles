@@ -17,7 +17,7 @@ configuration {
   normal-background:           @background;
   selected-urgent-background:  @red;
   alternate-active-background: @lightbg;
-  spacing:                     2;
+  spacing:                     4;
   alternate-normal-foreground: @foreground;
   urgent-background:           @background;
   selected-normal-foreground:  @lightbg;
@@ -35,7 +35,7 @@ configuration {
 
 }
 element {
-    padding: 2px 8px;
+    padding: 4px 8px;
     cursor:  pointer;
     spacing: 0;
     border:  0;
@@ -104,7 +104,7 @@ mainbox {
     border:  0;
 }
 message {
-    padding:      1px ;
+    padding:      4px ;
     border-color: @separatorcolor;
     border:       2px dash 0px 0px ;
 }
@@ -155,7 +155,7 @@ textbox-num-sep {
     text-color: Gray;
 }
 inputbar {
-    padding:    2px 8px;
+    padding:    4px 8px;
     spacing:    0px ;
     text-color: @normal-foreground;
     expand:     false;
