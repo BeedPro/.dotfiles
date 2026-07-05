@@ -40,7 +40,10 @@ if ! command -v rofi >/dev/null 2>&1; then
 fi
 
 while read -r file; do
-  fullpath="$(pwd)/$file"
+  case "$file" in
+    /*) fullpath="$file" ;;
+    *) fullpath="$(pwd)/$file" ;;
+  esac
 
   case "$1" in
     "w")
@@ -77,6 +80,23 @@ Yes")"
       if [ -n "$new_name" ]; then
         mv -- "$file" "$dir_name/$new_name" && notify-send -i "$dir_name/$new_name" "Renamed to $new_name"
       fi
+      ;;
+
+    "s")
+      case "$fullpath" in
+        /tmp/*)
+          if command -v "$HOME/.local/scripts/dbrowse" >/dev/null; then
+            target_dir="$("$HOME/.local/scripts/dbrowse")"
+            if [ -n "$target_dir" ]; then
+              new_name="$(rofi_input "Save as" "$(basename "$file")")"
+              [ -n "$new_name" ] && cp -- "$file" "$target_dir/$new_name" && notify-send -i "$target_dir/$new_name" "Saved to $target_dir/$new_name"
+            fi
+          fi
+          ;;
+        *)
+          notify-send "Save only works for images in /tmp."
+          ;;
+      esac
       ;;
 
     "m")
