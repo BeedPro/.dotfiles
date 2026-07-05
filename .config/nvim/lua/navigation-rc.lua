@@ -16,9 +16,10 @@ require("fzf-lua").setup {
   ---@diagnostic disable-next-line: assign-type-mismatch
   winopts = function()
     local small = vim.o.columns < 120 or vim.o.lines < 35
+    local height = math.min(12, math.floor(vim.o.lines * 0.4))
     return {
-      split = "belowright new",
-      height = math.floor(vim.o.lines * 0.4),
+      split = ("belowright %dnew"):format(height),
+      height = height,
       preview = {
         hidden = small,
         layout = "flex",

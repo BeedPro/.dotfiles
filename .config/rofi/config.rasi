@@ -94,8 +94,7 @@ window {
     width:            100%;
     padding:          0;
     background-color: @background;
-    border-color:     @border-color;
-    border:           1px solid;
+    border:           0;
 }
 mainbox {
     orientation: vertical;
@@ -155,11 +154,13 @@ textbox-num-sep {
     text-color: Gray;
 }
 inputbar {
-    padding:    4px 8px;
-    spacing:    0px ;
-    text-color: @normal-foreground;
-    expand:     false;
-    children:   [ "prompt","textbox-prompt-colon","entry","case-indicator" ];
+    padding:      4px 8px;
+    spacing:      0px ;
+    text-color:   @normal-foreground;
+    expand:       false;
+    border-color: @separatorcolor;
+    border:       1px 0px 1px 0px;
+    children:     [ "prompt","textbox-prompt-colon","entry","case-indicator" ];
 }
 case-indicator {
     spacing:    0;
