@@ -26,7 +26,7 @@ require("fzf-lua").setup {
         flip_columns = 120,
         vertical = "down:45%",
         horizontal = "right:55%",
-        border = "single",
+        border = "none",
       },
     }
   end,
