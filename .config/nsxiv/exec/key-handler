@@ -45,7 +45,7 @@ while read -r file; do
   case "$1" in
     "w")
       cp "$file" "$HOME/.config/wallpaper/current.jpg" &&
-      $HOME/.screenlayout/set-screens.sh
+      $HOME/.screenlayout/screens.sh
       notify-send -i "$HOME/.config/wallpaper/current.jpg" "Wallpaper changed."
       ;;
 
