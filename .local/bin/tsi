@@ -147,15 +147,18 @@ def get_all_items(config: LauncherConfig) -> Tuple[List[str], Dict[str, str]]:
     return display, mapping
 
 
-def fzf_select(items: List[str]) -> str:
+def fzf_select(items: List[str], bottom: bool = False) -> str:
     cmd: list[str] = [
         "fzf",
         "--prompt",
         "> ",
         "--height=100%",
-        "--layout=default",
         "--exit-0",
     ]
+    if bottom:
+        cmd.append("--layout=default")
+    else:
+        cmd.append("--layout=reverse")
 
     p: Popen[str] = subprocess.Popen(
         cmd,
@@ -203,8 +206,10 @@ def ensure_session(name: str, directory: Path) -> None:
 
 
 def main() -> None:
+    bottom: bool = "--bottom" in sys.argv[1:]
+
     items, mapping = get_all_items(CONFIG)
-    selected: str = fzf_select(items)
+    selected: str = fzf_select(items, bottom)
 
     if not selected:
         return
