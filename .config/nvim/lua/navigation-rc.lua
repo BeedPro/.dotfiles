@@ -17,12 +17,8 @@ require("fzf-lua").setup {
   winopts = function()
     local small = vim.o.columns < 120 or vim.o.lines < 35
     return {
-      height = 0.8,
-      width = 0.9,
-      row = 0.5,
-      col = 0.5,
-      border = "single",
-      backdrop = 100,
+      split = "belowright new",
+      height = math.floor(vim.o.lines * 0.4),
       preview = {
         hidden = small,
         layout = "flex",

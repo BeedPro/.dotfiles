@@ -5,6 +5,8 @@ __pycache__/
 .config/emacs/bookmarks
 .config/emacs/custom.el
 .config/emacs/eln-cache/
+.config/emacs/tree-sitter/
+.config/emacs/projects
 .config/emacs/elpa
 .config/emacs/history
 .config/emacs/recentf

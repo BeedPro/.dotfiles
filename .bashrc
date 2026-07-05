@@ -33,6 +33,8 @@ export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
 export HISTTIMEFORMAT='%F %T '
 
 source $HOME/.config/fzf/themes/dark.sh
+export FZF_DEFAULT_OPTS="--layout=reverse ${FZF_DEFAULT_OPTS:-}"
+tmux set-environment -g FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS" 2>/dev/null
 
 export GOPATH="$HOME/.go"
 [ -d "$SDKMAN_DIR/candidates/java/current" ] \
@@ -76,4 +78,3 @@ PS1='\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]\n\[\e[93m\]${VIRTUAL_ENV:+($
   ! ${BASH_COMPLETION_VERSINFO:-} &&
   -f /usr/share/bash-completion/bash_completion ]] &&
     . /usr/share/bash-completion/bash_completion
-
