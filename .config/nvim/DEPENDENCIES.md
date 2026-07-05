@@ -2,7 +2,7 @@
 
 ## Required System Dependencies
 
-- Neovim 0.11+
+- Neovim 0.12+
 - Git: `git`
 - Fuzzy finder: `fzf`
 - Search: `rg`
