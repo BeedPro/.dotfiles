@@ -74,14 +74,17 @@ def render_line(
     pos: int,
     error_message: str = "",
 ) -> None:
+    height, _ = stdscr.getmaxyx()
+
     stdscr.move(0, 0)
     stdscr.clrtoeol()
     stdscr.addstr(0, 0, f"{prompt}{''.join(buf)}")
 
-    stdscr.move(1, 0)
-    stdscr.clrtoeol()
-    if error_message:
-        stdscr.addstr(1, 0, error_message)
+    if height > 1:
+        stdscr.move(1, 0)
+        stdscr.clrtoeol()
+        if error_message:
+            stdscr.addstr(1, 0, error_message)
 
     stdscr.move(0, len(prompt) + pos)
     stdscr.refresh()

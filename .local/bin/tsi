@@ -152,8 +152,8 @@ def fzf_select(items: List[str]) -> str:
         "fzf",
         "--prompt",
         "> ",
-        "--reverse",
         "--height=100%",
+        "--layout=default",
         "--exit-0",
     ]
 

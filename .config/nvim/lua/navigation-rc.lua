@@ -11,7 +11,7 @@ require("fzf-lua").setup {
   },
   fzf_colors = true,
   fzf_opts = {
-    ["--layout"] = "reverse",
+    ["--layout"] = "default",
   },
   ---@diagnostic disable-next-line: assign-type-mismatch
   winopts = function()
