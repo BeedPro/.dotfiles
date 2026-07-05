@@ -128,7 +128,7 @@ xclip -selection clipboard -t image/png -i "$FINALFILE"
 
 if [ "$SHOW_SCREENSHOT" -eq 1 ]; then
     (
-        nsxiv -f --anti-alias=no "$FINALFILE"
+        nsxiv -f -b --anti-alias=no "$FINALFILE"
         send_notification
 
         if [ "$SAVE_SCREENSHOT" -eq 0 ]; then
