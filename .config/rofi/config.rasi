@@ -2,7 +2,6 @@
 
 configuration {
     show-icons: false;
-    drun-display-format: "{name}";
 }
 
 * {
@@ -95,10 +94,11 @@ window {
     width:            100%;
     padding:          0;
     background-color: @background;
-    border:           0;
+    border-color:     @border-color;
+    border:           1px solid;
 }
 mainbox {
-    orientation: horizontal;
+    orientation: vertical;
     children: [ "inputbar", "listview" ];
     padding: 0;
     border:  0;
@@ -117,7 +117,7 @@ listview {
     border-color: @separatorcolor;
     spacing:      0;
     lines:        20;
-    layout:       horizontal;
+    layout:       vertical;
     fixed-height: false;
     border:       0;
 }
@@ -169,7 +169,7 @@ entry {
     text-color:        @normal-foreground;
     cursor:            text;
     spacing:           0;
-    width:             16em;
+    expand:            true;
     placeholder-color: Gray;
     placeholder:       "";
 }
