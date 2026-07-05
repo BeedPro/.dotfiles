@@ -72,7 +72,7 @@ Yes")"
     "r")
       current_name="$(basename "$file")"
       dir_name="$(dirname "$file")"
-      new_name="$(rofi_input "Rename to:" "$current_name")"
+      new_name="$(rofi_input "Rename to" "$current_name")"
 
       if [ -n "$new_name" ]; then
         mv -- "$file" "$dir_name/$new_name" && notify-send -i "$dir_name/$new_name" "Renamed to $new_name"
