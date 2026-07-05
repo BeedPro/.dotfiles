@@ -8,6 +8,7 @@ mkdir -p "$SCREENSHOT_DIR"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 FINALFILE="$SCREENSHOT_DIR/$TIMESTAMP.png"
 SHOW_SCREENSHOT=0
+FULL_SCREEN=0
 SAVE_SCREENSHOT=1
 SEND_NOTIFICATION=1
 
@@ -101,6 +102,9 @@ for arg in "$@"; do
         --show)
             SHOW_SCREENSHOT=1
             ;;
+        --full-screen)
+            FULL_SCREEN=1
+            ;;
         --no-save)
             SAVE_SCREENSHOT=0
             ;;
@@ -108,14 +112,14 @@ for arg in "$@"; do
             SEND_NOTIFICATION=0
             ;;
         *)
-            echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save] [--no-notify]" >&2
+            echo "Usage: $0 [everything|screen|window|selection] [--show] [--full-screen] [--no-save] [--no-notify]" >&2
             exit 1
             ;;
     esac
 done
 
 if [ -z "$MODE" ]; then
-    echo "Usage: $0 [everything|screen|window|selection] [--show] [--no-save] [--no-notify]" >&2
+    echo "Usage: $0 [everything|screen|window|selection] [--show] [--full-screen] [--no-save] [--no-notify]" >&2
     exit 1
 fi
 
@@ -126,9 +130,14 @@ fi
 take_screenshot "$MODE"
 xclip -selection clipboard -t image/png -i "$FINALFILE"
 
-if [ "$SHOW_SCREENSHOT" -eq 1 ]; then
+if [ "$SHOW_SCREENSHOT" -eq 1 ] || [ "$FULL_SCREEN" -eq 1 ]; then
     (
-        nsxiv -f -b --anti-alias=no "$FINALFILE"
+        if [ "$FULL_SCREEN" -eq 1 ]; then
+            nsxiv -f -b --anti-alias=no "$FINALFILE"
+        else
+            nsxiv "$FINALFILE"
+        fi
+
         send_notification
 
         if [ "$SAVE_SCREENSHOT" -eq 0 ]; then
