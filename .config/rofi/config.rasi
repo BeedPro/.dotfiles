@@ -1,5 +1,10 @@
 @import "themes/dark"
 
+configuration {
+    show-icons: false;
+    drun-display-format: "{name}";
+}
+
 * {
   selected-active-foreground:  @background;
   lightfg:                     @text;
@@ -30,9 +35,9 @@
 
 }
 element {
-    padding: 1px ;
+    padding: 2px 8px;
     cursor:  pointer;
-    spacing: 5px ;
+    spacing: 0;
     border:  0;
 }
 element normal.normal {
@@ -79,17 +84,22 @@ element-text {
 }
 element-icon {
     background-color: transparent;
-    size:             1.0000em ;
+    size:             0;
     cursor:           inherit;
     text-color:       inherit;
 }
 window {
     font: "IosevkaTerm Nerd Font Mono 16";
-    padding:          5;
+    location:         south;
+    anchor:           south;
+    width:            100%;
+    padding:          0;
     background-color: @background;
-    border:           1;
+    border:           0;
 }
 mainbox {
+    orientation: horizontal;
+    children: [ "inputbar", "listview" ];
     padding: 0;
     border:  0;
 }
@@ -102,12 +112,14 @@ textbox {
     text-color: @foreground;
 }
 listview {
-    padding:      2px 0px 0px ;
-    scrollbar:    true;
+    padding:      0;
+    scrollbar:    false;
     border-color: @separatorcolor;
-    spacing:      2px ;
-    fixed-height: 0;
-    border:       2px dash 0px 0px ;
+    spacing:      0;
+    lines:        20;
+    layout:       horizontal;
+    fixed-height: false;
+    border:       0;
 }
 scrollbar {
     width:        4px ;
@@ -143,10 +155,11 @@ textbox-num-sep {
     text-color: Gray;
 }
 inputbar {
-    padding:    1px ;
+    padding:    2px 8px;
     spacing:    0px ;
     text-color: @normal-foreground;
-    children:   [ "prompt","textbox-prompt-colon","entry","num-filtered-rows","textbox-num-sep","num-rows","case-indicator" ];
+    expand:     false;
+    children:   [ "prompt","textbox-prompt-colon","entry","case-indicator" ];
 }
 case-indicator {
     spacing:    0;
@@ -156,8 +169,9 @@ entry {
     text-color:        @normal-foreground;
     cursor:            text;
     spacing:           0;
+    width:             16em;
     placeholder-color: Gray;
-    placeholder:       "Type to filter";
+    placeholder:       "";
 }
 prompt {
     spacing:    0;
