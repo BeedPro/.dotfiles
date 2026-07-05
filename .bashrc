@@ -33,7 +33,7 @@ export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
 export HISTTIMEFORMAT='%F %T '
 
 source $HOME/.config/fzf/themes/dark.sh
-export FZF_DEFAULT_OPTS="--layout=reverse ${FZF_DEFAULT_OPTS:-}"
+export FZF_DEFAULT_OPTS="--layout=reverse --height=~14 ${FZF_DEFAULT_OPTS:-}"
 tmux set-environment -g FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS" 2>/dev/null
 
 export GOPATH="$HOME/.go"
