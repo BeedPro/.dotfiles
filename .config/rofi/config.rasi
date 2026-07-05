@@ -116,7 +116,7 @@ listview {
     scrollbar:    false;
     border-color: @separatorcolor;
     spacing:      0;
-    lines:        20;
+    lines:        10;
     layout:       vertical;
     fixed-height: false;
     border:       0;
