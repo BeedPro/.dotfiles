@@ -3,8 +3,8 @@
 feh --no-fehbg --bg-scale $HOME/.config/wallpaper/current.jpg
 
 xrdb -merge <<EOF
-Xft.dpi: 96
-Xcursor.size: 24
+Xft.dpi: 120
+Xcursor.size: 32
 EOF
 
 xset s off
