@@ -2,66 +2,6 @@ vim.pack.add {
   "https://github.com/ibhagwan/fzf-lua",
 }
 
-local function preview_in_source_window(opts)
-  local libuv = require("fzf-lua.libuv")
-  local shell = require("fzf-lua.shell")
-
-  opts._fzf_cli_args = opts._fzf_cli_args or {}
-  opts.fzf_opts = opts.fzf_opts or {}
-
-  local preview = shell.stringify_data(function(selected, _, _)
-    local line = selected[1]
-    local winid = opts.__CTX and opts.__CTX.winid
-    if not line or not winid or not vim.api.nvim_win_is_valid(winid) then
-      return
-    end
-
-    local path = require("fzf-lua.path")
-    local utils = require("fzf-lua.utils")
-    local entry = path.entry_to_file(line, opts, opts._uri)
-    local file = entry.bufname or entry.path
-    if not file then
-      return
-    end
-
-    if not path.is_absolute(file) then
-      file = path.join { opts.cwd or opts._cwd or utils.cwd(), file }
-    end
-
-    vim.api.nvim_win_call(winid, function()
-      local bufnr = entry.bufnr or vim.fn.bufadd(file)
-      if not bufnr or bufnr == 0 then
-        return
-      end
-
-      vim.fn.bufload(bufnr)
-      pcall(vim.api.nvim_win_set_buf, winid, bufnr)
-      if entry.line and entry.line > 0 then
-        pcall(vim.api.nvim_win_set_cursor, winid, { entry.line, math.max((entry.col or 1) - 1, 0) })
-      end
-    end)
-  end, opts, "{}")
-
-  local restore = shell.stringify_data(function()
-    local winid = opts.__CTX and opts.__CTX.winid
-    local bufnr = opts.__CTX and opts.__CTX.bufnr
-    if not winid or not bufnr or not vim.api.nvim_win_is_valid(winid) or not vim.api.nvim_buf_is_valid(bufnr) then
-      return
-    end
-
-    pcall(vim.api.nvim_win_set_buf, winid, bufnr)
-    if opts.__CTX.cursor then
-      pcall(vim.api.nvim_win_set_cursor, winid, opts.__CTX.cursor)
-    end
-  end, opts, "")
-
-  opts.preview = preview
-  opts.fzf_opts["--preview-window"] = "nohidden:right:0"
-  table.insert(opts._fzf_cli_args, "--bind=" .. libuv.shellescape("esc:execute-silent(" .. restore .. ")+abort"))
-
-  return opts
-end
-
 require("fzf-lua").setup {
   { "telescope", "hide" },
   defaults = {
@@ -86,13 +26,9 @@ require("fzf-lua").setup {
   end,
   files = {
     cwd_prompt = false,
-    previewer = false,
-    enrich = preview_in_source_window,
   },
   oldfiles = {
     cwd_only = true,
-    previewer = false,
-    enrich = preview_in_source_window,
   },
   keymaps = {
     winopts = {
