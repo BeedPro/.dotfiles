@@ -40,7 +40,7 @@ CONFIG = LauncherConfig(
         "local/bin": Path("~/.local/bin"),
     },
     directory_sources=(
-        DirectorySource(base_dir=Path("~/Projects"), depth=2),
+        DirectorySource(base_dir=Path("~/Projects"), depth=2, include_hidden=True),
         DirectorySource(
             base_dir=Path("~/.dotfiles/.config"), depth=1, key_prefix="config/"
         ),
