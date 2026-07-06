@@ -88,7 +88,7 @@ element-icon {
     text-color:       inherit;
 }
 window {
-    font: "IosevkaTerm Nerd Font Mono 12";
+    font: "IosevkaTerm Nerd Font Mono 16";
     location:         south;
     anchor:           south;
     width:            100%;
