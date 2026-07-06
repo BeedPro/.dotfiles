@@ -17,7 +17,7 @@ require("fzf-lua").setup {
   winopts = function()
     return {
       split = ("belowright %dnew"):format(14),
-      height = height,
+      height = 14,
       preview = {
         hidden = true,
       },
