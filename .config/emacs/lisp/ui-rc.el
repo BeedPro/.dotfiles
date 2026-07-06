@@ -1,14 +1,14 @@
 ;;; ui-rc.el --- UI configuration -*- lexical-binding: t; -*-
 
 (set-face-attribute 'default nil
-                    :family "IosevkaTerm Nerd Font"
+                    :family "CommitMono Nerd Font"
                     :height 160)
 
 (set-fontset-font t 'arabic
                   (font-spec :family "Noto Sans Arabic"))
 
 (set-face-attribute 'variable-pitch nil
-                    :family "IosevkaTerm Nerd Font"
+                    :family "CommitMono Nerd Font"
                     :height 160)
 
 (use-package whitespace

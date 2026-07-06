@@ -5,10 +5,10 @@ general.import = [
 [font]
 size = 12.0
 
-normal      = { family = "IosevkaTerm Nerd Font Mono", style = "Regular" }
-bold        = { family = "IosevkaTerm Nerd Font Mono", style = "Bold" }
-italic      = { family = "IosevkaTerm Nerd Font Mono", style = "Italic" }
-bold_italic = { family = "IosevkaTerm Nerd Font Mono", style = "Bold Italic" }
+normal      = { family = "CommitMono Nerd Font Mono", style = "Regular" }
+bold        = { family = "CommitMono Nerd Font Mono", style = "Bold" }
+italic      = { family = "CommitMono Nerd Font Mono", style = "Italic" }
+bold_italic = { family = "CommitMono Nerd Font Mono", style = "Bold Italic" }
 
 offset = { x = 0, y = 0 }
 glyph_offset = { x = 0, y = 0 }
