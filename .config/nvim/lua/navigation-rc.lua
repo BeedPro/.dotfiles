@@ -15,18 +15,12 @@ require("fzf-lua").setup {
   },
   ---@diagnostic disable-next-line: assign-type-mismatch
   winopts = function()
-    local small = vim.o.columns < 120 or vim.o.lines < 35
     local height = math.min(14, math.floor(vim.o.lines * 0.4))
     return {
       split = ("belowright %dnew"):format(height),
       height = height,
       preview = {
-        hidden = small,
-        layout = "flex",
-        flip_columns = 120,
-        vertical = "down:45%",
-        horizontal = "right:55%",
-        border = "none",
+        hidden = true,
       },
     }
   end,
