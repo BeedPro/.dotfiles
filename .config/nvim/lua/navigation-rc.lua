@@ -30,14 +30,6 @@ require("fzf-lua").setup {
   oldfiles = {
     cwd_only = true,
   },
-  keymaps = {
-    winopts = {
-      preview = {
-        layout = "vertical",
-        vertical = "down:60%",
-      },
-    },
-  },
 }
 
 vim.keymap.set("n", "<leader>fa", "<cmd>FzfLua files<CR>", { desc = "Find all files" })
