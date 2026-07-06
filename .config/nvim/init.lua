@@ -41,7 +41,7 @@ vim.o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.ad
 
 vim.o.list = true
 vim.o.background = "dark"
-vim.o.laststatus = 3
+vim.o.laststatus = 2
 vim.o.splitkeep = "screen"
 
 vim.o.clipboard = ""

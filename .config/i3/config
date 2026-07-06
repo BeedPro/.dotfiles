@@ -40,8 +40,8 @@ for_window [class=Firefox title=".*Outlook.*"] move --no-auto-back-and-forth to 
 assign [class="KeePassXC"] number 9
 assign [class="protonvpn-app"] number 9
 
-default_border pixel 1
-default_floating_border pixel 1
+default_border normal 1
+default_floating_border normal 1
 hide_edge_borders smart_no_gaps
 
 for_window [title="^floating$"] floating enable
