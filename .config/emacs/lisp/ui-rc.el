@@ -2,14 +2,14 @@
 
 (set-face-attribute 'default nil
                     :family "IosevkaTerm Nerd Font"
-                    :height 120)
+                    :height 160)
 
 (set-fontset-font t 'arabic
                   (font-spec :family "Noto Sans Arabic"))
 
 (set-face-attribute 'variable-pitch nil
                     :family "IosevkaTerm Nerd Font"
-                    :height 120)
+                    :height 160)
 
 (use-package whitespace
   :ensure nil
