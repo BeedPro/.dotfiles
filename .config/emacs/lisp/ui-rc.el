@@ -2,14 +2,14 @@
 
 (set-face-attribute 'default nil
                     :family "CommitMono Nerd Font"
-                    :height 160)
+                    :height 120)
 
 (set-fontset-font t 'arabic
                   (font-spec :family "Noto Sans Arabic"))
 
 (set-face-attribute 'variable-pitch nil
                     :family "CommitMono Nerd Font"
-                    :height 160)
+                    :height 120)
 
 (use-package whitespace
   :ensure nil
