@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash
