@@ -16,7 +16,7 @@ require("fzf-lua").setup {
   ---@diagnostic disable-next-line: assign-type-mismatch
   winopts = function()
     return {
-      split = ("belowright %dnew"):format(14),
+      split = ("botright %dnew"):format(14),
       height = 14,
       preview = {
         hidden = true,
