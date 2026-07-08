@@ -20,7 +20,6 @@ eval "$(ssh-agent -s)" >/dev/null
 ssh-add "$KEY"
 
 cat >> "$HOME/.ssh/config" <<EOF
-
 Host github.com
   HostName github.com
   User git
