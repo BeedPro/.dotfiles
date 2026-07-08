@@ -88,36 +88,72 @@ cd ~/.dotfiles
 stow .
 ```
 
-### Install The Rest
+### Install Terminal And Development Tools
 
-Install the base app/tool groups:
+Install the terminal and development baseline:
 
 ```bash
-add/cli
-add/tui
-add/gui
+add/dev
 ```
 
-Install development tools:
+This installs the general tools needed for the shell, tmux, Neovim, common CLI workflows, base build tooling, Node, and Rust.
+
+### Install Standalone Components
+
+Each script owns the dependencies for the matching config or tool. Run only what the machine needs.
+
+Terminal and editor components:
 
 ```bash
-add/devtools
-add/haskell
+add/shell
+add/tmux
+add/nvim
+add/mpd
+add/emacs
+```
+
+Language and toolchain components:
+
+```bash
+add/c
+add/rust
+add/node
+add/java
+add/python
 add/uv
-add/ai
+add/haskell
+add/typst
+add/tex
+add/prolog
+add/godot
+add/groovy
 ```
 
-Install standalone extras:
+Desktop app components:
 
 ```bash
-add/espanso
-add/void-packages
-add/themes
 add/firefox
+add/themes
 add/i3wm
-add/gaming
+add/zathura
+add/media
+add/docs
 add/flathub
+add/vorta
 ```
+
+Standalone extras:
+
+```bash
+add/ai
+add/espanso
+add/gaming
+add/void-packages
+```
+
+`add/i3wm` assumes `add/xfce4` has already been run. It only installs the i3-specific pieces on top of the XFCE/Xorg/PipeWire base.
+
+`add/nvim` installs the minimal system dependencies for the base Neovim setup. Optional language servers and formatters that Mason can manage are left to Mason; the language scripts only install general system/runtime dependencies.
 
 ## Optional Scripts
 

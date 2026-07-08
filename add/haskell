@@ -3,4 +3,18 @@ set -euo pipefail
 
 sudo xbps-install -Syu
 
+sudo xbps-install -Sy \
+    curl \
+    gcc \
+    gmp-devel \
+    libffi-devel \
+    make \
+    ncurses-devel \
+    ncurses-libtinfo-devel \
+    ncurses-libtinfo-libs \
+    perl \
+    tar \
+    xz \
+    zlib-devel
+
 curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh

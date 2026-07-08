@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-install -Syu
+
+sudo xbps-install -Sy \
+    base-devel \
+    binutils \
+    clang \
+    gcc \
+    glibc-devel \
+    make \
+    pkg-config
