@@ -9,4 +9,5 @@ sudo xbps-install -Sy \
     papirus-icon-theme \
     nerd-fonts \
     noto-fonts-ttf \
+    noto-fonts-cjk \
     noto-fonts-emoji
