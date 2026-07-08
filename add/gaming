@@ -4,10 +4,13 @@ set -euo pipefail
 sudo xbps-install -Syu
 
 sudo xbps-install -Sy \
-    flatpak \
     libdrm-32bit \
     lutris \
     steam
 
-flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+if ! command -v flatpak >/dev/null 2>&1; then
+    echo "flatpak is not installed. Run add/flathub first."
+    exit 1
+fi
+
 flatpak install -y flathub org.prismlauncher.PrismLauncher

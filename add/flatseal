@@ -2,8 +2,9 @@
 
 set -euo pipefail
 
-sudo xbps-install -Syu
-sudo xbps-install -Sy flatpak
+if ! command -v flatpak >/dev/null 2>&1; then
+    echo "flatpak is not installed. Run add/flathub first."
+    exit 1
+fi
 
-flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak install -y flathub com.github.tchx84.Flatseal
