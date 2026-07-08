@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-sudo xbps-install -Syu
-sudo xbps-install -Sy borg fuse-sshfs
-
 if ! command -v flatpak >/dev/null 2>&1; then
     echo "flatpak is not installed. Run add/flathub first."
     exit 1
 fi
+
+sudo xbps-install -Syu
+sudo xbps-install -Sy borg fuse-sshfs
 
 flatpak install -y flathub com.borgbase.Vorta

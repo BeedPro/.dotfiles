@@ -2,4 +2,48 @@
 set -euo pipefail
 
 sudo xbps-install -Syu
-sudo xbps-install -Sy godot
+sudo xbps-install -Sy curl unzip
+
+VERSION="4.7"
+FLAVOUR="stable"
+SLUG="linux.x86_64.zip"
+PLATFORM="linux.64"
+
+INSTALL_DIR="/opt"
+BIN_LINK="/usr/local/bin/godot"
+
+OUTPUT="godot-${VERSION}-${SLUG}"
+URL="https://downloads.godotengine.org/?version=${VERSION}&flavor=${FLAVOUR}&slug=${SLUG}&platform=${PLATFORM}"
+
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+cd "$TMP_DIR"
+
+curl -L -o "$OUTPUT" "$URL"
+unzip "$OUTPUT"
+
+GODOT_BIN="$(find "$TMP_DIR" -maxdepth 1 -type f -iname 'Godot*' | head -n 1)"
+
+if [[ -z "$GODOT_BIN" ]]; then
+    echo "Could not find Godot executable after unzipping."
+    exit 1
+fi
+
+GODOT_NAME="$(basename "$GODOT_BIN")"
+TARGET_BIN="${INSTALL_DIR}/${GODOT_NAME}"
+
+sudo rm -f "$TARGET_BIN"
+sudo mv "$GODOT_BIN" "$TARGET_BIN"
+sudo chmod +x "$TARGET_BIN"
+
+sudo ln -sfn "$TARGET_BIN" "$BIN_LINK"
+
+echo "Godot installed to:"
+echo "  $TARGET_BIN"
+echo
+echo "Symlink created:"
+echo "  $BIN_LINK -> $TARGET_BIN"
+echo
+echo "Run it with:"
+echo "  godot"

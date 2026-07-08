@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+"$script_dir/shell"
+"$script_dir/tmux"
+"$script_dir/nvim"
+"$script_dir/mpd"
+"$script_dir/ai"
+"$script_dir/wireguard"
+"$script_dir/void-packages"
