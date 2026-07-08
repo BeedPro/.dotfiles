@@ -1,11 +1,33 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+if ! command -v cargo >/dev/null 2>&1; then
+    echo "cargo is not installed. Run add/rust first."
+    exit 1
+fi
+
 sudo xbps-install -Syu
 
 sudo xbps-install -Sy \
-    emacs \
+    base-devel \
+    curl \
     emacs-gtk3 \
     fd \
     git \
-    ripgrep
+    nerd-fonts \
+    noto-fonts-ttf \
+    pandoc \
+    ripgrep \
+    texlab \
+    tinymist \
+    tree-sitter-cli \
+    unzip \
+    xz
+
+"$script_dir/tex"
+"$script_dir/typst"
+
+cargo install --git=https://github.com/antonWetzel/prettypst.git --locked
+cargo install tex-fmt --locked

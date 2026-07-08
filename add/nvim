@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
 sudo xbps-install -Syu
 
 sudo xbps-install -Sy \
@@ -12,10 +14,9 @@ sudo xbps-install -Sy \
     make \
     neovim \
     ripgrep \
-    rustup \
     tree-sitter-cli \
     unzip \
     xdg-utils \
     xz
 
-rustup-init -y --no-modify-path
+"$script_dir/rust"
