@@ -3,27 +3,25 @@
 set -euo pipefail
 
 sudo xbps-install -Syu
-sudo xbps-install -Sy git git-lfs github-cli xclip
+sudo xbps-install -Sy git git-lfs xclip
 
-gh config set telemetry disabled
-
-KEY="$HOME/.ssh/github"
+KEY="$HOME/.ssh/codeberg"
 
 mkdir -p "$HOME/.ssh"
 chmod 700 "$HOME/.ssh"
 
 if [ ! -f "$KEY" ]; then
-  ssh-keygen -t ed25519 -a 100 -f "$KEY" -C "github"
+  ssh-keygen -t ed25519 -a 100 -f "$KEY" -C "codeberg"
 fi
 
 eval "$(ssh-agent -s)" >/dev/null
 ssh-add "$KEY"
 
 cat >> "$HOME/.ssh/config" <<EOF
-Host github.com
-  HostName github.com
+Host codeberg.org
+  HostName codeberg.org
   User git
-  IdentityFile ~/.ssh/github
+  IdentityFile ~/.ssh/codeberg
   IdentitiesOnly yes
 
 EOF
@@ -33,11 +31,10 @@ chmod 600 "$HOME/.ssh/config"
 xclip -selection clipboard < "$KEY.pub"
 
 echo "Public key copied to clipboard."
-echo "Add it here: GitHub -> Settings -> SSH and GPG keys -> New SSH key"
+echo "Add it here: Codeberg -> Settings -> SSH and GPG keys -> New SSH key"
 echo ""
 cat "$KEY.pub"
 echo ""
 read -r -p "After adding the key to GitHub, press Enter to test SSH..."
 
-ssh -T git@github.com || true
-git remote set-url origin git@github.com:BeedPro/.dotfiles.git
+ssh -T git@codeberg.org || true
