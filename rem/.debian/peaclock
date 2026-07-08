@@ -1,7 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-sudo rm -f /usr/local/bin/peaclock
-rm -rf "$HOME/.local/src/octobanana/peaclock"
-
-echo "Removed peaclock"

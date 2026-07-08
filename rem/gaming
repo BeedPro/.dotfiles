@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-sudo xbps-remove -Ry \
-    libdrm-32bit \
-    lutris \
-    steam

@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-flatpak uninstall -y com.borgbase.Vorta || true
-sudo xbps-remove -Ry borg

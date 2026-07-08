@@ -1,9 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-sudo rm -f /opt/Espanso-X11.AppImage
-sudo rm -f /usr/local/bin/espanso-x11
-sudo rm -f /usr/local/bin/espanso
-rm -rf "$HOME/.local/src/espanso"
-
-echo "Removed espanso binaries installed by add/espanso"

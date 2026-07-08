@@ -1,7 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-rm -rf "$HOME/.bun"
-rm -f "$HOME/.local/bin/bun" "$HOME/.local/bin/bunx"
-
-echo "Removed Bun"

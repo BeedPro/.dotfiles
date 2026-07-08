@@ -1,7 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-sudo rm -f /usr/local/bin/fzf
-rm -f "$HOME/.local/bin/fzf"
-
-echo "Removed fzf binary"

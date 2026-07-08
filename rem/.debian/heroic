@@ -1,7 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-sudo apt remove -y heroic || true
-sudo apt autoremove -y
-
-echo "Removed Heroic Games Launcher"

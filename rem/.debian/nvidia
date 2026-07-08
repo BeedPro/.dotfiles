@@ -1,7 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-sudo apt purge -y linux-headers-generic nvidia-detect nvidia-open-kernel-dkms nvidia-driver || true
-sudo apt autoremove -y
-
-echo "Removed NVIDIA driver packages"

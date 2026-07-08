@@ -1,9 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-sudo apt purge -y swi-prolog || true
-sudo apt autoremove -y
-
-rm -rf "$HOME/.local/share/swi-prolog/pack/lsp_server"
-
-echo "Removed SWI-Prolog and lsp_server pack"

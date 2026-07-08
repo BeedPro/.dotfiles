@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-sudo flatpak remote-delete --system flathub || true
-
-sudo apt purge -y flatpak gnome-software-plugin-flatpak || true
-sudo apt autoremove -y
-
-echo "Removed Flatpak and Flathub remote"

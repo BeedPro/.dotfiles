@@ -1,7 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-sudo apt purge -y steam-installer steam || true
-sudo apt autoremove -y
-
-echo "Removed Steam"
