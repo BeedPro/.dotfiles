@@ -35,7 +35,6 @@ sudo xbps-install -Sy \
 
 # Desktop permissions and networking
 sudo xbps-install -Sy \
-    NetworkManager \
     network-manager-applet
 
 # Audio and Bluetooth
@@ -44,7 +43,6 @@ sudo xbps-install -Sy \
     wireplumber \
     alsa-pipewire \
     pamixer \
-    bluez \
     libspa-bluetooth \
     blueman
 

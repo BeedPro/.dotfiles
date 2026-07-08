@@ -2,4 +2,4 @@
 set -euo pipefail
 
 sudo xbps-install -Syu
-sudo xbps-install -Sy python3 python3-pipx
+sudo xbps-install -Sy python3-pipx

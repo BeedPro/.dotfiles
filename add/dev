@@ -7,36 +7,25 @@ sudo xbps-install -Sy \
     base-devel \
     bash-completion \
     bat \
-    binutils \
-    curl \
     dust \
     eza \
     fd \
     fuse-sshfs \
-    gcc \
-    git \
     git-lfs \
-    glibc-devel \
-    make \
     ncurses-term \
     neovim \
-    openresolv \
-    pkg-config \
     qalculate \
     ripgrep \
     rustup \
     stow \
-    tar \
     tmux \
     trash-cli \
     tree-sitter-cli \
-    unzip \
     volta \
     wget \
     wireguard-tools \
     xdg-utils \
-    xtools \
-    xz
+    xtools
 
 bat cache --build
 volta install node

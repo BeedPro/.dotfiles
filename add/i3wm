@@ -14,20 +14,16 @@ sudo xbps-install -Sy \
     i3blocks \
     i3lock-color \
     alacritty \
-    libnotify \
     lm_sensors \
     maim \
     picom \
     playerctl \
-    python3 \
     rofi \
     setxkbmap \
-    slop \
     acpi \
     jq \
     xclip \
     xdotool \
-    xrandr \
     xsel \
     xss-lock \
     xdg-desktop-portal-gtk \

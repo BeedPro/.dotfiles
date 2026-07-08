@@ -13,7 +13,6 @@ sudo xbps-install -Sy \
     ncurses-libtinfo-devel \
     ncurses-libtinfo-libs \
     perl \
-    tar \
     xz \
     zlib-devel
 

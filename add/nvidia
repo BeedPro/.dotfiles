@@ -8,9 +8,7 @@ sudo xbps-install -Sy \
   nvidia \
   nvidia-libs-32bit \
   libdrm-32bit \
-  libgcc-32bit \
   libstdc++-32bit \
-  libglvnd-32bit \
   vulkan-loader \
   vulkan-loader-32bit
 
