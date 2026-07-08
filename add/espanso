@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-install -Syu
+sudo xbps-install -Sy wget
+
+wget -O /tmp/Espanso-X11.AppImage 'https://github.com/espanso/espanso/releases/latest/download/Espanso-X11.AppImage'
+chmod u+x /tmp/Espanso-X11.AppImage
+sudo mv /tmp/Espanso-X11.AppImage /opt
+sudo ln -sf /opt/Espanso-X11.AppImage /usr/local/bin/espanso-x11

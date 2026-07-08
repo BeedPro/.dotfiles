@@ -4,18 +4,6 @@ set -euo pipefail
 sudo xbps-install -Syu
 
 sudo xbps-install -Sy \
-    fzf \
-    tmux \
-    ncurses-term \
-    rustup \
-    volta \
-    openjdk25 \
-    tree-sitter-cli \
-    neovim \
-    emacs \
-    emacs-gtk3
-
-sudo xbps-install -Sy \
     binutils \
     curl \
     gcc \
@@ -32,11 +20,10 @@ sudo xbps-install -Sy \
     base-devel \
     libsecret-devel \
     tar \
-    xz
-
-curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+    xz \
+    rustup \
+    volta \
+    openjdk25
 
 volta install node
 rustup-init --no-modify-path
-
-curl -fsSL https://opencode.ai/install | bash

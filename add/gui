@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-install -Syu
+
+sudo xbps-install -Sy \
+    qalculate-gtk \
+    xournalpp \
+    scrcpy \
+    gucharmap \
+    syncthing \
+    timeshift \
+    keepassxc \
+    zathura \
+    zathura-pdf-poppler \
+    zathura-djvu \
+    zathura-cb \
+    nsxiv \
+    calibre \
+    mpv \
+    rofi \
+    emacs \
+    emacs-gtk3
