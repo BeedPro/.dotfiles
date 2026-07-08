@@ -7,7 +7,6 @@
 - Fuzzy finder: `fzf`
 - Search: `rg`
 - External opener: `xdg-open`
-- Trash support: `trash`
 - Rust toolchain: `rustc`, `cargo`
 
 ## Optional System Dependencies

@@ -13,7 +13,6 @@ sudo xbps-install -Sy \
     neovim \
     ripgrep \
     rustup \
-    trash-cli \
     tree-sitter-cli \
     unzip \
     xdg-utils \

@@ -19,7 +19,6 @@ sudo xbps-install -Sy \
     rustup \
     stow \
     tmux \
-    trash-cli \
     tree-sitter-cli \
     volta \
     wget \
