@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+source "$add_root/common/utils"
+
 read -rp "Set up QEMU/KVM as host or guest? [host] " role
 role="${role:-host}"
 
 case "$role" in
 host | h)
-    sudo xbps-install -Sy \
+    install_xbps_packages \
         qemu \
         libvirt \
         virt-manager \
@@ -26,7 +29,7 @@ host | h)
     sudo reboot
     ;;
 guest | g)
-    sudo xbps-install -Sy spice-vdagent
+    install_xbps_packages spice-vdagent
     sudo ln -sfn /etc/sv/spice-vdagentd /var/service/spice-vdagentd
     sudo reboot
     ;;

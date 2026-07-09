@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-sudo xbps-install -Sy mpd mpc
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+source "$add_root/common/utils"
+
+install_xbps_packages mpd mpc
 
 mkdir -p "$HOME/.local/share/mpd/playlists"
 mkdir -p "$HOME/.local/state/mpd"

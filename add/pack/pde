@@ -2,8 +2,9 @@
 set -euo pipefail
 
 add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+source "$add_root/common/utils"
 
-sudo xbps-install -Sy base-devel clang
+install_xbps_packages base-devel clang
 
 "$add_root/pack/shell"
 "$add_root/pack/tmux"

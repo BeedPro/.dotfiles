@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-sudo xbps-install -Sy curl unzip zip
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+source "$add_root/common/utils"
+
+install_xbps_packages curl unzip zip
 
 curl -s "https://get.sdkman.io" | bash
 

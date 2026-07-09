@@ -3,6 +3,7 @@
 set -euo pipefail
 
 add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+source "$add_root/common/utils"
 
 # Lock root account
 sudo -v
@@ -10,14 +11,14 @@ sudo true
 sudo passwd -l root
 
 # System update and repositories
-sudo xbps-install -Sy \
+install_xbps_packages \
     void-repo-nonfree \
     void-repo-multilib \
     void-repo-multilib-nonfree \
     linux-firmware
 
 # XFCE4 packages
-sudo xbps-install -Sy \
+install_xbps_packages \
     firefox \
     dbus-x11 \
     psmisc \
@@ -34,11 +35,11 @@ sudo xbps-install -Sy \
     udisks2
 
 # Desktop permissions and networking
-sudo xbps-install -Sy \
+install_xbps_packages \
     network-manager-applet
 
 # Audio and Bluetooth
-sudo xbps-install -Sy \
+install_xbps_packages \
     pipewire \
     wireplumber \
     alsa-pipewire \

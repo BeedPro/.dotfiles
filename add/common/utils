@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+require_command() {
+    local command_name="$1"
+    local install_script="$2"
+
+    if ! command -v "$command_name" >/dev/null 2>&1; then
+        echo "$command_name is not installed. Run $install_script first."
+        exit 1
+    fi
+}
+
+xbps_package_installed() {
+    local package="$1"
+
+    xbps-query -p pkgver "$package" >/dev/null 2>&1
+}
+
+install_xbps_packages() {
+    local package
+    local missing=()
+
+    for package in "$@"; do
+        if xbps_package_installed "$package"; then
+            echo "$package is already installed; skipping."
+        else
+            missing+=("$package")
+        fi
+    done
+
+    if ((${#missing[@]} == 0)); then
+        echo "All XBPS packages are already installed; skipping."
+        return 0
+    fi
+
+    sudo xbps-install -Sy "${missing[@]}"
+}
+
+flatpak_app_installed() {
+    local app_id="$1"
+
+    flatpak info "$app_id" >/dev/null 2>&1
+}
+
+install_flatpak_apps() {
+    local remote="$1"
+    shift
+
+    local app_id
+    local missing=()
+
+    for app_id in "$@"; do
+        if flatpak_app_installed "$app_id"; then
+            echo "$app_id is already installed; skipping."
+        else
+            missing+=("$app_id")
+        fi
+    done
+
+    if ((${#missing[@]} == 0)); then
+        echo "All Flatpak apps are already installed; skipping."
+        return 0
+    fi
+
+    flatpak install -y "$remote" "${missing[@]}"
+}

@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-sudo xbps-install -Sy wget
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+source "$add_root/common/utils"
+
+install_xbps_packages wget
 
 wget -O /tmp/Espanso-X11.AppImage 'https://github.com/espanso/espanso/releases/latest/download/Espanso-X11.AppImage'
 chmod u+x /tmp/Espanso-X11.AppImage

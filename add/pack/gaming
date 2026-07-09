@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! command -v flatpak >/dev/null 2>&1; then
-    echo "flatpak is not installed. Run add/flathub first."
-    exit 1
-fi
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+source "$add_root/common/utils"
 
-sudo xbps-install -Sy \
+require_command flatpak add/flathub
+
+install_xbps_packages \
     libdrm-32bit \
     lutris \
     steam
 
-flatpak install -y flathub org.prismlauncher.PrismLauncher
+install_flatpak_apps flathub org.prismlauncher.PrismLauncher
