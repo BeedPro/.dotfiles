@@ -10,7 +10,7 @@ fi
 if [ "$choice" == "logout" ]; then
   pkill i3
 elif [ "$choice" == "lock" ]; then
-  i3lock -c "#000000"
+  "$HOME/.local/scripts/locker"
 elif [ -n "$choice" ]; then
   loginctl "$choice"
 fi

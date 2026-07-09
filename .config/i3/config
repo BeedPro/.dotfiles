@@ -78,7 +78,7 @@ bindsym $mod+Return exec --no-startup-id alacritty
 bindsym $mod+w exec --no-startup-id $browser
 bindsym $mod+Shift+w exec --no-startup-id ~/.local/scripts/bookmarks
 
-bindsym $mod+x exec --no-startup-id i3lock --pass-volume-keys --pass-media-keys -c "#000000"
+bindsym $mod+x exec --no-startup-id ~/.local/scripts/locker
 
 bindsym $mod+Shift+x exec --no-startup-id ~/.local/scripts/powermenu
 bindsym $mod+Shift+c exec --no-startup-id ~/.local/scripts/killmenu

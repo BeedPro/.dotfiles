@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec i3lock --pass-volume-keys --pass-media-keys -c "#000000" "$@"
