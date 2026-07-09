@@ -83,6 +83,7 @@ bindsym $mod+Shift+c exec --no-startup-id ~/.local/scripts/killmenu
 bindsym $mod+c kill
 
 bindsym $mod+space exec --no-startup-id rofi -show drun
+bindsym $mod+Shift+space exec --no-startup-id rofi -show run
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
