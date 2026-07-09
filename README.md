@@ -44,7 +44,7 @@ Before running any `add/` script, update the system yourself:
 sudo xbps-install -Syu
 ```
 
-The `add/` scripts install their own packages, but they do not run a full system update. When rerun, they skip XBPS packages and Flatpak apps that are already installed.
+The `add/` scripts install their own packages, but they do not run a full system update.
 
 ### Install The Desktop
 
