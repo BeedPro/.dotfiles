@@ -3,8 +3,6 @@ set font "CommitMono Nerd Font Mono 12"
 set recolor "true"
 
 # Dark
-# Theme: Dark
-# Modus Vivendi
 set notification-error-bg "#9d1f1f"
 set notification-error-fg "#ffffff"
 set notification-warning-bg "#7a6100"
@@ -32,9 +30,6 @@ set default-fg "#ffffff"
 set render-loading true
 set render-loading-fg "#000000"
 set render-loading-bg "#ffffff"
-#
-# Recolor mode settings
-# <C-r> to switch modes
-#
+
 set recolor-lightcolor "#000000"
 set recolor-darkcolor "#ffffff"

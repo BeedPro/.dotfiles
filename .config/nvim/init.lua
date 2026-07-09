@@ -41,16 +41,12 @@ vim.o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.ad
 
 vim.o.list = true
 vim.o.background = "dark"
-vim.o.laststatus = 2
 vim.o.splitkeep = "screen"
 
-vim.o.clipboard = ""
 vim.o.cursorline = true
-vim.o.cursorlineopt = "both"
 vim.o.completeopt = "menu,popup,noselect"
 
 vim.o.expandtab = true
-vim.o.autoindent = true
 vim.o.smartindent = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4

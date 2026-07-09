@@ -10,21 +10,6 @@ bold        = { family = "CommitMono Nerd Font Mono", style = "Bold" }
 italic      = { family = "CommitMono Nerd Font Mono", style = "Italic" }
 bold_italic = { family = "CommitMono Nerd Font Mono", style = "Bold Italic" }
 
-offset = { x = 0, y = 0 }
-glyph_offset = { x = 0, y = 0 }
-
-builtin_box_drawing = true
-
 [window]
 padding = { x = 10, y = 10 }
 dynamic_padding = true
-
-[keyboard]
-bindings = [
-  { key = "Plus",  mods = "Control", action = "IncreaseFontSize" },
-  { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
-  { key = "Key0",  mods = "Control", action = "ResetFontSize" },
-]
-
-[cursor]
-style = { shape = "Block", blinking = "Off" }

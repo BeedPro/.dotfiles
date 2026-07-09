@@ -19,9 +19,6 @@ workspace 8 output DP-4 eDP
 workspace 9 output DP-4 eDP
 workspace 10 output DP-0 HDMI-A-0
 
-gaps inner 0
-gaps outer 0
-
 focus_wrapping workspace
 
 set $chat_ws 7

@@ -1,13 +1,7 @@
-# Modus Themes for Alacritty
-# Auto generated with https://github.com/miikanissi/modus-themes.nvim/blob/master/lua/modus-themes/extras/alacritty.lua
-# Modus Vivendi
-
-# Default colors
 [colors.primary]
 background   = '#000000'
 foreground   = '#ffffff'
 
-# Normal colors
 [colors.normal]
 black     = '#000000'
 red       = '#ff5f59'
@@ -18,7 +12,6 @@ magenta   = '#feacd0'
 cyan      = '#00d3d0'
 white     = '#a6a6a6'
 
-# Bright colors
 [colors.bright]
 black     = '#595959'
 red       = '#ff6b55'

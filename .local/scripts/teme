@@ -434,12 +434,24 @@ def toggle_zathura() -> None:
     light_path = zathura_dir / "themes/light.zathurarc"
     dark_path = zathura_dir / "themes/dark.zathurarc"
     current = target_path.read_text()
-    if "# Theme: Light" in current:
-        shared, _, _ = current.partition("# Light\n")
+    lines = current.splitlines(keepends=True)
+    theme_line = next(
+        (
+            index
+            for index, line in enumerate(lines)
+            if line.strip() in {"# Light", "# Dark"}
+        ),
+        None,
+    )
+    if theme_line is None:
+        raise RuntimeError(f"Could not find zathura theme marker in {target_path}")
+
+    shared = "".join(lines[:theme_line])
+    current_theme = lines[theme_line].strip()
+    if current_theme == "# Light":
         theme = dark_path.read_text()
         old_mode, new_mode = "light", "dark"
     else:
-        shared, _, _ = current.partition("# Dark\n")
         theme = light_path.read_text()
         old_mode, new_mode = "dark", "light"
     target_path.write_text(shared + theme)

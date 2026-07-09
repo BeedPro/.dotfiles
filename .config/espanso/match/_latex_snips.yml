@@ -158,8 +158,6 @@ matches:
   - trigger: ";tex.abs"
     replace: "| $|$ |"
 
-  # Line 444 and 456 from tex.snippets are ommited
-
   - trigger: ";tex.int"
     form: "\\int_{[[a]]}^{[[b]]} $|$ \\, d[[x]]"
 
