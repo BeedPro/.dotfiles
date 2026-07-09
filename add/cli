@@ -3,10 +3,11 @@ set -euo pipefail
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
-"$script_dir/shell"
-"$script_dir/tmux"
-"$script_dir/nvim"
+sudo xbps-install -Syu
+sudo xbps-install -Sy fuse-sshfs
+
+"$script_dir/pde"
 "$script_dir/mpd"
-"$script_dir/ai"
 "$script_dir/wireguard"
 "$script_dir/void-packages"
+"$script_dir/ai"

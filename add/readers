@@ -4,5 +4,7 @@ set -euo pipefail
 sudo xbps-install -Syu
 
 sudo xbps-install -Sy \
-    base-devel \
-    clang
+    calibre \
+    zathura-cb \
+    zathura-djvu \
+    zathura-pdf-mupdf

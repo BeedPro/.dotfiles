@@ -157,10 +157,10 @@ add/void-packages
 
 ## Optional Scripts
 
-Run this only inside a QEMU guest:
+Run this on a QEMU/KVM host or guest:
 
 ```bash
-add/qemu-kvm.guest
+add/qemu-kvm
 ```
 
 Run this on laptops where TLP power management is wanted:

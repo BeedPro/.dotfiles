@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+read -rp "Set up QEMU/KVM as host or guest? [host] " role
+role="${role:-host}"
+
+case "$role" in
+host | h)
+    sudo xbps-install -Syu
+    sudo xbps-install -Sy \
+        qemu \
+        libvirt \
+        virt-manager \
+        virt-viewer \
+        dnsmasq \
+        bridge-utils \
+        iptables \
+        edk2-ovmf \
+        swtpm
+
+    sudo ln -sfn /etc/sv/dbus /var/service/dbus
+    sudo ln -sfn /etc/sv/libvirtd /var/service/libvirtd
+    sudo ln -sfn /etc/sv/virtlogd /var/service/virtlogd
+    sudo ln -sfn /etc/sv/virtlockd /var/service/virtlockd
+
+    sudo usermod -aG libvirt,kvm "$USER"
+    sudo reboot
+    ;;
+guest | g)
+    sudo xbps-install -Sy spice-vdagent
+    sudo ln -sfn /etc/sv/spice-vdagentd /var/service/spice-vdagentd
+    sudo reboot
+    ;;
+*)
+    echo "Expected host or guest."
+    exit 1
+    ;;
+esac

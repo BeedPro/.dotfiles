@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-sudo xbps-install -Sy spice-vdagent
-sudo ln -s /etc/sv/spice-vdagentd /var/service
-sudo reboot
