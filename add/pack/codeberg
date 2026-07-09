@@ -5,6 +5,8 @@ set -euo pipefail
 sudo xbps-install -Sy git git-lfs xclip
 
 KEY="$HOME/.ssh/codeberg"
+MIRROR_URL="ssh://git@codeberg.org/Beed/.dotfiles.git"
+repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 mkdir -p "$HOME/.ssh"
 chmod 700 "$HOME/.ssh"
@@ -34,6 +36,15 @@ echo "Add it here: Codeberg -> Settings -> SSH and GPG keys -> New SSH key"
 echo ""
 cat "$KEY.pub"
 echo ""
-read -r -p "After adding the key to GitHub, press Enter to test SSH..."
+read -r -p "After adding the key to Codeberg, press Enter to test SSH..."
 
 ssh -T git@codeberg.org || true
+
+if git -C "$repo_root" remote get-url mirror >/dev/null 2>&1; then
+  git -C "$repo_root" remote set-url mirror "$MIRROR_URL"
+  git -C "$repo_root" config remote.mirror.mirror true
+else
+  git -C "$repo_root" remote add --mirror=push mirror "$MIRROR_URL"
+fi
+
+echo "Configured mirror remote: $MIRROR_URL"
