@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$add_root/common/utils"
-
-install_xbps_packages \
+sudo xbps-install -Sy \
     arandr \
     bc \
     brightnessctl \

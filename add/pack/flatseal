@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$add_root/common/utils"
+if ! command -v flatpak >/dev/null 2>&1; then
+    echo "flatpak is not installed. Run add/flathub first."
+    exit 1
+fi
 
-require_command flatpak add/flathub
-
-install_flatpak_apps flathub com.github.tchx84.Flatseal
+flatpak install -y flathub com.github.tchx84.Flatseal

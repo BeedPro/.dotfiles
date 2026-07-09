@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$add_root/common/utils"
+if ! command -v flatpak >/dev/null 2>&1; then
+    echo "flatpak is not installed. Run add/flathub first."
+    exit 1
+fi
 
-require_command flatpak add/flathub
+sudo xbps-install -Sy borg
 
-install_xbps_packages borg
-
-install_flatpak_apps flathub com.borgbase.Vorta
+flatpak install -y flathub com.borgbase.Vorta

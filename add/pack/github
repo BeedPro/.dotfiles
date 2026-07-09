@@ -2,10 +2,7 @@
 
 set -euo pipefail
 
-add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$add_root/common/utils"
-
-install_xbps_packages git git-lfs github-cli xclip
+sudo xbps-install -Sy git git-lfs github-cli xclip
 
 gh config set telemetry disabled
 

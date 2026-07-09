@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$add_root/common/utils"
+if ! command -v cargo >/dev/null 2>&1; then
+    echo "cargo is not installed. Run add/lang/rust first."
+    exit 1
+fi
 
-require_command cargo add/lang/rust
-
-install_xbps_packages texlive-full
+sudo xbps-install -Sy texlive-full
 
 cargo install tex-fmt --locked
 

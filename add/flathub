@@ -2,10 +2,7 @@
 
 set -euo pipefail
 
-add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-source "$add_root/common/utils"
-
-install_xbps_packages flatpak
+sudo xbps-install -Sy flatpak
 
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 

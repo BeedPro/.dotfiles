@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$add_root/common/utils"
-
-install_xbps_packages python3-pipx curl
+sudo xbps-install -Sy python3-pipx curl
 
 curl -LsSf https://astral.sh/uv/install.sh | sh

@@ -2,9 +2,8 @@
 set -euo pipefail
 
 add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$add_root/common/utils"
 
-install_xbps_packages fuse-sshfs
+sudo xbps-install -Sy fuse-sshfs
 
 "$add_root/pack/pde"
 "$add_root/pack/mpd"
