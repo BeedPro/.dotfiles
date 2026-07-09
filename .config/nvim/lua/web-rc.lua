@@ -9,6 +9,7 @@ lsp.enable {
   "ts_ls",
   "tailwindcss",
   "svelte",
+  "jsonls"
 }
 
 mason.add {
@@ -19,6 +20,7 @@ mason.add {
   "js-debug-adapter",
   "firefox-debug-adapter",
   "prettierd",
+  "json-lsp",
 }
 
 treesitter.add {
