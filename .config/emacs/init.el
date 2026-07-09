@@ -5,7 +5,6 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" beed/emacs-config-directory))
 
-;; Package management
 (require 'package)
 
 (setq package-archives
@@ -16,7 +15,6 @@
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
-  ;; Bootstrap use-package on first run so a clean machine can start.
   (unless package-archive-contents
     (package-refresh-contents))
   (package-install 'use-package))

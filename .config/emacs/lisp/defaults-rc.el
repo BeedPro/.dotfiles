@@ -1,6 +1,5 @@
 ;;; defaults-rc.el --- Default editor behavior -*- lexical-binding: t; -*-
 
-;; Startup defaults
 (setq inhibit-startup-message t
       initial-scratch-message nil
       auto-save-default nil
@@ -15,7 +14,6 @@
       default-input-method "arabic"
       native-comp-async-report-warnings-errors nil)
 
-;; Global modes
 (repeat-mode 1)
 (blink-cursor-mode 0)
 (menu-bar-mode 0)
@@ -30,7 +28,6 @@
 (global-visual-line-mode 1)
 (global-auto-revert-mode 1)
 
-;; Editing defaults
 (setq-default indent-tabs-mode nil
               tab-width 4
               fill-column 80
@@ -49,7 +46,6 @@
 
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
-;; Input method display
 (defun beed/arabic-input-method-title ()
   (when (string= current-input-method "arabic")
     (setq current-input-method-title "ARA")))
@@ -57,7 +53,6 @@
 (add-hook 'input-method-activate-hook #'beed/arabic-input-method-title)
 (add-hook 'isearch-mode-hook #'beed/arabic-input-method-title)
 
-;; Custom file
 (setq custom-file (expand-file-name "custom.el" beed/emacs-config-directory))
 (when (file-exists-p custom-file)
   (load custom-file t))
