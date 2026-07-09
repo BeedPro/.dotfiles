@@ -1,4 +1,5 @@
-For partitioning and disk setup during a fresh install, see [`INSTALL.md`](./INSTALL.md).
+For partitioning and disk setup during a fresh install, see
+[`INSTALL.md`](./INSTALL.md).
 
 These steps assume the base Void live image, the one that boots to a TTY.
 
@@ -44,7 +45,8 @@ Before running any `add/` script, update the system yourself:
 sudo xbps-install -Syu
 ```
 
-The `add/` scripts install their own packages, but they do not run a full system update.
+The `add/` scripts install their own packages, but they do not run a full
+system update.
 
 ### Install The Desktop
 
@@ -76,20 +78,22 @@ add/amd
 
 These scripts reboot when they finish. Do not run both unless the machine intentionally needs both driver stacks.
 
-### Set Up GitHub
+## Set Up GitHub And Codeberg
 
-After rebooting, set up GitHub SSH:
+After rebooting, set up GitHub and Codeberg SSH:
 
 ```bash
 cd ~/.dotfiles
 add/pack/github
+add/pack/codeberg
 ```
 
-The script copies the new public key to the clipboard and waits while you add it to GitHub.
+The script copies the new public key to the clipboard and waits while you add
+it to GitHub and Codeberg.
 
 ### Apply Dotfiles
 
-After GitHub is set up and the repo origin has been switched to SSH:
+After GitHub and Codeberg is set up and the repo origin has been switched to SSH:
 
 ```bash
 cd ~/.dotfiles
@@ -167,9 +171,13 @@ add/pack/void-packages
 add/pack/wireguard
 ```
 
-`add/app/i3wm` assumes `add/xfce4` has already been run. It only installs the i3-specific pieces on top of the XFCE/Xorg/PipeWire base.
+`add/app/i3wm` assumes `add/xfce4` has already been run. It only installs the
+i3-specific pieces on top of the XFCE/Xorg/PipeWire base.
 
-`add/pack/nvim` installs the minimal system dependencies for the base Neovim setup. Optional language servers and formatters that Mason can manage are left to Mason; the language scripts only install general system/runtime dependencies.
+`add/pack/nvim` installs the minimal system dependencies for the base Neovim
+setup. Optional language servers and formatters that Mason can manage are left
+to Mason; the language scripts only install general system/runtime
+dependencies.
 
 ## Optional Scripts
 
@@ -187,7 +195,8 @@ add/powerman
 
 ## Laptop Lid Suspend
 
-For laptop suspend behavior, disable the `acpid` service and let `xfce4-power-manager` handle lid close:
+For laptop suspend behavior, disable the `acpid` service and let
+`xfce4-power-manager` handle lid close:
 
 ```bash
 sudo rm /var/service/acpid
