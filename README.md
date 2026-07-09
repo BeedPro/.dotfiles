@@ -76,7 +76,8 @@ cd ~/.dotfiles
 add/amd
 ```
 
-These scripts reboot when they finish. Do not run both unless the machine intentionally needs both driver stacks.
+These scripts reboot when they finish. Do not run both unless the machine
+intentionally needs both driver stacks.
 
 ## Set Up GitHub And Codeberg
 
