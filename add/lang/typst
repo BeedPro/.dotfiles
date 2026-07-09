@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if ! command -v cargo >/dev/null 2>&1; then
-    echo "cargo is not installed. Run add/rust first."
+    echo "cargo is not installed. Run add/lang/rust first."
     exit 1
 fi
 

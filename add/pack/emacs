@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
 if ! command -v cargo >/dev/null 2>&1; then
-    echo "cargo is not installed. Run add/rust first."
+    echo "cargo is not installed. Run add/lang/rust first."
     exit 1
 fi
 
@@ -24,5 +24,5 @@ sudo xbps-install -Sy \
     unzip \
     xz
 
-"$script_dir/tex"
-"$script_dir/typst"
+"$add_root/lang/tex"
+"$add_root/lang/typst"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
 sudo xbps-install -Syu
 
@@ -19,4 +19,4 @@ sudo xbps-install -Sy \
     xdg-utils \
     xz
 
-"$script_dir/rust"
+"$add_root/lang/rust"

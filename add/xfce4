@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
 # Lock root account
 sudo -v
@@ -69,7 +69,7 @@ sudo ln -sfn /etc/sv/bluetoothd /var/service/bluetoothd
 # Add user to common desktop groups
 sudo usermod -aG wheel,audio,video,input,storage,network,bluetooth "$USER"
 
-"$script_dir/themes"
+"$add_root/pack/themes"
 
 # Reboot to apply everything
 sudo reboot
