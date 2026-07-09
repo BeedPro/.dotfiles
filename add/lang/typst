@@ -10,3 +10,5 @@ sudo xbps-install -Syu
 sudo xbps-install -Sy typst
 
 cargo install --git=https://github.com/antonWetzel/prettypst.git --locked
+
+ln -sfn $HOME/.cargo/bin/prettypst $HOME/.local/bin/prettypst

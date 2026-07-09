@@ -10,3 +10,5 @@ sudo xbps-install -Syu
 sudo xbps-install -Sy texlive-full
 
 cargo install tex-fmt --locked
+
+ln -sfn $HOME/.cargo/bin/tex-fmt $HOME/.local/bin/tex-fmt

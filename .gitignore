@@ -16,4 +16,6 @@ __pycache__/
 .config/opencode/opencode.jsonc
 .local/bin/uv
 .local/bin/uvx
+.local/bin/prettypst
+.local/bin/tex-fmt
 .local/share/icons/hicolor/icon-theme.cache
