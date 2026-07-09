@@ -1,10 +1,12 @@
 #!/bin/bash
 
-feh --no-fehbg --bg-scale $HOME/.config/wallpaper/current.jpg
+xrandr --output eDP --primary --mode 1920x1200 --pos 0x0 --rotate normal
+
+feh --no-fehbg --bg-scale "$HOME/.config/wallpaper/current.jpg"
 
 xrdb -merge <<EOF
-Xft.dpi: 120
-Xcursor.size: 32
+Xft.dpi: 96
+Xcursor.size: 24
 EOF
 
 xset s off
