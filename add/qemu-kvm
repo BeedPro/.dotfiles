@@ -6,7 +6,6 @@ role="${role:-host}"
 
 case "$role" in
 host | h)
-    sudo xbps-install -Syu
     sudo xbps-install -Sy \
         qemu \
         libvirt \

@@ -6,7 +6,6 @@ if ! command -v cargo >/dev/null 2>&1; then
     exit 1
 fi
 
-sudo xbps-install -Syu
 sudo xbps-install -Sy typst
 
 cargo install --git=https://github.com/antonWetzel/prettypst.git --locked

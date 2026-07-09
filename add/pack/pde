@@ -3,7 +3,6 @@ set -euo pipefail
 
 add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
-sudo xbps-install -Syu
 sudo xbps-install -Sy base-devel clang
 
 "$add_root/pack/shell"

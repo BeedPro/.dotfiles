@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-sudo xbps-install -Syu
 sudo xbps-install -Sy volta
 
 volta install node

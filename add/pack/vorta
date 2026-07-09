@@ -6,7 +6,6 @@ if ! command -v flatpak >/dev/null 2>&1; then
     exit 1
 fi
 
-sudo xbps-install -Syu
 sudo xbps-install -Sy borg
 
 flatpak install -y flathub com.borgbase.Vorta

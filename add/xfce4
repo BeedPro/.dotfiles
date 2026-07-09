@@ -10,8 +10,6 @@ sudo true
 sudo passwd -l root
 
 # System update and repositories
-sudo xbps-install -Syu
-
 sudo xbps-install -Sy \
     void-repo-nonfree \
     void-repo-multilib \

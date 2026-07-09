@@ -2,7 +2,6 @@
 set -euo pipefail
 shopt -s nullglob
 
-sudo xbps-install -Syu
 sudo xbps-install -Sy firefox speech-dispatcher
 
 for profile_dir in "$HOME/.config/mozilla/firefox"/*/; do

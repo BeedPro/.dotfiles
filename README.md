@@ -38,6 +38,14 @@ git clone https://github.com/BeedPro/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ```
 
+Before running any `add/` script, update the system yourself:
+
+```bash
+sudo xbps-install -Syu
+```
+
+The `add/` scripts install their own packages, but they do not run a full system update.
+
 ### Install The Desktop
 
 Install XFCE, Xorg, LightDM, PipeWire, Bluetooth, and NetworkManager:
@@ -74,7 +82,7 @@ After rebooting, set up GitHub SSH:
 
 ```bash
 cd ~/.dotfiles
-add/github
+add/pack/github
 ```
 
 The script copies the new public key to the clipboard and waits while you add it to GitHub.
@@ -93,10 +101,10 @@ stow .
 Install the terminal and development baseline:
 
 ```bash
-add/dev
+add/app/cli
 ```
 
-This installs the general tools needed for the shell, tmux, Neovim, common CLI workflows, base build tooling, Node, and Rust.
+This installs the general tools needed for common CLI workflows and development packs.
 
 ### Install Standalone Components
 
@@ -105,55 +113,56 @@ Each script owns the dependencies for the matching config or tool. Run only what
 Terminal and editor components:
 
 ```bash
-add/shell
-add/tmux
-add/nvim
-add/mpd
-add/emacs
+add/pack/shell
+add/pack/tmux
+add/pack/nvim
+add/pack/mpd
+add/pack/emacs
 ```
 
 Language and toolchain components:
 
 ```bash
-add/c
-add/rust
-add/node
-add/java
-add/python
-add/uv
-add/haskell
-add/typst
-add/tex
-add/prolog
-add/godot
-add/groovy
+add/lang/rust
+add/lang/node
+add/lang/java
+add/lang/python
+add/lang/haskell
+add/lang/typst
+add/lang/tex
+add/lang/prolog
+add/lang/sdkman
+add/pack/godot
 ```
 
 Desktop app components:
 
 ```bash
-add/firefox
-add/themes
-add/i3wm
-add/zathura
-add/media
-add/docs
+add/app/gui
+add/app/i3wm
+add/pack/firefox
+add/pack/themes
+add/pack/readers
+add/pack/media
 add/flathub
-add/vorta
+add/pack/flatseal
+add/pack/vorta
 ```
 
 Standalone extras:
 
 ```bash
-add/ai
-add/espanso
-add/gaming
-add/void-packages
+add/pack/ai
+add/pack/codeberg
+add/pack/espanso
+add/pack/gaming
+add/pack/void-packages
+add/pack/wireguard
 ```
 
-`add/i3wm` assumes `add/xfce4` has already been run. It only installs the i3-specific pieces on top of the XFCE/Xorg/PipeWire base.
+`add/app/i3wm` assumes `add/xfce4` has already been run. It only installs the i3-specific pieces on top of the XFCE/Xorg/PipeWire base.
 
-`add/nvim` installs the minimal system dependencies for the base Neovim setup. Optional language servers and formatters that Mason can manage are left to Mason; the language scripts only install general system/runtime dependencies.
+`add/pack/nvim` installs the minimal system dependencies for the base Neovim setup. Optional language servers and formatters that Mason can manage are left to Mason; the language scripts only install general system/runtime dependencies.
 
 ## Optional Scripts
 
