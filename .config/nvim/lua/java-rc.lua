@@ -1,4 +1,3 @@
-local lsp = require "lsp-rc"
 local mason = require "mason-rc"
 local treesitter = require "treesitter-rc"
 
