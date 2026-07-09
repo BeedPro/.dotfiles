@@ -93,7 +93,8 @@ it to GitHub and Codeberg.
 
 ### Apply Dotfiles
 
-After GitHub and Codeberg is set up and the repo origin has been switched to SSH:
+After GitHub and Codeberg is set up and the repo origin has been switched to
+SSH:
 
 ```bash
 cd ~/.dotfiles
@@ -111,7 +112,8 @@ add/app/i3wm
 ```
 
 This installs the general tools needed for common CLI workflows, development
-and productivity. This does not install gaming related packages. To install those please do:
+and productivity. This does not install gaming related packages. To install
+those please do:
 
 ```bash
 add/pack/gaming
@@ -119,65 +121,11 @@ add/pack/gaming
 
 ### Install Standalone Components
 
-Each script owns the dependencies for the matching config or tool. Run only what the machine needs.
-
-Terminal and editor components:
-
-```bash
-add/pack/shell
-add/pack/tmux
-add/pack/nvim
-add/pack/mpd
-add/pack/emacs
-```
-
-Language and toolchain components:
-
-```bash
-add/lang/rust
-add/lang/node
-add/lang/java
-add/lang/python
-add/lang/haskell
-add/lang/typst
-add/lang/tex
-add/lang/prolog
-add/lang/sdkman
-add/pack/godot
-```
-
-Desktop app components:
-
-```bash
-add/app/gui
-add/app/i3wm
-add/pack/firefox
-add/pack/themes
-add/pack/readers
-add/pack/media
-add/flathub
-add/pack/flatseal
-add/pack/vorta
-```
-
-Standalone extras:
-
-```bash
-add/pack/ai
-add/pack/codeberg
-add/pack/espanso
-add/pack/gaming
-add/pack/void-packages
-add/pack/wireguard
-```
+Each script owns the dependencies for the matching config or tool. Run only
+what the machine needs. They are found in `add/pack` and `add/lang`.
 
 `add/app/i3wm` assumes `add/xfce4` has already been run. It only installs the
 i3-specific pieces on top of the XFCE/Xorg/PipeWire base.
-
-`add/pack/nvim` installs the minimal system dependencies for the base Neovim
-setup. Optional language servers and formatters that Mason can manage are left
-to Mason; the language scripts only install general system/runtime
-dependencies.
 
 ## Optional Scripts
 
