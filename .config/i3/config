@@ -136,7 +136,7 @@ bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move scratchpad
-bindsym $mod+Shift+minus floating toggle, sticky toggle
+bindsym $mod+minus floating toggle, sticky toggle
 
 bindsym $mod+comma focus output left
 bindsym $mod+period focus output right
