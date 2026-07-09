@@ -96,15 +96,22 @@ cd ~/.dotfiles
 stow .
 ```
 
-### Install Terminal And Development Tools
+### Install Applications
 
-Install the terminal and development baseline:
+Install the terminal and graphical applicatons:
 
 ```bash
 add/app/cli
+add/app/gui
+add/app/i3wm
 ```
 
-This installs the general tools needed for common CLI workflows and development packs.
+This installs the general tools needed for common CLI workflows, development
+and productivity. This does not install gaming related packages. To install those please do:
+
+```bash
+add/pack/gaming
+```
 
 ### Install Standalone Components
 

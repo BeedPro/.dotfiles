@@ -10,4 +10,3 @@ sudo xbps-install -Sy base-devel clang
 "$add_root/pack/nvim"
 "$add_root/lang/node"
 "$add_root/pack/codeberg"
-"$add_root/pack/github"
