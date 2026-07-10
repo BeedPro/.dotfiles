@@ -127,6 +127,9 @@ class Screen:
     def get_position(self) -> Position:
         return self.__position
 
+    def get_output_spec(self) -> str:
+        return f"{self.__resolution.get_width()}x{self.__resolution.get_height()}+{self.__position.get_x()}+{self.__position.get_y()}"
+
     def __str__(self) -> str:
         return f"<Screen: id={self.__id}, name={self.__name}, is_primary={self.__is_primary}, resolution={self.__resolution}, position={self.__position}>"
 
@@ -192,6 +195,27 @@ class Screens:
             if screen.get_id() == id:
                 return screen
 
+    def get_screen_by_output(self, output: str) -> Screen | None:
+        for screen in self.__screens:
+            if output in [screen.get_name(), screen.get_output_spec()]:
+                return screen
+
+    def get_relative_screen(self, current: Screen, direction: str) -> Screen:
+        screens = sorted(
+            self.__screens,
+            key=lambda screen: (
+                screen.get_position().get_x(),
+                screen.get_position().get_y(),
+                screen.get_id(),
+            ),
+        )
+        current_index = screens.index(current)
+        next_index = current_index + (-1 if direction == "left" else 1)
+        if next_index < 0 or next_index >= len(screens):
+            return current
+
+        return screens[next_index]
+
 
 class Keybind:
     def __init__(self, key: str, binding: str):
@@ -227,6 +251,13 @@ class Tablet:
             .split()
         )
 
+    def __get_mapped_output(self, component: TabletComponent) -> str:
+        return subprocess.run(
+            ["xsetwacom", "get", component.get_id(), "MapToOutput"],
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+
     def get_name(self) -> str:
         return self.__name
 
@@ -238,6 +269,18 @@ class Tablet:
     def get_components(self):
         for components in self.__components:
             print(components.get_id())
+
+    def get_mapped_screen(self, screens: Screens) -> Screen | None:
+        for component_type in self.__area_components:
+            component: TabletComponent | None = self.get_component_from_type(
+                component_type.name
+            )
+            if not component:
+                continue
+
+            screen = screens.get_screen_by_output(self.__get_mapped_output(component))
+            if screen:
+                return screen
 
     def configure_screen(self, screen: Screen) -> None:
         for component_type in self.__area_components:
@@ -260,7 +303,7 @@ class Tablet:
                 f"xsetwacom set {component.get_id()} Area 0 0 {area_x} {area_y}"
             )
             screen_cmd: str = (
-                f"xsetwacom set {component.get_id()} MapToOutput {screen.get_resolution().get_width()}x{screen.get_resolution().get_height()}+{screen.get_position().get_x()}+{screen.get_position().get_y()}"
+                f"xsetwacom set {component.get_id()} MapToOutput {screen.get_output_spec()}"
             )
             subprocess.run(area_cmd, shell=True)
             subprocess.run(screen_cmd, shell=True)
@@ -281,7 +324,7 @@ def main() -> None:
         print("This script requires at least 1 argument to be passed\n")
         print("Example use:")
         print("=============")
-        print("./configure_tablets [SCREEN_ID]")
+        print("./xswacomon [SCREEN_ID|left|right]")
         return
     devices: Devices = Devices()
     screens: Screens = Screens()
@@ -309,12 +352,30 @@ def main() -> None:
         keybinds={ComponentTypes.STYLUS: [Keybind(key="2", binding="+2")]},
     )
     tablets: List[Tablet] = [huion, wacom]
-    screen_id: int = int(sys.argv[1])
-    screen: Screen | None = screens.get_screen(screen_id)
+    screen_arg: str = sys.argv[1]
+    if screen_arg in ["left", "right"]:
+        current_screen: Screen | None = None
+        for tablet in tablets:
+            current_screen = tablet.get_mapped_screen(screens)
+            if current_screen:
+                break
+
+        if not current_screen:
+            print("Could not determine current xsetwacom output")
+            return
+
+        screen: Screen | None = screens.get_relative_screen(current_screen, screen_arg)
+    else:
+        screen_id: int = int(screen_arg)
+        screen = screens.get_screen(screen_id)
+
+    if not screen:
+        print(f"Could not find screen for argument: {screen_arg}")
+        return
+
     for tablet in tablets:
         tablet.set_keybinds()
-        if screen:
-            tablet.configure_screen(screen)
+        tablet.configure_screen(screen)
 
 
 if __name__ == "__main__":

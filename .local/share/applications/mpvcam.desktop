@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Bookmarks
+Exec=/home/beed/.local/bin/mpvcam
+Icon=camera
+Type=Application
+Terminal=false

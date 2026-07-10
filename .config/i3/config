@@ -83,7 +83,6 @@ bindsym $mod+Shift+c exec --no-startup-id ~/.local/scripts/killmenu
 bindsym $mod+c kill
 
 bindsym $mod+space exec --no-startup-id rofi -show drun
-bindsym $mod+Shift+space exec --no-startup-id rofi -show run
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -136,6 +135,10 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move scratchpad
 bindsym $mod+minus floating toggle, sticky toggle
 
+bindsym $mod+Mod1+0 exec --no-startup-id ~/.local/bin/xswacomon 0
+bindsym $mod+Mod1+comma exec --no-startup-id ~/.local/bin/xswacomon left
+bindsym $mod+Mod1+period exec --no-startup-id ~/.local/bin/xswacomon right
+
 bindsym $mod+comma focus output left
 bindsym $mod+period focus output right
 
@@ -144,5 +147,5 @@ bindsym $mod+Shift+period move container to output right
 
 bindsym $mod+Mod1+b bar mode toggle
 bindsym $mod+Mod1+r reload
-bindsym $mod+Mod1+t exec --no-startup-id "~/.local/scripts/teme --confirm
+bindsym $mod+Mod1+t exec --no-startup-id ~/.local/scripts/teme --confirm
 bindsym $mod+Mod1+Shift+r restart

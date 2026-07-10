@@ -2,6 +2,7 @@
 
 dbus-update-activation-environment DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP 2>/dev/null
 [ -x "$HOME/.screenlayout/screens.sh" ] && "$HOME/.screenlayout/screens.sh"
+command -v xswacom >/dev/null 2>&1 && xswacom 0
 
 dex --autostart --environment i3
 
