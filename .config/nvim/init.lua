@@ -24,16 +24,18 @@ require("markdown-rc")
 require("yaml-rc")
 require("shell-rc")
 
--- Additional languages
+-- All Paradigm Languages
 require("python-rc")
-require("web-rc")
 require("c-rc")
-require("java-rc")
 require("haskell-rc")
-require("typst-rc")
-require("tex-rc")
 require("prolog-rc")
+require("typst-rc")
+
+-- Additional Languages
 require("gdscript-rc")
+require("java-rc")
+require("web-rc")
+require("tex-rc")
 require("groovy-rc")
 
 -- Options
