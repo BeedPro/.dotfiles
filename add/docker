@@ -9,5 +9,4 @@ sudo xbps-install -Sy \
 sudo ln -sfn /etc/sv/docker /var/service/docker
 sudo usermod -aG docker "$USER"
 
-echo "Docker installed and the runit service is enabled."
-echo "Log out and back in, or reboot, before running docker without sudo."
+sudo reboot
