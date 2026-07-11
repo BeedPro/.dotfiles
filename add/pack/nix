@@ -4,3 +4,5 @@ set -euo pipefail
 sudo xbps-install -Sy curl
 
 curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install | sh -s -- --daemon
+
+sudo reboot
