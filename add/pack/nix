@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-sudo xbps-install -Sy curl
+sudo xbps-install -Sy nix
 
-curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install | sh -s -- --daemon
+sudo ln -sfn /etc/sv/nix-daemon /var/service/nix-daemon
 
 sudo reboot
