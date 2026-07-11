@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-install -Sy curl
+
+VERSION="2.22.0"
+APPIMAGE="Heroic-${VERSION}-linux-x86_64.AppImage"
+
+INSTALL_DIR="/opt"
+BIN_LINK="/usr/local/bin/heroic"
+
+URL="https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${VERSION}/${APPIMAGE}"
+TARGET_BIN="${INSTALL_DIR}/${APPIMAGE}"
+
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+cd "$TMP_DIR"
+
+curl -L -o "$APPIMAGE" "$URL"
+
+sudo rm -f "$TARGET_BIN"
+sudo mv "$APPIMAGE" "$TARGET_BIN"
+sudo chmod +x "$TARGET_BIN"
+
+sudo ln -sfn "$TARGET_BIN" "$BIN_LINK"
+
+echo "Heroic installed to:"
+echo "  $TARGET_BIN"
+echo
+echo "Symlink created:"
+echo "  $BIN_LINK -> $TARGET_BIN"
+echo
+echo "Run it with:"
+echo "  heroic"
