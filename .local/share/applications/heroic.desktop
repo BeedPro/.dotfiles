@@ -4,3 +4,4 @@ Exec=heroic
 Icon=heroic
 Type=Application
 Terminal=false
+MimeType=x-scheme-handler/heroic;
