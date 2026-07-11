@@ -1,7 +1,7 @@
 @import "themes/dark"
 
 configuration {
-    show-icons: false;
+    show-icons: true;
 }
 
 * {
@@ -36,7 +36,7 @@ configuration {
 element {
     padding: 4px 8px;
     cursor:  pointer;
-    spacing: 0;
+    spacing: 8px;
     border:  0;
 }
 element normal.normal {
@@ -83,7 +83,7 @@ element-text {
 }
 element-icon {
     background-color: transparent;
-    size:             0;
+    size:             1.2em;
     cursor:           inherit;
     text-color:       inherit;
 }
