@@ -39,10 +39,6 @@ default_border normal 1
 default_floating_border normal 1
 hide_edge_borders smart_no_gaps
 
-for_window [title="^floating$"] floating enable
-for_window [class="^floating$"] floating enable
-for_window [instance="^floating$"] floating enable
-
 floating_modifier $mod
 tiling_drag modifier titlebar
 
