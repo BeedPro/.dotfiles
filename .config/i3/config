@@ -22,20 +22,18 @@ workspace 10 output DP-0 HDMI-A-0
 focus_wrapping workspace
 
 set $chat_ws 7
-set $no_private ^(?!.*Private Browsing)
 
-for_window [class="^Firefox$" title="$no_private.*WhatsApp.*"] move --no-auto-back-and-forth to workspace number $chat_ws
-for_window [class="^Firefox$" title="$no_private.*Discord.*"] move --no-auto-back-and-forth to workspace number $chat_ws
-for_window [class="^Firefox$" title="$no_private.*Element.*"] move --no-auto-back-and-forth to workspace number $chat_ws
-for_window [class="^Firefox$" title="$no_private.*Google Messages.*"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [class="^Firefox$" title="^(?!.*Private Browsing)WhatsApp — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [class="^Firefox$" title="^(?!.*Private Browsing)Discord — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [class="^Firefox$" title="^(?!.*Private Browsing)Element — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [class="^Firefox$" title="^(?!.*Private Browsing)Google Messages for web: Conversations — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
 
 set $email_ws 8
 
-for_window [class=Firefox title=".*Gmail.*"] move --no-auto-back-and-forth to workspace number $email_ws
-for_window [class=Firefox title=".*Outlook.*"] move --no-auto-back-and-forth to workspace number $email_ws
+for_window [class=Firefox title="^(?!.*Private Browsing)Gmail — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
+for_window [class=Firefox title="^(?!.*Private Browsing)Outlook — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
 
 assign [class="KeePassXC"] number 9
-assign [class="protonvpn-app"] number 9
 
 default_border normal 1
 default_floating_border normal 1
