@@ -32,21 +32,29 @@ end
 local java_bin = jdk_home and vim.fs.joinpath(jdk_home, "bin", "java") or vim.fn.exepath "java"
 
 local bundles = {}
-
-local function extend_bundles(pattern, exclude)
-  for _, path in ipairs(vim.fn.glob(pattern, true, true)) do
-    local name = vim.fn.fnamemodify(path, ":t")
-    if not exclude or not exclude[name] then
-      bundles[#bundles + 1] = path
-    end
-  end
+local debug_bundle_pattern = vim.fs.joinpath(
+  mason_packages,
+  "java-debug-adapter",
+  "extension",
+  "server",
+  "com.microsoft.java.debug.plugin-*.jar"
+)
+for _, path in ipairs(vim.fn.glob(debug_bundle_pattern, true, true)) do
+  bundles[#bundles + 1] = path
 end
 
-extend_bundles(vim.fs.joinpath(mason_packages, "java-debug-adapter", "extension", "server", "com.microsoft.java.debug.plugin-*.jar"))
-extend_bundles(vim.fs.joinpath(mason_packages, "java-test", "extension", "server", "*.jar"), {
+local excluded_test_bundles = {
   ["com.microsoft.java.test.runner-jar-with-dependencies.jar"] = true,
   ["jacocoagent.jar"] = true,
-})
+}
+
+local test_bundle_pattern = vim.fs.joinpath(mason_packages, "java-test", "extension", "server", "*.jar")
+for _, path in ipairs(vim.fn.glob(test_bundle_pattern, true, true)) do
+  local name = vim.fn.fnamemodify(path, ":t")
+  if not excluded_test_bundles[name] then
+    bundles[#bundles + 1] = path
+  end
+end
 
 local launcher = vim.fn.glob(vim.fs.joinpath(mason_packages, "jdtls", "plugins", "org.eclipse.equinox.launcher_*.jar"))
 local config_dir = vim.fs.joinpath(
@@ -147,21 +155,26 @@ local config = {
 jdtls.start_or_attach(config)
 jdtls.setup_dap { hotcodereplace = "auto", config_overrides = {} }
 
-local map = function(mode, lhs, rhs, desc)
-  vim.keymap.set(mode, lhs, rhs, { buffer = true, desc = desc })
-end
-
-map("n", "<leader>co", jdtls.organize_imports, "Organize imports")
-map("n", "<leader>crv", jdtls.extract_variable, "Extract variable")
-map("v", "<leader>crv", function()
+vim.keymap.set("n", "<leader>co", jdtls.organize_imports, {
+  buffer = true,
+  desc = "Organize imports",
+})
+vim.keymap.set("n", "<leader>crv", jdtls.extract_variable, {
+  buffer = true,
+  desc = "Extract variable",
+})
+vim.keymap.set("v", "<leader>crv", function()
   jdtls.extract_variable(true)
-end, "Extract variable")
-map("n", "<leader>crc", jdtls.extract_constant, "Extract constant")
-map("v", "<leader>crc", function()
+end, { buffer = true, desc = "Extract variable" })
+vim.keymap.set("n", "<leader>crc", jdtls.extract_constant, {
+  buffer = true,
+  desc = "Extract constant",
+})
+vim.keymap.set("v", "<leader>crc", function()
   jdtls.extract_constant(true)
-end, "Extract constant")
-map("v", "<leader>crm", function()
+end, { buffer = true, desc = "Extract constant" })
+vim.keymap.set("v", "<leader>crm", function()
   jdtls.extract_method(true)
-end, "Extract method")
-map("n", "<leader>tc", jdtls.test_class, "Debug test class")
-map("n", "<leader>tr", jdtls.test_nearest_method, "Debug nearest test")
+end, { buffer = true, desc = "Extract method" })
+vim.keymap.set("n", "<leader>tc", jdtls.test_class, { buffer = true, desc = "Debug test class" })
+vim.keymap.set("n", "<leader>tr", jdtls.test_nearest_method, { buffer = true, desc = "Debug nearest test" })
