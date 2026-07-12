@@ -23,15 +23,15 @@ focus_wrapping workspace
 
 set $chat_ws 7
 
-for_window [class="^Firefox$" title="^(?!.*Private Browsing)WhatsApp — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
-for_window [class="^Firefox$" title="^(?!.*Private Browsing)Discord — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
-for_window [class="^Firefox$" title="^(?!.*Private Browsing)Element — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
-for_window [class="^Firefox$" title="^(?!.*Private Browsing)Google Messages for web: Conversations — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [class="^Firefox$" title="^WhatsApp — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [class="^Firefox$" title="^Discord — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [class="^Firefox$" title="^Element — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [class="^Firefox$" title="^Google Messages for web: Conversations — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
 
 set $email_ws 8
 
-for_window [class=Firefox title="^(?!.*Private Browsing)Gmail — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
-for_window [class=Firefox title="^(?!.*Private Browsing)Outlook — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
+for_window [class="^Firefox$" title="^Gmail — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
+for_window [class="^Firefox$" title="^Outlook — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
 
 assign [class="KeePassXC"] number 9
 
