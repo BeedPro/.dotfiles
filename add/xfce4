@@ -28,6 +28,8 @@ sudo xbps-install -Sy \
     xfce4-screenshooter \
     lightdm \
     lightdm-gtk-greeter \
+    xarchiver \
+    thunar-archive-plugin \
     gvfs \
     ntfs-3g \
     exfatprogs \
