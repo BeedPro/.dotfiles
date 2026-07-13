@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+REPO=git@github.com:BeedPro/void-packages.git
+DES=$HOME/Projects/BeedPro/void-packages
+
 sudo xbps-install -Sy xtools
 
-git clone --depth=1 git@github.com:BeedPro/void-packages.git ~/.local/pkgs
-cd ~/.local/pkgs
+git clone --depth=1 $REPO $DES
+cd $DES
 ./xbps-src binary-bootstrap
