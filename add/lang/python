@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-sudo xbps-install -Sy python3-pipx curl
-
-curl -LsSf https://astral.sh/uv/install.sh | sh
+sudo xbps-install -Sy python3-pipx curl uv
