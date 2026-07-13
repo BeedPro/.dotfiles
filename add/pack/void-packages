@@ -6,6 +6,7 @@ DES=$HOME/Projects/BeedPro/void-packages
 
 sudo xbps-install -Sy xtools
 
-git clone --depth=1 $REPO $DES
+git clone --depth=1 --no-single-branch $REPO $DES
 cd $DES
+git remote add upstream https://github.com/void-linux/void-packages.git
 ./xbps-src binary-bootstrap
