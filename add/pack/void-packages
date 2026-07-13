@@ -3,6 +3,6 @@ set -euo pipefail
 
 sudo xbps-install -Sy xtools
 
-git clone --depth=1 https://github.com/void-linux/void-packages.git ~/.local/pkgs
+git clone --depth=1 git@github.com:BeedPro/void-packages.git ~/.local/pkgs
 cd ~/.local/pkgs
 ./xbps-src binary-bootstrap
