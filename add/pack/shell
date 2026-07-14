@@ -5,6 +5,7 @@ sudo xbps-install -Sy \
     bash-completion \
     bat \
     curl \
+    xxd \
     dust \
     eza \
     fd \
@@ -17,3 +18,4 @@ sudo xbps-install -Sy \
     xdg-utils
 
 bat cache --build
+sudo xbps-alternatives -s bash
