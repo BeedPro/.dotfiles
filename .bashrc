@@ -9,7 +9,6 @@ export PATH="$HOME/.go/bin:$PATH"
 export PATH="$HOME/.cache/scalacli/local-repo/bin/scala-cli:$PATH"
 export PATH="$HOME/.local/share/coursier/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-export PATH=$HOME/.opencode/bin:$PATH
 
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"

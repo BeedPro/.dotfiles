@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-sudo xbps-install -Sy curl
+if ! command -v npm >/dev/null 2>&1; then
+    echo "npm is not installed. Run add/lang/node first."
+    exit 1
+fi
 
-curl -fsSL https://opencode.ai/install | bash
+npm i -g opencode-ai
