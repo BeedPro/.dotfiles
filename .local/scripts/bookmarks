@@ -1,59 +1,110 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 
-BOOKMARKS_FILE="$HOME/Compendium/Journal/bookmarks.txt"
+import argparse
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
 
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    -h|--help)
-      printf 'Usage: %s [bookmarks_file]\n' "$(basename "$0")"
-      exit 0
-      ;;
-    -*)
-      printf 'Error: unknown option: %s\n' "$1" >&2
-      exit 1
-      ;;
-    *)
-      BOOKMARKS_FILE="$1"
-      shift
-      ;;
-  esac
-done
+DEFAULT_BOOKMARKS_FILE = Path.home() / "Compendium/Journal/bookmarks.txt"
 
-if [[ ! -f "$BOOKMARKS_FILE" ]]; then
-  printf 'Error: bookmarks file not found: %s\n' "$BOOKMARKS_FILE" >&2
-  exit 1
-fi
 
-# Show bookmark names (left side of |) in rofi
-CHOICE="$(awk -F'|' 'NF>=2 {print $1}' "$BOOKMARKS_FILE" | rofi -dmenu -i -p "Bookmarks")"
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog=Path(sys.argv[0]).name,
+        usage="%(prog)s [bookmarks_file]",
+        description="Select a bookmark with rofi and copy its URL to the clipboard.",
+    )
+    parser.add_argument(
+        "bookmarks_file", nargs="?", default=str(DEFAULT_BOOKMARKS_FILE)
+    )
+    return parser.parse_args()
 
-# Exit if nothing selected
-[[ -z "$CHOICE" ]] && exit 0
 
-# Find the URL (right side of |) for the selected name
-URL="$(awk -F'|' -v choice="$CHOICE" '$1 == choice {print $2; exit}' "$BOOKMARKS_FILE")"
+def load_bookmarks(bookmarks_file: Path) -> list[tuple[str, str]]:
+    if not bookmarks_file.is_file():
+        print(f"Error: bookmarks file not found: {bookmarks_file}", file=sys.stderr)
+        sys.exit(1)
 
-# Exit if no matching URL found
-[[ -z "$URL" ]] && exit 1
+    bookmarks: list[tuple[str, str]] = []
+    with bookmarks_file.open(encoding="utf-8") as file:
+        for line in file:
+            name, separator, url = line.rstrip("\n").partition("|")
+            if separator:
+                bookmarks.append((name, url))
 
-# Copy URL to clipboard
-if [[ "${XDG_SESSION_TYPE:-}" == "wayland" ]]; then
-  if command -v wl-copy >/dev/null 2>&1; then
-    printf '%s' "$URL" | wl-copy
-  else
-    printf 'Error: wayland session detected but wl-copy is not installed\n' >&2
-    exit 1
-  fi
-elif [[ "${XDG_SESSION_TYPE:-}" == "x11" ]]; then
-  if command -v xclip >/dev/null 2>&1; then
-    printf '%s' "$URL" | xclip -selection clipboard
-  elif command -v xsel >/dev/null 2>&1; then
-    printf '%s' "$URL" | xsel --clipboard --input
-  else
-    printf 'Error: x11 session detected but neither xclip nor xsel is installed\n' >&2
-    exit 1
-  fi
-else
-  printf 'Error: unsupported or unknown session type: %s\n' "${XDG_SESSION_TYPE:-unset}" >&2
-  exit 1
-fi
+    return bookmarks
+
+
+def choose_bookmark(bookmarks: list[tuple[str, str]]) -> str:
+    names = "\n".join(name for name, _ in bookmarks)
+    if names:
+        names += "\n"
+
+    result = subprocess.run(
+        ["rofi", "-dmenu", "-i", "-p", "Bookmarks"],
+        input=names,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    return result.stdout.rstrip("\n")
+
+
+def copy_to_clipboard(url: str) -> None:
+    session_type = os.environ.get("XDG_SESSION_TYPE", "")
+
+    if session_type == "wayland":
+        if shutil.which("wl-copy") is None:
+            print(
+                "Error: wayland session detected but wl-copy is not installed",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        subprocess.run(["wl-copy"], input=url, text=True, check=True)
+        return
+
+    if session_type == "x11":
+        if shutil.which("xclip") is not None:
+            subprocess.run(
+                ["xclip", "-selection", "clipboard"], input=url, text=True, check=True
+            )
+            return
+        if shutil.which("xsel") is not None:
+            subprocess.run(
+                ["xsel", "--clipboard", "--input"], input=url, text=True, check=True
+            )
+            return
+        print(
+            "Error: x11 session detected but neither xclip nor xsel is installed",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    print(
+        f"Error: unsupported or unknown session type: {session_type or 'unset'}",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
+
+def main() -> int:
+    args = parse_args()
+    bookmarks = load_bookmarks(Path(args.bookmarks_file).expanduser())
+    choice = choose_bookmark(bookmarks)
+
+    if not choice:
+        return 0
+
+    for name, url in bookmarks:
+        if name == choice:
+            copy_to_clipboard(url)
+            return 0
+
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
