@@ -6,10 +6,8 @@ sudo xbps-install -Sy curl
 VERSION="2.22.0"
 APPIMAGE="Heroic-${VERSION}-linux-x86_64.AppImage"
 CHECKSUM="298ac4dfccfd866ede34c31fad1992e6d3a4bb90471438e6d0c64915f4e1d7c1"
-
 INSTALL_DIR="/opt"
 BIN_LINK="/usr/local/bin/heroic"
-
 URL="https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${VERSION}/${APPIMAGE}"
 TARGET_BIN="${INSTALL_DIR}/${APPIMAGE}"
 
@@ -27,11 +25,4 @@ sudo chmod +x "$TARGET_BIN"
 
 sudo ln -sfn "$TARGET_BIN" "$BIN_LINK"
 
-echo "Heroic installed to:"
-echo "  $TARGET_BIN"
-echo
-echo "Symlink created:"
-echo "  $BIN_LINK -> $TARGET_BIN"
-echo
-echo "Run it with:"
-echo "  heroic"
+echo "Heroic installed: $BIN_LINK -> $TARGET_BIN"

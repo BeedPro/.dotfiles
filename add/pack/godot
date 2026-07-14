@@ -8,11 +8,11 @@ FLAVOUR="stable"
 SLUG="linux.x86_64.zip"
 PLATFORM="linux.64"
 CHECKSUM="0b1a6c54c2c619c12e169fe9241edda4b81080b519451cec2984bf0d2c6cb73c"
-
+ARCHIVE="godot-${VERSION}-${SLUG}"
+APP_BIN="Godot_v${VERSION}-${FLAVOUR}_${SLUG%.zip}"
 INSTALL_DIR="/opt"
 BIN_LINK="/usr/local/bin/godot"
-
-OUTPUT="godot-${VERSION}-${SLUG}"
+TARGET_BIN="${INSTALL_DIR}/${APP_BIN}"
 URL="https://downloads.godotengine.org/?version=${VERSION}&flavor=${FLAVOUR}&slug=${SLUG}&platform=${PLATFORM}"
 
 TMP_DIR="$(mktemp -d)"
@@ -20,31 +20,19 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 
 cd "$TMP_DIR"
 
-curl -fL -o "$OUTPUT" "$URL"
-printf '%s  %s\n' "$CHECKSUM" "$OUTPUT" | sha256sum --check
-unzip "$OUTPUT"
+curl -fL -o "$ARCHIVE" "$URL"
+printf '%s  %s\n' "$CHECKSUM" "$ARCHIVE" | sha256sum --check
+unzip "$ARCHIVE"
 
-GODOT_BIN="$(find "$TMP_DIR" -maxdepth 1 -type f -iname 'Godot*' | head -n 1)"
-
-if [[ -z "$GODOT_BIN" ]]; then
+if [[ ! -f "$APP_BIN" ]]; then
     echo "Could not find Godot executable after unzipping."
     exit 1
 fi
 
-GODOT_NAME="$(basename "$GODOT_BIN")"
-TARGET_BIN="${INSTALL_DIR}/${GODOT_NAME}"
-
 sudo rm -f "$TARGET_BIN"
-sudo mv "$GODOT_BIN" "$TARGET_BIN"
+sudo mv "$APP_BIN" "$TARGET_BIN"
 sudo chmod +x "$TARGET_BIN"
 
 sudo ln -sfn "$TARGET_BIN" "$BIN_LINK"
 
-echo "Godot installed to:"
-echo "  $TARGET_BIN"
-echo
-echo "Symlink created:"
-echo "  $BIN_LINK -> $TARGET_BIN"
-echo
-echo "Run it with:"
-echo "  godot"
+echo "Godot installed: $BIN_LINK -> $TARGET_BIN"
