@@ -1,212 +1,379 @@
 #!/usr/bin/env python3
+"""Launch scrcpy over adb TCP using the phone's Wi-Fi address."""
 
 import argparse
 import re
-import shlex
+import shutil
 import subprocess
 import sys
 import time
+from typing import Sequence
 
 
-def run(cmd):
-    return subprocess.run(cmd, text=True, capture_output=True)
+DEFAULT_PORT = "5555"
+IP_RE = r"\d+\.\d+\.\d+\.\d+"
 
 
-def run_or_exit(cmd, err_msg):
-    result = run(cmd)
-    if result.returncode != 0:
-        details = result.stderr.strip() or result.stdout.strip() or "unknown error"
-        print(f"{err_msg}: {details}", file=sys.stderr)
-        sys.exit(1)
-    return result
+def run(command: Sequence[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(command, text=True, capture_output=True)
 
 
-def check_dependency(binary):
-    result = run(["bash", "-lc", f"command -v {shlex.quote(binary)}"])
-    return result.returncode == 0
+def run_or_exit(
+    command: Sequence[str],
+    error_message: str,
+) -> subprocess.CompletedProcess[str]:
+    result = run(command)
+
+    if result.returncode == 0:
+        return result
+
+    details = result.stderr.strip() or result.stdout.strip() or "unknown error"
+    print(f"{error_message}: {details}", file=sys.stderr)
+    sys.exit(1)
 
 
-def parse_adb_devices(output):
-    devices = []
-    for line in output.splitlines():
-        line = line.strip()
-        if not line or line.startswith("List of devices"):
-            continue
-        if "\t" not in line:
-            continue
-        serial, state = line.split("\t", 1)
-        if state.strip() == "device":
-            devices.append(serial)
-    return devices
+def check_dependency(binary: str) -> bool:
+    return shutil.which(binary) is not None
 
 
-def choose_device(devices, auto_yes=False):
+def parse_adb_devices(output: str) -> list[str]:
+    devices = [parse_device_line(line) for line in output.splitlines()]
+    return [device for device in devices if device is not None]
+
+
+def parse_device_line(line: str) -> str | None:
+    stripped = line.strip()
+
+    if not stripped or stripped.startswith("List of devices"):
+        return None
+
+    if "\t" not in stripped:
+        return None
+
+    serial, state = stripped.split("\t", 1)
+
+    if state.strip() != "device":
+        return None
+
+    return serial
+
+
+def exit_no_devices() -> None:
+    print("No connected/authorized adb devices found.", file=sys.stderr)
+    print(
+        "Tip: connect USB, unlock phone, and accept the debug prompt.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
+
+def confirm_single_device(serial: str, auto_yes: bool) -> str:
+    if auto_yes:
+        print(f"Using device {serial} (-y enabled)")
+        return serial
+
+    answer = input(f"Use device {serial}? [Y/n]: ").strip().lower()
+
+    if answer in {"", "y", "yes"}:
+        return serial
+
+    print("Cancelled.")
+    sys.exit(0)
+
+
+def print_devices(devices: Sequence[str]) -> None:
+    print("Available adb devices:")
+
+    for index, serial in enumerate(devices, start=1):
+        print(f"  {index}) {serial}")
+
+
+def selected_device(raw: str, devices: Sequence[str]) -> str | None:
+    if not raw.isdigit():
+        return None
+
+    index = int(raw)
+
+    if not 1 <= index <= len(devices):
+        return None
+
+    return devices[index - 1]
+
+
+def prompt_device_choice(devices: Sequence[str]) -> str:
+    raw = input(f"Choose device [1-{len(devices)}]: ").strip()
+    device = selected_device(raw, devices)
+
+    if device is not None:
+        return device
+
+    print("Invalid choice. Try again.")
+    return prompt_device_choice(devices)
+
+
+def prompt_device(devices: Sequence[str]) -> str:
+    print_devices(devices)
+    return prompt_device_choice(devices)
+
+
+def choose_device(devices: Sequence[str], auto_yes: bool = False) -> str:
     if not devices:
-        print("No connected/authorized adb devices found.", file=sys.stderr)
-        print(
-            "Tip: connect USB, unlock phone, and accept the debug prompt.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+        exit_no_devices()
 
     if len(devices) == 1:
-        only = devices[0]
-        if auto_yes:
-            print(f"Using device {only} (-y enabled)")
-            return only
-        answer = input(f"Use device {only}? [Y/n]: ").strip().lower()
-        if answer in {"", "y", "yes"}:
-            return only
-        print("Cancelled.")
-        sys.exit(0)
+        return confirm_single_device(devices[0], auto_yes)
 
     if auto_yes:
         first = devices[0]
         print(f"Using first device {first} (-y enabled)")
         return first
 
-    print("Available adb devices:")
-    for idx, serial in enumerate(devices, start=1):
-        print(f"  {idx}) {serial}")
-
-    while True:
-        raw = input(f"Choose device [1-{len(devices)}]: ").strip()
-        if raw.isdigit():
-            i = int(raw)
-            if 1 <= i <= len(devices):
-                return devices[i - 1]
-        print("Invalid choice. Try again.")
+    return prompt_device(devices)
 
 
-def get_wlan_ip(serial):
-    # 1) Try discovering Wi-Fi interface via route table.
+def route_dev(line: str) -> str | None:
+    match = re.search(r"\bdev\s+(\S+)", line)
+    return match.group(1) if match else None
+
+
+def route_src(line: str) -> str | None:
+    match = re.search(rf"\bsrc\s+({IP_RE})", line)
+    return match.group(1) if match else None
+
+
+def wifi_interface(name: str) -> bool:
+    lowered = name.lower()
+    return "wlan" in lowered or "wifi" in lowered
+
+
+def interface_ip(serial: str, name: str) -> str | None:
+    command = [
+        "adb",
+        "-s",
+        serial,
+        "shell",
+        "ip",
+        "-f",
+        "inet",
+        "addr",
+        "show",
+        name,
+    ]
+    result = run(command)
+
+    if result.returncode != 0:
+        return None
+
+    match = re.search(rf"inet\s+({IP_RE})/", result.stdout)
+    return match.group(1) if match else None
+
+
+def route_line_ip(serial: str, line: str) -> str | None:
+    dev = route_dev(line)
+
+    if dev is None or not wifi_interface(dev):
+        return None
+
+    return route_src(line) or interface_ip(serial, dev)
+
+
+def route_wifi_ip(serial: str) -> str | None:
     result = run(["adb", "-s", serial, "shell", "ip", "route"])
-    if result.returncode == 0:
-        for line in result.stdout.splitlines():
-            dev_match = re.search(r"\bdev\s+(\S+)", line)
-            if not dev_match:
-                continue
-            dev = dev_match.group(1)
-            if "wlan" not in dev.lower() and "wifi" not in dev.lower():
-                continue
 
-            src = re.search(r"\bsrc\s+(\d+\.\d+\.\d+\.\d+)", line)
-            if src:
-                return src.group(1)
+    if result.returncode != 0:
+        return None
 
-            addr = run(
-                ["adb", "-s", serial, "shell", "ip", "-f", "inet", "addr", "show", dev]
-            )
-            if addr.returncode == 0:
-                match = re.search(r"inet\s+(\d+\.\d+\.\d+\.\d+)/", addr.stdout)
-                if match:
-                    return match.group(1)
+    ips = (route_line_ip(serial, line) for line in result.stdout.splitlines())
+    return next(filter(None, ips), None)
 
-    # 2) Fallback: scan all IPv4 interfaces, prefer wlan/wifi names.
-    result = run(["adb", "-s", serial, "shell", "ip", "-o", "-4", "addr", "show"])
-    if result.returncode == 0:
-        candidates = []
-        for line in result.stdout.splitlines():
-            iface = re.search(r"^\d+:\s+([^\s:]+)", line)
-            ip = re.search(r"\binet\s+(\d+\.\d+\.\d+\.\d+)/", line)
-            if not iface or not ip:
-                continue
-            name = iface.group(1).lower()
-            addr = ip.group(1)
-            if addr.startswith("127."):
-                continue
-            if "wlan" in name or "wifi" in name:
-                return addr
-            candidates.append(addr)
-        if candidates:
-            return candidates[0]
 
-    # 3) Android properties often expose DHCP-assigned Wi-Fi IP.
-    iface_result = run(["adb", "-s", serial, "shell", "getprop", "wifi.interface"])
-    iface_name = iface_result.stdout.strip() if iface_result.returncode == 0 else ""
-    prop_keys = ["dhcp.wlan0.ipaddress", "dhcp.wlan1.ipaddress"]
+def ipv4_line_parts(line: str) -> tuple[str, str] | None:
+    iface = re.search(r"^\d+:\s+([^\s:]+)", line)
+    ip = re.search(rf"\binet\s+({IP_RE})/", line)
+
+    if iface is None or ip is None:
+        return None
+
+    return iface.group(1).lower(), ip.group(1)
+
+
+def valid_ipv4_part(part: tuple[str, str] | None) -> tuple[str, str] | None:
+    if part is None:
+        return None
+
+    _, address = part
+
+    if address.startswith("127."):
+        return None
+
+    return part
+
+
+def first_ipv4_ip(serial: str) -> str | None:
+    command = ["adb", "-s", serial, "shell", "ip", "-o", "-4", "addr", "show"]
+    result = run(command)
+
+    if result.returncode != 0:
+        return None
+
+    parts = (
+        valid_ipv4_part(ipv4_line_parts(line))
+        for line in result.stdout.splitlines()
+    )
+    candidates = [part for part in parts if part is not None]
+    wifi_ips = [address for name, address in candidates if wifi_interface(name)]
+
+    if wifi_ips:
+        return wifi_ips[0]
+
+    return candidates[0][1] if candidates else None
+
+
+def adb_property(serial: str, key: str) -> str:
+    result = run(["adb", "-s", serial, "shell", "getprop", key])
+    return result.stdout.strip() if result.returncode == 0 else ""
+
+
+def property_keys(serial: str) -> list[str]:
+    keys = ["dhcp.wlan0.ipaddress", "dhcp.wlan1.ipaddress"]
+    iface_name = adb_property(serial, "wifi.interface")
+
     if iface_name:
-        prop_keys.insert(0, f"dhcp.{iface_name}.ipaddress")
+        keys.insert(0, f"dhcp.{iface_name}.ipaddress")
 
-    for key in prop_keys:
-        prop = run(["adb", "-s", serial, "shell", "getprop", key])
-        value = prop.stdout.strip() if prop.returncode == 0 else ""
-        if re.fullmatch(r"\d+\.\d+\.\d+\.\d+", value):
-            return value
-
-    return None
+    return keys
 
 
-def parse_tcp_serial(serial):
-    match = re.fullmatch(r"(\d+\.\d+\.\d+\.\d+):(\d+)", serial)
-    if not match:
+def property_wifi_ip(serial: str) -> str | None:
+    values = (adb_property(serial, key) for key in property_keys(serial))
+    return next((value for value in values if re.fullmatch(IP_RE, value)), None)
+
+
+def get_wlan_ip(serial: str) -> str | None:
+    ip = route_wifi_ip(serial) or first_ipv4_ip(serial)
+    return ip or property_wifi_ip(serial)
+
+
+def parse_tcp_serial(serial: str) -> tuple[str | None, str | None]:
+    match = re.fullmatch(rf"({IP_RE}):(\d+)", serial)
+
+    if match is None:
         return None, None
+
     return match.group(1), match.group(2)
 
 
-def main():
+def parse_args() -> tuple[argparse.Namespace, list[str]]:
     parser = argparse.ArgumentParser(add_help=True)
-    parser.add_argument("-y", "--yes", action="store_true", help="auto-accept prompts")
-    args, scrcpy_args = parser.parse_known_args()
+    parser.add_argument(
+        "-y",
+        "--yes",
+        action="store_true",
+        help="auto-accept prompts",
+    )
+    return parser.parse_known_args()
 
-    if not check_dependency("adb"):
-        print("adb is not installed or not in PATH.", file=sys.stderr)
-        sys.exit(1)
-    if not check_dependency("scrcpy"):
-        print("scrcpy is not installed or not in PATH.", file=sys.stderr)
-        sys.exit(1)
 
+def require_dependency(binary: str) -> None:
+    if check_dependency(binary):
+        return
+
+    print(f"{binary} is not installed or not in PATH.", file=sys.stderr)
+    sys.exit(1)
+
+
+def prompt_port(auto_yes: bool) -> str:
+    if auto_yes:
+        print(f"ADB TCP port [{DEFAULT_PORT}]: {DEFAULT_PORT} (-y enabled)")
+        return DEFAULT_PORT
+
+    port = input(f"ADB TCP port [{DEFAULT_PORT}]: ").strip() or DEFAULT_PORT
+
+    if port.isdigit():
+        return port
+
+    print("Port must be numeric.", file=sys.stderr)
+    sys.exit(1)
+
+
+def enable_tcp(serial: str, port: str) -> None:
+    print(f"Enabling TCP mode on {serial}:{port}...")
+    command = ["adb", "-s", serial, "tcpip", port]
+    run_or_exit(command, "Failed to enable adb TCP mode")
+
+
+def retry_wlan_ip(serial: str, attempts: int = 6) -> str | None:
+    if attempts <= 0:
+        return None
+
+    ip = get_wlan_ip(serial)
+
+    if ip:
+        return ip
+
+    time.sleep(0.5)
+    return retry_wlan_ip(serial, attempts - 1)
+
+
+def require_wlan_ip(serial: str) -> str:
+    ip = retry_wlan_ip(serial)
+
+    if ip is not None:
+        return ip
+
+    print("Could not determine phone Wi-Fi IP.", file=sys.stderr)
+    print("Make sure Wi-Fi is enabled and connected.", file=sys.stderr)
+    sys.exit(1)
+
+
+def connect_target(target: str) -> None:
+    print(f"Connecting to {target}...")
+    connection = run(["adb", "connect", target])
+    output = (connection.stdout + connection.stderr).strip()
+    already_connected = "already connected" in output.lower()
+
+    if connection.returncode == 0 or already_connected:
+        return
+
+    print(f"adb connect failed: {output}", file=sys.stderr)
+    sys.exit(1)
+
+
+def wireless_target(serial: str, auto_yes: bool) -> str:
+    ip, port = parse_tcp_serial(serial)
+
+    if ip is not None and port is not None:
+        print(f"Using existing wireless device {serial}...")
+        return serial
+
+    port = prompt_port(auto_yes)
+    enable_tcp(serial, port)
+    target = f"{require_wlan_ip(serial)}:{port}"
+    connect_target(target)
+    return target
+
+
+def adb_serial(auto_yes: bool) -> str:
     devices_out = run_or_exit(["adb", "devices"], "Failed to list adb devices")
-    serial = choose_device(parse_adb_devices(devices_out.stdout), auto_yes=args.yes)
+    devices = parse_adb_devices(devices_out.stdout)
+    return choose_device(devices, auto_yes=auto_yes)
 
-    ip_from_serial, port_from_serial = parse_tcp_serial(serial)
 
-    if ip_from_serial and port_from_serial:
-        target = serial
-        print(f"Using existing wireless device {target}...")
-    else:
-        if args.yes:
-            port_input = ""
-            print("ADB TCP port [5555]: 5555 (-y enabled)")
-        else:
-            port_input = input("ADB TCP port [5555]: ").strip()
-        port = port_input if port_input else "5555"
-        if not port.isdigit():
-            print("Port must be numeric.", file=sys.stderr)
-            sys.exit(1)
+def main() -> int:
+    args, scrcpy_args = parse_args()
+    require_dependency("adb")
+    require_dependency("scrcpy")
 
-        print(f"Enabling TCP mode on {serial}:{port}...")
-        run_or_exit(
-            ["adb", "-s", serial, "tcpip", port], "Failed to enable adb TCP mode"
-        )
-
-        # adbd restarts after `adb tcpip`; give it a moment and retry.
-        ip = None
-        for _ in range(6):
-            ip = get_wlan_ip(serial)
-            if ip:
-                break
-            time.sleep(0.5)
-
-        if not ip:
-            print("Could not determine phone Wi-Fi IP.", file=sys.stderr)
-            print("Make sure Wi-Fi is enabled and connected.", file=sys.stderr)
-            sys.exit(1)
-
-        target = f"{ip}:{port}"
-        print(f"Connecting to {target}...")
-        conn = run(["adb", "connect", target])
-        conn_text = (conn.stdout + conn.stderr).strip()
-        if conn.returncode != 0 and "already connected" not in conn_text.lower():
-            print(f"adb connect failed: {conn_text}", file=sys.stderr)
-            sys.exit(1)
-
+    target = wireless_target(adb_serial(args.yes), args.yes)
     print(f"Launching scrcpy on {target}...")
+
     try:
         subprocess.run(["scrcpy", "-s", target, *scrcpy_args], check=False)
     finally:
         print("Done.")
 
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
