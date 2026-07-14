@@ -11,43 +11,49 @@ DEFAULT_BOOKMARKS_FILE = Path.home() / "Compendium/Journal/bookmarks.txt"
 
 
 def parse_args() -> argparse.Namespace:
+    description = "Select a bookmark and copy its URL to the clipboard."
     parser = argparse.ArgumentParser(
-        prog=Path(sys.argv[0]).name,
-        usage="%(prog)s [bookmarks_file]",
-        description="Select a bookmark with rofi and copy its URL to the clipboard.",
+    description=description,
+    prog=Path(sys.argv[0]).name,
+    usage="%(prog)s [bookmarks_file]",
     )
     parser.add_argument(
-        "bookmarks_file", nargs="?", default=str(DEFAULT_BOOKMARKS_FILE)
+    "bookmarks_file",
+    default=str(DEFAULT_BOOKMARKS_FILE),
+    nargs="?",
     )
     return parser.parse_args()
 
 
+def die(message: str) -> None:
+    print(message, file=sys.stderr)
+    sys.exit(1)
+
+
+def parse_bookmark(line: str) -> tuple[str, str] | None:
+    name, separator, url = line.partition("|")
+    return (name, url) if separator else None
+
+
 def load_bookmarks(bookmarks_file: Path) -> list[tuple[str, str]]:
-    if not bookmarks_file.is_file():
-        print(f"Error: bookmarks file not found: {bookmarks_file}", file=sys.stderr)
-        sys.exit(1)
+    message = f"Error: bookmarks file not found: {bookmarks_file}"
+    if not bookmarks_file.is_file(): die(message)
 
-    bookmarks: list[tuple[str, str]] = []
-    with bookmarks_file.open(encoding="utf-8") as file:
-        for line in file:
-            name, separator, url = line.rstrip("\n").partition("|")
-            if separator:
-                bookmarks.append((name, url))
-
-    return bookmarks
+    lines = bookmarks_file.read_text(encoding="utf-8").splitlines()
+    parsed = (parse_bookmark(line) for line in lines)
+    return [bookmark for bookmark in parsed if bookmark is not None]
 
 
 def choose_bookmark(bookmarks: list[tuple[str, str]]) -> str:
     names = "\n".join(name for name, _ in bookmarks)
-    if names:
-        names += "\n"
+    names += "\n" if names else ""
 
     result = subprocess.run(
-        ["rofi", "-dmenu", "-i", "-p", "Bookmarks"],
-        input=names,
-        text=True,
-        capture_output=True,
-        check=False,
+    ["rofi", "-dmenu", "-i", "-p", "Bookmarks"],
+    capture_output=True,
+    check=False,
+    input=names,
+    text=True,
     )
 
     return result.stdout.rstrip("\n")
@@ -56,38 +62,38 @@ def choose_bookmark(bookmarks: list[tuple[str, str]]) -> str:
 def copy_to_clipboard(url: str) -> None:
     session_type = os.environ.get("XDG_SESSION_TYPE", "")
 
-    if session_type == "wayland":
-        if shutil.which("wl-copy") is None:
-            print(
-                "Error: wayland session detected but wl-copy is not installed",
-                file=sys.stderr,
-            )
-            sys.exit(1)
-        subprocess.run(["wl-copy"], input=url, text=True, check=True)
-        return
+    if session_type == "wayland": copy_to_wayland_clipboard(url); return
 
-    if session_type == "x11":
-        if shutil.which("xclip") is not None:
-            subprocess.run(
-                ["xclip", "-selection", "clipboard"], input=url, text=True, check=True
-            )
-            return
-        if shutil.which("xsel") is not None:
-            subprocess.run(
-                ["xsel", "--clipboard", "--input"], input=url, text=True, check=True
-            )
-            return
-        print(
-            "Error: x11 session detected but neither xclip nor xsel is installed",
-            file=sys.stderr,
-        )
-        sys.exit(1)
+    if session_type == "x11": copy_to_x11_clipboard(url); return
 
-    print(
-        f"Error: unsupported or unknown session type: {session_type or 'unset'}",
-        file=sys.stderr,
-    )
-    sys.exit(1)
+    die(f"Error: unknown session type: {session_type or 'unset'}")
+
+
+def copy_to_wayland_clipboard(url: str) -> None:
+    message = "Error: wayland session detected but wl-copy is not installed"
+    if shutil.which("wl-copy") is None: die(message)
+
+    subprocess.run(["wl-copy"], input=url, text=True, check=True)
+
+
+def copy_with(command: list[str], url: str) -> bool:
+    if shutil.which(command[0]) is None: return False
+
+    subprocess.run(command, input=url, text=True, check=True)
+    return True
+
+
+def copy_to_x11_clipboard(url: str) -> None:
+    if copy_with(["xclip", "-selection", "clipboard"], url): return
+
+    if copy_with(["xsel", "--clipboard", "--input"], url): return
+
+    die("Error: x11 session detected but neither xclip nor xsel is installed")
+
+
+def find_url(bookmarks: list[tuple[str, str]], choice: str) -> str | None:
+    matches = (url for name, url in bookmarks if name == choice)
+    return next(matches, None)
 
 
 def main() -> int:
@@ -95,15 +101,13 @@ def main() -> int:
     bookmarks = load_bookmarks(Path(args.bookmarks_file).expanduser())
     choice = choose_bookmark(bookmarks)
 
-    if not choice:
-        return 0
+    if not choice: return 0
 
-    for name, url in bookmarks:
-        if name == choice:
-            copy_to_clipboard(url)
-            return 0
+    url = find_url(bookmarks, choice)
+    if url is None: return 1
 
-    return 1
+    copy_to_clipboard(url)
+    return 0
 
 
 if __name__ == "__main__":
