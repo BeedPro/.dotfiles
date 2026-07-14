@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! command -v cargo >/dev/null 2>&1; then
-    echo "cargo is not installed. Run add/lang/rust first."
-    exit 1
-fi
+if ! command -v cargo >/dev/null 2>&1; then echo "cargo is not installed. Run add/lang/rust first."; exit 1; fi
 
 sudo xbps-install -Sy typst
 

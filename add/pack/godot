@@ -24,10 +24,7 @@ curl -fL -o "$ARCHIVE" "$URL"
 printf '%s  %s\n' "$CHECKSUM" "$ARCHIVE" | sha256sum --check
 unzip "$ARCHIVE"
 
-if [[ ! -f "$APP_BIN" ]]; then
-    echo "Could not find Godot executable after unzipping."
-    exit 1
-fi
+if [[ ! -f "$APP_BIN" ]]; then echo "Could not find Godot executable after unzipping."; exit 1; fi
 
 sudo rm -f "$TARGET_BIN"
 sudo mv "$APP_BIN" "$TARGET_BIN"

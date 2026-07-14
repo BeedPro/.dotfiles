@@ -11,9 +11,7 @@ repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 mkdir -p "$HOME/.ssh"
 chmod 700 "$HOME/.ssh"
 
-if [ ! -f "$KEY" ]; then
-  ssh-keygen -t ed25519 -a 100 -f "$KEY" -C "codeberg"
-fi
+if [ ! -f "$KEY" ]; then ssh-keygen -t ed25519 -a 100 -f "$KEY" -C "codeberg"; fi
 
 eval "$(ssh-agent -s)" >/dev/null
 ssh-add "$KEY"
@@ -40,11 +38,6 @@ read -r -p "After adding the key to Codeberg, press Enter to test SSH..."
 
 ssh -T git@codeberg.org || true
 
-if git -C "$repo_root" remote get-url mirror >/dev/null 2>&1; then
-  git -C "$repo_root" remote set-url mirror "$MIRROR_URL"
-  git -C "$repo_root" config remote.mirror.mirror true
-else
-  git -C "$repo_root" remote add --mirror=push mirror "$MIRROR_URL"
-fi
+git -C "$repo_root" remote add --mirror=push mirror "$MIRROR_URL"
 
 echo "Configured mirror remote: $MIRROR_URL"

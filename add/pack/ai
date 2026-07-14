@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! command -v npm >/dev/null 2>&1; then
-    echo "npm is not installed. Run add/lang/node first."
-    exit 1
-fi
+if ! command -v npm >/dev/null 2>&1; then echo "npm is not installed. Run add/lang/node first."; exit 1; fi
 
 npm i -g opencode-ai
