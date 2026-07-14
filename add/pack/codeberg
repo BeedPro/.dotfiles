@@ -38,6 +38,6 @@ read -r -p "After adding the key to Codeberg, press Enter to test SSH..."
 
 ssh -T git@codeberg.org || true
 
-git -C "$repo_root" remote add --mirror=push mirror "$MIRROR_URL"
+git -C "$repo_root" remote get-url mirror >/dev/null 2>&1 || git -C "$repo_root" remote add --mirror=push mirror "$MIRROR_URL"
 
 echo "Configured mirror remote: $MIRROR_URL"
