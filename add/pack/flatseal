@@ -2,6 +2,6 @@
 
 set -euo pipefail
 
-if ! command -v flatpak >/dev/null 2>&1; then echo "flatpak is not installed. Run add/flathub first."; exit 1; fi
+command -v flatpak >/dev/null 2>&1 || { echo "flatpak is not installed. Run add/flathub first."; exit 1; }
 
 flatpak install -y flathub com.github.tchx84.Flatseal
