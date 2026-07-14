@@ -5,6 +5,7 @@ sudo xbps-install -Sy curl
 
 VERSION="2.22.0"
 APPIMAGE="Heroic-${VERSION}-linux-x86_64.AppImage"
+CHECKSUM="298ac4dfccfd866ede34c31fad1992e6d3a4bb90471438e6d0c64915f4e1d7c1"
 
 INSTALL_DIR="/opt"
 BIN_LINK="/usr/local/bin/heroic"
@@ -17,7 +18,8 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 
 cd "$TMP_DIR"
 
-curl -L -o "$APPIMAGE" "$URL"
+curl -fL -o "$APPIMAGE" "$URL"
+printf '%s  %s\n' "$CHECKSUM" "$APPIMAGE" | sha256sum --check
 
 sudo rm -f "$TARGET_BIN"
 sudo mv "$APPIMAGE" "$TARGET_BIN"

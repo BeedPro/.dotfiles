@@ -7,6 +7,7 @@ VERSION="4.7"
 FLAVOUR="stable"
 SLUG="linux.x86_64.zip"
 PLATFORM="linux.64"
+CHECKSUM="0b1a6c54c2c619c12e169fe9241edda4b81080b519451cec2984bf0d2c6cb73c"
 
 INSTALL_DIR="/opt"
 BIN_LINK="/usr/local/bin/godot"
@@ -19,7 +20,8 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 
 cd "$TMP_DIR"
 
-curl -L -o "$OUTPUT" "$URL"
+curl -fL -o "$OUTPUT" "$URL"
+printf '%s  %s\n' "$CHECKSUM" "$OUTPUT" | sha256sum --check
 unzip "$OUTPUT"
 
 GODOT_BIN="$(find "$TMP_DIR" -maxdepth 1 -type f -iname 'Godot*' | head -n 1)"
