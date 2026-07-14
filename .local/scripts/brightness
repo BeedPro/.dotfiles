@@ -1,38 +1,50 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 
-# Change brightness
-case "$1" in
-	up)
-		brightnessctl set +5% >/dev/null
-		;;
-	down)
-		brightnessctl set 5%- >/dev/null
-		;;
-esac
+from pathlib import Path
+import re
+import subprocess
+import sys
 
-TITLE="Brightness"
-BODY="lux --%"
 
-# Check backlight exists
-if [ -d /sys/class/backlight ] && [ "$(ls -A /sys/class/backlight 2>/dev/null)" ]; then
-	percent=$(brightnessctl | grep -oP '\(\K[0-9]+(?=%)')
+def run(*args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(args, capture_output=True, text=True, check=False)
 
-	if [ -n "$percent" ]; then
-		# clamp visual bar
-		bar_val=$percent
-		[ "$bar_val" -gt 100 ] && bar_val=100
-		[ "$bar_val" -lt 0 ] && bar_val=0
 
-		BAR_WIDTH=35
-		FILLED=$((bar_val * BAR_WIDTH / 100))
-		EMPTY=$((BAR_WIDTH - FILLED))
+def set_brightness(command: str | None) -> None:
+    commands = {"up": ("brightnessctl", "set", "+5%"), "down": ("brightnessctl", "set", "5%-")}
+    args = commands.get(command)
+    args and run(*args)
 
-		FILLED_BAR=$(printf '%*s' "$FILLED" '' | tr ' ' '|')
-		EMPTY_BAR=$(printf '%*s' "$EMPTY" '' | tr ' ' '-')
 
-		TITLE="Brightness ${percent}%"
-		BODY="[${FILLED_BAR}${EMPTY_BAR}]"
-	fi
-fi
+def backlight_exists() -> bool:
+    backlight = Path("/sys/class/backlight")
+    return backlight.is_dir() and any(backlight.iterdir())
 
-notify-send -r 9998 -t 1000 "$TITLE" "\n$BODY"
+
+def brightness_percent() -> int | None:
+    match = re.search(r"\((\d+)%\)", run("brightnessctl").stdout)
+    return int(match.group(1)) if match else None
+
+
+def brightness_body(percent: int) -> str:
+    bar_val = max(0, min(percent, 100))
+    bar_width = 35
+    filled = bar_val * bar_width // 100
+    empty = bar_width - filled
+    return f"[{'|' * filled}{'-' * empty}]"
+
+
+def main() -> int:
+    command = sys.argv[1] if len(sys.argv) > 1 else None
+    set_brightness(command)
+
+    percent = brightness_percent() if backlight_exists() else None
+    title = f"Brightness {percent}%" if percent is not None else "Brightness"
+    body = brightness_body(percent) if percent is not None else "lux --%"
+
+    run("notify-send", "-r", "9998", "-t", "1000", title, f"\n{body}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
