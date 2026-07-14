@@ -15,6 +15,7 @@ Plug 'c9rgreen/vim-colors-modus'
 call plug#end()
 
 let g:highlightedyank_highlight_duration = 200
+let g:netrw_banner = 0
 
 let g:fzf_colors = {
       \ 'fg':      ['fg', 'Normal'],
@@ -24,7 +25,6 @@ let g:fzf_colors = {
       \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
       \ 'hl+':     ['fg', 'Statement'],
       \ 'info':    ['fg', 'PreProc'],
-      \ 'border':  ['fg', 'Ignore'],
       \ 'prompt':  ['fg', 'Conditional'],
       \ 'pointer': ['fg', 'Exception'],
       \ 'marker':  ['fg', 'Keyword'],
@@ -32,12 +32,18 @@ let g:fzf_colors = {
       \ 'header':  ['fg', 'Comment']
       \ }
 
+let g:fzf_layout = { 'window': 'botright 14new' }
+let g:fzf_vim = {
+      \ 'preview_window': [],
+      \ 'files_options': ['--prompt', 'Files> ']
+      \ }
+
 if executable('fd')
   let $FZF_DEFAULT_COMMAND = 'fd --type f --strip-cwd-prefix --exclude .git'
-  command! -bang -nargs=? -complete=dir FilesAll call fzf#vim#files(<q-args>, { 'source': 'fd --type f --hidden --follow --no-ignore --strip-cwd-prefix --exclude .git' }, <bang>0)
+  command! -bang -nargs=? -complete=dir FilesAll call fzf#vim#files(<q-args>, { 'source': 'fd --type f --hidden --follow --no-ignore --strip-cwd-prefix --exclude .git', 'options': ['--prompt', 'Files> '] }, <bang>0)
 else
   let $FZF_DEFAULT_COMMAND = "find . -type f -not -path '*/.git/*' -not -path '*/.*'"
-  command! -bang -nargs=? -complete=dir FilesAll call fzf#vim#files(<q-args>, { 'source': "find . -type f -not -path '*/.git/*'" }, <bang>0)
+  command! -bang -nargs=? -complete=dir FilesAll call fzf#vim#files(<q-args>, { 'source': "find . -type f -not -path '*/.git/*'", 'options': ['--prompt', 'Files> '] }, <bang>0)
 endif
 
 " options
