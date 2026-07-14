@@ -18,4 +18,3 @@ sudo xbps-install -Sy \
     xdg-utils
 
 bat cache --build
-sudo xbps-alternatives -s bash
