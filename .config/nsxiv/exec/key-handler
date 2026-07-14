@@ -1,135 +1,271 @@
-#!/bin/sh
+#!/usr/bin/env python3
 
-rofi_select() {
-  prompt="$1"
-  printf "%s\n" "$2" | rofi -dmenu -i -p "$prompt"
+from __future__ import annotations
+
+import os
+import re
+import shutil
+import signal
+import subprocess
+import sys
+from collections.abc import Callable
+from pathlib import Path
+
+
+HOME = Path.home()
+WALLPAPER = HOME / ".config/wallpaper/current.jpg"
+SCREENS = HOME / ".screenlayout/screens.sh"
+DBROWSE = HOME / ".local/scripts/dbrowse"
+
+
+def command_exists(command: str | Path) -> bool:
+    return shutil.which(str(command)) is not None
+
+
+def notify(
+    summary: str,
+    body: str | None = None,
+    icon: Path | None = None,
+) -> None:
+    cmd = ["notify-send"]
+    if icon is not None:
+        cmd.extend(["-i", str(icon)])
+    cmd.append(summary)
+    if body is not None:
+        cmd.append(body)
+    subprocess.run(cmd, check=False)
+
+
+def rofi_select(prompt: str, options: str) -> str:
+    result = subprocess.run(
+        ["rofi", "-dmenu", "-i", "-p", prompt],
+        check=False,
+        input=f"{options}\n",
+        stdout=subprocess.PIPE,
+        text=True,
+    )
+    return result.stdout.rstrip("\n")
+
+
+def rofi_input(prompt: str, initial: str) -> str:
+    result = subprocess.run(
+        ["rofi", "-dmenu", "-p", prompt],
+        check=False,
+        input=initial,
+        stdout=subprocess.PIPE,
+        text=True,
+    )
+    return result.stdout.rstrip("\n")
+
+
+def copy_wayland(kind: str, payload: str, message: str) -> None:
+    if kind == "file":
+        data = Path(payload).read_bytes()
+        subprocess.run(["wl-copy"], check=True, input=data)
+        notify(message, icon=Path(payload))
+        return
+    subprocess.run(["wl-copy"], check=True, input=f"{payload}\n", text=True)
+    notify(message)
+
+
+def copy_x11(kind: str, payload: str, message: str) -> None:
+    if kind == "file":
+        cmd = ["xclip", "-selection", "clipboard"]
+        cmd.extend(["-t", "image/png", "-i", payload])
+        subprocess.run(cmd, check=True)
+        notify(message, icon=Path(payload))
+        return
+    subprocess.run(
+        ["xclip", "-selection", "clipboard"],
+        check=True,
+        input=f"{payload}\n",
+        text=True,
+    )
+    notify(message)
+
+
+def copy_to_clipboard(
+    kind: str,
+    payload: str,
+    wayland: str,
+    x11: str,
+) -> None:
+    if os.environ.get("WAYLAND_DISPLAY") and command_exists("wl-copy"):
+        copy_wayland(kind, payload, wayland)
+        return
+    if command_exists("xclip"):
+        copy_x11(kind, payload, x11)
+        return
+    notify("Clipboard tool not found (xclip or wl-copy).")
+
+
+def action_wallpaper(file: Path, _: Path) -> None:
+    shutil.copyfile(file, WALLPAPER)
+    subprocess.run([str(SCREENS)], check=True)
+    notify("Wallpaper changed.", icon=WALLPAPER)
+
+
+def action_delete(file: Path, _: Path) -> None:
+    confirm = rofi_select(f"Really delete {file}?", "No\nYes")
+    if confirm != "Yes":
+        return
+    file.unlink()
+    notify(f"{file} deleted.")
+
+
+def action_copy_image(file: Path, _: Path) -> None:
+    copy_to_clipboard(
+        "file",
+        str(file),
+        "Image copied to clipboard (Wayland)",
+        "Image copied to clipboard (X11)",
+    )
+
+
+def action_rotate(file: Path, _: Path) -> None:
+    subprocess.run(
+        ["magick", str(file), "-rotate", "90", str(file)],
+        check=True,
+    )
+
+
+def action_yank_path(_: Path, fullpath: Path) -> None:
+    copy_to_clipboard(
+        "text",
+        str(fullpath),
+        "File path copied to clipboard (Wayland)",
+        "File path copied to clipboard (X11)",
+    )
+
+
+def action_rename(file: Path, _: Path) -> None:
+    new_name = rofi_input("Rename to", file.name)
+    if not new_name:
+        return
+    target = file.parent / new_name
+    file.rename(target)
+    notify(f"Renamed to {new_name}", icon=target)
+
+
+def target_from_dbrowse() -> Path | None:
+    if not command_exists(DBROWSE):
+        return None
+    result = subprocess.run(
+        [str(DBROWSE)],
+        check=False,
+        stdout=subprocess.PIPE,
+        text=True,
+    )
+    if not result.stdout.rstrip("\n"):
+        return None
+    return Path(result.stdout.rstrip("\n"))
+
+
+def action_save(file: Path, fullpath: Path) -> None:
+    if not str(fullpath).startswith("/tmp/"):
+        notify("Save only works for images in /tmp.")
+        return
+    target_dir = target_from_dbrowse()
+    if target_dir is None:
+        return
+    new_name = rofi_input("Save as", file.name)
+    if not new_name:
+        return
+    target = target_dir / new_name
+    shutil.copyfile(file, target)
+    notify(f"Saved to {target}", icon=target)
+
+
+def action_move(file: Path, _: Path) -> None:
+    target_dir = target_from_dbrowse()
+    if target_dir is None:
+        return
+    shutil.move(str(file), str(target_dir))
+    notify(f"Moved to {target_dir}", icon=file)
+
+
+def action_copy(file: Path, _: Path) -> None:
+    target_dir = target_from_dbrowse()
+    if target_dir is None:
+        return
+    shutil.copy(str(file), str(target_dir))
+    notify(f"Copied to {target_dir}", icon=file)
+
+
+def action_open(file: Path, _: Path) -> None:
+    if not command_exists("thunar"):
+        notify("Thunar is not installed.")
+        return
+    subprocess.Popen(["thunar", str(file)])
+    notify("Opened in Thunar", icon=file)
+    os.kill(os.getppid(), signal.SIGTERM)
+    raise SystemExit(0)
+
+
+def format_mediainfo_line(line: str) -> str | None:
+    formatted = re.sub(r" +:", ":", line)
+    if ": " not in formatted:
+        return None
+    return formatted.replace(": ", ": <b>", 1) + "</b>"
+
+
+def mediainfo_body(file: Path) -> str:
+    result = subprocess.run(
+        ["mediainfo", str(file)],
+        check=False,
+        stdout=subprocess.PIPE,
+        text=True,
+    )
+    lines = map(format_mediainfo_line, result.stdout.splitlines())
+    return "\n".join(line for line in lines if line is not None)
+
+
+def action_info(file: Path, _: Path) -> None:
+    notify("File information", mediainfo_body(file))
+
+
+Action = Callable[[Path, Path], None]
+
+
+ACTIONS: dict[str, Action] = {
+    "w": action_wallpaper,
+    "C-d": action_delete,
+    "C-c": action_copy_image,
+    "C-r": action_rotate,
+    "y": action_yank_path,
+    "r": action_rename,
+    "s": action_save,
+    "m": action_move,
+    "c": action_copy,
+    "e": action_open,
+    "i": action_info,
 }
 
-rofi_input() {
-  prompt="$1"
-  initial="$2"
-  printf "%s" "$initial" | rofi -dmenu -p "$prompt"
-}
 
-copy_to_clipboard() {
-  kind="$1"
-  payload="$2"
-  wayland_msg="$3"
-  x11_msg="$4"
+def full_path(file: Path) -> Path:
+    if file.is_absolute():
+        return file
+    return Path.cwd() / file
 
-  if [ -n "$WAYLAND_DISPLAY" ] && command -v wl-copy >/dev/null; then
-    if [ "$kind" = "file" ]; then
-      wl-copy < "$payload" && notify-send -i "$payload" "$wayland_msg"
-    else
-      printf "%s\n" "$payload" | wl-copy && notify-send "$wayland_msg"
-    fi
-  elif command -v xclip >/dev/null; then
-    if [ "$kind" = "file" ]; then
-      xclip -selection clipboard -t image/png -i "$payload" && notify-send -i "$payload" "$x11_msg"
-    else
-      printf "%s\n" "$payload" | xclip -selection clipboard && notify-send "$x11_msg"
-    fi
-  else
-    notify-send "Clipboard tool not found (xclip or wl-copy)."
-  fi
-}
 
-if ! command -v rofi >/dev/null 2>&1; then
-  notify-send "rofi is not installed."
-  exit 1
-fi
+def handle(action: str, file_name: str) -> None:
+    file = Path(file_name)
+    handler = ACTIONS.get(action)
+    if handler is None:
+        notify(f"Unknown action: {action}")
+        return
+    handler(file, full_path(file))
 
-while read -r file; do
-  case "$file" in
-    /*) fullpath="$file" ;;
-    *) fullpath="$(pwd)/$file" ;;
-  esac
 
-  case "$1" in
-    "w")
-      cp "$file" "$HOME/.config/wallpaper/current.jpg" &&
-      $HOME/.screenlayout/screens.sh
-      notify-send -i "$HOME/.config/wallpaper/current.jpg" "Wallpaper changed."
-      ;;
+def main() -> int:
+    if not command_exists("rofi"):
+        notify("rofi is not installed.")
+        return 1
+    action = sys.argv[1] if len(sys.argv) > 1 else ""
+    for line in sys.stdin:
+        handle(action, line.rstrip("\n"))
+    return 0
 
-    "C-d")
-      confirm="$(rofi_select "Really delete $file?" "No
-Yes")"
-      if [ "$confirm" = "Yes" ]; then
-        rm "$file" && notify-send "$file deleted."
-      fi
-      ;;
 
-    "C-c")
-      copy_to_clipboard "file" "$file" "Image copied to clipboard (Wayland)" "Image copied to clipboard (X11)"
-      ;;
-
-    "C-r")
-      magick "$file" -rotate 90 "$file"
-      ;;
-
-    "y")
-      copy_to_clipboard "text" "$fullpath" "File path copied to clipboard (Wayland)" "File path copied to clipboard (X11)"
-      ;;
-
-    "r")
-      current_name="$(basename "$file")"
-      dir_name="$(dirname "$file")"
-      new_name="$(rofi_input "Rename to" "$current_name")"
-
-      if [ -n "$new_name" ]; then
-        mv -- "$file" "$dir_name/$new_name" && notify-send -i "$dir_name/$new_name" "Renamed to $new_name"
-      fi
-      ;;
-
-    "s")
-      case "$fullpath" in
-        /tmp/*)
-          if command -v "$HOME/.local/scripts/dbrowse" >/dev/null; then
-            target_dir="$("$HOME/.local/scripts/dbrowse")"
-            if [ -n "$target_dir" ]; then
-              new_name="$(rofi_input "Save as" "$(basename "$file")")"
-              [ -n "$new_name" ] && cp -- "$file" "$target_dir/$new_name" && notify-send -i "$target_dir/$new_name" "Saved to $target_dir/$new_name"
-            fi
-          fi
-          ;;
-        *)
-          notify-send "Save only works for images in /tmp."
-          ;;
-      esac
-      ;;
-
-    "m")
-      if command -v "$HOME/.local/scripts/dbrowse" >/dev/null; then
-        target_dir="$("$HOME/.local/scripts/dbrowse")"
-        [ -n "$target_dir" ] && mv "$file" "$target_dir" && notify-send -i "$file" "Moved to $target_dir"
-      fi
-      ;;
-
-    "c")
-      if command -v "$HOME/.local/scripts/dbrowse" >/dev/null; then
-        target_dir="$("$HOME/.local/scripts/dbrowse")"
-        [ -n "$target_dir" ] && cp "$file" "$target_dir" && notify-send -i "$file" "Copied to $target_dir"
-      fi
-      ;;
-
-    "e")
-      if command -v thunar >/dev/null; then
-        thunar "$file" &
-        notify-send -i "$file" "Opened in Thunar"
-        kill "$PPID"
-        exit 0
-      else
-        notify-send "Thunar is not installed."
-      fi
-      ;;
-
-    "i")
-      notify-send "File information" "$(mediainfo "$file" | sed "s/[ ]\+:/:/g;s/: /: <b>/;s/$/<\/b>/" | grep "<b>")"
-      ;;
-
-    *)
-      notify-send "Unknown action: $1"
-      ;;
-  esac
-done
+if __name__ == "__main__":
+    raise SystemExit(main())
