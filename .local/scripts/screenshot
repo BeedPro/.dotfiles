@@ -20,12 +20,18 @@ MONITOR_RE = re.compile(r"(\d+)/(\d+)x(\d+)/(\d+)\+(\d+)\+(\d+)")
 CONNECTED_RE = re.compile(r"^(\d+)x(\d+)\+(\d+)\+(\d+)$")
 
 
-def run(command: Sequence[str], **kwargs: Any) -> subprocess.CompletedProcess[str]:
+def run(
+    command: Sequence[str],
+    **kwargs: Any,
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(command, text=True, check=True, **kwargs)
 
 
 def mouse_location() -> tuple[int, int]:
-    result = run(["xdotool", "getmouselocation", "--shell"], capture_output=True)
+    result = run(
+        ["xdotool", "getmouselocation", "--shell"],
+        capture_output=True,
+    )
     values = dict(location_part(line) for line in result.stdout.splitlines())
 
     return values["X"], values["Y"]
@@ -49,8 +55,16 @@ def xrandr_output() -> str:
     return run(["xrandr", "--query"], capture_output=True).stdout
 
 
+def regex_field_match(
+    pattern: re.Pattern[str],
+    line: str,
+) -> re.Match[str] | None:
+    matches = (pattern.search(field) for field in line.split())
+    return next(filter(None, matches), None)
+
+
 def active_monitor_geometry(line: str) -> Geometry | None:
-    match = next((MONITOR_RE.search(field) for field in line.split() if MONITOR_RE.search(field)), None)
+    match = regex_field_match(MONITOR_RE, line)
 
     if match is None:
         return None
@@ -60,7 +74,7 @@ def active_monitor_geometry(line: str) -> Geometry | None:
 
 
 def connected_monitor_geometry(line: str) -> Geometry | None:
-    match = next((CONNECTED_RE.match(field) for field in line.split() if CONNECTED_RE.match(field)), None)
+    match = regex_field_match(CONNECTED_RE, line)
 
     if match is None:
         return None
@@ -81,7 +95,9 @@ def monitor_geometry(line: str) -> Geometry | None:
 
 def contains_point(geometry: Geometry, x: int, y: int) -> bool:
     width, height, monitor_x, monitor_y = geometry
-    return monitor_x <= x < monitor_x + width and monitor_y <= y < monitor_y + height
+    inside_x = monitor_x <= x < monitor_x + width
+    inside_y = monitor_y <= y < monitor_y + height
+    return inside_x and inside_y
 
 
 def maim_geometry(geometry: Geometry) -> Geometry:
@@ -89,13 +105,21 @@ def maim_geometry(geometry: Geometry) -> Geometry:
     return x, y, width, height
 
 
+def current_monitor_match(
+    geometry: Geometry | None,
+    mouse_x: int,
+    mouse_y: int,
+) -> bool:
+    return geometry is not None and contains_point(geometry, mouse_x, mouse_y)
+
+
 def current_monitor_geometry() -> Geometry:
     mouse_x, mouse_y = mouse_location()
-    geometries = (monitor_geometry(line) for line in xrandr_output().splitlines())
-    geometry = next(
-        (item for item in geometries if item is not None and contains_point(item, mouse_x, mouse_y)),
-        None,
+    geometries = (
+        monitor_geometry(line) for line in xrandr_output().splitlines()
     )
+    matches = lambda item: current_monitor_match(item, mouse_x, mouse_y)
+    geometry = next(filter(matches, geometries), None)
 
     if geometry is not None:
         return maim_geometry(geometry)
@@ -111,18 +135,37 @@ def take_screenshot(mode: str, final_file: Path) -> None:
 
     if mode == "screen":
         x, y, width, height = current_monitor_geometry()
-        run(["maim", "-u", "-g", f"{width}x{height}+{x}+{y}", str(final_file)])
+        geometry = f"{width}x{height}+{x}+{y}"
+        run(["maim", "-u", "-g", geometry, str(final_file)])
         return
 
     if mode == "window":
-        active_window = run(["xdotool", "getactivewindow"], capture_output=True).stdout.strip()
-        run(["maim", "-u", "-i", active_window, str(final_file)])
+        run(["maim", "-u", "-i", active_window_id(), str(final_file)])
         return
 
-    run(["maim", "-u", "-s", "-b", "1", "-c", "0.89,0.75,0.98,1.0", str(final_file)])
+    command = [
+        "maim",
+        "-u",
+        "-s",
+        "-b",
+        "1",
+        "-c",
+        "0.89,0.75,0.98,1.0",
+        str(final_file),
+    ]
+    run(command)
 
 
-def send_notification(timestamp: str, final_file: Path, save_screenshot: bool) -> None:
+def active_window_id() -> str:
+    result = run(["xdotool", "getactivewindow"], capture_output=True)
+    return result.stdout.strip()
+
+
+def send_notification(
+    timestamp: str,
+    final_file: Path,
+    save_screenshot: bool,
+) -> None:
     title = "Screenshot taken" if save_screenshot else "Screenshot copied"
     body = f"{timestamp}.png" if save_screenshot else "Not saved to disk"
     run(["notify-send", title, body, "-i", str(final_file)])
@@ -152,7 +195,13 @@ def redirect_to_devnull() -> None:
     os.close(devnull)
 
 
-def show_then_finish(command: Sequence[str], timestamp: str, final_file: Path, save_screenshot: bool, notify: bool) -> None:
+def show_then_finish(
+    command: Sequence[str],
+    timestamp: str,
+    final_file: Path,
+    save_screenshot: bool,
+    notify: bool,
+) -> None:
     subprocess.run(command, check=False)
 
     if notify:
@@ -161,7 +210,13 @@ def show_then_finish(command: Sequence[str], timestamp: str, final_file: Path, s
     remove_if_temporary(final_file, save_screenshot)
 
 
-def fork_viewer(command: Sequence[str], timestamp: str, final_file: Path, save_screenshot: bool, notify: bool) -> None:
+def fork_viewer(
+    command: Sequence[str],
+    timestamp: str,
+    final_file: Path,
+    save_screenshot: bool,
+    notify: bool,
+) -> None:
     if os.fork() != 0:
         return
 
@@ -172,8 +227,12 @@ def fork_viewer(command: Sequence[str], timestamp: str, final_file: Path, save_s
 
 
 def parse_args() -> argparse.Namespace:
+    usage = " ".join((
+        "%(prog)s [everything|screen|window|selection]",
+        "[--show] [--full-screen] [--no-save] [--no-notify]",
+    ))
     parser = argparse.ArgumentParser(
-        usage="%(prog)s [everything|screen|window|selection] [--show] [--full-screen] [--no-save] [--no-notify]"
+        usage=usage,
     )
     parser.add_argument("mode", choices=MODES)
     parser.add_argument("--show", action="store_true")
@@ -192,7 +251,12 @@ def final_file(timestamp: str, save_screenshot: bool) -> Path:
     return Path(temporary_file.name)
 
 
-def finish_without_viewer(timestamp: str, path: Path, save_screenshot: bool, notify: bool) -> None:
+def finish_without_viewer(
+    timestamp: str,
+    path: Path,
+    save_screenshot: bool,
+    notify: bool,
+) -> None:
     if notify:
         send_notification(timestamp, path, save_screenshot)
 
@@ -209,17 +273,31 @@ def main() -> int:
 
     try:
         take_screenshot(args.mode, path)
-        run(["xclip", "-selection", "clipboard", "-t", "image/png", "-i", str(path)])
+        run(xclip_command(path))
     except Exception:
         remove_if_temporary(path, save_screenshot)
         raise
 
     if args.show or args.full_screen:
-        fork_viewer(nsxiv_command(path, args.full_screen), timestamp, path, save_screenshot, not args.no_notify)
+        notify = not args.no_notify
+        viewer_command = nsxiv_command(path, args.full_screen)
+        fork_viewer(viewer_command, timestamp, path, save_screenshot, notify)
         return 0
 
     finish_without_viewer(timestamp, path, save_screenshot, not args.no_notify)
     return 0
+
+
+def xclip_command(path: Path) -> list[str]:
+    return [
+        "xclip",
+        "-selection",
+        "clipboard",
+        "-t",
+        "image/png",
+        "-i",
+        str(path),
+    ]
 
 
 if __name__ == "__main__":
