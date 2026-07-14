@@ -10,7 +10,13 @@ from typing import Optional
 
 
 def command_output(*args: str) -> str:
-    result = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, check=False)
+    result = subprocess.run(
+        args,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        text=True,
+        check=False,
+    )
     return result.stdout
 
 
@@ -18,7 +24,7 @@ def main() -> int:
     bat_number = os.environ.get("BAT_NUMBER", "0")
     label = os.environ.get("LABEL", "")
 
-    # Select the configured battery from acpi output; systems may expose BAT0/BAT1.
+    # Select the configured battery from acpi output.
     acpi = find_battery_line(bat_number)
 
     if acpi is None:
@@ -47,7 +53,10 @@ def main() -> int:
 
 def find_battery_line(bat_number: str) -> Optional[str]:
     acpi_lines = command_output("acpi", "-b").splitlines()
-    return next((line for line in acpi_lines if f"Battery {bat_number}" in line), None)
+    return next(
+        (line for line in acpi_lines if f"Battery {bat_number}" in line),
+        None,
+    )
 
 
 def parse_battery_line(acpi: str) -> Optional[tuple[str, int]]:
@@ -66,7 +75,7 @@ def status_suffix(status: str) -> str:
         return "+"
 
     if status == "Unknown":
-        # Some devices report "Unknown" while AC state still tells us plugged/unplugged.
+        # Some devices report "Unknown" while AC state still tells us enough.
         return adapter_suffix()
 
     return ""
@@ -79,7 +88,10 @@ def adapter_suffix() -> str:
         return ""
 
     adapter_status = adapter_match.group(1)
-    return {"on-line": " [+]", "off-line": " [-]"}.get(adapter_status, "")
+    return {
+        "on-line": " [+]",
+        "off-line": " [-]",
+    }.get(adapter_status, "")
 
 
 def notify_low_battery(bat_number: str, percent: int) -> None:
@@ -105,7 +117,16 @@ def send_battery_notification(percent: int) -> None:
     if not shutil.which("notify-send"):
         return
 
-    subprocess.run(["notify-send", "-u", "critical", "Battery Warning", f"Battery low: {percent}% remaining"], check=False)
+    subprocess.run(
+        [
+            "notify-send",
+            "-u",
+            "critical",
+            "Battery Warning",
+            f"Battery low: {percent}% remaining",
+        ],
+        check=False,
+    )
 
 
 def write_last_bucket(state_file: Path, bucket: int) -> None:
