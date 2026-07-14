@@ -1,153 +1,226 @@
-#!/bin/bash
-# Dependencies (X11 only):
-# maim, xclip, xdotool, xrandr, notify-send
+#!/usr/bin/env python3
+"""Take screenshots on X11 using maim."""
 
-SCREENSHOT_DIR="$HOME/Pictures/Screenshots"
-mkdir -p "$SCREENSHOT_DIR"
+import argparse
+import os
+import re
+import subprocess
+import sys
+import tempfile
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Sequence
 
-TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
-FINALFILE="$SCREENSHOT_DIR/$TIMESTAMP.png"
-SHOW_SCREENSHOT=0
-FULL_SCREEN=0
-SAVE_SCREENSHOT=1
-SEND_NOTIFICATION=1
 
-take_screenshot() {
-    case "$1" in
-        everything)
-            maim -u "$FINALFILE"
-            ;;
-        screen)
-            local mouse_x mouse_y
-            local output_info output_x output_y output_w output_h
+Geometry = tuple[int, int, int, int]
 
-            mouse_x="$(xdotool getmouselocation --shell | awk -F= '/^X=/ { print $2 }')"
-            mouse_y="$(xdotool getmouselocation --shell | awk -F= '/^Y=/ { print $2 }')"
+SCREENSHOT_DIR = Path.home() / "Pictures" / "Screenshots"
+MODES = ("everything", "screen", "window", "selection")
+MONITOR_RE = re.compile(r"(\d+)/(\d+)x(\d+)/(\d+)\+(\d+)\+(\d+)")
+CONNECTED_RE = re.compile(r"^(\d+)x(\d+)\+(\d+)\+(\d+)$")
 
-            output_info="$({ xrandr --listactivemonitors 2>/dev/null || xrandr --query; } | awk -v mx="$mouse_x" -v my="$mouse_y" '
-                /^[[:space:]]*[0-9]+:/ {
-                    for (i = 1; i <= NF; i++) {
-                        if ($i ~ /[0-9]+\/[0-9]+x[0-9]+\/[0-9]+\+[0-9]+\+[0-9]+/) {
-                            split($i, parts, /[x+]/)
-                            split(parts[1], wparts, "/")
-                            split(parts[2], hparts, "/")
-                            x = parts[3] + 0
-                            y = parts[4] + 0
-                            w = wparts[1] + 0
-                            h = hparts[1] + 0
 
-                            if (mx >= x && mx < x + w && my >= y && my < y + h) {
-                                printf "%d %d %d %d\n", x, y, w, h
-                                exit
-                            }
-                        }
-                    }
-                }
-                / connected/ {
-                    for (i = 1; i <= NF; i++) {
-                        if ($i ~ /^[0-9]+x[0-9]+\+[0-9]+\+[0-9]+$/) {
-                            split($i, parts, /[x+]/)
-                            x = parts[3] + 0
-                            y = parts[4] + 0
-                            w = parts[1] + 0
-                            h = parts[2] + 0
+def run(command: Sequence[str], **kwargs: Any) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(command, text=True, check=True, **kwargs)
 
-                            if (mx >= x && mx < x + w && my >= y && my < y + h) {
-                                printf "%d %d %d %d\n", x, y, w, h
-                                exit
-                            }
-                        }
-                    }
-                }
-            ')"
 
-            if [ -z "$output_info" ]; then
-                echo "Could not determine current monitor" >&2
-                exit 1
-            fi
+def mouse_location() -> tuple[int, int]:
+    result = run(["xdotool", "getmouselocation", "--shell"], capture_output=True)
+    values = dict(location_part(line) for line in result.stdout.splitlines())
 
-            read -r output_x output_y output_w output_h <<< "$output_info"
-            maim -u -g "${output_w}x${output_h}+${output_x}+${output_y}" "$FINALFILE"
-            ;;
-        window)
-            maim -u -i "$(xdotool getactivewindow)" "$FINALFILE"
-            ;;
-        selection)
-            maim -u -s -b 1 -c 0.89,0.75,0.98,1.0 "$FINALFILE"
-            ;;
-        *)
-            echo "Invalid mode: $1" >&2
-            exit 1
-            ;;
-    esac
-}
+    return values["X"], values["Y"]
 
-send_notification() {
-    if [ "$SEND_NOTIFICATION" -eq 0 ]; then
+
+def location_part(line: str) -> tuple[str, int]:
+    key, _, value = line.partition("=")
+    return key, int(value)
+
+
+def xrandr_output() -> str:
+    result = subprocess.run(
+        ["xrandr", "--listactivemonitors"],
+        text=True,
+        capture_output=True,
+    )
+
+    if result.returncode == 0:
+        return result.stdout
+
+    return run(["xrandr", "--query"], capture_output=True).stdout
+
+
+def active_monitor_geometry(line: str) -> Geometry | None:
+    match = next((MONITOR_RE.search(field) for field in line.split() if MONITOR_RE.search(field)), None)
+
+    if match is None:
+        return None
+
+    width, _, height, _, x, y = (int(value) for value in match.groups())
+    return width, height, x, y
+
+
+def connected_monitor_geometry(line: str) -> Geometry | None:
+    match = next((CONNECTED_RE.match(field) for field in line.split() if CONNECTED_RE.match(field)), None)
+
+    if match is None:
+        return None
+
+    width, height, x, y = (int(value) for value in match.groups())
+    return width, height, x, y
+
+
+def monitor_geometry(line: str) -> Geometry | None:
+    if re.match(r"^\s*\d+:", line):
+        return active_monitor_geometry(line)
+
+    if " connected" in line:
+        return connected_monitor_geometry(line)
+
+    return None
+
+
+def contains_point(geometry: Geometry, x: int, y: int) -> bool:
+    width, height, monitor_x, monitor_y = geometry
+    return monitor_x <= x < monitor_x + width and monitor_y <= y < monitor_y + height
+
+
+def maim_geometry(geometry: Geometry) -> Geometry:
+    width, height, x, y = geometry
+    return x, y, width, height
+
+
+def current_monitor_geometry() -> Geometry:
+    mouse_x, mouse_y = mouse_location()
+    geometries = (monitor_geometry(line) for line in xrandr_output().splitlines())
+    geometry = next(
+        (item for item in geometries if item is not None and contains_point(item, mouse_x, mouse_y)),
+        None,
+    )
+
+    if geometry is not None:
+        return maim_geometry(geometry)
+
+    print("Could not determine current monitor", file=sys.stderr)
+    sys.exit(1)
+
+
+def take_screenshot(mode: str, final_file: Path) -> None:
+    if mode == "everything":
+        run(["maim", "-u", str(final_file)])
         return
-    fi
 
-    if [ "$SAVE_SCREENSHOT" -eq 1 ]; then
-        notify-send "Screenshot taken" "$TIMESTAMP.png" -i "$FINALFILE"
-    else
-        notify-send "Screenshot copied" "Not saved to disk" -i "$FINALFILE"
-    fi
-}
+    if mode == "screen":
+        x, y, width, height = current_monitor_geometry()
+        run(["maim", "-u", "-g", f"{width}x{height}+{x}+{y}", str(final_file)])
+        return
 
-for arg in "$@"; do
-    case "$arg" in
-        everything|screen|window|selection)
-            MODE="$arg"
-            ;;
-        --show)
-            SHOW_SCREENSHOT=1
-            ;;
-        --full-screen)
-            FULL_SCREEN=1
-            ;;
-        --no-save)
-            SAVE_SCREENSHOT=0
-            ;;
-        --no-notify)
-            SEND_NOTIFICATION=0
-            ;;
-        *)
-            echo "Usage: $0 [everything|screen|window|selection] [--show] [--full-screen] [--no-save] [--no-notify]" >&2
-            exit 1
-            ;;
-    esac
-done
+    if mode == "window":
+        active_window = run(["xdotool", "getactivewindow"], capture_output=True).stdout.strip()
+        run(["maim", "-u", "-i", active_window, str(final_file)])
+        return
 
-if [ -z "$MODE" ]; then
-    echo "Usage: $0 [everything|screen|window|selection] [--show] [--full-screen] [--no-save] [--no-notify]" >&2
-    exit 1
-fi
+    run(["maim", "-u", "-s", "-b", "1", "-c", "0.89,0.75,0.98,1.0", str(final_file)])
 
-if [ "$SAVE_SCREENSHOT" -eq 0 ]; then
-    FINALFILE="$(mktemp --suffix=.png)"
-fi
 
-take_screenshot "$MODE"
-xclip -selection clipboard -t image/png -i "$FINALFILE"
+def send_notification(timestamp: str, final_file: Path, save_screenshot: bool) -> None:
+    title = "Screenshot taken" if save_screenshot else "Screenshot copied"
+    body = f"{timestamp}.png" if save_screenshot else "Not saved to disk"
+    run(["notify-send", title, body, "-i", str(final_file)])
 
-if [ "$SHOW_SCREENSHOT" -eq 1 ] || [ "$FULL_SCREEN" -eq 1 ]; then
-    (
-        if [ "$FULL_SCREEN" -eq 1 ]; then
-            nsxiv -f -b --anti-alias=no "$FINALFILE"
-        else
-            nsxiv "$FINALFILE"
-        fi
 
-        send_notification
+def remove_if_temporary(final_file: Path, save_screenshot: bool) -> None:
+    if save_screenshot:
+        return
 
-        if [ "$SAVE_SCREENSHOT" -eq 0 ]; then
-            rm -f "$FINALFILE"
-        fi
-    ) >/dev/null 2>&1 &
-else
-    send_notification
+    try:
+        os.unlink(final_file)
+    except FileNotFoundError:
+        pass
 
-    if [ "$SAVE_SCREENSHOT" -eq 0 ]; then
-        rm -f "$FINALFILE"
-    fi
-fi
+
+def nsxiv_command(final_file: Path, full_screen: bool) -> list[str]:
+    if full_screen:
+        return ["nsxiv", "-f", "-b", "--anti-alias=no", str(final_file)]
+
+    return ["nsxiv", str(final_file)]
+
+
+def redirect_to_devnull() -> None:
+    devnull = os.open(os.devnull, os.O_WRONLY)
+    os.dup2(devnull, sys.stdout.fileno())
+    os.dup2(devnull, sys.stderr.fileno())
+    os.close(devnull)
+
+
+def show_then_finish(command: Sequence[str], timestamp: str, final_file: Path, save_screenshot: bool, notify: bool) -> None:
+    subprocess.run(command, check=False)
+
+    if notify:
+        send_notification(timestamp, final_file, save_screenshot)
+
+    remove_if_temporary(final_file, save_screenshot)
+
+
+def fork_viewer(command: Sequence[str], timestamp: str, final_file: Path, save_screenshot: bool, notify: bool) -> None:
+    if os.fork() != 0:
+        return
+
+    os.setsid()
+    redirect_to_devnull()
+    show_then_finish(command, timestamp, final_file, save_screenshot, notify)
+    os._exit(0)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        usage="%(prog)s [everything|screen|window|selection] [--show] [--full-screen] [--no-save] [--no-notify]"
+    )
+    parser.add_argument("mode", choices=MODES)
+    parser.add_argument("--show", action="store_true")
+    parser.add_argument("--full-screen", action="store_true")
+    parser.add_argument("--no-save", action="store_true")
+    parser.add_argument("--no-notify", action="store_true")
+    return parser.parse_args()
+
+
+def final_file(timestamp: str, save_screenshot: bool) -> Path:
+    if save_screenshot:
+        return SCREENSHOT_DIR / f"{timestamp}.png"
+
+    temporary_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
+    temporary_file.close()
+    return Path(temporary_file.name)
+
+
+def finish_without_viewer(timestamp: str, path: Path, save_screenshot: bool, notify: bool) -> None:
+    if notify:
+        send_notification(timestamp, path, save_screenshot)
+
+    remove_if_temporary(path, save_screenshot)
+
+
+def main() -> int:
+    args = parse_args()
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    save_screenshot = not args.no_save
+    path = final_file(timestamp, save_screenshot)
+
+    SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
+
+    try:
+        take_screenshot(args.mode, path)
+        run(["xclip", "-selection", "clipboard", "-t", "image/png", "-i", str(path)])
+    except Exception:
+        remove_if_temporary(path, save_screenshot)
+        raise
+
+    if args.show or args.full_screen:
+        fork_viewer(nsxiv_command(path, args.full_screen), timestamp, path, save_screenshot, not args.no_notify)
+        return 0
+
+    finish_without_viewer(timestamp, path, save_screenshot, not args.no_notify)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
