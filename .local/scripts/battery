@@ -6,62 +6,31 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from typing import Optional
 
 
 def command_output(*args: str) -> str:
-    return subprocess.run(
-        args,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        text=True,
-        check=False,
-    ).stdout
+    result = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, check=False)
+    return result.stdout
 
 
 def main() -> int:
     bat_number = os.environ.get("BAT_NUMBER", "0")
     label = os.environ.get("LABEL", "")
 
-    # Select the configured battery from acpi output; systems may expose
-    # BAT0/BAT1.
-    acpi_lines = command_output("acpi", "-b").splitlines()
-    acpi = next((line for line in acpi_lines if f"Battery {bat_number}" in
-                 line), None)
+    # Select the configured battery from acpi output; systems may expose BAT0/BAT1.
+    acpi = find_battery_line(bat_number)
 
     if acpi is None:
         return 0
 
-    match = re.search(r": ([\w\s]+), (\d+)%", acpi)
-    if not match:
+    battery = parse_battery_line(acpi)
+    if battery is None:
         print(acpi, file=sys.stderr)
         return 1
 
-    status = match.group(1)
-    percent = int(match.group(2))
-    full_text = f":: {label}{percent}%"
-
-    if status == "Discharging":
-        full_text += "-"
-    elif status == "Charging":
-        full_text += "+"
-    elif status == "Unknown":
-        # Some devices report "Unknown" while AC state still tells us
-        # plugged/unplugged.
-        ac_adapt = command_output("acpi", "-a")
-        adapter_match = re.search(r": ([\w-]+)", ac_adapt)
-
-        if adapter_match:
-            adapter_status = adapter_match.group(1)
-            if adapter_status == "on-line":
-                full_text += " [+]"
-            elif adapter_status == "off-line":
-                full_text += " [-]"
-
-    short_text = full_text
-
-    time_match = re.search(r"(\d\d:\d\d):", acpi)
-    if time_match:
-        full_text += f" ({time_match.group(1)})"
+    status, percent = battery
+    short_text = f":: {label}{percent}%{status_suffix(status)}"
 
     print(short_text)
 
@@ -76,31 +45,70 @@ def main() -> int:
     return 0
 
 
+def find_battery_line(bat_number: str) -> Optional[str]:
+    acpi_lines = command_output("acpi", "-b").splitlines()
+    return next((line for line in acpi_lines if f"Battery {bat_number}" in line), None)
+
+
+def parse_battery_line(acpi: str) -> Optional[tuple[str, int]]:
+    match = re.search(r": ([\w\s]+), (\d+)%", acpi)
+    if not match:
+        return None
+
+    return match.group(1), int(match.group(2))
+
+
+def status_suffix(status: str) -> str:
+    if status == "Discharging":
+        return "-"
+
+    if status == "Charging":
+        return "+"
+
+    if status == "Unknown":
+        # Some devices report "Unknown" while AC state still tells us plugged/unplugged.
+        return adapter_suffix()
+
+    return ""
+
+
+def adapter_suffix() -> str:
+    ac_adapt = command_output("acpi", "-a")
+    adapter_match = re.search(r": ([\w-]+)", ac_adapt)
+    if not adapter_match:
+        return ""
+
+    adapter_status = adapter_match.group(1)
+    return {"on-line": " [+]", "off-line": " [-]"}.get(adapter_status, "")
+
+
 def notify_low_battery(bat_number: str, percent: int) -> None:
     bucket = percent // 5
     state_file = Path(f"/tmp/.blocks_battery_notify_{bat_number}")
-    last_bucket = -1
-
-    try:
-        last_bucket = int(state_file.read_text().strip())
-    except (FileNotFoundError, ValueError, OSError):
-        pass
+    last_bucket = read_last_bucket(state_file)
 
     if bucket >= 3 or bucket == last_bucket:
         return
 
-    if shutil.which("notify-send"):
-        subprocess.run(
-            [
-                "notify-send",
-                "-u",
-                "critical",
-                "Battery Warning",
-                f"Battery low: {percent}% remaining",
-            ],
-            check=False,
-        )
+    send_battery_notification(percent)
+    write_last_bucket(state_file, bucket)
 
+
+def read_last_bucket(state_file: Path) -> int:
+    try:
+        return int(state_file.read_text().strip())
+    except (FileNotFoundError, ValueError, OSError):
+        return -1
+
+
+def send_battery_notification(percent: int) -> None:
+    if not shutil.which("notify-send"):
+        return
+
+    subprocess.run(["notify-send", "-u", "critical", "Battery Warning", f"Battery low: {percent}% remaining"], check=False)
+
+
+def write_last_bucket(state_file: Path, bucket: int) -> None:
     try:
         state_file.write_text(str(bucket))
     except OSError:
