@@ -1,123 +1,56 @@
-#!/usr/bin/env python3
+#!/usr/bin/env bash
 
-import argparse
-import os
-import shutil
-import subprocess
-import sys
-from pathlib import Path
+BOOKMARKS_FILE="$HOME/Compendium/Journal/bookmarks.txt"
 
-DEFAULT_BOOKMARKS_FILE = Path.home() / "Compendium/Journal/bookmarks.txt"
+die() {
+    printf '%s\n' "$1" >&2
+    exit 1
+}
 
+usage() {
+    printf 'Usage: %s [bookmarks_file]\n' "$(basename "$0")"
+}
 
-def parse_args() -> argparse.Namespace:
-    description = "Select a bookmark and copy its URL to the clipboard."
-    parser = argparse.ArgumentParser(
-    description=description,
-    prog=Path(sys.argv[0]).name,
-    usage="%(prog)s [bookmarks_file]",
-    )
-    parser.add_argument(
-    "bookmarks_file",
-    default=str(DEFAULT_BOOKMARKS_FILE),
-    nargs="?",
-    )
-    return parser.parse_args()
+copy_wayland() {
+    command -v wl-copy >/dev/null 2>&1 || die 'Error: wayland session detected but wl-copy is not installed'
+    printf '%s' "$URL" | wl-copy
+}
 
+copy_x11() {
+    command -v xclip >/dev/null 2>&1 && printf '%s' "$URL" | xclip -selection clipboard && return
+    command -v xsel >/dev/null 2>&1 && printf '%s' "$URL" | xsel --clipboard --input && return
+    die 'Error: x11 session detected but neither xclip nor xsel is installed'
+}
 
-def die(message: str) -> None:
-    print(message, file=sys.stderr)
-    sys.exit(1)
+copy_url() {
+    [[ "${XDG_SESSION_TYPE:-}" == "wayland" ]] && copy_wayland && return
+    [[ "${XDG_SESSION_TYPE:-}" == "x11" ]] && copy_x11 && return
+    die "Error: unsupported or unknown session type: ${XDG_SESSION_TYPE:-unset}"
+}
 
+[[ $# -gt 1 ]] && die "Error: too many arguments"
 
-def parse_bookmark(line: str) -> tuple[str, str] | None:
-    name, separator, url = line.partition("|")
-    return (name, url) if separator else None
+case "${1:-}" in
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    -*)
+        die "Error: unknown option: $1"
+        ;;
+    ?*)
+        BOOKMARKS_FILE="$1"
+        ;;
+esac
 
+[[ -f "$BOOKMARKS_FILE" ]] || die "Error: bookmarks file not found: $BOOKMARKS_FILE"
 
-def load_bookmarks(bookmarks_file: Path) -> list[tuple[str, str]]:
-    message = f"Error: bookmarks file not found: {bookmarks_file}"
-    bookmarks_file.is_file() or die(message)
+CHOICE="$(awk -F'|' 'NF>=2 {print $1}' "$BOOKMARKS_FILE" | rofi -dmenu -i -p 'Bookmarks')"
 
-    lines = bookmarks_file.read_text(encoding="utf-8").splitlines()
-    parsed = (parse_bookmark(line) for line in lines)
-    return [bookmark for bookmark in parsed if bookmark is not None]
+[[ -z "$CHOICE" ]] && exit 0
 
+URL="$(awk -F'|' -v choice="$CHOICE" '$1 == choice {print $2; exit}' "$BOOKMARKS_FILE")"
 
-def choose_bookmark(bookmarks: list[tuple[str, str]]) -> str:
-    names = "\n".join(name for name, _ in bookmarks)
-    names += "\n" if names else ""
+[[ -z "$URL" ]] && exit 1
 
-    result = subprocess.run(
-    ["rofi", "-dmenu", "-i", "-p", "Bookmarks"],
-    capture_output=True,
-    check=False,
-    input=names,
-    text=True,
-    )
-
-    return result.stdout.rstrip("\n")
-
-
-def copy_to_clipboard(url: str) -> None:
-    session_type = os.environ.get("XDG_SESSION_TYPE", "")
-    copiers = {
-    "wayland": copy_to_wayland_clipboard,
-    "x11": copy_to_x11_clipboard,
-    }
-    copier = copiers.get(session_type)
-    copier(url) if copier else die_unknown_session(session_type)
-
-
-def die_unknown_session(session_type: str) -> None:
-    die(f"Error: unknown session type: {session_type or 'unset'}")
-
-
-def copy_to_wayland_clipboard(url: str) -> None:
-    message = "Error: wayland session detected but wl-copy is not installed"
-    shutil.which("wl-copy") is not None or die(message)
-
-    subprocess.run(["wl-copy"], input=url, text=True, check=True)
-
-
-def run_command(command: list[str], url: str) -> bool:
-    subprocess.run(command, input=url, text=True, check=True)
-    return True
-
-
-def copy_with(command: list[str], url: str) -> bool:
-    available = shutil.which(command[0]) is not None
-    return available and run_command(command, url)
-
-
-def copy_to_x11_clipboard(url: str) -> None:
-    message = "Error: x11 session missing xclip and xsel"
-    copied = copy_with(["xclip", "-selection", "clipboard"], url)
-    copied or copy_with(["xsel", "--clipboard", "--input"], url) or die(message)
-
-
-def find_url(bookmarks: list[tuple[str, str]], choice: str) -> str | None:
-    matches = (url for name, url in bookmarks if name == choice)
-    return next(matches, None)
-
-
-def copy_selected_url(url: str | None) -> int:
-    return 1 if url is None else copy_url(url)
-
-
-def copy_url(url: str) -> int:
-    copy_to_clipboard(url)
-    return 0
-
-
-def main() -> int:
-    args = parse_args()
-    bookmarks = load_bookmarks(Path(args.bookmarks_file).expanduser())
-    choice = choose_bookmark(bookmarks)
-
-    url = find_url(bookmarks, choice)
-    return copy_selected_url(url) if choice else 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+copy_url
