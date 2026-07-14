@@ -6,7 +6,7 @@ DEFAULT_SPEED=15
 DEFAULT_FPS=30
 
 usage() {
-  cat <<'EOF'
+    cat <<'EOF'
 Usage:
   timelapse INPUT [-o OUTPUT] [-f FPS] [-d SECONDS] [-s SPEED]
 
@@ -32,8 +32,8 @@ EOF
 }
 
 if [[ $# -eq 0 ]]; then
-  usage
-  exit 1
+    usage
+    exit 1
 fi
 
 input=""
@@ -43,84 +43,84 @@ duration=""
 speed=""
 
 while [[ $# -gt 0 ]]; do
-  case "$1" in
-    -o|--output)
-      [[ $# -lt 2 ]] && { echo "Error: missing value for $1" >&2; exit 1; }
-      output="$2"
-      shift 2
-      ;;
-    -f|--fps)
-      [[ $# -lt 2 ]] && { echo "Error: missing value for $1" >&2; exit 1; }
-      fps="$2"
-      shift 2
-      ;;
-    -d|--duration)
-      [[ $# -lt 2 ]] && { echo "Error: missing value for $1" >&2; exit 1; }
-      duration="$2"
-      shift 2
-      ;;
-    -s|--speed)
-      [[ $# -lt 2 ]] && { echo "Error: missing value for $1" >&2; exit 1; }
-      speed="$2"
-      shift 2
-      ;;
-    -h|--help)
-      usage
-      exit 0
-      ;;
-    --)
-      shift
-      break
-      ;;
-    -*)
-      echo "Error: unknown option: $1" >&2
-      usage
-      exit 1
-      ;;
-    *)
-      if [[ -z "$input" ]]; then
-        input="$1"
-      else
-        echo "Error: unexpected extra argument: $1" >&2
-        usage
-        exit 1
-      fi
-      shift
-      ;;
-  esac
+    case "$1" in
+        -o|--output)
+            [[ $# -lt 2 ]] && { echo "Error: missing value for $1" >&2; exit 1; }
+            output="$2"
+            shift 2
+            ;;
+        -f|--fps)
+            [[ $# -lt 2 ]] && { echo "Error: missing value for $1" >&2; exit 1; }
+            fps="$2"
+            shift 2
+            ;;
+        -d|--duration)
+            [[ $# -lt 2 ]] && { echo "Error: missing value for $1" >&2; exit 1; }
+            duration="$2"
+            shift 2
+            ;;
+        -s|--speed)
+            [[ $# -lt 2 ]] && { echo "Error: missing value for $1" >&2; exit 1; }
+            speed="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*)
+            echo "Error: unknown option: $1" >&2
+            usage
+            exit 1
+            ;;
+        *)
+            if [[ -z "$input" ]]; then
+                input="$1"
+            else
+                echo "Error: unexpected extra argument: $1" >&2
+                usage
+                exit 1
+            fi
+            shift
+            ;;
+    esac
 done
 
 if [[ -z "$input" ]]; then
-  echo "Error: INPUT is required." >&2
-  usage
-  exit 1
+    echo "Error: INPUT is required." >&2
+    usage
+    exit 1
 fi
 
 if [[ ! -f "$input" ]]; then
-  echo "Error: input file not found: $input" >&2
-  exit 1
+    echo "Error: input file not found: $input" >&2
+    exit 1
 fi
 
 if [[ -n "$duration" && -n "$speed" ]]; then
-  echo "Error: use either --duration or --speed, not both." >&2
-  exit 1
+    echo "Error: use either --duration or --speed, not both." >&2
+    exit 1
 fi
 
 if [[ -z "$output" ]]; then
-  mkdir -p "Timelapses"
-  output="Timelapses/$(basename "$input")"
+    mkdir -p "Timelapses"
+    output="Timelapses/$(basename "$input")"
 else
-  mkdir -p "$(dirname "$output")"
+    mkdir -p "$(dirname "$output")"
 fi
 
 if [[ -n "$duration" ]]; then
-  input_duration="$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$input")"
-  if [[ -z "$input_duration" ]]; then
-    echo "Error: failed to read input duration with ffprobe." >&2
-    exit 1
-  fi
+    input_duration="$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$input")"
+    if [[ -z "$input_duration" ]]; then
+        echo "Error: failed to read input duration with ffprobe." >&2
+        exit 1
+    fi
 
-  speed="$(awk -v in_dur="$input_duration" -v out_dur="$duration" 'BEGIN {
+    speed="$(awk -v in_dur="$input_duration" -v out_dur="$duration" 'BEGIN {
     if (out_dur <= 0) {
       print "ERR"
     } else {
@@ -128,12 +128,12 @@ if [[ -n "$duration" ]]; then
     }
   }')"
 
-  if [[ "$speed" == "ERR" ]]; then
-    echo "Error: duration must be greater than 0." >&2
-    exit 1
-  fi
+    if [[ "$speed" == "ERR" ]]; then
+        echo "Error: duration must be greater than 0." >&2
+        exit 1
+    fi
 elif [[ -z "$speed" ]]; then
-  speed="$DEFAULT_SPEED"
+    speed="$DEFAULT_SPEED"
 fi
 
 ffmpeg -i "$input" -filter:v "setpts=PTS/$speed,fps=$fps" -an "$output"

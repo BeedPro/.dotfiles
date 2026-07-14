@@ -2,17 +2,17 @@
 SINK="@DEFAULT_SINK@"
 
 case "$1" in
-	up)
-		pactl set-sink-mute "$SINK" 0
-		pactl set-sink-volume "$SINK" +5%
-		;;
-	down)
-		pactl set-sink-mute "$SINK" 0
-		pactl set-sink-volume "$SINK" -5%
-		;;
-	mute)
-		pactl set-sink-mute "$SINK" toggle
-		;;
+    up)
+        pactl set-sink-mute "$SINK" 0
+        pactl set-sink-volume "$SINK" +5%
+        ;;
+    down)
+        pactl set-sink-mute "$SINK" 0
+        pactl set-sink-volume "$SINK" -5%
+        ;;
+    mute)
+        pactl set-sink-mute "$SINK" toggle
+        ;;
 esac
 
 info=$(pactl get-sink-volume "$SINK" 2>/dev/null)
@@ -22,28 +22,28 @@ TITLE="Volume"
 BODY="vol --%"
 
 if [ -n "$info" ] && [ -n "$mute" ]; then
-	vol=$(echo "$info" | grep -oP '\d+%' | head -1 | tr -d '%')
+    vol=$(echo "$info" | grep -oP '\d+%' | head -1 | tr -d '%')
 
-	# clamp visual bar at 100%
-	bar_vol=$vol
-	[ "$bar_vol" -gt 100 ] && bar_vol=100
-	[ "$bar_vol" -lt 0 ] && bar_vol=0
+    # clamp visual bar at 100%
+    bar_vol=$vol
+    [ "$bar_vol" -gt 100 ] && bar_vol=100
+    [ "$bar_vol" -lt 0 ] && bar_vol=0
 
-	BAR_WIDTH=35
-	FILLED=$((bar_vol * BAR_WIDTH / 100))
-	EMPTY=$((BAR_WIDTH - FILLED))
+    BAR_WIDTH=35
+    FILLED=$((bar_vol * BAR_WIDTH / 100))
+    EMPTY=$((BAR_WIDTH - FILLED))
 
-	FILLED_BAR=$(printf '%*s' "$FILLED" '' | tr ' ' '|')
-	EMPTY_BAR=$(printf '%*s' "$EMPTY" '' | tr ' ' '-')
+    FILLED_BAR=$(printf '%*s' "$FILLED" '' | tr ' ' '|')
+    EMPTY_BAR=$(printf '%*s' "$EMPTY" '' | tr ' ' '-')
 
-	if echo "$mute" | grep -q yes; then
-		TITLE="Volume MUTED"
-	  FILLED_BAR=$(printf '%*s' "$FILLED" '' | tr ' ' '#')
-		BODY="[${FILLED_BAR}${EMPTY_BAR}]"
-	else
-		TITLE="Volume ${vol}%"
-		BODY="[${FILLED_BAR}${EMPTY_BAR}]"
-	fi
+    if echo "$mute" | grep -q yes; then
+        TITLE="Volume MUTED"
+        FILLED_BAR=$(printf '%*s' "$FILLED" '' | tr ' ' '#')
+        BODY="[${FILLED_BAR}${EMPTY_BAR}]"
+    else
+        TITLE="Volume ${vol}%"
+        BODY="[${FILLED_BAR}${EMPTY_BAR}]"
+    fi
 fi
 
 notify-send -r 9999 -t 1000 "$TITLE" "\n$BODY"

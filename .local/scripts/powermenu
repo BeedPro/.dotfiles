@@ -3,14 +3,14 @@
 choice=$(echo -e "lock\nlogout\nsuspend\nhibernate\nreboot\npoweroff" | rofi -dmenu)
 
 if [[ -f /tmp/power-lock ]]; then
-  notify-send "Powermenu" "Power locked due to process"
-  exit 0
+    notify-send "Powermenu" "Power locked due to process"
+    exit 0
 fi
 
 if [ "$choice" == "logout" ]; then
-  pkill i3
+    pkill i3
 elif [ "$choice" == "lock" ]; then
-  "$HOME/.local/scripts/locker"
+    "$HOME/.local/scripts/locker"
 elif [ -n "$choice" ]; then
-  loginctl "$choice"
+    loginctl "$choice"
 fi
