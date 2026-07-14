@@ -45,7 +45,7 @@ filetype plugin indent on
 syntax on
 
 set background=dark
-set laststatus=3
+set laststatus=2
 set noshowmode
 set clipboard=
 set cursorline
