@@ -37,7 +37,7 @@ def parse_bookmark(line: str) -> tuple[str, str] | None:
 
 def load_bookmarks(bookmarks_file: Path) -> list[tuple[str, str]]:
     message = f"Error: bookmarks file not found: {bookmarks_file}"
-    if not bookmarks_file.is_file(): die(message)
+    bookmarks_file.is_file() or die(message)
 
     lines = bookmarks_file.read_text(encoding="utf-8").splitlines()
     parsed = (parse_bookmark(line) for line in lines)
@@ -61,34 +61,39 @@ def choose_bookmark(bookmarks: list[tuple[str, str]]) -> str:
 
 def copy_to_clipboard(url: str) -> None:
     session_type = os.environ.get("XDG_SESSION_TYPE", "")
+    copiers = {
+    "wayland": copy_to_wayland_clipboard,
+    "x11": copy_to_x11_clipboard,
+    }
+    copier = copiers.get(session_type)
+    copier(url) if copier else die_unknown_session(session_type)
 
-    if session_type == "wayland": copy_to_wayland_clipboard(url); return
 
-    if session_type == "x11": copy_to_x11_clipboard(url); return
-
+def die_unknown_session(session_type: str) -> None:
     die(f"Error: unknown session type: {session_type or 'unset'}")
 
 
 def copy_to_wayland_clipboard(url: str) -> None:
     message = "Error: wayland session detected but wl-copy is not installed"
-    if shutil.which("wl-copy") is None: die(message)
+    shutil.which("wl-copy") is not None or die(message)
 
     subprocess.run(["wl-copy"], input=url, text=True, check=True)
 
 
-def copy_with(command: list[str], url: str) -> bool:
-    if shutil.which(command[0]) is None: return False
-
+def run_command(command: list[str], url: str) -> bool:
     subprocess.run(command, input=url, text=True, check=True)
     return True
 
 
+def copy_with(command: list[str], url: str) -> bool:
+    available = shutil.which(command[0]) is not None
+    return available and run_command(command, url)
+
+
 def copy_to_x11_clipboard(url: str) -> None:
-    if copy_with(["xclip", "-selection", "clipboard"], url): return
-
-    if copy_with(["xsel", "--clipboard", "--input"], url): return
-
-    die("Error: x11 session detected but neither xclip nor xsel is installed")
+    message = "Error: x11 session missing xclip and xsel"
+    copied = copy_with(["xclip", "-selection", "clipboard"], url)
+    copied or copy_with(["xsel", "--clipboard", "--input"], url) or die(message)
 
 
 def find_url(bookmarks: list[tuple[str, str]], choice: str) -> str | None:
@@ -96,18 +101,22 @@ def find_url(bookmarks: list[tuple[str, str]], choice: str) -> str | None:
     return next(matches, None)
 
 
+def copy_selected_url(url: str | None) -> int:
+    return 1 if url is None else copy_url(url)
+
+
+def copy_url(url: str) -> int:
+    copy_to_clipboard(url)
+    return 0
+
+
 def main() -> int:
     args = parse_args()
     bookmarks = load_bookmarks(Path(args.bookmarks_file).expanduser())
     choice = choose_bookmark(bookmarks)
 
-    if not choice: return 0
-
     url = find_url(bookmarks, choice)
-    if url is None: return 1
-
-    copy_to_clipboard(url)
-    return 0
+    return copy_selected_url(url) if choice else 0
 
 
 if __name__ == "__main__":
