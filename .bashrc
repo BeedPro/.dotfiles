@@ -4,6 +4,7 @@ export EDITOR=nvim
 export MANPAGER='nvim +Man!'
 
 export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
 export PATH="$HOME/.volta/bin:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
 export PATH="$HOME/.cache/scalacli/local-repo/bin/scala-cli:$PATH"
@@ -16,7 +17,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export SDKMAN_DIR="$HOME/.sdkman"
 
 [ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
-[ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env"
 [ -f "$HOME/.deno/env" ] && source "$HOME/.deno/env"
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
