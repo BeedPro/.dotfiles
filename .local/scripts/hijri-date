@@ -4,7 +4,9 @@ import json
 import os
 import subprocess
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
+from pathlib import Path
+from typing import Any
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
@@ -14,13 +16,14 @@ HIJRI_CACHE = "/tmp/hijri-date.json"
 
 TIMINGS_API_URL = "https://api.aladhan.com/v1/timings"
 ARABIC_DIGITS = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
+JsonObject = dict[str, Any]
 
 
-def gregorian_str(dt):
+def gregorian_str(dt: datetime) -> str:
     return dt.strftime("%d-%m-%Y")
 
 
-def generate_cache():
+def generate_cache() -> None:
     subprocess.run(
         [PRAYER_SCRIPT],
         stdout=subprocess.DEVNULL,
@@ -29,25 +32,24 @@ def generate_cache():
     )
 
 
-def read_prayer_cache():
+def read_prayer_cache() -> JsonObject:
     if not os.path.exists(PRAYER_CACHE):
         generate_cache()
 
-    with open(PRAYER_CACHE) as f:
-        return json.load(f)
+    return json.loads(Path(PRAYER_CACHE).read_text())
 
 
-def get_maghrib_time():
+def get_maghrib_time() -> time:
     data = read_prayer_cache()
     maghrib = data["data"]["timings"]["Maghrib"].split(" ")[0]
     return datetime.strptime(maghrib, "%H:%M").time()
 
 
-def after_maghrib(maghrib_time):
+def after_maghrib(maghrib_time: time) -> bool:
     return datetime.now().time() >= maghrib_time
 
 
-def effective_gregorian_date():
+def effective_gregorian_date() -> datetime:
     """
     Before Maghrib  -> today
     After Maghrib   -> tomorrow
@@ -61,18 +63,17 @@ def effective_gregorian_date():
     return today
 
 
-def load_cache():
+def load_cache() -> JsonObject | None:
     if not os.path.exists(HIJRI_CACHE):
         return None
 
     try:
-        with open(HIJRI_CACHE) as f:
-            return json.load(f)
+        return json.loads(Path(HIJRI_CACHE).read_text())
     except Exception:
         return None
 
 
-def save_cache(key, hijri_data):
+def save_cache(key: str, hijri_data: JsonObject) -> None:
     payload = {
         "key": key,
         "source": "timings",
@@ -80,13 +81,12 @@ def save_cache(key, hijri_data):
     }
 
     try:
-        with open(HIJRI_CACHE, "w") as f:
-            json.dump(payload, f)
+        Path(HIJRI_CACHE).write_text(json.dumps(payload))
     except Exception:
         pass
 
 
-def fetch_timings(gregorian_date):
+def fetch_timings(gregorian_date: datetime) -> JsonObject:
     params = {
         "latitude": 51.5074,
         "longitude": -0.1278,
@@ -95,8 +95,9 @@ def fetch_timings(gregorian_date):
     }
     url = f"{TIMINGS_API_URL}/{gregorian_str(gregorian_date)}?{urlencode(params)}"
 
-    with urlopen(url, timeout=10) as response:
-        data = json.loads(response.read().decode())
+    response = urlopen(url, timeout=10)
+    data = json.loads(response.read().decode())
+    response.close()
 
     if data.get("code") != 200:
         raise RuntimeError("API error")
@@ -104,20 +105,31 @@ def fetch_timings(gregorian_date):
     return data
 
 
-def hijri_from_prayer_cache(gregorian_date):
+def hijri_from_prayer_cache(gregorian_date: datetime) -> JsonObject | None:
     try:
         data = read_prayer_cache()
         date = data["data"]["date"]["gregorian"]["date"]
-
-        if date == gregorian_str(gregorian_date):
-            return data["data"]["date"]["hijri"]
+        hijri = data["data"]["date"]["hijri"]
     except Exception:
-        pass
+        return None
 
-    return None
+    if date != gregorian_str(gregorian_date):
+        return None
+
+    return hijri
 
 
-def fetch_hijri(gregorian_date):
+def hijri_from_cache(cache: JsonObject | None, cache_key: str) -> JsonObject | None:
+    if not cache:
+        return None
+
+    if cache.get("key") != cache_key or cache.get("source") != "timings":
+        return None
+
+    return cache["hijri"]
+
+
+def fetch_hijri(gregorian_date: datetime) -> JsonObject:
     hijri = hijri_from_prayer_cache(gregorian_date)
 
     if hijri:
@@ -126,7 +138,25 @@ def fetch_hijri(gregorian_date):
     return fetch_timings(gregorian_date)["data"]["date"]["hijri"]
 
 
-def format_hijri_date(hijri, arabic=False):
+def fetch_or_cached_hijri(
+    effective_date: datetime,
+    cache_key: str,
+    cache: JsonObject | None,
+) -> JsonObject | None:
+    hijri = hijri_from_cache(cache, cache_key)
+
+    if hijri:
+        return hijri
+
+    try:
+        hijri = fetch_hijri(effective_date)
+        save_cache(cache_key, hijri)
+        return hijri
+    except Exception:
+        return cache["hijri"] if cache else None
+
+
+def format_hijri_date(hijri: JsonObject, arabic: bool = False) -> str:
     if arabic:
         formatted = f"{int(hijri['day']):02d}.{int(hijri['month']['number']):02d}.{hijri['year']}"
         return formatted.translate(ARABIC_DIGITS)
@@ -134,7 +164,7 @@ def format_hijri_date(hijri, arabic=False):
     return f"{hijri['year']}.{int(hijri['month']['number']):02d}.{int(hijri['day']):02d}"
 
 
-def main():
+def main() -> None:
     arabic_output = any(arg in {"--arabic", "-a"} for arg in sys.argv[1:])
 
     try:
@@ -145,19 +175,11 @@ def main():
         return
 
     cache = load_cache()
+    hijri = fetch_or_cached_hijri(effective_date, cache_key, cache)
 
-    if cache and cache.get("key") == cache_key and cache.get("source") == "timings":
-        hijri = cache["hijri"]
-    else:
-        try:
-            hijri = fetch_hijri(effective_date)
-            save_cache(cache_key, hijri)
-        except Exception:
-            if cache:
-                hijri = cache["hijri"]
-            else:
-                print(":: --")
-                return
+    if not hijri:
+        print(":: --")
+        return
 
     print(f":: {format_hijri_date(hijri, arabic=arabic_output)}")
 
