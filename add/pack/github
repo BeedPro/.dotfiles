@@ -13,7 +13,7 @@ repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 mkdir -p "$HOME/.ssh"
 chmod 700 "$HOME/.ssh"
 
-[ -f "$KEY" ] || ssh-keygen -t ed25519 -a 100 -f "$KEY" -C "github"
+[ -f "$KEY" ] || ssh-keygen -t ed25519 -a 100 -f "$KEY"
 
 eval "$(ssh-agent -s)" >/dev/null
 ssh-add "$KEY"
