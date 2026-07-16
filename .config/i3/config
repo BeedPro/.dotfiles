@@ -55,7 +55,6 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 bindsym $mod+F12 exec --no-startup-id ~/.local/scripts/xswapkb
 
 bindsym Print exec --no-startup-id ~/.local/scripts/screenshot selection
-bindsym $mod+Print exec --no-startup-id ~/.local/scripts/screenshot screen --full-screen --no-save --no-notify
 bindsym $mod+Shift+Print exec --no-startup-id ~/.local/scripts/screenshot everything --show
 bindsym $mod+control+Print exec --no-startup-id ~/.local/scripts/screenshot window --show
 
@@ -142,6 +141,7 @@ bindsym $mod+period focus output right
 bindsym $mod+Shift+comma move container to output left
 bindsym $mod+Shift+period move container to output right
 
+bindsym $mod+Mod1+f exec --no-startup-id ~/.local/scripts/screenshot screen --full-screen --no-save --no-notify
 bindsym $mod+Mod1+b bar mode toggle
 bindsym $mod+Mod1+r reload
 bindsym $mod+Mod1+t exec --no-startup-id ~/.local/scripts/teme --confirm
