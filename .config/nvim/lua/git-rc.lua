@@ -90,9 +90,11 @@ vim.keymap.set("n", "<leader>gf", function()
     return
   end
 
-  local normalized_root = vim.fs.normalize(root)
-  local normalized_file = vim.fs.normalize(file)
-  local relative_file = normalized_file:sub(#normalized_root + 2)
+  local relative_file = vim.fs.relpath(root, file)
+  if not relative_file then
+    vim.notify("Current file is not inside the git repository", vim.log.levels.WARN)
+    return
+  end
 
   vim.cmd("NeogitLogCurrent " .. vim.fn.fnameescape(relative_file))
 end, {
