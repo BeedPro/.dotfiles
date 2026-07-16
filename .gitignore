@@ -17,3 +17,4 @@ __pycache__/
 .local/bin/prettypst
 .local/bin/tex-fmt
 .local/share/icons/hicolor/icon-theme.cache
+.local/bin/poomer

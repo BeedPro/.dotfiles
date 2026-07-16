@@ -14,3 +14,4 @@ sudo xbps-install -Sy gucharmap xournalpp
 "$add_root/pack/vorta"
 "$add_root/pack/espanso"
 "$add_root/pack/emacs"
+"$add_root/pack/obs"
