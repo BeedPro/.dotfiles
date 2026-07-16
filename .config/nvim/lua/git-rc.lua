@@ -76,3 +76,25 @@ require("diffview").setup {
 vim.keymap.set("n", "<leader>gg", function()
   require("neogit").open()
 end, { desc = "Open Neogit" })
+
+vim.keymap.set("n", "<leader>gf", function()
+  local file = vim.api.nvim_buf_get_name(0)
+  if file == "" then
+    vim.notify("Current buffer has no file", vim.log.levels.WARN)
+    return
+  end
+
+  local root = vim.fs.root(file, ".git")
+  if not root then
+    vim.notify("Current file is not inside a git repository", vim.log.levels.WARN)
+    return
+  end
+
+  local normalized_root = vim.fs.normalize(root)
+  local normalized_file = vim.fs.normalize(file)
+  local relative_file = normalized_file:sub(#normalized_root + 2)
+
+  vim.cmd("NeogitLogCurrent " .. vim.fn.fnameescape(relative_file))
+end, {
+  desc = "Git history for current file",
+})
