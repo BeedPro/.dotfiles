@@ -1,0 +1,26 @@
+[Default Applications]
+text/plain=nvim.desktop
+audio/flac=mpv.desktop
+application/pdf=org.pwmt.zathura.desktop
+application/vnd.comicbook+zip=org.pwmt.zathura-cb.desktop
+application/epub+zip=calibre-ebook-viewer.desktop
+image/png=nsxiv.desktop
+audio/mp4=mpv.desktop
+image/jpeg=nsxiv.desktop
+x-scheme-handler/heroic=heroic.desktop
+inode/directory=thunar.desktop
+
+[Added Associations]
+text/plain=nvim.desktop;
+image/webp=firefox.desktop;
+audio/flac=mpv.desktop;
+application/pdf=org.pwmt.zathura.desktop;firefox.desktop;
+application/vnd.comicbook+zip=org.pwmt.zathura-cb.desktop;
+application/epub+zip=calibre-ebook-viewer.desktop;
+image/png=nsxiv.desktop;
+audio/mp4=mpv.desktop;
+image/jpeg=nsxiv.desktop;
+image/heif=nsxiv.desktop;
+application/zip=xarchiver.desktop;
+audio/mpeg=mpv.desktop;
+image/gif=mpv.desktop;nsxiv.desktop;
