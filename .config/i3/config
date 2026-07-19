@@ -36,6 +36,11 @@ for_window [class="^Firefox$" title="^Outlook — Mozilla Firefox$"] move --no-a
 assign [class="KeePassXC"] number 9
 
 for_window [class="pavucontrol"] floating enable, resize set 1024 576, move position center
+for_window [class="Qalculate-gtk"] floating enable, resize set 1024 576, move position center
+for_window [class="Blueman-manager"] floating enable, resize set 1024 576, move position center
+for_window [class="Nm-connection-editor"] floating enable, resize set 1024 576, move position center
+for_window [class="Arandr"] floating enable, resize set 1024 576, move position center
+for_window [class="Xarchiver"] floating enable, resize set 1024 576, move position center
 
 default_border normal 1
 default_floating_border normal 1
