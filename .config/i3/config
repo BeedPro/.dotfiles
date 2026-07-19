@@ -77,7 +77,6 @@ bindsym $mod+e exec --no-startup-id $files
 bindsym $mod+n exec --no-startup-id emacsclient -c -s default
 
 bindsym $mod+Return exec --no-startup-id alacritty
-bindsym $mod+Shift+Return exec --no-startup-id alacritty --class floatitty
 bindsym $mod+w exec --no-startup-id $browser
 bindsym $mod+Shift+w exec --no-startup-id ~/.local/scripts/bookmarks
 
