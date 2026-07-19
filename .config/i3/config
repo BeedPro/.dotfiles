@@ -65,6 +65,7 @@ bindsym Print exec --no-startup-id ~/.local/scripts/screenshot selection
 bindsym $mod+Shift+Print exec --no-startup-id ~/.local/scripts/screenshot everything --show
 bindsym $mod+control+Print exec --no-startup-id ~/.local/scripts/screenshot window --show
 
+bindsym Mod1+Tab exec --no-startup-id rofi -show window
 bindsym $mod+Tab workspace back_and_forth
 bindsym $mod+Left workspace prev
 bindsym $mod+Right workspace next
