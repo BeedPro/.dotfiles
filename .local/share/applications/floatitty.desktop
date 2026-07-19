@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Floatitty
+Exec=alacritty --class floatitty
+Icon=Alacritty
+Type=Application
+Terminal=false
