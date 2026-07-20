@@ -86,6 +86,8 @@ bindsym $mod+Shift+x exec --no-startup-id ~/.local/scripts/powermenu
 bindsym $mod+Shift+c exec --no-startup-id ~/.local/scripts/killmenu
 
 bindsym $mod+c kill
+bindsym button3 kill
+bindsym button2 move scratchpad
 
 bindsym $mod+space exec --no-startup-id rofi -show drun
 
