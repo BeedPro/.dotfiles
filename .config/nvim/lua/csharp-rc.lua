@@ -1,5 +1,6 @@
 local mason = require "mason-rc"
 local treesitter = require "treesitter-rc"
+local quality = require "quality-rc"
 local dap = require "debugging-rc"
 
 vim.pack.add {
@@ -9,9 +10,14 @@ vim.pack.add {
 mason.add {
   "roslyn-language-server",
   "netcoredbg",
+  "csharpier"
 }
 
 treesitter.add { "c_sharp" }
+
+quality.formatters {
+  cs = { "csharpier" },
+}
 
 dap.adapters.coreclr = {
   type = "executable",
