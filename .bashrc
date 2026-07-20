@@ -71,6 +71,8 @@ export FZF_DEFAULT_OPTS="--layout=reverse --height=~14 ${FZF_DEFAULT_OPTS:-}"
 tmux set-environment -g FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS" 2>/dev/null
 command -v fzf >/dev/null 2>&1 && eval "$(fzf --bash)"
 
+command -v flutter >/dev/null 2>&1 && source <(flutter bash-completion 2>/dev/null)
+
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 PROMPT_COMMAND='history -a; history -c; history -r'
 PS1='\[\e[92m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\[\e[0m\]\n\[\e[93m\]${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }\[\e[0m\]> '
