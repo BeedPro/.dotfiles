@@ -16,6 +16,7 @@ export PATH="$HOME/.cache/scalacli/local-repo/bin/scala-cli:$PATH"
 export PATH="$HOME/.local/share/coursier/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.dotnet:$PATH"
+export PATH="$HOME/.dotnet/tools:$PATH"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
