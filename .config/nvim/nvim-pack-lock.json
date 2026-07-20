@@ -72,10 +72,6 @@
       "rev": "b8c8aa91f42055d7f69012587cde4f1d99f2a701",
       "src": "https://github.com/igorlfs/nvim-dap-view"
     },
-    "nvim-jdtls": {
-      "rev": "6e9d953f0b82bccdb834cfde0e893f3119c22592",
-      "src": "https://codeberg.org/mfussenegger/nvim-jdtls"
-    },
     "nvim-lint": {
       "rev": "a219b2c9e5b4765e5c845aba119dad55806fcaf1",
       "src": "https://github.com/mfussenegger/nvim-lint"
@@ -95,10 +91,6 @@
     "orgmode": {
       "rev": "f32a06d4b5399dad8bf0478c772bf6c513f02dcf",
       "src": "https://github.com/nvim-orgmode/orgmode"
-    },
-    "roslyn.nvim": {
-      "rev": "b4954e97e145bd8129b3bbe99809759f6ced2235",
-      "src": "https://github.com/seblyng/roslyn.nvim"
     }
   }
 }

@@ -33,11 +33,11 @@ require("typst-rc")
 
 -- Additional Languages
 require("gdscript-rc")
--- require("java-rc")
--- require("groovy-rc")
--- require("web-rc")
+require("web-rc")
 -- require("tex-rc")
 -- require("csharp-rc")
+-- require("java-rc")
+-- require("groovy-rc")
 
 -- Options
 vim.o.spellfile = vim.fs.joinpath(vim.fn.stdpath "config", "spell", "en.utf-8.add")
