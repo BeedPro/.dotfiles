@@ -2,6 +2,7 @@
 
 export EDITOR=nvim
 export MANPAGER='nvim +Man!'
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
