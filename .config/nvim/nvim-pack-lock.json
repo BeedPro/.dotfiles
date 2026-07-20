@@ -95,6 +95,10 @@
     "orgmode": {
       "rev": "f32a06d4b5399dad8bf0478c772bf6c513f02dcf",
       "src": "https://github.com/nvim-orgmode/orgmode"
+    },
+    "roslyn.nvim": {
+      "rev": "b4954e97e145bd8129b3bbe99809759f6ced2235",
+      "src": "https://github.com/seblyng/roslyn.nvim"
     }
   }
 }

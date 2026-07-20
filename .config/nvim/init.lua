@@ -34,6 +34,7 @@ require("typst-rc")
 -- Additional Languages
 require("gdscript-rc")
 require("java-rc")
+require("csharp-rc")
 require("web-rc")
 require("tex-rc")
 require("groovy-rc")
