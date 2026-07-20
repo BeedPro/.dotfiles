@@ -4,6 +4,7 @@ set -euo pipefail
 sudo xbps-install -Sy \
     bash-completion \
     bat \
+    peaclock \
     curl \
     xxd \
     dust \
