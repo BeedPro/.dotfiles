@@ -3,7 +3,7 @@ set -euo pipefail
 
 add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
-command -v cargo >/dev/null 2>&1 || { echo "cargo is not installed. Run add/lang/rust first."; exit 1; }
+command -v cargo >/dev/null 2>&1 || { echo "cargo is not installed. Run add/dev/rust first."; exit 1; }
 
 sudo xbps-install -Sy \
     base-devel \
@@ -19,5 +19,5 @@ sudo xbps-install -Sy \
     unzip \
     xz
 
-"$add_root/lang/tex"
-"$add_root/lang/typst"
+"$add_root/dev/tex"
+"$add_root/dev/typst"

@@ -123,7 +123,7 @@ add/pack/gaming
 ### Install Standalone Components
 
 Each script owns the dependencies for the matching config or tool. Run only
-what the machine needs. They are found in `add/pack` and `add/lang`.
+what the machine needs. They are found in `add/pack` and `add/dev`.
 
 `add/app/i3wm` assumes `add/xfce4` has already been run. It only installs the
 i3-specific pieces on top of the XFCE/Xorg/PipeWire base.

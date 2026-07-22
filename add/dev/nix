@@ -5,4 +5,4 @@ sudo xbps-install -Sy nix
 
 sudo ln -sfn /etc/sv/nix-daemon /var/service/nix-daemon
 
-sudo reboot
+sudo sv up nix-daemon
