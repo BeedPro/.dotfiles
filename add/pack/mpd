@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-sudo xbps-install -Sy mpd mpc
-
-mkdir -p "$HOME/.local/share/mpd/playlists"
-mkdir -p "$HOME/.local/state/mpd"

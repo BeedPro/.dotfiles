@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #pkg
+
+sudo xbps-install -Sy \
+    bash-completion \
+    bat \
+    peaclock \
+    curl \
+    xxd \
+    dust \
+    eza \
+    fd \
+    fzf \
+    qalculate \
+    ripgrep \
+    stow \
+    unzip \
+    wget \
+    xdg-utils
+
+bat cache --build
+sudo chsh -s /bin/bash root

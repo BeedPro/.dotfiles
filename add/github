@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# tags: #pkg
+
+sudo xbps-install -Sy git git-lfs github-cli xclip
+
+gh config set telemetry disabled
+
+KEY="$HOME/.ssh/github"
+ORIGIN_URL="git@github.com:BeedPro/.dotfiles.git"
+repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+mkdir -p "$HOME/.ssh"
+chmod 700 "$HOME/.ssh"
+
+[ -f "$KEY" ] || ssh-keygen -t ed25519 -a 100 -f "$KEY"
+
+eval "$(ssh-agent -s)" >/dev/null
+ssh-add "$KEY"
+
+cat >> "$HOME/.ssh/config" <<EOF
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/github
+  IdentitiesOnly yes
+
+EOF
+
+chmod 600 "$HOME/.ssh/config"
+
+xclip -selection clipboard < "$KEY.pub"
+
+echo "Public key copied to clipboard."
+echo "Add it here: GitHub -> Settings -> SSH and GPG keys -> New SSH key"
+echo ""
+cat "$KEY.pub"
+echo ""
+read -r -p "After adding the key to GitHub, press Enter to test SSH..."
+
+ssh -T git@github.com || true
+git -C "$repo_root" remote set-url origin "$ORIGIN_URL"
+git -C "$repo_root" lfs install --local
+git -C "$repo_root" lfs pull

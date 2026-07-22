@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #dev
+
+sudo xbps-install -Sy rustup
+
+rustup-init -y --no-modify-path

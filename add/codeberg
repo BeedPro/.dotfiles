@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# tags: #pkg
+
+sudo xbps-install -Sy git git-lfs xclip
+
+KEY="$HOME/.ssh/codeberg"
+MIRROR_URL="ssh://git@codeberg.org/Beed/.dotfiles.git"
+repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+mkdir -p "$HOME/.ssh"
+chmod 700 "$HOME/.ssh"
+
+[ -f "$KEY" ] || ssh-keygen -t ed25519 -a 100 -f "$KEY"
+
+eval "$(ssh-agent -s)" >/dev/null
+ssh-add "$KEY"
+
+cat >> "$HOME/.ssh/config" <<EOF
+Host codeberg.org
+  HostName codeberg.org
+  User git
+  IdentityFile ~/.ssh/codeberg
+  IdentitiesOnly yes
+
+EOF
+
+chmod 600 "$HOME/.ssh/config"
+
+xclip -selection clipboard < "$KEY.pub"
+
+echo "Public key copied to clipboard."
+echo "Add it here: Codeberg -> Settings -> SSH and GPG keys -> New SSH key"
+echo ""
+cat "$KEY.pub"
+echo ""
+read -r -p "After adding the key to Codeberg, press Enter to test SSH..."
+
+ssh -T git@codeberg.org || true
+
+git -C "$repo_root" remote get-url mirror >/dev/null 2>&1 || git -C "$repo_root" remote add --mirror=push mirror "$MIRROR_URL"
+
+echo "Configured mirror remote: $MIRROR_URL"

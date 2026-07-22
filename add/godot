@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #pkg
+
+sudo xbps-install -Sy curl unzip
+
+VERSION="4.7"
+FLAVOUR="stable"
+SLUG="linux.x86_64.zip"
+PLATFORM="linux.64"
+CHECKSUM="0b1a6c54c2c619c12e169fe9241edda4b81080b519451cec2984bf0d2c6cb73c"
+ARCHIVE="godot-${VERSION}-${SLUG}"
+APP_BIN="Godot_v${VERSION}-${FLAVOUR}_${SLUG%.zip}"
+INSTALL_DIR="/opt"
+BIN_LINK="/usr/local/bin/godot"
+TARGET_BIN="${INSTALL_DIR}/${APP_BIN}"
+URL="https://downloads.godotengine.org/?version=${VERSION}&flavor=${FLAVOUR}&slug=${SLUG}&platform=${PLATFORM}"
+
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+cd "$TMP_DIR"
+
+curl -fL -o "$ARCHIVE" "$URL"
+printf '%s  %s\n' "$CHECKSUM" "$ARCHIVE" | sha256sum --check
+unzip "$ARCHIVE"
+
+[[ -f "$APP_BIN" ]] || { echo "Could not find Godot executable after unzipping."; exit 1; }
+
+sudo rm -f "$TARGET_BIN"
+sudo mv "$APP_BIN" "$TARGET_BIN"
+sudo chmod +x "$TARGET_BIN"
+
+sudo ln -sfn "$TARGET_BIN" "$BIN_LINK"
+
+echo "Godot installed: $BIN_LINK -> $TARGET_BIN"

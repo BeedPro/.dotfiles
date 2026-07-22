@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #dev
+
+sudo xbps-install -Sy python3-pip python3-pipx curl uv

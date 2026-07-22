@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #app
+
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+
+sudo xbps-install -Sy fuse-sshfs
+
+"$add_root/pde"
+"$add_root/mpd"
+"$add_root/wireguard"
+"$add_root/void-packages"
+"$add_root/ai"

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #pkg
+
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+
+sudo xbps-install -Sy base-devel clang
+
+"$add_root/shell"
+"$add_root/tmux"
+"$add_root/nvim"
+"$add_root/node"
+"$add_root/codeberg"

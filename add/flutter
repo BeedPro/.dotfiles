@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #dev
+
+VERSION="3.44.7"
+ARCHIVE="flutter_linux_${VERSION}-stable.tar.xz"
+CHECKSUM="a0edd646c159c0e816788c0e46a4f071199c1320495898f5a679599b583a05a4"
+INSTALL_DIR="${FLUTTER_HOME:-$HOME/.flutter}"
+URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.44.7-stable.tar.xz"
+
+sudo xbps-install -Sy curl git unzip xz zip cmake ninja gtk+3-devel pkg-config
+
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+EXTRACT_DIR="$TMP_DIR/extract"
+
+curl -fL -o "$TMP_DIR/$ARCHIVE" "$URL"
+printf '%s  %s\n' "$CHECKSUM" "$TMP_DIR/$ARCHIVE" | sha256sum --check
+
+rm -rf "$INSTALL_DIR"
+mkdir -p "$EXTRACT_DIR"
+mkdir -p "$(dirname "$INSTALL_DIR")"
+tar -xf "$TMP_DIR/$ARCHIVE" -C "$EXTRACT_DIR"
+mv "$EXTRACT_DIR/flutter" "$INSTALL_DIR"
+
+mkdir -p "$HOME/.local/bin"
+ln -sfn "$INSTALL_DIR/bin/flutter" "$HOME/.local/bin/flutter"
+ln -sfn "$INSTALL_DIR/bin/dart" "$HOME/.local/bin/dart"
+
+"$INSTALL_DIR/bin/flutter" config --no-analytics
+"$INSTALL_DIR/bin/flutter" precache
+"$INSTALL_DIR/bin/flutter" --disable-analytics
+
+echo "Flutter installed: $INSTALL_DIR/bin/flutter"
+echo "Dart installed: $INSTALL_DIR/bin/dart"

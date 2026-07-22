@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# tags: #system#driver
+
 sudo xbps-install -Sy \
   linux-firmware-amd \
   mesa-dri \

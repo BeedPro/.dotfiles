@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #app
+
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+
+command -v flatpak >/dev/null 2>&1 || { echo "flatpak is not installed. Run add/flathub first."; exit 1; }
+
+sudo xbps-install -Sy gucharmap xournalpp
+
+"$add_root/firefox"
+"$add_root/readers"
+"$add_root/media"
+"$add_root/flatseal"
+"$add_root/vorta"
+"$add_root/espanso"
+"$add_root/emacs"
+"$add_root/obs"

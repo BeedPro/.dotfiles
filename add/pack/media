@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-sudo xbps-install -Sy \
-    flac \
-    ImageMagick \
-    mpv \
-    nsxiv

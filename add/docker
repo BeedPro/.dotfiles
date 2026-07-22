@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #dev
+
+sudo xbps-install -Sy \
+    docker \
+    docker-buildx \
+    docker-compose
+
+sudo ln -sfn /etc/sv/docker /var/service/docker
+sudo usermod -aG docker "$USER"
+
+sudo sv up docker

@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #dev
+
+sudo xbps-install -Sy \
+    curl \
+    gcc \
+    gmp-devel \
+    libffi-devel \
+    make \
+    ncurses-devel \
+    ncurses-libtinfo-devel \
+    ncurses-libtinfo-libs \
+    perl \
+    xz \
+    zlib-devel
+
+VERSION="0.2.6.2"
+BIN="x86_64-linux-ghcup-${VERSION}"
+CHECKSUM="9ed5da5449b48043a0d17e767c05d2ef585e25a639bb934329496c6d2fad9cf8"
+INSTALL_DIR="$HOME/.ghcup/bin"
+TARGET_BIN="$INSTALL_DIR/ghcup"
+URL="https://downloads.haskell.org/~ghcup/${VERSION}/${BIN}"
+
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+cd "$TMP_DIR"
+
+curl -fL -o "$BIN" "$URL"
+printf '%s  %s\n' "$CHECKSUM" "$BIN" | sha256sum --check
+
+mkdir -p "$INSTALL_DIR"
+rm -f "$TARGET_BIN"
+mv "$BIN" "$TARGET_BIN"
+chmod +x "$TARGET_BIN"
+
+export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
+
+ghcup install ghc --set recommended
+ghcup install cabal latest
+ghcup install stack latest
+cabal update
+
+echo "GHCup installed: $TARGET_BIN"

@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+# tags: #system#pkg
+
 sudo xbps-install -Sy flatpak
 
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo

@@ -85,8 +85,8 @@ After rebooting, set up GitHub and Codeberg SSH:
 
 ```bash
 cd ~/.dotfiles
-add/pack/github
-add/pack/codeberg
+add/github
+add/codeberg
 ```
 
 The script copies the new public key to the clipboard and waits while you add
@@ -107,9 +107,9 @@ stow .
 Install the terminal and graphical applicatons:
 
 ```bash
-add/app/cli
-add/app/gui
-add/app/i3wm
+add/cli
+add/gui
+add/i3wm
 ```
 
 This installs the general tools needed for common CLI workflows, development
@@ -117,15 +117,15 @@ and productivity. This does not install gaming related packages. To install
 those please do:
 
 ```bash
-add/pack/gaming
+add/gaming
 ```
 
 ### Install Standalone Components
 
 Each script owns the dependencies for the matching config or tool. Run only
-what the machine needs. They are found in `add/pack` and `add/dev`.
+what the machine needs. They are found in `add`.
 
-`add/app/i3wm` assumes `add/xfce4` has already been run. It only installs the
+`add/i3wm` assumes `add/xfce4` has already been run. It only installs the
 i3-specific pieces on top of the XFCE/Xorg/PipeWire base.
 
 ## Optional Scripts

@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-command -v npm >/dev/null 2>&1 || { echo "npm is not installed. Run add/dev/node first."; exit 1; }
-
-npm i -g opencode-ai --allow-scripts=opencode-ai

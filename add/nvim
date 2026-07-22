@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #pkg
+
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+
+sudo xbps-install -Sy \
+    curl \
+    fd \
+    fzf \
+    gcc \
+    git \
+    make \
+    neovim \
+    ripgrep \
+    tree-sitter-cli \
+    unzip \
+    xdg-utils \
+    xz
+
+"$add_root/rust"

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #pkg
+
+sudo xbps-install -Sy \
+    nwg-look \
+    yaru \
+    papirus-icon-theme \
+    nerd-fonts \
+    noto-fonts-ttf \
+    noto-fonts-cjk \
+    noto-fonts-emoji

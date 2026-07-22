@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #dev
+
+command -v cargo >/dev/null 2>&1 || { echo "cargo is not installed. Run add/rust first."; exit 1; }
+
+sudo xbps-install -Sy texlive-full
+
+cargo install tex-fmt --locked
+
+ln -sfn $HOME/.cargo/bin/tex-fmt $HOME/.local/bin/tex-fmt

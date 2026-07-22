@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #pkg
+
+add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+
+command -v cargo >/dev/null 2>&1 || { echo "cargo is not installed. Run add/rust first."; exit 1; }
+
+sudo xbps-install -Sy \
+    base-devel \
+    curl \
+    emacs-gtk3 \
+    fd \
+    git \
+    pandoc \
+    ripgrep \
+    texlab \
+    tinymist \
+    tree-sitter-cli \
+    unzip \
+    xz
+
+"$add_root/tex"
+"$add_root/typst"
