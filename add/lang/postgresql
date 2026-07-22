@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+sudo xbps-install -Sy \
+    postgresql \
+    postgresql-client \
+    postgresql-contrib
+
+services=(/etc/sv/postgresql[0-9]*)
+if [[ ! -e "${services[0]}" ]]; then
+    echo "No versioned PostgreSQL service found under /etc/sv."
+    exit 1
+fi
+
+service="${services[-1]##*/}"
+major="${service#postgresql}"
+default_conf="/etc/psql${major}/default/postgresql"
+pgroot="/var/lib/postgresql${major}"
+pgdata="${pgroot}/data"
+
+if [[ ! -d "$pgdata" ]] && ! locale -a | grep -Eiq '^en_US\.utf-?8$'; then
+    if locale -a | grep -Eiq '^C\.utf-?8$'; then
+        sudo sed -i 's/--locale en_US.UTF-8/--locale C.UTF-8/' "$default_conf"
+    else
+        echo "PostgreSQL defaults to en_US.UTF-8, but that locale is not available."
+        echo "Enable en_US.UTF-8 or edit $default_conf before starting $service."
+        exit 1
+    fi
+fi
+
+sudo ln -sfn "/etc/sv/$service" "/var/service/$service"
+sudo sv up "$service"
+
+for _ in {1..30}; do
+    if sudo -u postgres pg_isready -q; then
+        break
+    fi
+    sleep 1
+done
+
+if ! sudo -u postgres pg_isready -q; then
+    echo "PostgreSQL service $service did not become ready."
+    sudo sv status "$service" || true
+    exit 1
+fi
+
+read -rp "Create PostgreSQL role and database for $USER? [Y/n] " create_local
+create_local="${create_local:-Y}"
+
+case "$create_local" in
+    [Yy] | [Yy][Ee][Ss])
+        if ! sudo -u postgres psql -v "role=$USER" -tAc "SELECT 1 FROM pg_roles WHERE rolname = :'role'" | grep -qx 1; then
+            sudo -u postgres createuser --createdb "$USER"
+        fi
+
+        if ! sudo -u postgres psql -v "dbname=$USER" -tAc "SELECT 1 FROM pg_database WHERE datname = :'dbname'" | grep -qx 1; then
+            sudo -u postgres createdb -O "$USER" "$USER"
+        fi
+        ;;
+    [Nn] | [Nn][Oo]) ;;
+    *)
+        echo "Expected yes or no."
+        exit 1
+        ;;
+esac
+
+echo "PostgreSQL is running as $service. Connect with: psql"
