@@ -24,13 +24,22 @@ host | h)
     sudo ln -sfn /etc/sv/virtlogd /var/service/virtlogd
     sudo ln -sfn /etc/sv/virtlockd /var/service/virtlockd
 
+    sudo sv up dbus
+    sudo sv up libvirtd
+    sudo sv up virtlogd
+    sudo sv up virtlockd
+
     sudo usermod -aG libvirt,kvm "$USER"
-    sudo reboot
+
+    echo "Groups updated. Log out and back in, or run:"
+    echo "  newgrp libvirt"
     ;;
 guest | g)
     sudo xbps-install -Sy spice-vdagent
+
     sudo ln -sfn /etc/sv/spice-vdagentd /var/service/spice-vdagentd
-    sudo reboot
+
+    sudo sv up spice-vdagentd
     ;;
 *)
     echo "Expected host or guest."
