@@ -31,8 +31,7 @@ host | h)
 
     sudo usermod -aG libvirt,kvm "$USER"
 
-    echo "Groups updated. Log out and back in, or run:"
-    echo "  newgrp libvirt"
+    echo "Groups updated. Log out and back in, or run: newgrp libvirt"
     ;;
 guest | g)
     sudo xbps-install -Sy spice-vdagent
