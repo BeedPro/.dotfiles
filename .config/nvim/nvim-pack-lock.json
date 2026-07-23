@@ -56,6 +56,10 @@
       "rev": "17a64464c27c1be605adca13dbe48f2f402fe107",
       "src": "https://github.com/miikanissi/modus-themes.nvim"
     },
+    "neogen": {
+      "rev": "23e7e9f883d01289ebd90e98025acc860ea26366",
+      "src": "https://github.com/danymat/neogen"
+    },
     "neogit": {
       "rev": "f8674ec894315c02449b61c9de9a116c5aafeb90",
       "src": "https://github.com/NeogitOrg/neogit"

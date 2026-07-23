@@ -13,6 +13,7 @@ require("git-rc")
 require("journal-rc")
 require("filebrowser-rc")
 require("completion-rc")
+require("documentation-rc")
 require("navigation-rc")
 require("mason-rc")
 
