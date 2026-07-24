@@ -147,7 +147,10 @@ def get_all_items(config: LauncherConfig) -> Tuple[List[str], Dict[str, str]]:
 
 
 def fzf_select(
-    items: List[str], bottom: bool = False, full_screen: bool = False
+    items: List[str],
+    bottom: bool = False,
+    full_screen: bool = False,
+    bordered: bool = False,
 ) -> str:
     cmd: list[str] = [
         "fzf",
@@ -160,6 +163,9 @@ def fzf_select(
         cmd.append("--layout=default")
     else:
         cmd.append("--layout=reverse")
+
+    if bordered:
+        cmd.append("--border=top")
 
     p: Popen[str] = subprocess.Popen(
         cmd,
@@ -210,9 +216,10 @@ def main() -> None:
     args = sys.argv[1:]
     bottom: bool = "--bottom" in args
     full_screen: bool = "--full-screen" in args
+    bordered: bool = "--bordered" in args
 
     items, mapping = get_all_items(CONFIG)
-    selected: str = fzf_select(items, bottom, full_screen)
+    selected: str = fzf_select(items, bottom, full_screen, bordered)
 
     if not selected:
         return
