@@ -458,6 +458,35 @@ def toggle_zathura() -> None:
     print(f"{target_path}: {old_mode} => {new_mode}")
 
 
+def toggle_tmux():
+    tmux_dir = Path.home() / ".config/tmux"
+    target_path = tmux_dir / "tmux.conf"
+    light_path = tmux_dir / "themes/light.conf"
+    dark_path = tmux_dir / "themes/dark.conf"
+    current = target_path.read_text()
+    lines = current.splitlines(keepends=True)
+    theme_line = next(
+        (
+            index
+            for index, line in enumerate(lines)
+            if line.strip() in {"# Light", "# Dark"}
+        ),
+        None,
+    )
+    if theme_line is None:
+        raise RuntimeError(f"Could not find tmux theme marker in {target_path}")
+
+    shared = "".join(lines[:theme_line])
+    current_theme = lines[theme_line].strip()
+    if current_theme == "# Light":
+        theme = dark_path.read_text()
+        old_mode, new_mode = "light", "dark"
+    else:
+        theme = light_path.read_text()
+        old_mode, new_mode = "dark", "light"
+    target_path.write_text(shared + theme)
+    print(f"{target_path}: {old_mode} => {new_mode}")
+
 def toggle_rofi() -> None:
     run_text_toggle(
         Path.home() / ".config/rofi/config.rasi",
@@ -568,6 +597,7 @@ def main() -> None:
     toggle_dunst()
     toggle_i3()
     toggle_zathura()
+    toggle_tmux()
     toggle_rofi()
     toggle_nvim()
     toggle_emacs()
