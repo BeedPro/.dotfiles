@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import curses
 import os
 import re
@@ -76,20 +77,39 @@ def render_line(
     buf: list[str],
     pos: int,
     error_message: str = "",
+    bordered: bool = False,
 ) -> None:
-    height, _ = stdscr.getmaxyx()
+    height, width = stdscr.getmaxyx()
 
-    stdscr.move(0, 0)
+    row = 1 if bordered else 0
+    error_row = 2 if bordered else 1
+
+    if bordered:
+        stdscr.move(0, 0)
+        stdscr.clrtoeol()
+        try:
+            stdscr.addstr(0, 0, "─" * width)
+        except curses.error:
+            pass
+
+    stdscr.move(row, 0)
     stdscr.clrtoeol()
-    stdscr.addstr(0, 0, f"{prompt}{''.join(buf)}")
 
-    if height > 1:
-        stdscr.move(1, 0)
+    try:
+        stdscr.addstr(row, 0, f"{prompt}{''.join(buf)}")
+    except curses.error:
+        pass
+
+    if height > error_row:
+        stdscr.move(error_row, 0)
         stdscr.clrtoeol()
         if error_message:
-            stdscr.addstr(1, 0, error_message)
+            try:
+                stdscr.addstr(error_row, 0, error_message)
+            except curses.error:
+                pass
 
-    stdscr.move(0, len(prompt) + pos)
+    stdscr.move(row, len(prompt) + pos)
     stdscr.refresh()
 
 
@@ -124,6 +144,7 @@ def curses_loop(
     prompt: str,
     initial_value: str = "",
     error_message: str = "",
+    bordered: bool = False,
 ) -> str:
     curses.set_escdelay(25)
     curses.curs_set(1)
@@ -135,14 +156,14 @@ def curses_loop(
 
     buf: list[str] = list(initial_value)
     pos = len(buf)
-    render_line(stdscr, prompt, buf, pos, error_message)
+    render_line(stdscr, prompt, buf, pos, error_message, bordered)
 
     while True:
         ch = stdscr.getch()
 
         buf, pos, done = handle_key(ch, buf, pos)
 
-        render_line(stdscr, prompt, buf, pos, error_message)
+        render_line(stdscr, prompt, buf, pos, error_message, bordered)
 
         if done:
             if is_esc(ch):
@@ -154,8 +175,9 @@ def curses_input(
     prompt: str,
     initial_value: str = "",
     error_message: str = "",
+    bordered: bool = False,
 ) -> str:
-    return curses.wrapper(curses_loop, prompt, initial_value, error_message)
+    return curses.wrapper(curses_loop, prompt, initial_value, error_message, bordered)
 
 
 def line_input(
@@ -260,8 +282,12 @@ def prompt_input(
     initial_value: str = "",
     error_message: str = "",
 ) -> str:
-    if "--full-screen" in sys.argv[1:]:
-        return curses_input(prompt, initial_value, error_message)
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--full-screen", action="store_true")
+    parser.add_argument("--bordered", action="store_true")
+    args, _ = parser.parse_known_args()
+    if args.full_screen:
+        return curses_input(prompt, initial_value, error_message, args.bordered)
     return line_input(prompt, initial_value, error_message)
 
 
