@@ -284,10 +284,11 @@ def prompt_input(
 ) -> str:
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--full-screen", action="store_true")
-    parser.add_argument("--bordered", action="store_true")
+    parser.add_argument("--full-screen-bordered", action="store_true")
     args, _ = parser.parse_known_args()
-    if args.full_screen:
-        return curses_input(prompt, initial_value, error_message, args.bordered)
+    full_screen = args.full_screen or args.full_screen_bordered
+    if full_screen:
+        return curses_input(prompt, initial_value, error_message, args.full_screen_bordered)
     return line_input(prompt, initial_value, error_message)
 
 
