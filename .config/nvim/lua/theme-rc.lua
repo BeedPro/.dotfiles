@@ -7,6 +7,9 @@ require("modus-themes").setup {
     comments = { italic = false },
     keywords = { italic = false },
   },
+  on_highlights = function(highlights, colors)
+    highlights.NeogitActiveItem = { bg = colors.bg_dim, fg = colors.fg_main }
+  end,
 }
 
 vim.cmd.colorscheme "modus"
