@@ -11,5 +11,5 @@ italic      = { family = "CommitMono Nerd Font Mono", style = "Italic" }
 bold_italic = { family = "CommitMono Nerd Font Mono", style = "Bold Italic" }
 
 [window]
-padding = { x = 10, y = 10 }
+padding = { x = 8, y = 8 }
 dynamic_padding = true
