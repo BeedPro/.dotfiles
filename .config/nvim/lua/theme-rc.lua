@@ -9,6 +9,7 @@ require("modus-themes").setup {
   },
   on_highlights = function(highlights, colors)
     highlights.NeogitActiveItem = { bg = colors.bg_dim, fg = colors.fg_main }
+    highlights.TabLineSel = { bg = colors.bg_dim, fg = colors.fg_main }
   end,
 }
 
