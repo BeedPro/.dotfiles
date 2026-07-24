@@ -1,5 +1,8 @@
 # theme: dark
 
+[global]
+    follow = mouse
+
 [urgency_low]
     background = "#000000"
     foreground = "#ffffff"
