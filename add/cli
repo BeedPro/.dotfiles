@@ -5,7 +5,7 @@ set -euo pipefail
 
 add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
-sudo xbps-install -Sy fuse-sshfs
+sudo xbps-install -Sy fuse-sshfs fastfetch
 
 "$add_root/pde"
 "$add_root/mpd"
