@@ -86,41 +86,79 @@ if in_slipbox() then
   })
 end
 
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
-  group = vim.api.nvim_create_augroup("TypstAutoCompile", { clear = true }),
-  pattern = "*.typ",
-  callback = function(ev)
-    if vim.bo[ev.buf].buftype ~= "" then
+local function compile_typst(buf)
+  if vim.bo[buf].buftype ~= "" then
+    return
+  end
+
+  local filepath = vim.api.nvim_buf_get_name(buf)
+
+  if filepath == "" then
+    return
+  end
+
+  if filepath:sub(-4) ~= ".typ" then
+    return
+  end
+
+  if vim.fn.filereadable(filepath) == 0 then
+    return
+  end
+
+  local dir = vim.fn.fnamemodify(filepath, ":h")
+  local outpath = vim.fs.joinpath(vim.fn.stdpath "cache", "typst-render.pdf")
+
+  vim.fn.jobstart({ "typst", "compile", filepath, outpath }, {
+    cwd = dir,
+    stdout_buffered = true,
+    stderr_buffered = true,
+    on_stdout = function(_, data)
+      if data and #data > 0 then
+        print(table.concat(data, "\n"))
+      end
+    end,
+    on_stderr = function(_, data)
+      if data and #data > 0 then
+        print(table.concat(data, "\n"))
+      end
+    end,
+  })
+end
+
+if not vim.g.typst_watch_command_defined then
+  vim.g.typst_watch_command_defined = true
+
+  vim.api.nvim_create_user_command("TypstWatch", function(opts)
+    local subcommand = opts.args
+
+    if subcommand == "stop" then
+      pcall(vim.api.nvim_clear_autocmds, { group = "TypstWatch" })
+      vim.notify("Typst watch disabled", vim.log.levels.INFO)
       return
     end
 
-    local filepath = vim.api.nvim_buf_get_name(ev.buf)
-
-    if filepath == "" then
+    if subcommand ~= "start" then
+      vim.notify("Usage: TypstWatch start|stop", vim.log.levels.ERROR)
       return
     end
 
-    if vim.fn.filereadable(filepath) == 0 then
-      return
-    end
+    local group = vim.api.nvim_create_augroup("TypstWatch", { clear = true })
 
-    local dir = vim.fn.fnamemodify(filepath, ":h")
-    local outpath = vim.fs.joinpath(vim.fn.stdpath "cache", "typst-render.pdf")
-
-    vim.fn.jobstart({ "typst", "compile", filepath, outpath }, {
-      cwd = dir,
-      stdout_buffered = true,
-      stderr_buffered = true,
-      on_stdout = function(_, data)
-        if data and #data > 0 then
-          print(table.concat(data, "\n"))
-        end
-      end,
-      on_stderr = function(_, data)
-        if data and #data > 0 then
-          print(table.concat(data, "\n"))
-        end
+    vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
+      group = group,
+      pattern = "*.typ",
+      callback = function(ev)
+        compile_typst(ev.buf)
       end,
     })
-  end,
-})
+
+    compile_typst(vim.api.nvim_get_current_buf())
+    vim.notify("Typst watch enabled for this session", vim.log.levels.INFO)
+  end, {
+    nargs = 1,
+    complete = function()
+      return { "start", "stop" }
+    end,
+    desc = "Start or stop Typst auto compile for this session",
+  })
+end
