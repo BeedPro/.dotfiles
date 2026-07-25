@@ -406,7 +406,7 @@ def handle_bare_git_input(value: str) -> bool:
         return True
 
     clean = clean_repo_path(bare_url)
-    repo_root = CONFIG.src_dir / clean
+    repo_root = CONFIG.src_dir / f"{clean}.git"
     bare_dir = repo_root / ".git"
 
     ensure_bare_clone(bare_url, bare_dir)
