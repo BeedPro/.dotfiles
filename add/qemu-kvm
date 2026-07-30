@@ -19,12 +19,10 @@ host | h)
         edk2-ovmf \
         swtpm
 
-    sudo ln -sfn /etc/sv/dbus /var/service/dbus
     sudo ln -sfn /etc/sv/libvirtd /var/service/libvirtd
     sudo ln -sfn /etc/sv/virtlogd /var/service/virtlogd
     sudo ln -sfn /etc/sv/virtlockd /var/service/virtlockd
 
-    sudo sv up dbus
     sudo sv up libvirtd
     sudo sv up virtlogd
     sudo sv up virtlockd
