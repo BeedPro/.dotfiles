@@ -17,3 +17,4 @@ sudo xbps-install -Sy gucharmap xournalpp gpick
 "$add_root/espanso"
 "$add_root/emacs"
 "$add_root/obs"
+"$add_root/printers"
