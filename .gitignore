@@ -20,3 +20,7 @@ __pycache__/
 .local/bin/poomer
 .local/bin/flutter
 .local/bin/dart
+.local/share/applications/powdertoy-uk.co.powdertoy.tpt.desktop
+.local/share/icons/hicolor/64x64/apps/powdertoy-powder.png
+.local/share/icons/hicolor/64x64/mimetypes/application-vnd.powdertoy.save.png
+.local/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-vnd.powdertoy.save.png

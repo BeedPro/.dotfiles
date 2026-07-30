@@ -13,6 +13,8 @@ x-scheme-handler/https=firefox.desktop
 x-scheme-handler/heroic=heroic.desktop
 text/html=firefox.desktop
 inode/directory=thunar.desktop
+application/vnd.powdertoy.save=powdertoy-uk.co.powdertoy.tpt.desktop
+x-scheme-handler/ptsave=powdertoy-uk.co.powdertoy.tpt.desktop
 
 [Added Associations]
 text/html=firefox.desktop;
