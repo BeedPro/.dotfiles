@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tags: #pkg
+
+command -v flatpak >/dev/null 2>&1 || { echo "flatpak is not installed. Run add/flathub first."; exit 1; }
+
+sudo xbps-install -Sy curl avahi
+
+VERSION="26.7.1"
+APPIMAGE="WayVR-v${VERSION}-x86_64.AppImage"
+CHECKSUM="24389d73ca36c548472f3326ff94dd3e75d4fea701bd8ffd0841caee813e029b"
+INSTALL_DIR="/opt"
+BIN_LINK="/usr/local/bin/wayvr"
+URL="https://github.com/wayvr-org/wayvr/releases/download/v${VERSION}/${APPIMAGE}"
+TARGET_BIN="${INSTALL_DIR}/${APPIMAGE}"
+
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+cd "$TMP_DIR"
+
+curl -fL -o "$APPIMAGE" "$URL"
+printf '%s  %s\n' "$CHECKSUM" "$APPIMAGE" | sha256sum --check
+
+sudo rm -f "$TARGET_BIN"
+sudo mv "$APPIMAGE" "$TARGET_BIN"
+sudo chmod +x "$TARGET_BIN"
+
+sudo ln -sfn "$TARGET_BIN" "$BIN_LINK"
+
+flatpak install flathub io.github.wivrn.wivrn
+
+sudo ln -sfn /etc/sv/avahi-daemon /var/service/avahi-daemon
+
+sudo sv up avahi-daemon
+
+echo "WayVR installed: $BIN_LINK -> $TARGET_BIN"
