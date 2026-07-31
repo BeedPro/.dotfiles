@@ -35,4 +35,9 @@ sudo ln -sfn /etc/sv/avahi-daemon /var/service/avahi-daemon
 
 sudo sv up avahi-daemon
 
+sudo usermod -aG plugdev "$USER"
+
 echo "WayVR installed: $BIN_LINK -> $TARGET_BIN"
+echo "For wired connection please do the following:"
+echo "> adb reverse tcp:9757 tcp:9757"
+echo "> adb shell am start -a android.intent.action.VIEW -d "wivrn+tcp://localhost" org.meumeu.wivrn"
