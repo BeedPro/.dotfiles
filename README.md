@@ -35,7 +35,7 @@ sudo xbps-install -S git neovim curl stow
 Clone the repo:
 
 ```bash
-git clone https://github.com/BeedPro/.dotfiles.git ~/.dotfiles
+git clone https://github.com/beedware/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ```
 

@@ -7,7 +7,7 @@ set -euo pipefail
 sudo xbps-install -Sy git git-lfs xclip
 
 KEY="$HOME/.ssh/codeberg"
-MIRROR_URL="ssh://git@codeberg.org/Beed/.dotfiles.git"
+MIRROR_URL="ssh://git@codeberg.org/beedware/.dotfiles.git"
 repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 mkdir -p "$HOME/.ssh"

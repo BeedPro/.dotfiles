@@ -9,7 +9,7 @@ sudo xbps-install -Sy git git-lfs github-cli xclip
 gh config set telemetry disabled
 
 KEY="$HOME/.ssh/github"
-ORIGIN_URL="git@github.com:BeedPro/.dotfiles.git"
+ORIGIN_URL="git@github.com:beedware/.dotfiles.git"
 repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 mkdir -p "$HOME/.ssh"
