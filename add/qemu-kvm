@@ -1,9 +1,10 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 # tags: #system#virtualization
 
-read -rp "Set up QEMU/KVM as host or guest? [host] " role
+printf '%s' "Set up QEMU/KVM as host or guest? [host] "
+read -r role
 role="${role:-host}"
 
 case "$role" in

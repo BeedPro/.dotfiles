@@ -1,12 +1,12 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 # tags: #pkg
-shopt -s nullglob
 
 sudo xbps-install -Sy firefox speech-dispatcher
 
 for profile_dir in "$HOME/.config/mozilla/firefox"/*/; do
+  [ -d "$profile_dir" ] || continue
   ln -sfn "$HOME/.dotfiles/.mozilla/firefox/user.js" "$profile_dir/user.js"
   ln -sfn "$HOME/.dotfiles/.mozilla/firefox/chrome" "$profile_dir/chrome"
 done

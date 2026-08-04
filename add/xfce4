@@ -1,10 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euo pipefail
+set -eu
 
 # tags: #system#desktop
 
-add_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+add_root="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 
 # Lock root account
 sudo -v

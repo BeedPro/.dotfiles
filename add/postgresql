@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 # tags: #dev
 
@@ -8,19 +8,20 @@ sudo xbps-install -Sy \
     postgresql-client \
     postgresql-contrib
 
-services=(/etc/sv/postgresql[0-9]*)
-if [[ ! -e "${services[0]}" ]]; then
+set -- /etc/sv/postgresql[0-9]*
+if [ ! -e "$1" ]; then
     echo "No versioned PostgreSQL service found under /etc/sv."
     exit 1
 fi
 
-service="${services[-1]##*/}"
+for service_path do :; done
+service="${service_path##*/}"
 major="${service#postgresql}"
 default_conf="/etc/psql${major}/default/postgresql"
 pgroot="/var/lib/postgresql${major}"
 pgdata="${pgroot}/data"
 
-if [[ ! -d "$pgdata" ]] && ! locale -a | grep -Eiq '^en_US\.utf-?8$'; then
+if [ ! -d "$pgdata" ] && ! locale -a | grep -Eiq '^en_US\.utf-?8$'; then
     if locale -a | grep -Eiq '^C\.utf-?8$'; then
         sudo sed -i 's/--locale en_US.UTF-8/--locale C.UTF-8/' "$default_conf"
     else
@@ -33,11 +34,13 @@ fi
 sudo ln -sfn "/etc/sv/$service" "/var/service/$service"
 sudo sv up "$service"
 
-for _ in {1..30}; do
+tries=30
+while [ "$tries" -gt 0 ]; do
     if sudo -u postgres pg_isready -q; then
         break
     fi
     sleep 1
+    tries=$((tries - 1))
 done
 
 if ! sudo -u postgres pg_isready -q; then
@@ -46,7 +49,8 @@ if ! sudo -u postgres pg_isready -q; then
     exit 1
 fi
 
-read -rp "Create PostgreSQL role and database for $USER? [Y/n] " create_local
+printf '%s' "Create PostgreSQL role and database for $USER? [Y/n] "
+read -r create_local
 create_local="${create_local:-Y}"
 
 case "$create_local" in
