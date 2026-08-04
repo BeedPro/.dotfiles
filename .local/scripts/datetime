@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 OUTPUT=$(date '+%Y.%m.%d %H:%M:%S')
 
-echo "::" $OUTPUT
+printf ':: %s\n' "$OUTPUT"

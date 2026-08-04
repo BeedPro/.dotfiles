@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 BOOKMARKS_FILE="$HOME/Compendium/Journal/bookmarks.txt"
 
@@ -23,12 +23,12 @@ copy_x11() {
 }
 
 copy_url() {
-    [[ "${XDG_SESSION_TYPE:-}" == "wayland" ]] && copy_wayland && return
-    [[ "${XDG_SESSION_TYPE:-}" == "x11" ]] && copy_x11 && return
+    [ "${XDG_SESSION_TYPE:-}" = "wayland" ] && copy_wayland && return
+    [ "${XDG_SESSION_TYPE:-}" = "x11" ] && copy_x11 && return
     die "Error: unsupported or unknown session type: ${XDG_SESSION_TYPE:-unset}"
 }
 
-[[ $# -gt 1 ]] && die "Error: too many arguments"
+[ "$#" -gt 1 ] && die "Error: too many arguments"
 
 case "${1:-}" in
     -h|--help)
@@ -43,14 +43,14 @@ case "${1:-}" in
         ;;
 esac
 
-[[ -f "$BOOKMARKS_FILE" ]] || die "Error: bookmarks file not found: $BOOKMARKS_FILE"
+[ -f "$BOOKMARKS_FILE" ] || die "Error: bookmarks file not found: $BOOKMARKS_FILE"
 
 CHOICE="$(awk -F'|' 'NF>=2 {print $1}' "$BOOKMARKS_FILE" | rofi -dmenu -i -p 'Bookmarks')"
 
-[[ -z "$CHOICE" ]] && exit 0
+[ -z "$CHOICE" ] && exit 0
 
 URL="$(awk -F'|' -v choice="$CHOICE" '$1 == choice {print $2; exit}' "$BOOKMARKS_FILE")"
 
-[[ -z "$URL" ]] && exit 1
+[ -z "$URL" ] && exit 1
 
 copy_url

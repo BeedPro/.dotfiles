@@ -1,15 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 
-choice=$(echo -e "lock\nlogout\nsuspend\nhibernate\nreboot\npoweroff" | rofi -dmenu)
+choice=$(printf '%s\n' lock logout suspend hibernate reboot poweroff | rofi -dmenu)
 
-if [[ -f /tmp/power-lock ]]; then
+if [ -f /tmp/power-lock ]; then
     notify-send "Powermenu" "Power locked due to process"
     exit 0
 fi
 
-if [ "$choice" == "logout" ]; then
+if [ "$choice" = "logout" ]; then
     pkill i3
-elif [ "$choice" == "lock" ]; then
+elif [ "$choice" = "lock" ]; then
     "$HOME/.local/scripts/locker"
 elif [ -n "$choice" ]; then
     loginctl "$choice"

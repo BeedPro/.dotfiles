@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Define the keyboard layouts you want to toggle between
 LAYOUT_1="gb"
@@ -8,12 +8,11 @@ LAYOUT_2="ara"
 CURRENT_LAYOUT=$(setxkbmap -query | grep layout | awk '{print $2}')
 
 # Toggle between layouts
-if [ "$CURRENT_LAYOUT" == "$LAYOUT_1" ]; then
-    setxkbmap $LAYOUT_2
+if [ "$CURRENT_LAYOUT" = "$LAYOUT_1" ]; then
+    setxkbmap "$LAYOUT_2"
 else
-    setxkbmap $LAYOUT_1
+    setxkbmap "$LAYOUT_1"
 fi
 
 pkill -SIGRTMIN+10 dwmblocks
 pkill -SIGRTMIN+10 i3blocks
-
