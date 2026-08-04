@@ -1,0 +1,7 @@
+# .bashrc
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+PS1='\[\e[91m\]\u@\h\[\e[0m\]:\[\e[96m\]\w\n\[\e[0m\]> '

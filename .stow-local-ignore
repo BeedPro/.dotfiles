@@ -23,6 +23,7 @@ _darcs
 ^/TODO.*
 ^/LICENSE.*
 ^/COPYING
+^/\.bashrc\.root$
 
 # Python cache and tooling artifacts
 __pycache__

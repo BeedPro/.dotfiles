@@ -22,3 +22,4 @@ sudo xbps-install -Sy \
 
 bat cache --build
 sudo chsh -s /bin/bash root
+sudo sh -c 'cat "$1" > /root/.bashrc' sh "$HOME/.dotfiles/.bashrc.root"
