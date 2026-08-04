@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
     printf 'Usage: %s <file-path> [max-backups]\n' "${0##*/}" >&2
@@ -10,12 +10,16 @@ fi
 input_path="$1"
 max_backups="${2:-15}"
 
-if ! [[ "$max_backups" =~ ^[1-9][0-9]*$ ]]; then
-    printf 'max-backups must be a positive integer, got: %s\n' "$max_backups" >&2
-    exit 1
-fi
+case "$max_backups" in
+    ''|0|0*|*[!0123456789]*)
+        printf 'max-backups must be a positive integer, got: %s\n' "$max_backups" >&2
+        exit 1
+        ;;
+esac
 
-[[ "$input_path" == @* ]] && input_path="${PWD}/${input_path#@}"
+case "$input_path" in
+    @*) input_path="${PWD}/${input_path#@}" ;;
+esac
 
 if [ ! -f "$input_path" ]; then
     printf 'Source file not found: %s\n' "$input_path" >&2
@@ -42,13 +46,20 @@ cp -- "$input_path" "$target_path"
 
 printf '[%s] Created: %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$target_path"
 
-mapfile -t backup_files < <(ls -1 "$backup_dir"/* 2>/dev/null | sort)
-backup_count="${#backup_files[@]}"
+set -- "$backup_dir"/*
+
+if [ -f "$1" ]; then
+    backup_count=$#
+else
+    backup_count=0
+fi
 
 if [ "$backup_count" -gt "$max_backups" ]; then
     delete_count=$((backup_count - max_backups))
-    for ((i = 0; i < delete_count; i++)); do
-        rm -f -- "${backup_files[$i]}"
-        printf '[%s] Deleted: %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "${backup_files[$i]}"
+    while [ "$delete_count" -gt 0 ]; do
+        rm -f -- "$1"
+        printf '[%s] Deleted: %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$1"
+        shift
+        delete_count=$((delete_count - 1))
     done
 fi
