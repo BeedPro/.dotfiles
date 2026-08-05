@@ -119,13 +119,17 @@ local function need_rg(name)
   end
 end
 
+local rg_find_all_complete = has_rg and function(arglead)
+  return rg_find(arglead, true, true)
+end or "file"
+
 vim.api.nvim_create_user_command("FindAll", has_rg and function(args)
   local matches = rg_find(args.args, true)
   if vim.tbl_isempty(matches) then
     return vim.notify("No files found matching: " .. args.args, vim.log.levels.WARN)
   end
   vim.cmd.edit(vim.fn.fnameescape(matches[1]))
-end or need_rg "FindAll", { desc = "Find file including gitignored files", nargs = 1 })
+end or need_rg "FindAll", { complete = rg_find_all_complete, desc = "Find file including gitignored files", nargs = 1 })
 
 vim.api.nvim_create_user_command("GrepAll", has_rg and function(args)
   local old_grepprg = vim.o.grepprg
@@ -135,7 +139,7 @@ vim.api.nvim_create_user_command("GrepAll", has_rg and function(args)
   if not ok then
     error(err)
   end
-end or need_rg "GrepAll", { desc = "Grep including gitignored files", nargs = "+" })
+end or need_rg "GrepAll", { complete = rg_find_all_complete, desc = "Grep including gitignored files", nargs = "+" })
 
 vim.api.nvim_create_user_command("PackClean", function(args)
   local unused = {}
