@@ -25,3 +25,7 @@ vim.api.nvim_create_autocmd("QuickFixCmdPost", {
     vim.cmd "cwindow"
   end,
 })
+
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.softtabstop = 2
