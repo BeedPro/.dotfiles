@@ -106,8 +106,8 @@ end
 if has_rg then
   vim.o.grepprg = rg_grep
   vim.o.grepformat = "%f:%l:%c:%m"
-  vim.o.findfunc = "v:lua.FindGitignoredFiles"
-  function _G.FindGitignoredFiles(cmdarg, cmdcomplete)
+  vim.o.findfunc = "v:lua.RgFindFiles"
+  function _G.RgFindFiles(cmdarg, cmdcomplete)
     return rg_find(cmdarg, false, cmdcomplete)
   end
 end
