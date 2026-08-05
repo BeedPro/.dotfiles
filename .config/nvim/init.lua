@@ -92,70 +92,50 @@ vim.g.loaded_ruby_provider = 0
 vim.g.netrw_banner = 0
 
 local has_rg = vim.fn.executable "rg" == 1
-local grepallprg
-if has_rg then
-  local grepprg = "rg --vimgrep --smart-case --hidden --glob '!.git'"
-  grepallprg = "rg --vimgrep --smart-case --hidden --no-ignore --glob '!.git'"
+local rg_grep = "rg --vimgrep --smart-case --hidden --glob '!.git'"
+local rg_grep_all = "rg --vimgrep --smart-case --hidden --no-ignore --glob '!.git'"
 
-  vim.o.grepprg = grepprg
+local function rg_find(query, no_ignore, complete)
+  local files = vim.fn.systemlist { "rg", "--files", "--hidden", no_ignore and "--no-ignore" or "--glob", no_ignore and "--glob" or "!.git", no_ignore and "!.git" or nil }
+  local pattern = vim.pesc(query:gsub("\\", "/")) .. (complete and ".*" or "")
+  return vim.tbl_filter(function(file)
+    return file:match(pattern) or vim.fs.basename(file):match(pattern)
+  end, files)
+end
+
+if has_rg then
+  vim.o.grepprg = rg_grep
   vim.o.grepformat = "%f:%l:%c:%m"
   vim.o.findfunc = "v:lua.FindGitignoredFiles"
   function _G.FindGitignoredFiles(cmdarg, cmdcomplete)
-    local files = vim.fn.systemlist { "rg", "--files", "--hidden", "--glob", "!.git" }
-    local query = vim.pesc(cmdarg:gsub("\\", "/")) .. (cmdcomplete and ".*" or "")
-    return vim.tbl_filter(function(file)
-      return file:match(query) or vim.fs.basename(file):match(query)
-    end, files)
+    return rg_find(cmdarg, false, cmdcomplete)
   end
 end
 
 -- Commands
-if has_rg then
-  vim.api.nvim_create_user_command("FindAll", function(args)
-    local files = vim.fn.systemlist { "rg", "--files", "--hidden", "--no-ignore", "--glob", "!.git" }
-    local query = vim.pesc(args.args:gsub("\\", "/"))
-    local matches = vim.tbl_filter(function(file)
-      return file:match(query) or vim.fs.basename(file):match(query)
-    end, files)
-
-    if vim.tbl_isempty(matches) then
-      vim.notify("No files found matching: " .. args.args, vim.log.levels.WARN)
-      return
-    end
-
-    vim.cmd.edit(vim.fn.fnameescape(matches[1]))
-  end, {
-    desc = "Find file including gitignored files",
-    nargs = 1,
-  })
-
-  vim.api.nvim_create_user_command("GrepAll", function(args)
-    local old_grepprg = vim.o.grepprg
-    vim.o.grepprg = grepallprg
-    local ok, err = pcall(vim.cmd.grep, { args = { args.args }, bang = true })
-    vim.o.grepprg = old_grepprg
-    if not ok then
-      error(err)
-    end
-  end, {
-    desc = "Grep including gitignored files",
-    nargs = "+",
-  })
-else
-  vim.api.nvim_create_user_command("FindAll", function()
-    vim.notify("FindAll requires ripgrep", vim.log.levels.WARN)
-  end, {
-    desc = "Find file including gitignored files",
-    nargs = 1,
-  })
-
-  vim.api.nvim_create_user_command("GrepAll", function()
-    vim.notify("GrepAll requires ripgrep", vim.log.levels.WARN)
-  end, {
-    desc = "Grep including gitignored files",
-    nargs = "+",
-  })
+local function need_rg(name)
+  return function()
+    vim.notify(name .. " requires ripgrep", vim.log.levels.WARN)
+  end
 end
+
+vim.api.nvim_create_user_command("FindAll", has_rg and function(args)
+  local matches = rg_find(args.args, true)
+  if vim.tbl_isempty(matches) then
+    return vim.notify("No files found matching: " .. args.args, vim.log.levels.WARN)
+  end
+  vim.cmd.edit(vim.fn.fnameescape(matches[1]))
+end or need_rg "FindAll", { desc = "Find file including gitignored files", nargs = 1 })
+
+vim.api.nvim_create_user_command("GrepAll", has_rg and function(args)
+  local old_grepprg = vim.o.grepprg
+  vim.o.grepprg = rg_grep_all
+  local ok, err = pcall(vim.cmd.grep, { args = { args.args }, bang = true })
+  vim.o.grepprg = old_grepprg
+  if not ok then
+    error(err)
+  end
+end or need_rg "GrepAll", { desc = "Grep including gitignored files", nargs = "+" })
 
 vim.api.nvim_create_user_command("PackClean", function(args)
   local unused = {}
