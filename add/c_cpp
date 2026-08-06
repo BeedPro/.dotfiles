@@ -1,6 +1,0 @@
-#!/bin/sh
-set -eu
-
-# tags: #dev
-
-sudo xbps-install -Sy clang cmake
