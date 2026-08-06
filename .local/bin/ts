@@ -11,10 +11,10 @@ import subprocess
 import sys
 import termios
 import tty
+from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from subprocess import CompletedProcess
-from typing import Sequence
 
 
 @dataclass(frozen=True)
@@ -305,6 +305,7 @@ def has_session(name: str) -> bool:
         ["tmux", "has-session", "-t", name],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
+        check=False,
     )
     return result.returncode == 0
 
