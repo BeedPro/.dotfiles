@@ -13,12 +13,16 @@ sudo xbps-install -Sy \
     gpick \
     mpv \
     nsxiv \
-    obs
+    obs \
+    calibre \
+    zathura \
+    zathura-cb \
+    zathura-djvu \
+    zathura-pdf-poppler
 
 flatpak install -y flathub com.github.tchx84.Flatseal
 
 "$add_root/firefox"
-"$add_root/readers"
 "$add_root/vorta"
 "$add_root/espanso"
 "$add_root/emacs"
