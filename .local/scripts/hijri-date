@@ -5,8 +5,10 @@ import os
 import subprocess
 import sys
 from datetime import datetime, time, timedelta
+from json import JSONDecodeError
 from pathlib import Path
 from typing import Any
+from urllib.error import URLError
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
@@ -42,11 +44,11 @@ def read_prayer_cache() -> JsonObject:
 def get_maghrib_time() -> time:
     data = read_prayer_cache()
     maghrib = data["data"]["timings"]["Maghrib"].split(" ")[0]
-    return datetime.strptime(maghrib, "%H:%M").time()
+    return time.fromisoformat(maghrib)
 
 
 def after_maghrib(maghrib_time: time) -> bool:
-    return datetime.now().time() >= maghrib_time
+    return datetime.now().astimezone().time() >= maghrib_time
 
 
 def effective_gregorian_date() -> datetime:
@@ -54,7 +56,7 @@ def effective_gregorian_date() -> datetime:
     Before Maghrib  -> today
     After Maghrib   -> tomorrow
     """
-    today = datetime.now()
+    today = datetime.now().astimezone()
     maghrib = get_maghrib_time()
 
     if after_maghrib(maghrib):
@@ -69,7 +71,7 @@ def load_cache() -> JsonObject | None:
 
     try:
         return json.loads(Path(HIJRI_CACHE).read_text())
-    except Exception:
+    except (OSError, JSONDecodeError):
         return None
 
 
@@ -82,8 +84,8 @@ def save_cache(key: str, hijri_data: JsonObject) -> None:
 
     try:
         Path(HIJRI_CACHE).write_text(json.dumps(payload))
-    except Exception:
-        pass
+    except OSError:
+        return
 
 
 def fetch_timings(gregorian_date: datetime) -> JsonObject:
@@ -110,7 +112,7 @@ def hijri_from_prayer_cache(gregorian_date: datetime) -> JsonObject | None:
         data = read_prayer_cache()
         date = data["data"]["date"]["gregorian"]["date"]
         hijri = data["data"]["date"]["hijri"]
-    except Exception:
+    except (OSError, JSONDecodeError, subprocess.CalledProcessError, KeyError, TypeError):
         return None
 
     if date != gregorian_str(gregorian_date):
@@ -152,7 +154,16 @@ def fetch_or_cached_hijri(
         hijri = fetch_hijri(effective_date)
         save_cache(cache_key, hijri)
         return hijri
-    except Exception:
+    except (
+        OSError,
+        JSONDecodeError,
+        subprocess.CalledProcessError,
+        KeyError,
+        RuntimeError,
+        TimeoutError,
+        TypeError,
+        URLError,
+    ):
         return cache["hijri"] if cache else None
 
 
@@ -170,7 +181,14 @@ def main() -> None:
     try:
         effective_date = effective_gregorian_date()
         cache_key = gregorian_str(effective_date)
-    except Exception:
+    except (
+        OSError,
+        JSONDecodeError,
+        subprocess.CalledProcessError,
+        KeyError,
+        TypeError,
+        ValueError,
+    ):
         print(":: --")
         return
 
