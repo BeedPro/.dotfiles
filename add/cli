@@ -11,4 +11,4 @@ sudo xbps-install -Sy fuse-sshfs fastfetch
 "$add_root/mpd"
 "$add_root/wireguard"
 "$add_root/void-packages"
-"$add_root/ai"
+"$add_root/opencode"
