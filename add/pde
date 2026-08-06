@@ -5,10 +5,14 @@ set -eu
 
 add_root="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 
-sudo xbps-install -Sy base-devel clang
+sudo xbps-install -Sy \
+    base-devel \
+    clang \
+    cmake \
+    ncurses-term \
+    tmux
 
 "$add_root/shell"
-"$add_root/tmux"
 "$add_root/nvim"
 "$add_root/node"
 "$add_root/codeberg"

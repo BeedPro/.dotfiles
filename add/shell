@@ -19,8 +19,6 @@ sudo xbps-install -Sy \
     unzip \
     wget \
     xdg-utils \
-    clang \
-    cmake
 
 bat cache --build
 sudo chsh -s /bin/bash root
