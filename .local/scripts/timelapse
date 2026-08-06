@@ -4,9 +4,9 @@
 import argparse
 import subprocess
 import sys
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Sequence
-
+from typing import NoReturn
 
 DEFAULT_SPEED = 15.0
 DEFAULT_FPS = 30
@@ -41,7 +41,7 @@ def print_usage() -> None:
     print(usage(), end="")
 
 
-def fail(message: str, show_usage: bool = False) -> None:
+def fail(message: str, show_usage: bool = False) -> NoReturn:
     print(f"Error: {message}", file=sys.stderr)
 
     if show_usage:
