@@ -6,4 +6,21 @@ set -eu
 
 command -v flatpak >/dev/null 2>&1 || { echo "flatpak is not installed. Run add/flathub first."; exit 1; }
 
-flatpak install flathub dev.lizardbyte.app.Sunshine
+printf 'Install Sunshine server, Moonshine client, or both? [sunshine/moonshine/both] (sunshine): '
+read -r choice
+
+case "${choice:-sunshine}" in
+  sunshine|server)
+    flatpak install flathub dev.lizardbyte.app.Sunshine
+    ;;
+  moonshine|client)
+    flatpak install flathub com.moonlight_stream.Moonlight
+    ;;
+  both)
+    flatpak install flathub dev.lizardbyte.app.Sunshine com.moonlight_stream.Moonlight
+    ;;
+  *)
+    echo "Invalid choice: $choice"
+    exit 1
+    ;;
+esac
