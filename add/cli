@@ -16,3 +16,4 @@ sudo xbps-install -Sy \
 "$add_root/wireguard"
 "$add_root/void-packages"
 "$add_root/opencode"
+"$add_root/power"
