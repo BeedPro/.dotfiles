@@ -71,7 +71,14 @@ sudo ln -sfn /etc/sv/bluetoothd /var/service/bluetoothd
 # Add user to common desktop groups
 sudo usermod -aG wheel,audio,video,input,storage,network,bluetooth "$USER"
 
-"$add_root/themes"
+sudo xbps-install -Sy \
+    nwg-look \
+    yaru \
+    papirus-icon-theme \
+    nerd-fonts \
+    noto-fonts-ttf \
+    noto-fonts-cjk \
+    noto-fonts-emoji
 
 # Reboot to apply everything
 sudo reboot
