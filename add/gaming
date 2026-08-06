@@ -21,6 +21,27 @@ prompt_install() {
     esac
 }
 
+install_game_streaming() {
+    printf 'Install Sunshine server, Moonlight client, or both? [sunshine/moonlight/both] (sunshine): '
+    read -r choice
+
+    case "${choice:-sunshine}" in
+        sunshine|server)
+            flatpak install flathub dev.lizardbyte.app.Sunshine
+            ;;
+        moonlight|moonshine|client)
+            flatpak install flathub com.moonlight_stream.Moonlight
+            ;;
+        both)
+            flatpak install flathub dev.lizardbyte.app.Sunshine com.moonlight_stream.Moonlight
+            ;;
+        *)
+            echo "Invalid choice: $choice"
+            exit 1
+            ;;
+    esac
+}
+
 sudo xbps-install -Sy \
     libdrm-32bit \
     lutris \
@@ -29,5 +50,5 @@ sudo xbps-install -Sy \
 flatpak install -y flathub org.prismlauncher.PrismLauncher
 "$add_root/heroic"
 
-prompt_install 'Install game streaming apps?' "$add_root/game-streaming"
+prompt_install 'Install game streaming apps?' install_game_streaming
 prompt_install 'Install Eden NS Emulator?' sudo xbps-install -Sy eden
