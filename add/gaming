@@ -27,6 +27,7 @@ sudo xbps-install -Sy \
     steam
 
 flatpak install -y flathub org.prismlauncher.PrismLauncher
+"$add_root/heroic"
 
 prompt_install 'Install game streaming apps?' "$add_root/game-streaming"
 prompt_install 'Install Eden NS Emulator?' "$add_root/eden"
