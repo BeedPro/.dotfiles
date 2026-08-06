@@ -3,7 +3,23 @@ set -eu
 
 # tags: #pkg
 
+add_root="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+
 command -v flatpak >/dev/null 2>&1 || { echo "flatpak is not installed. Run add/flathub first."; exit 1; }
+
+prompt_install() {
+    message="$1"
+    shift
+
+    printf '%s [y/N]: ' "$message"
+    read -r choice
+
+    case "$choice" in
+        y|Y|yes|YES)
+            "$@"
+            ;;
+    esac
+}
 
 sudo xbps-install -Sy \
     libdrm-32bit \
@@ -12,11 +28,5 @@ sudo xbps-install -Sy \
 
 flatpak install -y flathub org.prismlauncher.PrismLauncher
 
-printf 'Install game streaming apps? [y/N]: '
-read -r choice
-
-case "$choice" in
-    y|Y|yes|YES)
-        add/game-stream
-        ;;
-esac
+prompt_install 'Install game streaming apps?' "$add_root/game-stream"
+prompt_install 'Install Eden NS Emulator?' "$add_root/eden"
