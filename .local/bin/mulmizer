@@ -1,7 +1,7 @@
 #!/bin/env python3
-import zipfile
 import os
 import shutil
+import zipfile
 
 AUTHOR: str = "Yusuke Murata"
 SERIES: str = "One-Punch Man"
