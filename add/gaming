@@ -28,5 +28,5 @@ sudo xbps-install -Sy \
 
 flatpak install -y flathub org.prismlauncher.PrismLauncher
 
-prompt_install 'Install game streaming apps?' "$add_root/game-stream"
+prompt_install 'Install game streaming apps?' "$add_root/game-streaming"
 prompt_install 'Install Eden NS Emulator?' "$add_root/eden"
