@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-from typing import Dict, List
-from enum import Enum
 import subprocess
 import sys
+from enum import Enum
 
 
 class ComponentTypes(Enum):
@@ -30,11 +29,11 @@ class TabletComponent:
 class Devices:
     def __init__(self) -> None:
         self.__devices_str: str = subprocess.run(
-            ["xsetwacom", "list"], capture_output=True
+            ["xsetwacom", "list"], capture_output=True, check=False
         ).stdout.decode("utf-8")
         self.__devices = self.__parse_devices()
 
-    def __parse_devices(self) -> List[TabletComponent]:
+    def __parse_devices(self) -> list[TabletComponent]:
         lines = self.__devices_str.splitlines()
         devices = [
             self.__create_tablet_component(line)
@@ -52,8 +51,8 @@ class Devices:
             name=info["name"], component_type=info["type"], id=info["id"]
         )
 
-    def __extract_info(self, line: str) -> Dict[str, str]:
-        info_parts: List[str] = line.split("\t")
+    def __extract_info(self, line: str) -> dict[str, str]:
+        info_parts: list[str] = line.split("\t")
         id_offset: int = len("id: ")
         type_offset: int = len("type: ")
 
@@ -63,7 +62,7 @@ class Devices:
             "type": info_parts[2].strip()[type_offset:],
         }
 
-    def get_components(self, id: str) -> List[TabletComponent]:
+    def get_components(self, id: str) -> list[TabletComponent]:
         return [device for device in self.__devices if id in device.get_name()]
 
 
@@ -144,20 +143,20 @@ class Screens:
     """
 
     def __init__(self) -> None:
-        self.__screens: List[Screen] = self.__generate_screens()
+        self.__screens: list[Screen] = self.__generate_screens()
 
-    def __generate_xrandr_output(self) -> List[str]:
+    def __generate_xrandr_output(self) -> list[str]:
         command = "xrandr --listactivemonitors"
         return subprocess.run(
-            command.split(), capture_output=True, text=True
+            command.split(), capture_output=True, text=True, check=False
         ).stdout.splitlines()
 
-    def __generate_screens(self) -> List[Screen]:
-        xrandr_output: List[str] = self.__generate_xrandr_output()
-        screens: List[Screen] = []
-        screen_lines: List[str] = xrandr_output[1:]
+    def __generate_screens(self) -> list[Screen]:
+        xrandr_output: list[str] = self.__generate_xrandr_output()
+        screens: list[Screen] = []
+        screen_lines: list[str] = xrandr_output[1:]
         for line in screen_lines:
-            screen_parts: List[str] = line.strip().split()
+            screen_parts: list[str] = line.strip().split()
             id: int = int(screen_parts[0].split(":")[0])
             name: str = screen_parts[-1]
             status: str = screen_parts[1]
@@ -187,7 +186,7 @@ class Screens:
             if screen.is_primary():
                 return screen
 
-    def get_screens(self) -> List[Screen]:
+    def get_screens(self) -> list[Screen]:
         return self.__screens
 
     def get_screen(self, id: int) -> Screen | None:
@@ -227,26 +226,26 @@ class Keybind:
             f"xsetwacom set {component.get_id()} Button {self.__key} {self.__binding}"
         )
 
-        subprocess.run(cmd, shell=True)
+        subprocess.run(cmd, shell=True, check=False)
 
 
 class Tablet:
     def __init__(
         self,
         name: str,
-        components: List[TabletComponent],
-        area_components: List[ComponentTypes],
-        keybinds: Dict[ComponentTypes, List[Keybind]] = {},
+        components: list[TabletComponent],
+        area_components: list[ComponentTypes],
+        keybinds: dict[ComponentTypes, list[Keybind]] | None = None,
     ) -> None:
         self.__name: str = name
-        self.__components: List[TabletComponent] = components
-        self.__keybinds = keybinds
-        self.__area_components: List[ComponentTypes] = area_components
+        self.__components: list[TabletComponent] = components
+        self.__keybinds = keybinds or {}
+        self.__area_components: list[ComponentTypes] = area_components
 
-    def __generate_default_area(self, component: TabletComponent) -> List[str]:
+    def __generate_default_area(self, component: TabletComponent) -> list[str]:
         command: str = f"xsetwacom get {component.get_id()} Area"
         return (
-            subprocess.run(command.split(), capture_output=True, text=True)
+            subprocess.run(command.split(), capture_output=True, text=True, check=False)
             .stdout.strip()
             .split()
         )
@@ -256,6 +255,7 @@ class Tablet:
             ["xsetwacom", "get", component.get_id(), "MapToOutput"],
             capture_output=True,
             text=True,
+            check=False,
         ).stdout.strip()
 
     def get_name(self) -> str:
@@ -289,7 +289,7 @@ class Tablet:
             )
             if not component:
                 return
-            areas: List[str] = self.__generate_default_area(component)[2:]
+            areas: list[str] = self.__generate_default_area(component)[2:]
             area_x: int = int(areas[0])
             area_y: int = int(
                 int(areas[0])
@@ -305,8 +305,8 @@ class Tablet:
             screen_cmd: str = (
                 f"xsetwacom set {component.get_id()} MapToOutput {screen.get_output_spec()}"
             )
-            subprocess.run(area_cmd, shell=True)
-            subprocess.run(screen_cmd, shell=True)
+            subprocess.run(area_cmd, shell=True, check=False)
+            subprocess.run(screen_cmd, shell=True, check=False)
 
     def set_keybinds(self) -> None:
         for component_type in self.__keybinds:
@@ -330,8 +330,8 @@ def main() -> None:
     screens: Screens = Screens()
     huion_id: str = "HID 256:006e"
     wacom_id: str = "Wacom One pen tablet small"
-    huion_components: List[TabletComponent] = devices.get_components(huion_id)
-    wacom_components: List[TabletComponent] = devices.get_components(wacom_id)
+    huion_components: list[TabletComponent] = devices.get_components(huion_id)
+    wacom_components: list[TabletComponent] = devices.get_components(wacom_id)
     huion: Tablet = Tablet(
         "Huion",
         huion_components,
@@ -351,7 +351,7 @@ def main() -> None:
         area_components=[ComponentTypes.ERASER, ComponentTypes.STYLUS],
         keybinds={ComponentTypes.STYLUS: [Keybind(key="2", binding="+2")]},
     )
-    tablets: List[Tablet] = [huion, wacom]
+    tablets: list[Tablet] = [huion, wacom]
     screen_arg: str = sys.argv[1]
     if screen_arg in ["left", "right"]:
         current_screen: Screen | None = None
