@@ -7,15 +7,14 @@ import shutil
 import subprocess
 import sys
 import time
-from typing import Sequence
-
+from collections.abc import Sequence
 
 DEFAULT_PORT = "5555"
 IP_RE = r"\d+\.\d+\.\d+\.\d+"
 
 
 def run(command: Sequence[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(command, text=True, capture_output=True)
+    return subprocess.run(command, text=True, capture_output=True, check=False)
 
 
 def run_or_exit(
