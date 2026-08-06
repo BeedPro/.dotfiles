@@ -11,3 +11,12 @@ sudo xbps-install -Sy \
     steam
 
 flatpak install -y flathub org.prismlauncher.PrismLauncher
+
+printf 'Install game streaming apps? [y/N]: '
+read -r choice
+
+case "$choice" in
+    y|Y|yes|YES)
+        add/game-stream
+        ;;
+esac
