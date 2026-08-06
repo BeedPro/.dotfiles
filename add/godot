@@ -5,5 +5,5 @@ set -eu
 
 sudo xbps-install -Sy godot godot-export-templates
 
-mkdir $HOME/.local/share/godot
-ln -sfn /usr/lib/godot/export_templates $HOME/.local/share/godot/export_templates
+mkdir -p "$HOME/.local/share/godot"
+ln -sfn /usr/lib/godot/export_templates "$HOME/.local/share/godot/export_templates"

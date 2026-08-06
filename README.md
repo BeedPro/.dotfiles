@@ -139,7 +139,7 @@ add/qemu-kvm
 Run this on laptops where TLP power management is wanted:
 
 ```bash
-add/powerman
+add/power
 ```
 
 ## Laptop Lid Suspend

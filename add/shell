@@ -18,7 +18,7 @@ sudo xbps-install -Sy \
     stow \
     unzip \
     wget \
-    xdg-utils \
+    xdg-utils
 
 bat cache --build
 sudo chsh -s /bin/bash root
