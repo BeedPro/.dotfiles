@@ -1,6 +1,0 @@
-#!/bin/sh
-set -eu
-
-# tags: #pkg
-
-sudo xbps-install -Sy obs
