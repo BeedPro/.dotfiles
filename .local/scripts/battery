@@ -6,7 +6,6 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Optional
 
 
 def command_output(*args: str) -> str:
@@ -51,7 +50,7 @@ def main() -> int:
     return 0
 
 
-def find_battery_line(bat_number: str) -> Optional[str]:
+def find_battery_line(bat_number: str) -> str | None:
     acpi_lines = command_output("acpi", "-b").splitlines()
     return next(
         (line for line in acpi_lines if f"Battery {bat_number}" in line),
@@ -59,7 +58,7 @@ def find_battery_line(bat_number: str) -> Optional[str]:
     )
 
 
-def parse_battery_line(acpi: str) -> Optional[tuple[str, int]]:
+def parse_battery_line(acpi: str) -> tuple[str, int] | None:
     match = re.search(r": ([\w\s]+), (\d+)%", acpi)
     if not match:
         return None
