@@ -64,7 +64,10 @@ alias cp='cp -v'
 
 alias grep='grep --color=auto'
 alias python='python3'
-alias fonts='fc-list | grep -ioE ": [^:]*$1[^:]+:" | sed -E "s/(^: |:)//g" | tr , "\n" | sort | uniq'
+
+fonts() {
+  fc-list | command grep -ioE ": [^:]*${1:-}[^:]+:" | sed -E "s/(^: |:)//g" | tr , "\n" | sort | uniq
+}
 
 source $HOME/.config/fzf/themes/dark.sh
 export FZF_DEFAULT_OPTS="--layout=reverse --height=~14 ${FZF_DEFAULT_OPTS:-}"

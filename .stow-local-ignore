@@ -44,4 +44,3 @@ rem
 vial-qmk
 .mozilla
 .voidlinux
-.config/systemd/user/mpd-mpris.service
