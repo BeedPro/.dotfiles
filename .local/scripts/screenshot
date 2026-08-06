@@ -7,10 +7,10 @@ import re
 import subprocess
 import sys
 import tempfile
+from collections.abc import Sequence
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Sequence
-
+from typing import Any
 
 Geometry = tuple[int, int, int, int]
 
@@ -47,6 +47,7 @@ def xrandr_output() -> str:
         ["xrandr", "--listactivemonitors"],
         text=True,
         capture_output=True,
+        check=False,
     )
 
     if result.returncode == 0:
@@ -227,10 +228,10 @@ def fork_viewer(
 
 
 def parse_args() -> argparse.Namespace:
-    usage = " ".join((
-        "%(prog)s [everything|screen|window|selection]",
-        "[--show] [--full-screen] [--no-save] [--no-notify]",
-    ))
+    usage = (
+        "%(prog)s [everything|screen|window|selection] "
+        "[--show] [--full-screen] [--no-save] [--no-notify]"
+    )
     parser = argparse.ArgumentParser(
         usage=usage,
     )
@@ -246,9 +247,8 @@ def final_file(timestamp: str, save_screenshot: bool) -> Path:
     if save_screenshot:
         return SCREENSHOT_DIR / f"{timestamp}.png"
 
-    temporary_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
-    temporary_file.close()
-    return Path(temporary_file.name)
+    with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as temporary_file:
+        return Path(temporary_file.name)
 
 
 def finish_without_viewer(
@@ -265,7 +265,7 @@ def finish_without_viewer(
 
 def main() -> int:
     args = parse_args()
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    timestamp = datetime.now().astimezone().strftime("%Y%m%d-%H%M%S")
     save_screenshot = not args.no_save
     path = final_file(timestamp, save_screenshot)
 
