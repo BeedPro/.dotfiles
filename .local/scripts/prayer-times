@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 import json
-from datetime import datetime, timedelta
+from collections.abc import Callable
+from datetime import datetime, time, timedelta
+from json import JSONDecodeError
 from pathlib import Path
-from typing import Any, Callable, TypeVar
+from typing import Any, TypeVar
+from urllib.error import URLError
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
@@ -24,12 +27,23 @@ T = TypeVar("T")
 
 
 def run_or_none(callback: Callable[[], T]) -> T | None:
-    try: return callback()
-    except Exception: return None
+    try:
+        return callback()
+    except (
+        OSError,
+        JSONDecodeError,
+        KeyError,
+        RuntimeError,
+        TimeoutError,
+        TypeError,
+        URLError,
+        ValueError,
+    ):
+        return None
 
 
 def fetch_prayer_times() -> JsonObject:
-    date_str = datetime.now().strftime("%d-%m-%Y")
+    date_str = datetime.now().astimezone().strftime("%d-%m-%Y")
     url = f"{TIMINGS_URL}/{date_str}?{urlencode(TIMINGS_PARAMS)}"
     response = urlopen(url, timeout=10)
     try: return json.loads(response.read().decode())
@@ -55,7 +69,7 @@ def cache_date(data: JsonObject) -> str | None:
 
 
 def load_prayer_times() -> JsonObject:
-    today = datetime.now().strftime("%d-%m-%Y")
+    today = datetime.now().astimezone().strftime("%d-%m-%Y")
     cached_data = read_cache()
     if cached_data and cache_date(cached_data) == today: return cached_data
     data = fetch_prayer_times()
@@ -64,10 +78,10 @@ def load_prayer_times() -> JsonObject:
 
 
 def parse_time_today(time_str: str) -> datetime:
-    now = datetime.now()
+    now = datetime.now().astimezone()
     clean_time = time_str.split(" ")[0]
-    parsed_time = datetime.strptime(clean_time, "%H:%M")
-    return parsed_time.replace(year=now.year, month=now.month, day=now.day)
+    parsed_time = time.fromisoformat(clean_time)
+    return datetime.combine(now.date(), parsed_time, tzinfo=now.tzinfo)
 
 
 def result_for_future(
@@ -89,7 +103,7 @@ def result_after_isha(timings: dict[str, str]) -> PrayerWindow:
 
 
 def find_future_prayer(parsed: ParsedTimings) -> FuturePrayer:
-    now = datetime.now()
+    now = datetime.now().astimezone()
     future = [
     (index, name)
     for index, (name, prayer_time) in enumerate(parsed)
