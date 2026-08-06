@@ -3,4 +3,30 @@ set -eu
 
 # tags: #dev
 
+add_root="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+
 sudo xbps-install -Sy openjdk25
+
+printf 'Install SDKMAN? [y/N]: '
+read -r choice
+
+case "$choice" in
+    y|Y|yes|YES)
+        sudo xbps-install -Sy curl unzip zip
+
+        INSTALLER="sdkman-init.sh"
+        CHECKSUM="b7bda3ce24f631d54d6b6b24f9ca32bc0a0e12dde12b2c3c73b1e28c5c36a364"
+        URL="https://get.sdkman.io"
+
+        TMP_DIR="$(mktemp -d)"
+        trap 'rm -rf "$TMP_DIR"' EXIT
+
+        cd "$TMP_DIR"
+
+        curl -fL -o "$INSTALLER" "$URL"
+        printf '%s  %s\n' "$CHECKSUM" "$INSTALLER" | sha256sum --check
+        bash "$INSTALLER"
+
+        . "$HOME/.sdkman/bin/sdkman-init.sh"
+        ;;
+esac
