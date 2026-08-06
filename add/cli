@@ -5,7 +5,11 @@ set -eu
 
 add_root="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 
-sudo xbps-install -Sy fuse-sshfs fastfetch
+sudo xbps-install -Sy \
+    fuse-sshfs \
+    fastfetch \
+    flac \
+    ImageMagick
 
 "$add_root/pde"
 "$add_root/mpd"

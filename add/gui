@@ -7,13 +7,17 @@ add_root="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 
 command -v flatpak >/dev/null 2>&1 || { echo "flatpak is not installed. Run add/flathub first."; exit 1; }
 
-sudo xbps-install -Sy gucharmap xournalpp gpick
+sudo xbps-install -Sy \
+    gucharmap \
+    xournalpp \
+    gpick \
+    mpv \
+    nsxiv
 
 flatpak install -y flathub com.github.tchx84.Flatseal
 
 "$add_root/firefox"
 "$add_root/readers"
-"$add_root/media"
 "$add_root/vorta"
 "$add_root/espanso"
 "$add_root/emacs"
