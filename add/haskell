@@ -38,9 +38,9 @@ chmod +x "$TARGET_BIN"
 
 export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH"
 
-ghcup install ghc 9.14.1 --set
-ghcup install cabal 3.16.1.0
-ghcup install stack 3.11.1
+ghcup install ghc --set recommended
+ghcup install cabal latest
+ghcup install stack latest
 cabal update
 
 echo "GHCup installed: $TARGET_BIN"
