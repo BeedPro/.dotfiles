@@ -32,6 +32,7 @@ if [ -n "$info" ] && [ -n "$mute" ]; then
 
     if printf '%s\n' "$mute" | grep -q yes; then
         TITLE="Volume: ${vol}% [muted]"
+        HINT_VALUE=0
         BODY=""
     else
         TITLE="Volume: ${vol}%"
