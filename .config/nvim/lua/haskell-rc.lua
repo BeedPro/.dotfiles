@@ -1,3 +1,5 @@
+-- Use https://github.com/MrcJkb/haskell-tools.nvim for more features!
+
 local lsp = require "lsp-rc"
 local mason = require "mason-rc"
 local quality = require "quality-rc"
