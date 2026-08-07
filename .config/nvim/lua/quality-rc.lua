@@ -39,7 +39,7 @@ end
 configure()
 
 vim.keymap.set({ "n", "x" }, "<leader>cf", function()
-  require("conform").format { lsp_format = "first", async = true }
+  require("conform").format { lsp_format = "fallback", async = true }
 end, { desc = "Format code" })
 
 vim.api.nvim_create_user_command("FormatDisable", function()

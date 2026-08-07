@@ -42,7 +42,9 @@ local function extend_bundles(pattern, exclude)
   end
 end
 
-extend_bundles(vim.fs.joinpath(mason_packages, "java-debug-adapter", "extension", "server", "com.microsoft.java.debug.plugin-*.jar"))
+extend_bundles(
+  vim.fs.joinpath(mason_packages, "java-debug-adapter", "extension", "server", "com.microsoft.java.debug.plugin-*.jar")
+)
 extend_bundles(vim.fs.joinpath(mason_packages, "java-test", "extension", "server", "*.jar"), {
   ["com.microsoft.java.test.runner-jar-with-dependencies.jar"] = true,
   ["jacocoagent.jar"] = true,
@@ -72,7 +74,10 @@ if vim.fn.executable(java_bin) ~= 1 then
 end
 
 if not jdk_home or vim.fn.executable(vim.fs.joinpath(jdk_home, "bin", "javac")) ~= 1 then
-  vim.notify("Java compiler not found for jdtls. Install a full JDK and ensure 'javac' is on PATH.", vim.log.levels.WARN)
+  vim.notify(
+    "Java compiler not found for jdtls. Install a full JDK and ensure 'javac' is on PATH.",
+    vim.log.levels.WARN
+  )
   return
 end
 
@@ -165,3 +170,7 @@ map("v", "<leader>crm", function()
 end, "Extract method")
 map("n", "<leader>tc", jdtls.test_class, "Debug test class")
 map("n", "<leader>tr", jdtls.test_nearest_method, "Debug nearest test")
+
+map({ "n", "x" }, "<leader>cf", function()
+  require("conform").format { lsp_format = "first", async = true }
+end, "Format Java code")
