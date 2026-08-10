@@ -69,6 +69,22 @@ fonts() {
   fc-list | command grep -ioE ": [^:]*${1:-}[^:]+:" | sed -E "s/(^: |:)//g" | tr , "\n" | sort | uniq
 }
 
+distrotime() {
+  local root_device created_at created_ts now_ts days
+
+  root_device=$(findmnt -no SOURCE /) || return
+  created_at=$(sudo tune2fs -l "$root_device" | sed -n 's/^Filesystem created:[[:space:]]*//p') || return
+  created_ts=$(date -d "$created_at" +%s) || return
+  now_ts=$(date +%s) || return
+  days=$(((now_ts - created_ts) / 86400))
+
+  if ((days == 1)); then
+    echo "distro 1 day"
+  else
+    echo "distro $days days"
+  fi
+}
+
 source $HOME/.config/fzf/themes/dark.sh
 export FZF_DEFAULT_OPTS="--layout=reverse --height=~14 ${FZF_DEFAULT_OPTS:-}"
 tmux set-environment -g FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS" 2>/dev/null
