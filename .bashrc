@@ -70,11 +70,10 @@ fonts() {
 }
 
 distrotime() {
-  local root_device created_at created_ts now_ts days
+  local created_ts now_ts days
 
-  root_device=$(findmnt -no SOURCE /) || return
-  created_at=$(sudo tune2fs -l "$root_device" | sed -n 's/^Filesystem created:[[:space:]]*//p') || return
-  created_ts=$(date -d "$created_at" +%s) || return
+  created_ts=$(stat -c %W /) || return
+  ((created_ts > 0)) || return
   now_ts=$(date +%s) || return
   days=$(((now_ts - created_ts) / 86400))
 
