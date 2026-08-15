@@ -13,7 +13,7 @@ matches:
       - name: output
         type: shell
         params:
-          cmd: "python3 /home/beed/.local/scripts/system/hijri.py"
+          cmd: "/home/beed/.local/scripts/hijri-date"
 
   - trigger: ";ar.hijri"
     replace: "{{output}}"
@@ -21,20 +21,4 @@ matches:
       - name: output
         type: shell
         params:
-          cmd: "python3 /home/beed/.local/scripts/system/hijri.py --arabic"
-
-  - trigger: ";en.lhijri"
-    replace: "{{output}}"
-    vars:
-      - name: output
-        type: shell
-        params:
-          cmd: "python3 /home/beed/.local/scripts/system/hijri.py --long"
-
-  - trigger: ";ar.lhijri"
-    replace: "{{output}}"
-    vars:
-      - name: output
-        type: shell
-        params:
-          cmd: "python3 /home/beed/.local/scripts/system/hijri.py --arabic --long"
+          cmd: "/home/beed/.local/scripts/hijri-date --arabic"
