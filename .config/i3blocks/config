@@ -5,7 +5,7 @@ command=~/.local/scripts/battery
 interval=60
 
 [hijri]
-command=~/.local/scripts/hijri-date --arabic
+command=~/.local/scripts/hijri-date --arabic --divider ::
 interval=60
 
 [prayer]

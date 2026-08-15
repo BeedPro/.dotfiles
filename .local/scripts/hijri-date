@@ -175,8 +175,26 @@ def format_hijri_date(hijri: JsonObject, arabic: bool = False) -> str:
     return f"{hijri['year']}.{int(hijri['month']['number']):02d}.{int(hijri['day']):02d}"
 
 
+def divider_from_args(args: list[str]) -> str | None:
+    for index, arg in enumerate(args):
+        if arg.startswith("--divider="):
+            return arg.split("=", 1)[1]
+
+        if arg in {"--divider", "-d"}:
+            next_arg = args[index + 1] if index + 1 < len(args) else None
+            return next_arg if next_arg and not next_arg.startswith("-") else "::"
+
+    return None
+
+
+def format_output(value: str, divider: str | None) -> str:
+    return f"{divider} {value}" if divider else value
+
+
 def main() -> None:
-    arabic_output = any(arg in {"--arabic", "-a"} for arg in sys.argv[1:])
+    args = sys.argv[1:]
+    arabic_output = any(arg in {"--arabic", "-a"} for arg in args)
+    divider = divider_from_args(args)
 
     try:
         effective_date = effective_gregorian_date()
@@ -189,17 +207,17 @@ def main() -> None:
         TypeError,
         ValueError,
     ):
-        print(":: --")
+        print(format_output("--", divider))
         return
 
     cache = load_cache()
     hijri = fetch_or_cached_hijri(effective_date, cache_key, cache)
 
     if not hijri:
-        print(":: --")
+        print(format_output("--", divider))
         return
 
-    print(f":: {format_hijri_date(hijri, arabic=arabic_output)}")
+    print(format_output(format_hijri_date(hijri, arabic=arabic_output), divider))
 
 
 if __name__ == "__main__":
