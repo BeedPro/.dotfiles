@@ -1,11 +1,11 @@
 matches:
   - trigger: ";date"
-    replace: "{{mydate}}"
+    replace: "{{cdate}}"
     vars:
-      - name: mydate
+      - name: cdate
         type: date
         params:
-          format: "%Y-%m-%d"
+          format: "%Y.%m.%d"
 
   - trigger: ";en.hijri"
     replace: "{{output}}"
