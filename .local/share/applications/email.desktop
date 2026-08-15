@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Email
-Exec=/home/beed/.local/scripts/openapps email
+Exec=/home/beed/.dotfiles/.local/bin/opener email
 Type=Application
 Icon=email
 Terminal=false

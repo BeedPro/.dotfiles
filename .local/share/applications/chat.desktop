@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Chat
-Exec=/home/beed/.local/scripts/openapps chat
+Exec=/home/beed/.dotfiles/.local/bin/opener chat
 Type=Application
 Icon=internet-chat
 Terminal=false

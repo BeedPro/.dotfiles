@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=wscrcpy
-Exec=/home/beed/.local/scripts/wscrcpy -y
+Exec=/home/beed/.dotfiles/.local/bin/wscrcpy -y
 Icon=scrcpy
 Type=Application
 Terminal=false
