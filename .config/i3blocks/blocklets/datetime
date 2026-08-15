@@ -1,24 +1,14 @@
-#!/usr/bin/env python3
+#!/bin/sh
 
-from datetime import datetime
-from pathlib import Path
+OUTPUT=$(date '+%Y.%m.%d %H:%M:%S')
+DIVIDER_FILE="$HOME/.config/i3blocks/divider"
 
+if [ -r "$DIVIDER_FILE" ]; then
+    IFS= read -r DIVIDER < "$DIVIDER_FILE"
+fi
 
-def read_default_divider() -> str | None:
-    try:
-        return (Path(__file__).resolve().parent.parent / "divider").read_text().splitlines()[0]
-    except (IndexError, OSError):
-        return None
-
-
-def format_output(value: str, divider: str | None) -> str:
-    return f"{divider} {value}" if divider else value
-
-
-def main() -> None:
-    output = datetime.now().strftime("%Y.%m.%d %H:%M:%S")
-    print(format_output(output, read_default_divider()))
-
-
-if __name__ == "__main__":
-    main()
+if [ -n "$DIVIDER" ]; then
+    printf '%s %s\n' "$DIVIDER" "$OUTPUT"
+else
+    printf '%s\n' "$OUTPUT"
+fi
