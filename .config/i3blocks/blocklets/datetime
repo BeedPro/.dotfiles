@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+
+from datetime import datetime
+from pathlib import Path
+
+
+def read_default_divider() -> str | None:
+    try:
+        return (Path(__file__).resolve().parent.parent / "divider").read_text().splitlines()[0]
+    except (IndexError, OSError):
+        return None
+
+
+def format_output(value: str, divider: str | None) -> str:
+    return f"{divider} {value}" if divider else value
+
+
+def main() -> None:
+    output = datetime.now().strftime("%Y.%m.%d %H:%M:%S")
+    print(format_output(output, read_default_divider()))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,17 +1,17 @@
 separator=false
 
 [battery]
-command=~/.local/scripts/battery
+command=~/.config/i3blocks/blocklets/battery
 interval=60
 
 [hijri]
-command=~/.local/scripts/hijri-date --arabic --divider ::
+command=~/.config/i3blocks/blocklets/hijri-date --arabic
 interval=60
 
 [prayer]
-command=~/.local/scripts/prayer-times
+command=~/.config/i3blocks/blocklets/prayer-times
 interval=60
 
 [datetime]
-command=~/.local/scripts/datetime
+command=~/.config/i3blocks/blocklets/datetime
 interval=1

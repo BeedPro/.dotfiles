@@ -22,6 +22,7 @@ def command_output(*args: str) -> str:
 def main() -> int:
     bat_number = os.environ.get("BAT_NUMBER", "0")
     label = os.environ.get("LABEL", "")
+    divider = read_default_divider()
 
     # Select the configured battery from acpi output.
     acpi = find_battery_line(bat_number)
@@ -35,7 +36,8 @@ def main() -> int:
         return 1
 
     status, percent = battery
-    short_text = f":: {label}{percent}%{status_suffix(status)}"
+    text = f"{label}{percent}%{status_suffix(status)}"
+    short_text = format_output(text, divider)
 
     print(short_text)
 
@@ -48,6 +50,17 @@ def main() -> int:
         return 33
 
     return 0
+
+
+def read_default_divider() -> str | None:
+    try:
+        return (Path(__file__).resolve().parent.parent / "divider").read_text().splitlines()[0]
+    except (IndexError, OSError):
+        return None
+
+
+def format_output(value: str, divider: str | None) -> str:
+    return f"{divider} {value}" if divider else value
 
 
 def find_battery_line(bat_number: str) -> str | None:

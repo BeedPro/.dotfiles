@@ -175,16 +175,11 @@ def format_hijri_date(hijri: JsonObject, arabic: bool = False) -> str:
     return f"{hijri['year']}.{int(hijri['month']['number']):02d}.{int(hijri['day']):02d}"
 
 
-def divider_from_args(args: list[str]) -> str | None:
-    for index, arg in enumerate(args):
-        if arg.startswith("--divider="):
-            return arg.split("=", 1)[1]
-
-        if arg in {"--divider", "-d"}:
-            next_arg = args[index + 1] if index + 1 < len(args) else None
-            return next_arg if next_arg and not next_arg.startswith("-") else "::"
-
-    return None
+def read_default_divider() -> str | None:
+    try:
+        return (Path(__file__).resolve().parent.parent / "divider").read_text().splitlines()[0]
+    except (IndexError, OSError):
+        return None
 
 
 def format_output(value: str, divider: str | None) -> str:
@@ -194,7 +189,7 @@ def format_output(value: str, divider: str | None) -> str:
 def main() -> None:
     args = sys.argv[1:]
     arabic_output = any(arg in {"--arabic", "-a"} for arg in args)
-    divider = divider_from_args(args)
+    divider = read_default_divider()
 
     try:
         effective_date = effective_gregorian_date()

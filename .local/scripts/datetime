@@ -1,4 +1,0 @@
-#!/bin/sh
-OUTPUT=$(date '+%Y.%m.%d %H:%M:%S')
-
-printf ':: %s\n' "$OUTPUT"

@@ -127,8 +127,19 @@ def format_output() -> str:
     return f"{current_name[:2]}:{next_name[:2]}[{hh}:{mm}]"
 
 
+def read_default_divider() -> str | None:
+    try:
+        return (Path(__file__).resolve().parent.parent / "divider").read_text().splitlines()[0]
+    except (IndexError, OSError):
+        return None
+
+
+def with_divider(value: str, divider: str | None) -> str:
+    return f"{divider} {value}" if divider else value
+
+
 def main() -> None:
-    print(run_or_none(format_output) or "--")
+    print(with_divider(run_or_none(format_output) or "--", read_default_divider()))
 
 
 if __name__ == "__main__":
