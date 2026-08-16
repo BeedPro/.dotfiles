@@ -40,6 +40,9 @@ if [ -n "$info" ] && [ -n "$mute" ]; then
     fi
 fi
 
+printf '%s\n' "$TITLE"
+[ -n "$BODY" ] && printf '%s\n' "$BODY"
+
 notify-send \
     -r 9999 \
     -t 1000 \
