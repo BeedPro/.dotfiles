@@ -33,14 +33,17 @@ CONFIG = LauncherConfig(
     static_targets={
         "dotfiles": Path("~/.dotfiles"),
         "home": Path("~"),
+        "local/share": Path("~/.dotfiles/.local/share"),
+        "local/bin": Path("~/.dotfiles/.local/bin"),
         "tmp": Path("/tmp"),
-        "local/share": Path("~/.local/share"),
-        "local/bin": Path("~/.local/bin"),
     },
     directory_sources=(
         DirectorySource(base_dir=Path("~/Projects"), depth=2, include_hidden=True),
         DirectorySource(
             base_dir=Path("~/.dotfiles/.config"), depth=1, key_prefix="config/"
+        ),
+        DirectorySource(
+            base_dir=Path("~/.dotfiles/.local/share"), depth=1, key_prefix="local/share/"
         ),
         DirectorySource(
             base_dir=Path("~/Compendium"), depth=1, key_prefix="compendium/"
