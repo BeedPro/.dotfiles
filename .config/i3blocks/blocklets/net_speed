@@ -46,7 +46,7 @@ fi
 printf '%s %s %s\n' "$NOW" "$RX" "$TX" > "$STATE_FILE"
 
 if [ -z "$PREV_NOW" ] || [ -z "$PREV_RX" ] || [ -z "$PREV_TX" ]; then
-    format_output "DOWN 0B UP 0B/s"
+    format_output "D 0B U 0B/s"
     exit 0
 fi
 
@@ -58,4 +58,4 @@ UP=$(((TX - PREV_TX) / ELAPSED))
 [ "$DOWN" -ge 0 ] || DOWN=0
 [ "$UP" -ge 0 ] || UP=0
 
-format_output "DOWN $(format_rate "$DOWN") UP $(format_rate "$UP")/s"
+format_output "D $(format_rate "$DOWN") U $(format_rate "$UP")/s"
