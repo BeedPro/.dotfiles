@@ -60,11 +60,11 @@ bindsym XF86AudioLowerVolume exec --no-startup-id ~/.local/scripts/volume down
 bindsym XF86AudioMute exec --no-startup-id ~/.local/scripts/volume mute
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
-bindsym $mod+F12 exec --no-startup-id ~/.local/scripts/xswapkb
+bindsym $mod+F12 exec --no-startup-id ~/.local/bin/xswapkb
 
-bindsym Print exec --no-startup-id ~/.local/scripts/screenshot selection
-bindsym $mod+Shift+Print exec --no-startup-id ~/.local/scripts/screenshot everything --show
-bindsym $mod+control+Print exec --no-startup-id ~/.local/scripts/screenshot window --show
+bindsym Print exec --no-startup-id ~/.local/bin/xshot selection
+bindsym $mod+Shift+Print exec --no-startup-id ~/.local/bin/xshot everything --show
+bindsym $mod+control+Print exec --no-startup-id ~/.local/bin/xshot window --show
 
 bindsym Mod1+Tab exec --no-startup-id rofi -show window
 bindsym $mod+Tab workspace back_and_forth
@@ -152,7 +152,7 @@ bindsym $mod+period focus output right
 bindsym $mod+Shift+comma move container to output left
 bindsym $mod+Shift+period move container to output right
 
-bindsym $mod+Mod1+f exec --no-startup-id ~/.local/scripts/screenshot screen --full-screen --no-save --no-notify
+bindsym $mod+Mod1+f exec --no-startup-id ~/.local/bin/xshot screen --full-screen --no-save --no-notify
 bindsym $mod+Mod1+b bar mode toggle
 bindsym $mod+Mod1+r reload
 bindsym $mod+Mod1+t exec --no-startup-id ~/.local/bin/thogle --rofi
