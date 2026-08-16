@@ -1,0 +1,21 @@
+#!/bin/sh
+
+DIVIDER_FILE="$HOME/.config/i3blocks/divider"
+if [ -r "$DIVIDER_FILE" ]; then
+    IFS= read -r DIVIDER < "$DIVIDER_FILE"
+fi
+
+format_output() {
+    if [ -n "$DIVIDER" ]; then
+        printf '%s %s\n' "$DIVIDER" "$1"
+    else
+        printf '%s\n' "$1"
+    fi
+}
+
+MOUNTPOINT=${MOUNTPOINT:-/}
+USAGE=$(df -h "$MOUNTPOINT" 2>/dev/null | awk 'NR == 2 { print $5 }')
+
+[ -n "$USAGE" ] || exit 0
+
+format_output "/ $USAGE"

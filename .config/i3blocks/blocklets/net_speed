@@ -1,0 +1,61 @@
+#!/bin/sh
+
+DIVIDER_FILE="$HOME/.config/i3blocks/divider"
+if [ -r "$DIVIDER_FILE" ]; then
+    IFS= read -r DIVIDER < "$DIVIDER_FILE"
+fi
+
+format_output() {
+    if [ -n "$DIVIDER" ]; then
+        printf '%s %s\n' "$DIVIDER" "$1"
+    else
+        printf '%s\n' "$1"
+    fi
+}
+
+format_rate() {
+    awk -v bytes="$1" 'BEGIN {
+        if (bytes >= 1073741824) {
+            printf "%.1fG", bytes / 1073741824
+        } else if (bytes >= 1048576) {
+            printf "%.1fM", bytes / 1048576
+        } else if (bytes >= 1024) {
+            printf "%.0fK", bytes / 1024
+        } else {
+            printf "%dB", bytes
+        }
+    }'
+}
+
+IFACE=${IFACE:-$(ip route 2>/dev/null | awk '$1 == "default" { for (i = 1; i <= NF; i++) if ($i == "dev") { print $(i + 1); exit } }')}
+[ -n "$IFACE" ] || exit 0
+
+RX_FILE="/sys/class/net/$IFACE/statistics/rx_bytes"
+TX_FILE="/sys/class/net/$IFACE/statistics/tx_bytes"
+[ -r "$RX_FILE" ] && [ -r "$TX_FILE" ] || exit 0
+
+IFS= read -r RX < "$RX_FILE" || exit 0
+IFS= read -r TX < "$TX_FILE" || exit 0
+NOW=$(date +%s)
+STATE_FILE="/tmp/i3blocks_net_speed_$IFACE"
+
+if [ -r "$STATE_FILE" ]; then
+    IFS=' ' read -r PREV_NOW PREV_RX PREV_TX < "$STATE_FILE"
+fi
+
+printf '%s %s %s\n' "$NOW" "$RX" "$TX" > "$STATE_FILE"
+
+if [ -z "$PREV_NOW" ] || [ -z "$PREV_RX" ] || [ -z "$PREV_TX" ]; then
+    format_output "D 0B U 0B/s"
+    exit 0
+fi
+
+ELAPSED=$((NOW - PREV_NOW))
+[ "$ELAPSED" -gt 0 ] || ELAPSED=1
+
+DOWN=$(((RX - PREV_RX) / ELAPSED))
+UP=$(((TX - PREV_TX) / ELAPSED))
+[ "$DOWN" -ge 0 ] || DOWN=0
+[ "$UP" -ge 0 ] || UP=0
+
+format_output "D $(format_rate "$DOWN") U $(format_rate "$UP")/s"

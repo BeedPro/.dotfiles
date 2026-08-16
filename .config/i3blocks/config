@@ -1,5 +1,21 @@
 separator=false
 
+[net_speed]
+command=~/.config/i3blocks/blocklets/net_speed
+interval=5
+
+[disk]
+command=~/.config/i3blocks/blocklets/disk
+interval=30
+
+[memory]
+command=~/.config/i3blocks/blocklets/memory
+interval=5
+
+[load_average]
+command=~/.config/i3blocks/blocklets/load_average
+interval=5
+
 [battery]
 command=~/.config/i3blocks/blocklets/battery
 interval=60
