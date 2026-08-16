@@ -34,7 +34,6 @@ CONFIG = LauncherConfig(
         "dotfiles": Path("~/.dotfiles"),
         "home": Path("~"),
         "tmp": Path("/tmp"),
-        "local/scripts": Path("~/.local/scripts"),
         "local/share": Path("~/.local/share"),
         "local/bin": Path("~/.local/bin"),
     },
