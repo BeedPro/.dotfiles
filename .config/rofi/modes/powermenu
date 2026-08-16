@@ -10,7 +10,7 @@ fi
 if [ "$choice" = "logout" ]; then
     pkill i3
 elif [ "$choice" = "lock" ]; then
-    "$HOME/.local/scripts/locker"
+    "$HOME/.config/rofi/modes/locker"
 elif [ -n "$choice" ]; then
     loginctl "$choice"
 fi

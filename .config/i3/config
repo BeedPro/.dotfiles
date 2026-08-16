@@ -78,12 +78,12 @@ bindsym $mod+n exec --no-startup-id emacsclient -c -s default
 
 bindsym $mod+Return exec --no-startup-id alacritty
 bindsym $mod+w exec --no-startup-id $browser
-bindsym $mod+Shift+w exec --no-startup-id ~/.local/scripts/bookmarks
+bindsym $mod+Shift+w exec --no-startup-id ~/.config/rofi/modes/bookmarks
 
-bindsym $mod+x exec --no-startup-id ~/.local/scripts/locker
+bindsym $mod+x exec --no-startup-id ~/.config/rofi/modes/locker
 
-bindsym $mod+Shift+x exec --no-startup-id ~/.local/scripts/powermenu
-bindsym $mod+Shift+c exec --no-startup-id ~/.local/scripts/killmenu
+bindsym $mod+Shift+x exec --no-startup-id ~/.config/rofi/modes/powermenu
+bindsym $mod+Shift+c exec --no-startup-id ~/.config/rofi/modes/killmenu
 
 bindsym $mod+c kill
 bindsym --release button2 kill

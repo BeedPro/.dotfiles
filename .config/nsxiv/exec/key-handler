@@ -15,7 +15,7 @@ from pathlib import Path
 HOME = Path.home()
 WALLPAPER = HOME / ".config/wallpaper/current.jpg"
 SCREENS = HOME / ".screenlayout/screens.sh"
-DBROWSE = HOME / ".local/scripts/dbrowse"
+DBROWSE = HOME / ".config/rofi/modes/dbrowse"
 
 
 def command_exists(command: str | Path) -> bool:
