@@ -236,7 +236,7 @@ def export_gtk_files(prefs: GtkPreferences) -> None:
     write_gtk_file(
         Path.home() / ".gtkrc-2.0",
         [
-            "# DO NOT EDIT! This file will be overwritten by teme.",
+            "# DO NOT EDIT! This file will be overwritten by thogle.",
             "# Any customization should be done in ~/.gtkrc-2.0.mine instead.",
             "",
             f'include "{Path.home()}/.gtkrc-2.0.mine"',
@@ -260,7 +260,7 @@ def export_gtk_files(prefs: GtkPreferences) -> None:
     write_gtk_file(
         Path.home() / ".icons/default/index.theme",
         [
-            "# This file is written by teme. Do not edit.",
+            "# This file is written by thogle. Do not edit.",
             "[Icon Theme]",
             "Name=Default",
             "Comment=Default Cursor Theme",
@@ -566,7 +566,7 @@ def reset_terminal_sessions() -> None:
 
 def main() -> None:
     args = _parse_args()
-    if args.confirm and not _confirm_with_rofi("Run teme?"):
+    if args.confirm and not _confirm_with_rofi("Run thogle?"):
         print("Cancelled")
         return
     mode = toggle_bashrc()
