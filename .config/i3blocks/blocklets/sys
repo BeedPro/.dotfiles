@@ -1,0 +1,25 @@
+#!/bin/sh
+
+DIVIDER_FILE="$HOME/.config/i3blocks/divider"
+if [ -r "$DIVIDER_FILE" ]; then
+    IFS= read -r DIVIDER < "$DIVIDER_FILE"
+fi
+
+format_output() {
+    if [ -n "$DIVIDER" ]; then
+        printf '%s %s\n' "$DIVIDER" "$1"
+    else
+        printf '%s\n' "$1"
+    fi
+}
+
+DISK=$(df / 2>/dev/null | awk 'NR == 2 { gsub(/%/, "", $5); print $5 }')
+RAM=$(free 2>/dev/null | awk '$1 == "Mem:" { printf "%d", ($3 / $2) * 100 }')
+
+read -r LOAD _ < /proc/loadavg || exit 0
+CORES=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
+CPU=$(awk -v avg="$LOAD" -v cores="$CORES" 'BEGIN { printf "%d", (avg / cores) * 100 }')
+
+[ -n "$DISK" ] && [ -n "$RAM" ] && [ -n "$CPU" ] || exit 0
+
+format_output "$DISK:$RAM:$CPU"
