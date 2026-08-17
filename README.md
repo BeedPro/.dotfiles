@@ -58,6 +58,18 @@ add/xfce4
 
 This script reboots when it finishes.
 
+For Sway sessions that need the unsupported GPU flag, set
+`/usr/share/wayland-sessions/sway.desktop` to:
+
+```ini
+[Desktop Entry]
+Name=Sway
+Comment=An i3-compatible Wayland compositor
+Exec=dbus-run-session -- sway --unsupported-gpu
+Type=Application
+DesktopNames=sway;wlroots
+```
+
 ### Install Graphics Drivers
 
 After rebooting, choose the script for the machine.
