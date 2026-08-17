@@ -20,12 +20,8 @@ interval=5
 command=~/.config/i3blocks/blocklets/battery
 interval=60
 
-[hijri]
-command=~/.config/i3blocks/blocklets/hijri-date --arabic
-interval=60
-
-[prayer]
-command=~/.config/i3blocks/blocklets/prayer-times
+[islaminfo]
+command=~/.config/i3blocks/blocklets/islaminfo --arabic
 interval=60
 
 [datetime]

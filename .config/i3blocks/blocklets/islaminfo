@@ -1,0 +1,260 @@
+#!/usr/bin/env python3
+
+import json
+import sys
+from collections.abc import Callable
+from datetime import datetime, time, timedelta
+from json import JSONDecodeError
+from pathlib import Path
+from typing import Any, TypeVar
+from urllib.error import URLError
+from urllib.parse import urlencode
+from urllib.request import urlopen
+
+CACHE_FILE = Path("/tmp/prayer-times.json")
+HIJRI_CACHE_FILE = Path("/tmp/hijri-date.json")
+TIMINGS_URL = "https://api.aladhan.com/v1/timings"
+TIMING_ORDER = ("Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha")
+TIMINGS_PARAMS = {
+    "latitude": 51.5074,
+    "longitude": -0.1278,
+    "method": 2,
+    "timezonestring": "Europe/London",
+}
+ARABIC_DIGITS = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
+
+JsonObject = dict[str, Any]
+PrayerWindow = tuple[str, str, str, str]
+ParsedTimings = list[tuple[str, datetime]]
+FuturePrayer = tuple[int, str] | None
+T = TypeVar("T")
+
+
+def run_or_none(callback: Callable[[], T]) -> T | None:
+    try:
+        return callback()
+    except (
+        OSError,
+        JSONDecodeError,
+        KeyError,
+        RuntimeError,
+        TimeoutError,
+        TypeError,
+        URLError,
+        ValueError,
+    ):
+        return None
+
+
+def date_str(dt: datetime) -> str:
+    return dt.strftime("%d-%m-%Y")
+
+
+def read_default_divider() -> str | None:
+    try:
+        return (Path(__file__).resolve().parent.parent / "divider").read_text().splitlines()[0]
+    except (IndexError, OSError):
+        return None
+
+
+def with_divider(value: str) -> str:
+    divider = read_default_divider()
+    return f"{divider} {value}" if divider else value
+
+
+def read_json(path: Path) -> JsonObject | None:
+    if not path.exists():
+        return None
+
+
+    return run_or_none(lambda: json.loads(path.read_text()))
+
+
+def write_json(path: Path, data: JsonObject) -> None:
+    run_or_none(lambda: path.write_text(json.dumps(data)))
+
+
+def fetch_timings(dt: datetime) -> JsonObject:
+    url = f"{TIMINGS_URL}/{date_str(dt)}?{urlencode(TIMINGS_PARAMS)}"
+    response = urlopen(url, timeout=10)
+
+    try:
+        data = json.loads(response.read().decode())
+    finally:
+        response.close()
+
+    if data.get("code") != 200:
+        raise RuntimeError("API error")
+
+    return data
+
+
+def cache_date(data: JsonObject) -> str | None:
+    return data.get("data", {}).get("date", {}).get("gregorian", {}).get("date")
+
+
+def load_timings(dt: datetime | None = None) -> JsonObject:
+    dt = dt or datetime.now().astimezone()
+    cached = read_json(CACHE_FILE)
+
+    if cached and cache_date(cached) == date_str(dt):
+        return cached
+
+    data = fetch_timings(dt)
+    write_json(CACHE_FILE, data)
+    return data
+
+
+def parse_time_today(time_str: str) -> datetime:
+    now = datetime.now().astimezone()
+    clean_time = time_str.split(" ")[0]
+    parsed_time = time.fromisoformat(clean_time)
+    return datetime.combine(now.date(), parsed_time, tzinfo=now.tzinfo)
+
+
+def result_for_future(
+    index: int,
+    next_name: str,
+    timings: dict[str, str],
+    parsed: ParsedTimings,
+) -> PrayerWindow:
+    current_name = parsed[index - 1][0] if index > 0 else "Isha"
+    current_time = timings[current_name].split(" ")[0]
+    next_time = timings[next_name].split(" ")[0]
+    return current_name, current_time, next_name, next_time
+
+
+def result_after_isha(timings: dict[str, str]) -> PrayerWindow:
+    fajr_time = parse_time_today(timings["Fajr"]) + timedelta(days=1)
+    current_time = timings["Isha"].split(" ")[0]
+    return "Isha", current_time, "Fajr", fajr_time.strftime("%H:%M")
+
+
+def find_future_prayer(parsed: ParsedTimings) -> FuturePrayer:
+    now = datetime.now().astimezone()
+
+    for index, (name, prayer_time) in enumerate(parsed):
+        if now < prayer_time:
+            return index, name
+
+    return None
+
+
+def get_current_and_next(timings: dict[str, str]) -> PrayerWindow:
+    parsed = [(name, parse_time_today(timings[name])) for name in TIMING_ORDER]
+    future = find_future_prayer(parsed)
+
+    if future:
+        return result_for_future(future[0], future[1], timings, parsed)
+
+    return result_after_isha(timings)
+
+
+def prayer_output() -> str:
+    data = load_timings()
+    timings = data["data"]["timings"]
+    current_name, _, next_name, next_time = get_current_and_next(timings)
+    hh, mm = next_time.split(":", 1)
+    return f"{current_name[:2]}:{next_name[:2]}[{hh}:{mm}]"
+
+
+def after_maghrib(timings: dict[str, str]) -> bool:
+    maghrib = time.fromisoformat(timings["Maghrib"].split(" ")[0])
+    return datetime.now().astimezone().time() >= maghrib
+
+
+def effective_hijri_date() -> datetime:
+    now = datetime.now().astimezone()
+    timings = load_timings(now)["data"]["timings"]
+
+    if after_maghrib(timings):
+        return now + timedelta(days=1)
+
+    return now
+
+
+def hijri_from_cache(cache: JsonObject | None, key: str) -> JsonObject | None:
+    if not cache or cache.get("key") != key:
+        return None
+
+    return cache.get("hijri")
+
+
+def load_hijri(dt: datetime) -> JsonObject | None:
+    key = date_str(dt)
+    cache = read_json(HIJRI_CACHE_FILE)
+    cached_hijri = hijri_from_cache(cache, key)
+
+    if cached_hijri:
+        return cached_hijri
+
+    try:
+        hijri = load_timings(dt)["data"]["date"]["hijri"]
+    except (
+        OSError,
+        JSONDecodeError,
+        KeyError,
+        RuntimeError,
+        TimeoutError,
+        TypeError,
+        URLError,
+    ):
+        return cache.get("hijri") if cache else None
+
+    write_json(HIJRI_CACHE_FILE, {"key": key, "hijri": hijri})
+    return hijri
+
+
+def format_hijri(hijri: JsonObject, arabic: bool) -> str:
+    day = int(hijri["day"])
+    month = int(hijri["month"]["number"])
+
+    if arabic:
+        return f"{day:02d}.{month:02d}.{hijri['year']}".translate(ARABIC_DIGITS)
+
+    return f"{hijri['year']}.{month:02d}.{day:02d}"
+
+
+def hijri_output(args: list[str]) -> str:
+    effective_date = effective_hijri_date()
+    hijri = load_hijri(effective_date)
+
+    if not hijri:
+        return "--"
+
+    return format_hijri(hijri, arabic=any(arg in {"--arabic", "-a"} for arg in args))
+
+
+def combined_output(args: list[str]) -> str:
+    hijri = run_or_none(lambda: hijri_output(args)) or "--"
+    prayer = run_or_none(prayer_output) or "--"
+    return f"{hijri} {prayer}"
+
+
+def usage() -> str:
+    return "usage: islaminfo [hijri|prayer|all] [--arabic]"
+
+
+def main() -> None:
+    argv = sys.argv[1:]
+    command = argv[0] if argv and argv[0] in {"hijri", "prayer", "all"} else "all"
+    args = argv[1:] if argv and argv[0] == command else argv
+
+    if command == "hijri":
+        print(with_divider(run_or_none(lambda: hijri_output(args)) or "--"))
+        return
+
+    if command == "prayer":
+        print(with_divider(run_or_none(prayer_output) or "--"))
+        return
+
+    if command == "all":
+        print(with_divider(combined_output(args)))
+        return
+
+    print(usage(), file=sys.stderr)
+    raise SystemExit(2)
+
+
+if __name__ == "__main__":
+    main()
