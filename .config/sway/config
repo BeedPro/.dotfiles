@@ -1,0 +1,186 @@
+set $mod Mod4
+set $browser firefox
+set $files thunar
+
+font pango:CommitMono Nerd Font Mono 12
+
+include ~/.config/sway/themes/dark.conf
+
+set $wallpaper ~/.config/wallpaper/current.jpg
+
+output DP-1 mode 1920x1080@143.85Hz position 0 0 transform 270 bg $wallpaper fill
+output DP-3 mode 1920x1080@143.85Hz position 1080 420 transform normal bg $wallpaper fill
+output eDP mode 1920x1200 position 0 0 transform normal bg $wallpaper fit
+
+input type:keyboard xkb_layout gb
+
+exec dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+exec xrdb -merge ~/.Xresources
+
+exec dex --autostart --environment sway
+exec pgrep -x pipewire >/dev/null || pipewire
+exec pgrep -x dunst >/dev/null || dunst
+exec pgrep -x mpd >/dev/null || mpd
+exec pgrep -x xfce-polkit >/dev/null || /usr/libexec/xfce-polkit
+exec pgrep -x keepassxc >/dev/null || keepassxc
+exec pgrep -x swayidle >/dev/null || swayidle -w before-sleep "$HOME/.config/rofi/modes/locker"
+exec pgrep -x espanso >/dev/null || espanso start --unmanaged
+exec pgrep -u "$USER" -f "emacs --daemon=default" >/dev/null || emacs --daemon=default
+exec pgrep -x syncthing >/dev/null || gtk-launch syncthing-start
+
+workspace 1 output DP-3 eDP
+workspace 2 output DP-3 eDP
+workspace 3 output DP-3 eDP
+workspace 4 output DP-3 eDP
+workspace 5 output DP-3 eDP
+workspace 6 output DP-3 eDP
+workspace 7 output DP-3 eDP
+workspace 8 output DP-3 eDP
+workspace 9 output DP-3 eDP
+workspace 10 output DP-1 HDMI-A-0
+
+focus_wrapping workspace
+
+set $chat_ws 7
+
+for_window [app_id="^Firefox$" title="^WhatsApp — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [app_id="^Firefox$" title="^• Discord | Friends — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [app_id="^Firefox$" title="^Element — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [app_id="^Firefox$" title="^Google Messages for web: Conversations — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+
+set $email_ws 8
+
+for_window [app_id="^Firefox$" title="^Gmail — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
+for_window [app_id="^Firefox$" title="^Outlook — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
+
+assign [class="KeePassXC"] number 9
+assign [app_id="org.keepassxc.KeePassXC"] number 9
+
+for_window [class="floatitty"] floating enable, resize set 1024 576, move position center
+for_window [class="pavucontrol"] floating enable, resize set 1024 576, move position center
+for_window [class="Qalculate-gtk"] floating enable, resize set 1024 576, move position center
+for_window [class="Blueman-manager"] floating enable, resize set 1024 576, move position center
+for_window [class="Nm-connection-editor"] floating enable, resize set 1024 576, move position center
+for_window [class="Arandr"] floating enable, resize set 1024 576, move position center
+for_window [class="Xarchiver"] floating enable, resize set 1024 576, move position center
+for_window [app_id="floatitty"] floating enable, resize set 1024 576, move position center
+for_window [app_id="pavucontrol"] floating enable, resize set 1024 576, move position center
+for_window [app_id="qalculate-gtk"] floating enable, resize set 1024 576, move position center
+for_window [app_id="blueman-manager"] floating enable, resize set 1024 576, move position center
+for_window [app_id="nm-connection-editor"] floating enable, resize set 1024 576, move position center
+for_window [app_id="arandr"] floating enable, resize set 1024 576, move position center
+for_window [app_id="xarchiver"] floating enable, resize set 1024 576, move position center
+
+default_border normal 1
+default_floating_border normal 1
+hide_edge_borders smart_no_gaps
+
+floating_modifier $mod
+tiling_drag titlebar
+
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+bindsym XF86MonBrightnessUp   exec --no-startup-id ~/.local/bin/brightman up
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/.local/bin/brightman down
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.local/bin/volman up
+bindsym XF86AudioLowerVolume exec --no-startup-id ~/.local/bin/volman down
+bindsym XF86AudioMute exec --no-startup-id ~/.local/bin/volman mute
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+bindsym $mod+F12 exec --no-startup-id ~/.local/bin/xswapkb
+
+bindsym Print exec --no-startup-id ~/.local/bin/xshot selection
+bindsym $mod+Shift+Print exec --no-startup-id ~/.local/bin/xshot everything --show
+bindsym $mod+control+Print exec --no-startup-id ~/.local/bin/xshot window --show
+
+bindsym Mod1+Tab exec --no-startup-id rofi -show window
+bindsym $mod+Tab workspace back_and_forth
+bindsym $mod+Left workspace prev
+bindsym $mod+Right workspace next
+bindsym $mod+Shift+Left move container to workspace prev
+bindsym $mod+Shift+Right move container to workspace next
+
+bindsym $mod+e exec --no-startup-id $files
+bindsym $mod+n exec --no-startup-id emacsclient -c -s default
+
+bindsym $mod+Return exec --no-startup-id alacritty
+bindsym $mod+w exec --no-startup-id $browser
+bindsym $mod+Shift+w exec --no-startup-id ~/.config/rofi/modes/bookmarks
+
+bindsym $mod+x exec --no-startup-id ~/.config/rofi/modes/locker
+
+bindsym $mod+Shift+x exec --no-startup-id ~/.config/rofi/modes/powermenu
+bindsym $mod+Shift+c exec --no-startup-id ~/.config/rofi/modes/killmenu
+
+bindsym $mod+c kill
+bindsym --release button2 kill
+bindsym button3 floating toggle
+
+bindsym $mod+space exec --no-startup-id rofi -show drun
+
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+control+h resize shrink width 5 px or 5 ppt
+bindsym $mod+control+j resize grow height 5 px or 5 ppt
+bindsym $mod+control+k resize shrink height 5 px or 5 ppt
+bindsym $mod+control+l resize grow width 5 px or 5 ppt
+
+bindsym $mod+b split h
+bindsym $mod+v split v
+
+bindsym $mod+m fullscreen toggle
+
+bindsym $mod+s layout stacking
+bindsym $mod+t layout tabbed
+bindsym $mod+g layout toggle split
+
+bindsym $mod+Shift+f floating toggle
+
+bindsym $mod+f focus mode_toggle
+
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 scratchpad show
+
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move scratchpad
+bindsym $mod+minus floating toggle, sticky toggle
+
+bindsym $mod+Mod1+0 exec --no-startup-id ~/.local/bin/xswacomon 0
+bindsym $mod+Mod1+comma exec --no-startup-id ~/.local/bin/xswacomon left
+bindsym $mod+Mod1+period exec --no-startup-id ~/.local/bin/xswacomon right
+
+bindsym $mod+comma focus output left
+bindsym $mod+period focus output right
+
+bindsym $mod+Shift+comma move container to output left
+bindsym $mod+Shift+period move container to output right
+
+bindsym $mod+Mod1+f exec --no-startup-id ~/.local/bin/xshot screen --full-screen --no-save --no-notify
+bindsym $mod+Mod1+b bar mode toggle
+bindsym $mod+Mod1+r reload
+bindsym $mod+Mod1+t exec --no-startup-id ~/.local/bin/thogle --rofi
