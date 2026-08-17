@@ -16,9 +16,9 @@ format_output() {
 format_rate() {
     awk -v bytes="$1" 'BEGIN {
         if (bytes >= 1073741824) {
-            printf "%.1fG", bytes / 1073741824
+            printf "%.0fG", bytes / 1073741824
         } else if (bytes >= 1048576) {
-            printf "%.1fM", bytes / 1048576
+            printf "%.0fM", bytes / 1048576
         } else if (bytes >= 1024) {
             printf "%.0fK", bytes / 1024
         } else {

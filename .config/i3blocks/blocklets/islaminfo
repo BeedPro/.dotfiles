@@ -15,6 +15,14 @@ CACHE_FILE = Path("/tmp/prayer-times.json")
 HIJRI_CACHE_FILE = Path("/tmp/hijri-date.json")
 TIMINGS_URL = "https://api.aladhan.com/v1/timings"
 TIMING_ORDER = ("Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha")
+PRAYER_LABELS = {
+    "Fajr": "F",
+    "Sunrise": "S",
+    "Dhuhr": "D",
+    "Asr": "A",
+    "Maghrib": "M",
+    "Isha": "I",
+}
 TIMINGS_PARAMS = {
     "latitude": 51.5074,
     "longitude": -0.1278,
@@ -155,7 +163,7 @@ def prayer_output() -> str:
     timings = data["data"]["timings"]
     current_name, _, next_name, next_time = get_current_and_next(timings)
     hh, mm = next_time.split(":", 1)
-    return f"{current_name[:2]}:{next_name[:2]}[{hh}:{mm}]"
+    return f"{PRAYER_LABELS[current_name]}:{PRAYER_LABELS[next_name]}({hh}{mm})"
 
 
 def after_maghrib(timings: dict[str, str]) -> bool:
