@@ -68,15 +68,15 @@ hide_edge_borders smart_no_gaps
 floating_modifier $mod
 tiling_drag titlebar
 
-bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
-bindsym XF86AudioNext exec --no-startup-id playerctl next
-bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+bindsym --locked XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym --locked XF86AudioNext exec --no-startup-id playerctl next
+bindsym --locked XF86AudioPrev exec --no-startup-id playerctl previous
 bindsym XF86MonBrightnessUp   exec --no-startup-id ~/.local/bin/brightman up
 bindsym XF86MonBrightnessDown exec --no-startup-id ~/.local/bin/brightman down
-bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.local/bin/volman up
-bindsym XF86AudioLowerVolume exec --no-startup-id ~/.local/bin/volman down
-bindsym XF86AudioMute exec --no-startup-id ~/.local/bin/volman mute
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym --locked XF86AudioRaiseVolume exec --no-startup-id ~/.local/bin/volman up
+bindsym --locked XF86AudioLowerVolume exec --no-startup-id ~/.local/bin/volman down
+bindsym --locked XF86AudioMute exec --no-startup-id ~/.local/bin/volman mute
+bindsym --locked XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 bindsym $mod+F12 exec --no-startup-id ~/.local/bin/wayswapkb
 
