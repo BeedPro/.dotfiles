@@ -1,0 +1,86 @@
+#!/bin/sh
+
+set -eu
+
+# tags: #app#system#desktop
+
+add_root="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+
+# Lock root account
+sudo -v
+sudo true
+sudo passwd -l root
+
+# System update and repositories
+sudo xbps-install -Sy \
+    void-repo-nonfree \
+    void-repo-multilib \
+    void-repo-multilib-nonfree \
+    linux-firmware
+
+# KDE Plasma base packages
+sudo xbps-install -Sy \
+    firefox \
+    dbus-x11 \
+    psmisc \
+    cronie \
+    xorg \
+    kde-plasma \
+    kde-baseapps \
+    gvfs \
+    ntfs-3g \
+    exfatprogs \
+    udisks2
+
+# KDE Plasma extras
+sudo xbps-install -Sy \
+    xdg-desktop-portal \
+    xdg-desktop-portal-kde \
+    NetworkManager \
+    plasma-nm \
+    plasma-pa \
+    bluedevil \
+    kdegraphics-thumbnailers \
+    ffmpegthumbs \
+    ocean-sound-theme \
+    oxygen-sounds \
+    plasma-browser-integration
+
+# Audio and Bluetooth
+sudo xbps-install -Sy \
+    pipewire \
+    wireplumber \
+    alsa-pipewire \
+    pamixer \
+    libspa-bluetooth
+
+# ALSA compatibility for PipeWire
+sudo mkdir -p /etc/alsa/conf.d
+sudo ln -sfn /usr/share/alsa/alsa.conf.d/50-pipewire.conf /etc/alsa/conf.d/50-pipewire.conf
+sudo ln -sfn /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf /etc/alsa/conf.d/99-pipewire-default.conf
+
+cd ~/.dotfiles
+ln -sfn ../.dotfiles/.config/autostart ~/.config/autostart
+ln -sfn ../.dotfiles/.config/pipewire ~/.config/pipewire
+
+# Start services after packages and config links are in place
+sudo ln -sfn /etc/sv/dbus /var/service/dbus
+sudo ln -sfn /etc/sv/elogind /var/service/elogind
+sudo ln -sfn /etc/sv/sddm /var/service/sddm
+sudo ln -sfn /etc/sv/polkitd /var/service/polkitd
+sudo ln -sfn /etc/sv/cronie /var/service/cronie
+sudo ln -sfn /etc/sv/NetworkManager /var/service/NetworkManager
+sudo ln -sfn /etc/sv/bluetoothd /var/service/bluetoothd
+
+# Add user to common desktop groups
+sudo usermod -aG wheel,audio,video,input,storage,network,bluetooth "$USER"
+
+sudo xbps-install -Sy \
+    papirus-icon-theme \
+    nerd-fonts \
+    noto-fonts-ttf \
+    noto-fonts-cjk \
+    noto-fonts-emoji
+
+# Reboot to apply everything
+sudo reboot

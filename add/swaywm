@@ -1,0 +1,30 @@
+#!/bin/sh
+set -eu
+
+# tags: #app#system#desktop
+
+sudo xbps-install -Sy \
+    sway \
+    swaybg \
+    swayidle \
+    swaylock \
+    xdg-desktop-portal \
+    xdg-desktop-portal-wlr \
+    qt6-wayland \
+    pamixer \
+    bc \
+    brightnessctl \
+    dex \
+    dunst \
+    alacritty \
+    mpd \
+    playerctl \
+    rofi \
+    acpi \
+    jq \
+    grim \
+    grimshot \
+    slurp \
+    wl-clipboard \
+    wdisplays \
+    kanshi
