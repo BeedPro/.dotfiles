@@ -14,19 +14,18 @@ output eDP mode 1920x1200 position 0 0 transform normal bg $wallpaper fit
 
 input type:keyboard xkb_layout gb
 
-exec dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+exec dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway:wlroots XDG_SESSION_DESKTOP=sway XDG_SESSION_TYPE=wayland
+
 exec xrdb -merge ~/.Xresources
 
 exec dex --autostart --environment sway
-exec pgrep -x pipewire >/dev/null || pipewire
-exec pgrep -x dunst >/dev/null || dunst
-exec pgrep -x mpd >/dev/null || mpd
-exec pgrep -x xfce-polkit >/dev/null || /usr/libexec/xfce-polkit
-exec pgrep -x keepassxc >/dev/null || keepassxc
-exec pgrep -x swayidle >/dev/null || swayidle -w before-sleep "$HOME/.config/rofi/modes/locker"
-exec pgrep -x espanso >/dev/null || espanso start --unmanaged
-exec pgrep -u "$USER" -f "emacs --daemon=default" >/dev/null || emacs --daemon=default
-exec pgrep -x syncthing >/dev/null || gtk-launch syncthing-start
+exec pipewire
+exec dunst
+exec mpd
+exec /usr/libexec/xfce-polkit
+exec keepassxc
+exec emacs --daemon=default
+exec gtk-launch syncthing-start
 
 workspace 1 output DP-3 eDP
 workspace 2 output DP-3 eDP
@@ -43,26 +42,18 @@ focus_wrapping workspace
 
 set $chat_ws 7
 
-for_window [app_id="^Firefox$" title="^WhatsApp — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
-for_window [app_id="^Firefox$" title="^• Discord | Friends — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
-for_window [app_id="^Firefox$" title="^Element — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
-for_window [app_id="^Firefox$" title="^Google Messages for web: Conversations — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [app_id="^Firefox$" title="^(?!.*Private Browsing)WhatsApp — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [app_id="^Firefox$" title="^(?!.*Private Browsing)• Discord \| Friends — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [app_id="^Firefox$" title="^(?!.*Private Browsing)Element — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
+for_window [app_id="^Firefox$" title="^(?!.*Private Browsing)Google Messages for web: Conversations — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $chat_ws
 
 set $email_ws 8
 
-for_window [app_id="^Firefox$" title="^Gmail — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
-for_window [app_id="^Firefox$" title="^Outlook — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
+for_window [app_id="^Firefox$" title="^(?!.*Private Browsing)Gmail — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
+for_window [app_id="^Firefox$" title="^(?!.*Private Browsing)Outlook — Mozilla Firefox$"] move --no-auto-back-and-forth to workspace number $email_ws
 
-assign [class="KeePassXC"] number 9
 assign [app_id="org.keepassxc.KeePassXC"] number 9
 
-for_window [class="floatitty"] floating enable, resize set 1024 576, move position center
-for_window [class="pavucontrol"] floating enable, resize set 1024 576, move position center
-for_window [class="Qalculate-gtk"] floating enable, resize set 1024 576, move position center
-for_window [class="Blueman-manager"] floating enable, resize set 1024 576, move position center
-for_window [class="Nm-connection-editor"] floating enable, resize set 1024 576, move position center
-for_window [class="Arandr"] floating enable, resize set 1024 576, move position center
-for_window [class="Xarchiver"] floating enable, resize set 1024 576, move position center
 for_window [app_id="floatitty"] floating enable, resize set 1024 576, move position center
 for_window [app_id="pavucontrol"] floating enable, resize set 1024 576, move position center
 for_window [app_id="qalculate-gtk"] floating enable, resize set 1024 576, move position center
@@ -70,6 +61,7 @@ for_window [app_id="blueman-manager"] floating enable, resize set 1024 576, move
 for_window [app_id="nm-connection-editor"] floating enable, resize set 1024 576, move position center
 for_window [app_id="arandr"] floating enable, resize set 1024 576, move position center
 for_window [app_id="xarchiver"] floating enable, resize set 1024 576, move position center
+for_window [app_id="xfce-polkit"] floating enable, move position center
 
 default_border normal 1
 default_floating_border normal 1
