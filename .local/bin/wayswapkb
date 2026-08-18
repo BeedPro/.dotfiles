@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+
+swaymsg input type:keyboard xkb_switch_layout next >/dev/null

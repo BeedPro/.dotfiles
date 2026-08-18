@@ -1,0 +1,195 @@
+#!/usr/bin/env python3
+"""Take screenshots on Wayland using grim/slurp."""
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+import tempfile
+from collections.abc import Sequence
+from datetime import datetime
+from pathlib import Path
+
+SCREENSHOT_DIR = Path.home() / "Pictures" / "Screenshots"
+MODES = ("everything", "screen", "window", "selection")
+
+
+def run(command: Sequence[str], **kwargs) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(command, text=True, check=True, **kwargs)
+
+
+def selected_geometry() -> str:
+    return run(["slurp"], capture_output=True).stdout.strip()
+
+
+def focused_output_geometry() -> str:
+    result = run(["swaymsg", "-t", "get_outputs", "-r"], capture_output=True)
+    outputs = json.loads(result.stdout)
+    focused = next((output for output in outputs if output.get("focused")), None)
+
+    if focused is None:
+        print("Could not determine focused output", file=sys.stderr)
+        sys.exit(1)
+
+    rect = focused["rect"]
+    return f'{rect["x"]},{rect["y"]} {rect["width"]}x{rect["height"]}'
+
+
+def focused_window_geometry() -> str:
+    result = run(["swaymsg", "-t", "get_tree", "-r"], capture_output=True)
+
+    def walk(node):
+        if node.get("focused"):
+            return node
+        for child in node.get("nodes", []) + node.get("floating_nodes", []):
+            found = walk(child)
+            if found is not None:
+                return found
+        return None
+
+    focused = walk(json.loads(result.stdout))
+
+    if focused is None:
+        print("Could not determine focused window", file=sys.stderr)
+        sys.exit(1)
+
+    rect = focused["rect"]
+    return f'{rect["x"]},{rect["y"]} {rect["width"]}x{rect["height"]}'
+
+
+def take_screenshot(mode: str, final_file: Path) -> None:
+    if mode == "everything":
+        run(["grim", str(final_file)])
+        return
+
+    if mode == "screen":
+        run(["grim", "-g", focused_output_geometry(), str(final_file)])
+        return
+
+    if mode == "window":
+        run(["grim", "-g", focused_window_geometry(), str(final_file)])
+        return
+
+    run(["grim", "-g", selected_geometry(), str(final_file)])
+
+
+def send_notification(timestamp: str, final_file: Path, save_screenshot: bool) -> None:
+    title = "Screenshot taken" if save_screenshot else "Screenshot copied"
+    body = f"{timestamp}.png" if save_screenshot else "Not saved to disk"
+    run(["notify-send", title, body, "-i", str(final_file)])
+
+
+def remove_if_temporary(final_file: Path, save_screenshot: bool) -> None:
+    if save_screenshot:
+        return
+
+    try:
+        os.unlink(final_file)
+    except FileNotFoundError:
+        pass
+
+
+def nsxiv_command(final_file: Path, full_screen: bool) -> list[str]:
+    if full_screen:
+        return ["nsxiv", "-f", "-b", "--anti-alias=no", str(final_file)]
+
+    return ["nsxiv", str(final_file)]
+
+
+def redirect_to_devnull() -> None:
+    devnull = os.open(os.devnull, os.O_WRONLY)
+    os.dup2(devnull, sys.stdout.fileno())
+    os.dup2(devnull, sys.stderr.fileno())
+    os.close(devnull)
+
+
+def show_then_finish(
+    command: Sequence[str],
+    timestamp: str,
+    final_file: Path,
+    save_screenshot: bool,
+    notify: bool,
+) -> None:
+    subprocess.run(command, check=False)
+
+    if notify:
+        send_notification(timestamp, final_file, save_screenshot)
+
+    remove_if_temporary(final_file, save_screenshot)
+
+
+def fork_viewer(
+    command: Sequence[str],
+    timestamp: str,
+    final_file: Path,
+    save_screenshot: bool,
+    notify: bool,
+) -> None:
+    if os.fork() != 0:
+        return
+
+    os.setsid()
+    redirect_to_devnull()
+    show_then_finish(command, timestamp, final_file, save_screenshot, notify)
+    os._exit(0)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        usage="%(prog)s [everything|screen|window|selection] [--show] [--full-screen] [--no-save] [--no-notify]",
+    )
+    parser.add_argument("mode", choices=MODES)
+    parser.add_argument("--show", action="store_true")
+    parser.add_argument("--full-screen", action="store_true")
+    parser.add_argument("--no-save", action="store_true")
+    parser.add_argument("--no-notify", action="store_true")
+    return parser.parse_args()
+
+
+def final_file(timestamp: str, save_screenshot: bool) -> Path:
+    if save_screenshot:
+        return SCREENSHOT_DIR / f"{timestamp}.png"
+
+    with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as temporary_file:
+        return Path(temporary_file.name)
+
+
+def copy_to_clipboard(path: Path) -> None:
+    with path.open("rb") as image:
+        subprocess.run(["wl-copy", "--type", "image/png"], check=True, stdin=image)
+
+
+def main() -> int:
+    args = parse_args()
+    timestamp = datetime.now().astimezone().strftime("%Y%m%d-%H%M%S")
+    save_screenshot = not args.no_save
+    path = final_file(timestamp, save_screenshot)
+
+    SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
+
+    try:
+        take_screenshot(args.mode, path)
+        copy_to_clipboard(path)
+    except Exception:
+        remove_if_temporary(path, save_screenshot)
+        raise
+
+    if args.show or args.full_screen:
+        fork_viewer(
+            nsxiv_command(path, args.full_screen),
+            timestamp,
+            path,
+            save_screenshot,
+            not args.no_notify,
+        )
+        return 0
+
+    if not args.no_notify:
+        send_notification(timestamp, path, save_screenshot)
+    remove_if_temporary(path, save_screenshot)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

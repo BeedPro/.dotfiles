@@ -12,11 +12,9 @@ output DP-1 mode 1920x1080@143.85Hz position 0 0 transform 270 bg $wallpaper fil
 output DP-3 mode 1920x1080@143.85Hz position 1080 420 transform normal bg $wallpaper fill
 output eDP mode 1920x1200 position 0 0 transform normal bg $wallpaper fit
 
-input type:keyboard xkb_layout gb
+input type:keyboard xkb_layout gb,ara
 
-exec dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway:wlroots XDG_SESSION_DESKTOP=sway XDG_SESSION_TYPE=wayland
-
-exec xrdb -merge ~/.Xresources
+exec dbus-update-activation-environment WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway:wlroots XDG_SESSION_DESKTOP=sway XDG_SESSION_TYPE=wayland
 
 exec dex --autostart --environment sway
 exec pipewire
@@ -59,7 +57,7 @@ for_window [app_id="pavucontrol"] floating enable, resize set 1024 576, move pos
 for_window [app_id="qalculate-gtk"] floating enable, resize set 1024 576, move position center
 for_window [app_id="blueman-manager"] floating enable, resize set 1024 576, move position center
 for_window [app_id="nm-connection-editor"] floating enable, resize set 1024 576, move position center
-for_window [app_id="arandr"] floating enable, resize set 1024 576, move position center
+for_window [app_id="wdisplays"] floating enable, resize set 1024 576, move position center
 for_window [app_id="xarchiver"] floating enable, resize set 1024 576, move position center
 for_window [app_id="xfce-polkit"] floating enable, move position center
 
@@ -80,11 +78,11 @@ bindsym XF86AudioLowerVolume exec --no-startup-id ~/.local/bin/volman down
 bindsym XF86AudioMute exec --no-startup-id ~/.local/bin/volman mute
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
-bindsym $mod+F12 exec --no-startup-id ~/.local/bin/xswapkb
+bindsym $mod+F12 exec --no-startup-id ~/.local/bin/wayswapkb
 
-bindsym Print exec --no-startup-id ~/.local/bin/xshot selection
-bindsym $mod+Shift+Print exec --no-startup-id ~/.local/bin/xshot everything --show
-bindsym $mod+control+Print exec --no-startup-id ~/.local/bin/xshot window --show
+bindsym Print exec --no-startup-id ~/.local/bin/wayshot selection
+bindsym $mod+Shift+Print exec --no-startup-id ~/.local/bin/wayshot everything --show
+bindsym $mod+control+Print exec --no-startup-id ~/.local/bin/wayshot window --show
 
 bindsym Mod1+Tab exec --no-startup-id rofi -show window
 bindsym $mod+Tab workspace back_and_forth
@@ -162,9 +160,7 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move scratchpad
 bindsym $mod+minus floating toggle, sticky toggle
 
-bindsym $mod+Mod1+0 exec --no-startup-id ~/.local/bin/xswacomon 0
-bindsym $mod+Mod1+comma exec --no-startup-id ~/.local/bin/xswacomon left
-bindsym $mod+Mod1+period exec --no-startup-id ~/.local/bin/xswacomon right
+# Add Wayland tablet bindings once a libinput/sway helper exists.
 
 bindsym $mod+comma focus output left
 bindsym $mod+period focus output right
@@ -172,7 +168,7 @@ bindsym $mod+period focus output right
 bindsym $mod+Shift+comma move container to output left
 bindsym $mod+Shift+period move container to output right
 
-bindsym $mod+Mod1+f exec --no-startup-id ~/.local/bin/xshot screen --full-screen --no-save --no-notify
+bindsym $mod+Mod1+f exec --no-startup-id ~/.local/bin/wayshot screen --full-screen --no-save --no-notify
 bindsym $mod+Mod1+b bar mode toggle
 bindsym $mod+Mod1+r reload
 bindsym $mod+Mod1+t exec --no-startup-id ~/.local/bin/thogle --rofi
