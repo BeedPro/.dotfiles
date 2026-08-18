@@ -8,7 +8,7 @@ if [ -f /tmp/power-lock ]; then
 fi
 
 if [ "$choice" = "logout" ]; then
-    pkill i3
+    i3-msg exit
 elif [ "$choice" = "lock" ]; then
     "$HOME/.config/rofi/modes/locker"
 elif [ -n "$choice" ]; then
