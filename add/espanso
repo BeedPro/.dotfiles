@@ -3,28 +3,62 @@ set -eu
 
 # tags: #pkg
 
-sudo xbps-install -Sy curl
-
 VERSION="2.3.0"
-APPIMAGE="Espanso-X11.AppImage"
-CHECKSUM="b0ce546786f6a54b31e0a30df0a797804fadf0a89b5b189ea115d25cb410866c"
-INSTALL_DIR="/opt"
-BIN_LINK="/usr/local/bin/espanso-x11"
-URL="https://github.com/espanso/espanso/releases/download/v${VERSION}/${APPIMAGE}"
-TARGET_BIN="${INSTALL_DIR}/${APPIMAGE}"
+TARBALL="espanso-${VERSION}.tar.gz"
+CHECKSUM="32b315a813114b28ef3ee74c5d2ce0bfc2f75a0bd9a4141c7465cd0b00fdf34c"
+URL="https://github.com/espanso/espanso/archive/refs/tags/v${VERSION}.tar.gz"
+FLAVOR="x11"
+
+case "${1:-}" in
+    "") ;;
+    --x11) FLAVOR="x11" ;;
+    --wayland) FLAVOR="wayland" ;;
+    *) echo "usage: $0 [--x11|--wayland]" >&2; exit 1 ;;
+esac
+
+sudo xbps-install -Sy \
+    curl \
+    dbus-devel \
+    gcc \
+    libX11-devel \
+    libXtst-devel \
+    libxkbcommon-devel \
+    make \
+    openssl-devel \
+    pkg-config \
+    tar \
+    wxWidgets-gtk3-devel
+
+command -v cargo >/dev/null 2>&1 || { echo "cargo is not installed. Run add/rust first."; exit 1; }
+
+if [ "$FLAVOR" = "wayland" ]; then
+    FEATURES="wayland,modulo,vendored-tls"
+else
+    FEATURES="modulo,vendored-tls"
+fi
+
+BIN_NAME="espanso-${FLAVOR}"
+INSTALL_DIR="/opt/${BIN_NAME}"
+TARGET_BIN="${INSTALL_DIR}/bin/${BIN_NAME}"
+BIN_LINK="/usr/local/bin/${BIN_NAME}"
 
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
 cd "$TMP_DIR"
 
-curl -fL -o "$APPIMAGE" "$URL"
-printf '%s  %s\n' "$CHECKSUM" "$APPIMAGE" | sha256sum --check
+curl -fL -o "$TARBALL" "$URL"
+printf '%s  %s\n' "$CHECKSUM" "$TARBALL" | sha256sum --check
+tar -xf "$TARBALL"
 
-sudo rm -f "$TARGET_BIN"
-sudo mv "$APPIMAGE" "$TARGET_BIN"
+cd "espanso-${VERSION}"
+cargo build --release --no-default-features --features "$FEATURES"
+
+sudo rm -rf "$INSTALL_DIR"
+sudo mkdir -p "${INSTALL_DIR}/bin"
+sudo cp target/release/espanso "$TARGET_BIN"
 sudo chmod +x "$TARGET_BIN"
 
 sudo ln -sfn "$TARGET_BIN" "$BIN_LINK"
 
-echo "Espanso installed: $BIN_LINK -> $TARGET_BIN"
+echo "Espanso ${FLAVOR} installed: $BIN_LINK -> $TARGET_BIN"
