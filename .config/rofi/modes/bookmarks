@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BOOKMARKS_FILE="$HOME/Compendium/Journal/bookmarks.txt"
+BOOKMARKS_FILE="$HOME/Compendium/Journal/bookmarks.org"
 
 die() {
     printf '%s\n' "$1" >&2
