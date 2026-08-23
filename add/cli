@@ -12,6 +12,7 @@ sudo xbps-install -Sy \
     fuse-sshfs \
     fastfetch \
     flac \
+    7zip \
     ImageMagick
 
 "$add_root/pde"
