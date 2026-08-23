@@ -44,7 +44,6 @@ install_game_streaming() {
 
 sudo xbps-install -Sy \
     libdrm-32bit \
-    lutris \
     steam
 
 flatpak install -y flathub org.prismlauncher.PrismLauncher
