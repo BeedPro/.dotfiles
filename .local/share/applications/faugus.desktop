@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Faugus
+Exec=faugus %f
+Icon=faugus
+Type=Application
+Terminal=false
+MimeType=application/x-ms-dos-executable;application/x-msi;application/x-ms-shortcut;application/x-bat;text/x-ms-regedit;
+Categories=Game;
+StartupWMClass=faugus
