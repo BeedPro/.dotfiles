@@ -13,7 +13,22 @@ format_output() {
     fi
 }
 
-DISK=$(df / 2>/dev/null | awk 'NR == 2 { gsub(/%/, "", $5); printf "%02d", $5 }')
+disk_usage() {
+    df "$1" 2>/dev/null | awk 'NR == 2 { gsub(/%/, "", $5); printf "%02d", $5 }'
+}
+
+DISK=
+for MOUNT in /mnt/ssd /mnt/nvme /; do
+    [ "$MOUNT" = "/" ] || [ -d "$MOUNT" ] || continue
+    USAGE=$(disk_usage "$MOUNT")
+    [ -n "$USAGE" ] || continue
+
+    if [ -n "$DISK" ]; then
+        DISK="$DISK.$USAGE"
+    else
+        DISK="$USAGE"
+    fi
+done
 RAM=$(free 2>/dev/null | awk '$1 == "Mem:" { printf "%02d", ($3 / $2) * 100 }')
 
 read -r LOAD _ < /proc/loadavg || exit 0
