@@ -136,9 +136,12 @@ def get_all_items(config: LauncherConfig) -> tuple[list[str], dict[str, str]]:
 
     tmux: set[str] = set(get_tmux_items())
     keys: set[str] = set(mapping)
+    normalized_tmux: set[str] = {normalize_session_name(name) for name in tmux}
 
     display: list[str] = sorted(tmux)
-    display.extend(sorted(keys - tmux))
+    display.extend(
+        sorted(key for key in keys if normalize_session_name(key) not in normalized_tmux)
+    )
 
     return display, mapping
 
