@@ -18,6 +18,6 @@ read -r LOAD _ < /proc/loadavg || exit 0
 CORES=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
 [ -n "$CORES" ] || exit 0
 
-USAGE=$(awk -v avg="$LOAD" -v cores="$CORES" 'BEGIN { printf "%d%%", (avg / cores) * 100 }')
+USAGE=$(awk -v avg="$LOAD" -v cores="$CORES" 'BEGIN { printf "%02d%%", (avg / cores) * 100 }')
 
 format_output "CPU $USAGE"

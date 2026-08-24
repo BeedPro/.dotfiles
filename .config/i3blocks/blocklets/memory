@@ -13,7 +13,7 @@ format_output() {
     fi
 }
 
-MEM=$(free 2>/dev/null | awk '$1 == "Mem:" { printf "%d%%", ($3 / $2) * 100 }')
+MEM=$(free 2>/dev/null | awk '$1 == "Mem:" { printf "%02d%%", ($3 / $2) * 100 }')
 
 [ -n "$MEM" ] || exit 0
 

@@ -13,12 +13,12 @@ format_output() {
     fi
 }
 
-DISK=$(df / 2>/dev/null | awk 'NR == 2 { gsub(/%/, "", $5); print $5 }')
-RAM=$(free 2>/dev/null | awk '$1 == "Mem:" { printf "%d", ($3 / $2) * 100 }')
+DISK=$(df / 2>/dev/null | awk 'NR == 2 { gsub(/%/, "", $5); printf "%02d", $5 }')
+RAM=$(free 2>/dev/null | awk '$1 == "Mem:" { printf "%02d", ($3 / $2) * 100 }')
 
 read -r LOAD _ < /proc/loadavg || exit 0
 CORES=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
-CPU=$(awk -v avg="$LOAD" -v cores="$CORES" 'BEGIN { printf "%d", (avg / cores) * 100 }')
+CPU=$(awk -v avg="$LOAD" -v cores="$CORES" 'BEGIN { printf "%02d", (avg / cores) * 100 }')
 
 [ -n "$DISK" ] && [ -n "$RAM" ] && [ -n "$CPU" ] || exit 0
 
