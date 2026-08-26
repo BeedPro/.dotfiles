@@ -24,3 +24,5 @@ __pycache__/
 .local/share/icons/hicolor/64x64/apps/powdertoy-powder.png
 .local/share/icons/hicolor/64x64/mimetypes/application-vnd.powdertoy.save.png
 .local/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-vnd.powdertoy.save.png
+.local/share/applications/battlenet.desktop
+.local/share/applications/ubisoft-connect.desktop

@@ -23,6 +23,7 @@ sudo xbps-install -Sy \
 
 flatpak install -y flathub com.github.tchx84.Flatseal
 flatpak install -y flathub com.borgbase.Vorta
+flatpak install flathub org.libreoffice.LibreOffice
 
 "$add_root/firefox"
 "$add_root/espanso"
