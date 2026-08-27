@@ -24,6 +24,9 @@ def main() -> int:
     label = os.environ.get("LABEL", "")
     divider = read_default_divider()
 
+    if not has_system_battery(bat_number):
+        return 0
+
     # Select the configured battery from acpi output.
     acpi = find_battery_line(bat_number)
 
@@ -61,6 +64,33 @@ def read_default_divider() -> str | None:
 
 def format_output(value: str, divider: str | None) -> str:
     return f"{divider} {value}" if divider else value
+
+
+def has_system_battery(bat_number: str) -> bool:
+    batteries = [
+        power_supply
+        for power_supply in sorted(Path("/sys/class/power_supply").iterdir())
+        if read_power_supply_attr(power_supply, "type") == "Battery"
+        and read_power_supply_attr(power_supply, "scope") != "Device"
+    ]
+
+    if not batteries:
+        return False
+
+    if any(battery.name == f"BAT{bat_number}" for battery in batteries):
+        return True
+
+    try:
+        return batteries[int(bat_number)] is not None
+    except (IndexError, ValueError):
+        return False
+
+
+def read_power_supply_attr(power_supply: Path, attr: str) -> str | None:
+    try:
+        return (power_supply / attr).read_text().strip()
+    except OSError:
+        return None
 
 
 def find_battery_line(bat_number: str) -> str | None:
