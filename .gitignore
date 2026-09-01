@@ -26,3 +26,4 @@ __pycache__/
 .local/share/icons/hicolor/64x64/mimetypes/gnome-mime-application-vnd.powdertoy.save.png
 .local/share/applications/battlenet.desktop
 .local/share/applications/ubisoft-connect.desktop
+.config/emacs/transient/history.el
