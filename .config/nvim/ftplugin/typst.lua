@@ -41,10 +41,39 @@ local function typst_title_text(line)
   return line:match [[#let%s+title%s*=%s*"([^"]*)"]] or line
 end
 
+local function typst_file_tags(filename)
+  if not filename or filename == "" then
+    return ""
+  end
+
+  local ok, lines = pcall(fn.readfile, filename, "", 40)
+  if not ok then
+    return ""
+  end
+
+  for _, line in ipairs(lines) do
+    local tag_text = line:match "^%s*#id:([^%s]+)"
+    if tag_text then
+      return ":" .. tag_text
+    end
+  end
+
+  return ""
+end
+
+local function typst_title_entry_text(filename, line)
+  local title = typst_title_text(line)
+  local tags = typst_file_tags(filename)
+  if tags == "" then
+    return title
+  end
+  return title .. " " .. tags
+end
+
 local function simplify_qflist_title_text()
   local items = fn.getqflist()
   for _, item in ipairs(items) do
-    item.text = typst_title_text(item.text)
+    item.text = typst_title_entry_text(fn.bufname(item.bufnr), item.text)
   end
   fn.setqflist({}, "r", { title = "Typst titles", items = items })
 end
@@ -87,7 +116,7 @@ local function search_with_rg(pattern)
         filename = filename,
         lnum = tonumber(lnum),
         col = tonumber(col),
-        text = typst_title_text(text),
+        text = typst_title_entry_text(filename, text),
       })
     end
   end
