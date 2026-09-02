@@ -37,10 +37,23 @@ local function open_qflist()
   return true
 end
 
+local function typst_title_text(line)
+  return line:match [[#let%s+title%s*=%s*"([^"]*)"]] or line
+end
+
+local function simplify_qflist_title_text()
+  local items = fn.getqflist()
+  for _, item in ipairs(items) do
+    item.text = typst_title_text(item.text)
+  end
+  fn.setqflist({}, "r", { title = "Typst titles", items = items })
+end
+
 local function search_with_vimgrep(pattern)
   local escaped = fn.escape(pattern, [[/\]])
   local cwd = fn.getcwd()
   vim.cmd("silent vimgrep /" .. escaped .. "/gj " .. cwd .. "/**/*.typ")
+  simplify_qflist_title_text()
   open_qflist()
 end
 
@@ -66,12 +79,25 @@ local function search_with_rg(pattern)
     return
   end
 
-  fn.setqflist({}, "r", { title = "Typst grep: " .. pattern, lines = results })
+  local items = {}
+  for _, result in ipairs(results) do
+    local filename, lnum, col, text = result:match "^(.-):(%d+):(%d+):(.*)$"
+    if filename then
+      table.insert(items, {
+        filename = filename,
+        lnum = tonumber(lnum),
+        col = tonumber(col),
+        text = typst_title_text(text),
+      })
+    end
+  end
+
+  fn.setqflist({}, "r", { title = "Typst titles", items = items })
   vim.cmd "copen"
 end
 
 local function search_slipbox_titles()
-  local pattern = '= "'
+  local pattern = '#let title = "'
   if fn.executable "rg" == 1 then
     search_with_rg(pattern)
     return
