@@ -1,9 +1,24 @@
 ;;; defaults-rc.el --- Default editor behavior -*- lexical-binding: t; -*-
 
+(defconst beed/emacs-data-directory
+  (expand-file-name "emacs/" (or (getenv "XDG_DATA_HOME") "~/.local/share/")))
+
+(dolist (directory '("auto-save/" "backups/"))
+  (make-directory (expand-file-name directory beed/emacs-data-directory) t))
+
 (setq inhibit-startup-message t
       initial-scratch-message nil
-      auto-save-default nil
-      make-backup-files nil
+      auto-save-default t
+      auto-save-file-name-transforms
+      `((".*" ,(expand-file-name "auto-save/" beed/emacs-data-directory) t))
+      make-backup-files t
+      backup-directory-alist
+      `(("." . ,(expand-file-name "backups/" beed/emacs-data-directory)))
+      backup-by-copying t
+      version-control t
+      delete-old-versions t
+      kept-new-versions 6
+      kept-old-versions 2
       ring-bell-function 'ignore
       set-mark-command-repeat-pop t
       large-file-warning-threshold nil
@@ -24,7 +39,7 @@
 (display-time-mode 1)
 (column-number-mode 1)
 (tab-bar-history-mode 1)
-(auto-save-visited-mode 1)
+(auto-save-visited-mode 0)
 (global-visual-line-mode 1)
 (global-auto-revert-mode 1)
 
