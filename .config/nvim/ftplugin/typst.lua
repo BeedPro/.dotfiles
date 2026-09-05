@@ -134,12 +134,42 @@ local function search_slipbox_titles()
   search_with_vimgrep(pattern)
 end
 
-if in_slipbox() then
+local function set_slipbox(enabled)
+  pcall(vim.keymap.del, "n", "<leader>fn", { buffer = true })
+
+  if not enabled then
+    return
+  end
+
   map("n", "<leader>fn", search_slipbox_titles, {
     buffer = true,
     desc = "Find slipbox notes by title",
   })
 end
+
+set_slipbox(in_slipbox())
+
+vim.api.nvim_buf_create_user_command(0, "SlipboxTesting", function(opts)
+  if opts.args == "on" then
+    set_slipbox(true)
+    vim.notify("Slipbox mappings enabled", vim.log.levels.INFO)
+    return
+  end
+
+  if opts.args == "off" then
+    set_slipbox(in_slipbox())
+    vim.notify("Slipbox mappings restored to default", vim.log.levels.INFO)
+    return
+  end
+
+  vim.notify("Usage: SlipboxTesting on|off", vim.log.levels.ERROR)
+end, {
+  nargs = 1,
+  complete = function()
+    return { "on", "off" }
+  end,
+  desc = "Enable Slipbox mappings or restore Typst default",
+})
 
 local function compile_typst(buf)
   if vim.bo[buf].buftype ~= "" then
